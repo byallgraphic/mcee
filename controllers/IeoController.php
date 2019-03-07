@@ -64,7 +64,6 @@ class IeoController extends Controller
         
         $model = new Ieo();
 		
-		echo $idTipoInforme;
 		$idInstitucion = $_SESSION['instituciones'][0];
 
         $idPerfilesXpersonas	= PerfilesXPersonasInstitucion::find()->where( "id_institucion = $idInstitucion" )->all();
@@ -91,21 +90,12 @@ class IeoController extends Controller
 		");
 		$ecProyectos = $command->queryAll();
 		
-	echo "<pre>"; print_r($ecProyectos); echo "</pre>"; 
-		
 		$descripcionProyecto = $ecProyectos[0]['descripcion'];
-		
-		
-		
-		
 		
 		$proyectos = new EcProyectosGenerales();
 		$proyectos = $proyectos->find()->AndWhere("descripcion ='$descripcionProyecto' and tipo_proyecto = 1")->orderby("id")->all();
 		$proyectos = ArrayHelper::map($proyectos,'id','descripcion');
 		
-		
-		echo "<pre>"; print_r($proyectos); echo "</pre>"; 
-		die;
 		//colores del acordeon
 		$arrayColores = array
 		(

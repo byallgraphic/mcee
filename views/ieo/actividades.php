@@ -43,10 +43,15 @@ foreach( $procesos as $idprocesos => $proceso )
 	
 	foreach( $actividades as $idactividad => $proceso )
 	{
+		
+		if( $proceso == "Productos" )
+			$formulario = "formProductos";
+		else
+			$formulario = "formActividades";
 		$items[] = 	
 		[
 			'label' 		=>  $proceso,
-			'content' 		=>  $this->render( 'formActividades', 
+			'content' 		=>  $this->render( $formulario, 
 											[  
 												'form' => $form,
 												'datos'=> $datos,
