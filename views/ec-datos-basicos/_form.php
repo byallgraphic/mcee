@@ -25,6 +25,34 @@ if( !$sede ){
 	$this->registerJs( "$( cambiarSede ).click()" );
 	return;
 }
+
+$idTipoInforme = $_GET['idTipoInforme'];
+
+$connection = Yii::$app->getDb();
+		$command = $connection->createCommand(
+		"
+			select p.id
+			from ec.tipo_informe as ti, ec.componentes as c, ec.proyectos as p
+			where ti.id = $idTipoInforme
+			and ti.id_componente = c.id
+			and c.descripcion = p.descripcion
+			
+		");
+		$ecProyectos = $command->queryAll();
+		
+
+//colores del acordeon
+		$arrayColores = array
+		(
+			1=>"panel panel-danger",
+			3=>"panel panel-info",
+			2=>"panel panel-success",
+			4=>"panel panel-warning"
+		);
+		
+		$color = $arrayColores[$ecProyectos[0]['id']];
+		
+
 ?>
 
 <div class="ec-datos-basicos-form">
@@ -56,6 +84,7 @@ if( !$sede ){
 		'items' => [
 						[
 							'label' 		=>  'AGREGANDO PLANEACIÓN MISIONAL',
+							
 							'content' 		=>  $this->render( 'planeacionMisional', [ 
 														'form' 				=> $form,
 														'modelPlaneacion' 	=> $modelPlaneacion,
@@ -63,8 +92,11 @@ if( !$sede ){
 														'modelReportes' 	=> $modelReportes,
 														'tiposVerificacion'	=> $tiposVerificacion,
 														'modelDatosBasico' => $modelDatosBasico,
+														'idTipoInforme' => $idTipoInforme,
+														
 												] ),
-								'contentOptions' => ['class' => 'in']
+								'contentOptions' => ['class' => 'in'],
+								'options' => ['class' => $color]
 						]
 					] 
 				]); ?>
@@ -76,6 +108,7 @@ if( !$sede ){
 			'modelReportes' 	=> $modelReportes,
 			'tiposVerificacion'	=> $tiposVerificacion,
 			'modelDatosBasico' => $modelDatosBasico,
+			'idTipoInforme' => $idTipoInforme,
 	] ); ?>
 		
     <div class="form-group" style="text-align: -webkit-center;">

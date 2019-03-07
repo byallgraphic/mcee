@@ -20,13 +20,15 @@ use app\models\TiposCantidadPoblacion;
 use app\models\Evidencias;
 use app\models\TipoDocumentos;
 use app\models\Producto;
-use app\models\RequerimientoExtraIeo;
+use yii\bootstrap\Collapse;
+
 use app\models\ZonasEducativas;
 use app\models\PerfilesXPersonasInstitucion;
 use app\models\PerfilesXPersonas;
 use app\models\Personas;
 use app\models\ComunasCorregimientos;
 use app\models\BarriosVeredas;
+use app\models\EcProyectosGenerales;
 
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
@@ -57,22 +59,95 @@ class IeoController extends Controller
         ];
     }
 
-    function actionViewFases($model, $form, $datos, $persona, $idTipoInforme){
+    function actionViewFases($model, $form, $datos, $persona, $idTipoInforme)
+	{
         
         $model = new Ieo();
-        $documentosReconocimiento = new DocumentosReconocimiento();
-        $tiposCantidadPoblacion = new TiposCantidadPoblacion();
-        $requerimientoExtra = new RequerimientoExtraIeo();
-        $evidencias = new Evidencias();
-        $producto = new Producto();
-        $estudiantesGrado = new EstudiantesIeo();
-
-        $idInstitucion = $_SESSION['instituciones'][0];
+		
+		echo $idTipoInforme;
+		$idInstitucion = $_SESSION['instituciones'][0];
 
         $idPerfilesXpersonas	= PerfilesXPersonasInstitucion::find()->where( "id_institucion = $idInstitucion" )->all();
 		$perfiles_x_persona 	= PerfilesXPersonas::findOne($idPerfilesXpersonas)->id_personas;		
         $nombres1 				= Personas::find($perfiles_x_persona)->all();
         $nombres	 = ArrayHelper::map( $nombres1, 'id', 'nombres');
+        
+		$connection = Yii::$app->getDb();
+		$command = $connection->createCommand(
+		"
+			select 
+				p.descripcion,p.id
+			from 
+				ec.tipo_informe as ti, 
+				ec.componentes as c, 
+				ec.proyectos as p
+			where 
+				ti.id = $idTipoInforme
+			and 
+				ti.id_componente = c.id
+			and 
+				c.descripcion = p.descripcion
+			
+		");
+		$ecProyectos = $command->queryAll();
+		
+	echo "<pre>"; print_r($ecProyectos); echo "</pre>"; 
+		
+		$descripcionProyecto = $ecProyectos[0]['descripcion'];
+		
+		
+		
+		
+		
+		$proyectos = new EcProyectosGenerales();
+		$proyectos = $proyectos->find()->AndWhere("descripcion ='$descripcionProyecto' and tipo_proyecto = 1")->orderby("id")->all();
+		$proyectos = ArrayHelper::map($proyectos,'id','descripcion');
+		
+		
+		echo "<pre>"; print_r($proyectos); echo "</pre>"; 
+		die;
+		//colores del acordeon
+		$arrayColores = array
+		(
+			"Proyectos Pedagógicos Transversales"=>"panel panel-danger",
+			"Articulación Familiar" =>"panel panel-info",
+			"Proyecto de Servicio Social Estudiantil"=>"panel panel-success",
+			"Proyecto Fortalecimiento de Competencias Básicas desde la Transversalidad"=>"panel-warning"
+		);
+		
+		$contenedores = array();
+		// $ecProyectos = ArrayHelper::map($ecProyectos,'id','descripcion');
+		foreach ($proyectos as $idProyecto => $proyecto)
+		{
+			 $contenedores[] = 	
+				[
+					'label' 		=>  $proyecto,
+					'content' 		=>  $this->renderPartial( 'actividades', 
+													[  
+                                                        'idProyecto' => $idProyecto,
+														'form' => $form,
+														'datos'=>$datos,
+														"datos" => $datos,
+														"persona" => $persona,
+														"nombres" => $nombres,
+														"idTipoInforme" => $idTipoInforme,
+														'proyecto' =>  $proyecto
+													] 
+										),
+					 'contentOptions' => ['class' => 'in'],
+					 'options' => ['class' => $arrayColores[$proyecto] ]
+				];
+	
+		}
+		
+		 echo Collapse::widget([
+			'items' => $contenedores,
+		]);
+		
+		
+		
+		
+      
        
         //$nombres				= $nombres->nombres." ".$nombres->apellidos;
         
@@ -82,31 +157,31 @@ class IeoController extends Controller
             3 => "Articulación Familiar"
         ];*/
 
-        $actividades =[
-            1 =>    "Requerimientos extras I.E.O",
-            2 =>    "Reconocimiento previo y documentos a desarrollar por el profesional de apoyo",
-            3 =>    "Actividad 1.Mesa de trabajo para la presentación de resultados de la caracterización y mapeo (puntos de partida y llegada)",
-            4 =>    "Actividad 2. Acompañamiento en práctica",
-            5 =>    "Actividad 3. Mesa de trabajo: contrucción del plan de acción",
-            6 =>    "Productos"
-        ];
+        // $actividades =
+		// [
+            // 1 =>    "Requerimientos extras I.E.O",
+            // 2 =>    "Reconocimiento previo y documentos a desarrollar por el profesional de apoyo",
+            // 3 =>    "Actividad 1.Mesa de trabajo para la presentación de resultados de la caracterización y mapeo (puntos de partida y llegada)",
+            // 4 =>    "Actividad 2. Acompañamiento en práctica",
+            // 5 =>    "Actividad 3. Mesa de trabajo: contrucción del plan de acción",
+            // 6 =>    "Productos"
+        // ];
 		
-		return $this->renderAjax('fases', [
-			'idPE' 	=> null,
-            'fases' => $actividades,
-            'form' => $form,
-            "model" => $model,
-            "documentosReconocimiento" =>  $documentosReconocimiento,
-            "tiposCantidadPoblacion" => $tiposCantidadPoblacion,
-            "evidencias" => $evidencias,
-            "producto" => $producto,
-            "requerimientoExtra" => $requerimientoExtra,
-            "estudiantesGrado" =>  $estudiantesGrado,
-            "datos" => $datos,
-            "persona" => $persona,
-            "nombres" => $nombres,
-            "idTipoInforme" => $idTipoInforme
-        ]);
+		// return $this->renderAjax('fases', [
+            // 'fases' => $actividades,
+            // 'form' => $form,
+            // "model" => $model,
+            // "documentosReconocimiento" =>  $documentosReconocimiento,
+            // "tiposCantidadPoblacion" => $tiposCantidadPoblacion,
+            // "evidencias" => $evidencias,
+            // "producto" => $producto,
+            // "requerimientoExtra" => $requerimientoExtra,
+            // "estudiantesGrado" =>  $estudiantesGrado,
+            // "datos" => $datos,
+            // "persona" => $persona,
+            // "nombres" => $nombres,
+            // "idTipoInforme" => $idTipoInforme
+        // ]);
 		
 	}
 
@@ -880,8 +955,9 @@ class IeoController extends Controller
                 echo "<option value='".$barrio->id."'>".$barrio->descripcion."</option>";
             }
         }
-        else{
-            echo "<option>-</option>";
+        else
+		{
+            // echo "<option value ='0'>-</option>";
         }
         
         //echo "<option>-</option>";

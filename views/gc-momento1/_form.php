@@ -20,215 +20,223 @@ $id_momento1= 1;
 ?>
     
 	<?= Html::a('Volver',['gc-bitacora/view2',],['class' => 'btn btn-info']) ?>
-	
-	<section class="form-box" >
-            <div class="container">
-                
-                <div class="row">
-                    <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-1 form-wizard">
-					
-						 	<h3>Planeación de la semana</h3>
-                    		<p>Debe terminar un paso para continuar con el siguiente</p>
-							
-							<!-- Form progress -->
-                    		<div class="form-wizard-steps form-wizard-tolal-steps-2">
-                    			<div class="form-wizard-progress">
-                    			    <div class="form-wizard-progress-line" data-now-value="12.25" data-number-of-steps="4" style="width: 12.25%;"></div>
-                    			</div>
-								<!-- Step 1 -->
-                    			<div class="form-wizard-step active">
-                    				<div class="form-wizard-step-icon"><i class="fa fa-address-book" aria-hidden="true"></i></div>
-                    				<p>Paso 1 Propositos de acompañamiento</p>
-                    			</div>
-								<!-- Step 1 -->
-								
-								<!-- Step 2 -->
-                    			<div class="form-wizard-step">
-                    				<div class="form-wizard-step-icon"><i class="fa fa-archive" aria-hidden="true"></i></div>
-                    				<p>Paso 2 Resultados esperados</p>
-                    			</div>
-								<!-- Step 2 -->
-								
-								<!-- Step 3 
-								<div class="form-wizard-step">
-                    				<div class="form-wizard-step-icon"><i class="fa fa-briefcase" aria-hidden="true"></i></div>
-                    				<p>Official</p>
-                    			</div>
-								<!-- Step 3 -->
-								
-								<!-- Step 4 
-								<div class="form-wizard-step">
-                    				<div class="form-wizard-step-icon"><i class="fa fa-money" aria-hidden="true"></i></div>
-                    				<p>Payment</p>
-                    			</div>
-								<!-- Step 4 -->
-                    		</div>
-							<!-- Form progress -->
-                    	</div>
-				</div>
-                    
-			</div>
-    </section>	
-					<!-- Form Step 1 -->
-					<div class="gc-momento1-form">
-					<?php $form = ActiveForm::begin(); ?>
-					
+
+<section class="form-box" >
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-1 form-wizard">
+
+                <h3>Planeación de la semana</h3>
+                <p>Debe terminar un paso para continuar con el siguiente</p>
+
+                <!-- Form progress -->
+                <div class="form-wizard-steps form-wizard-tolal-steps-2">
+                    <div class="form-wizard-progress">
+                        <div class="form-wizard-progress-line" data-now-value="12.25" data-number-of-steps="4" style="width: 12.25%;"></div>
+                    </div>
+                    <!-- Step 1 -->
+                    <div class="form-wizard-step active">
+                        <div class="form-wizard-step-icon"><i class="fa fa-address-book" aria-hidden="true"></i></div>
+                        <p>Paso 1 Propositos de acompañamiento</p>
+                    </div>
+                    <!-- Step 1 -->
+
+                    <!-- Step 2 -->
+                    <div class="form-wizard-step">
+                        <div class="form-wizard-step-icon"><i class="fa fa-archive" aria-hidden="true"></i></div>
+                        <p>Paso 2 Resultados esperados</p>
+                    </div>
+                    <!-- Step 2 -->
+
+                    <!-- Step 3
+                    <div class="form-wizard-step">
+                        <div class="form-wizard-step-icon"><i class="fa fa-briefcase" aria-hidden="true"></i></div>
+                        <p>Official</p>
+                    </div>
+                    <!-- Step 3 -->
+
+                    <!-- Step 4
+                    <div class="form-wizard-step">
+                        <div class="form-wizard-step-icon"><i class="fa fa-money" aria-hidden="true"></i></div>
+                        <p>Payment</p>
+                    </div>
+                    <!-- Step 4 -->
+                </div>
+                <!-- Form progress -->
+                    <!-- Form progress -->
+
+
+                    <!-- Form Step 1 -->
                     <fieldset>
-						<h4>Seleccione los propósitos que se trabajarán a través de las actividades planteadas para esta semana</h4>
-						<hr>
-						<label><h4>Propósitos de acompañamiento</h4></label>
-						<h6>
-							<?=Html::checkboxList('list', '', $propositos,['separator' => "<br />",'id' =>'checkboxMomento1Semana1',
-							'itemOptions' => [
-							'labelOptions' => [
-								'style' => 'font-weight: normal',
-								// 'class' => 'some-custom-class',
-								],
-							],
-							]) ?>
-						</h6>
-						<hr>
-						<label><h4>Planeación por día</h4></label>
-						<div class="row">
-							<div class="col-md-6"><?= $form->field($modelPlaneacionxdia, 'descripcion_plan')->textArea(['maxlength' => 300, 'rows' => 6, 'cols' => 50] )?></div>
-							
-							<div class="col-md-6"><?= $form->field($modelPlaneacionxdia, 'id_dia')->dropDownList($diasPlaneacion,['prompt'=> 'Seleccione...']) ?></div>
-						</div>
-						<div class="form-group">
-							<?= Html::submitButton('Agregar día', ['class' => 'btn btn-primary btn-sm']) ?>
-						</div>
-						
-						<?= $form->field($model, 'id_semana')->hiddenInput(['value' => $id_semana])->label(false) ?>
+                        <?php $form = ActiveForm::begin(); ?>
+                        <h4>Seleccione los propósitos que se trabajarán a través de las actividades planteadas para esta semana</h4>
+                        <hr>
+                        <label><h4>Propósitos de acompañamiento</h4></label>
+                        <h6>
+                            <?=Html::checkboxList('list', '', $propositos,['separator' => "<br />",'id' =>'checkboxMomento1Semana1',
+                                'itemOptions' => [
+                                    'labelOptions' => [
+                                        'style' => 'font-weight: normal',
+                                        // 'class' => 'some-custom-class',
+                                    ],
+                                ],
+                            ]) ?>
+                        </h6>
+                        <hr>
+                        <div id="contentDays">
+                            <input type="hidden" value="<?php echo $_GET['id'] ?>" id="id"/>
+                            <div class="form-group" id="addDay-1">
+                                <label class="control-label" for="gcplaneacionpordia-id_dia">Día</label>
+                                <select id="gcplaneacionpordia-id_dia-1" class="form-control required" name="GcPlaneacionPorDia[id_dia]" aria-required="true" disabled>
+                                    <option value="">Seleccione...</option>
+                                    <option value="1">Dia 1</option>
+                                    <option value="2">Dia 2</option>
+                                    <option value="3">Dia 3</option>
+                                    <option value="4">Dia 4</option>
+                                    <option value="5">Dia 5</option>
+                                    <option value="6">Dia 6</option>
+                                    <option value="7">Dia 7</option>
+                                </select>
+                                <label class="control-label" for="gcplaneacionpordia-descripcion_plan">Descripción Plan</label>
+                                <textarea id="gcplaneacionpordia-descripcion_plan" class="form-control required" name="GcPlaneacionPorDia[descripcion_plan]" maxlength="300" rows="6" cols="50" aria-required="true"></textarea>
+                            </div>
+                        </div>
 
-						<?= $form->field($model, "estado")->hiddenInput(['value'=> 1])->label(false) ?>
-						
-						
+                        <div class="form-group">
+                            <button value="1" id="btnAddDay" type="button" class="btn btn-primary btn-sm">Agregar día</button>
+                        </div>
+                        <div class="form-group form-wizard-buttons">
+                            <button id="saveMoment1" type="button" class="btn btn-next">Guardar y continuar</button>
+                        </div>
+                        <?php ActiveForm::end(); ?>
+                    </fieldset>
+                    <!-- Form Step 1 -->
 
-						<div class="form-group form-wizard-buttons">
-							<?= Html::submitButton('Guardar y continuar', ['class' => 'btn btn-success']) ?>
-							<button type="button" class="btn btn-next">Next</button>
-						</div>
-					</fieldset>
-				</div>
-					
-					<?php ActiveForm::end(); ?>
-					<!-- Form Step 1 -->
-	
-					<!-- Form Step 2 -->
+                    <!-- Form Step 2 -->
                     <fieldset>
-				<div class="gc-resultados-momento1-form">
+                        <div class="gc-resultados-momento1-form">
 
-						<h4>Describa los resultados que se esperan obtener de las actividades que se adelantarán en la semana.</h4>
-						<hr>
-							
-					<div class="row">
-							<div class="col-md-6">
-								<label><h4>Registro de un nuevo resultado esperado</h4></label>	
-								
-								<?php $form1 = ActiveForm::begin(); ?>
+                            <h4>Describa los resultados que se esperan obtener de las actividades que se adelantarán en la semana.</h4>
+                            <hr>
 
-								<?= $form1->field($modelResultadosMomento1, 'nombre')->textInput(['maxlength' => true,'placeholder' => 'Nombre del resultado esperado'])->label('Nombre del resultado esperado') ?>
-								
-								<?= $form1->field($modelResultadosMomento1, 'descripcion')->textArea(['maxlength' => 300, 'rows' => 6, 'cols' => 50 ,'placeholder' => 'Descripción del resultado esperado'] )->label('Descripción del resultado esperado')?>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label><h4>Registro de un nuevo resultado esperado</h4></label>
 
-								<?= $form1->field($modelResultadosMomento1, 'id_momento1')->hiddenInput(['value' => $id_momento1])->label(false) ?>
+                                    <?php $form1 = ActiveForm::begin(); ?>
 
-								<?= $form1->field($modelResultadosMomento1, 'estado')->hiddenInput(['value'=> 1])->label(false) ?>
+                                    <?= $form1->field($modelResultadosMomento1, 'nombre')->textInput(['maxlength' => true,'placeholder' => 'Nombre del resultado esperado'])->label('Nombre del resultado esperado') ?>
 
-								<div class="form-group">
-									<?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
-								</div>
-							</div>
+                                    <?= $form1->field($modelResultadosMomento1, 'descripcion')->textArea(['maxlength' => 300, 'rows' => 6, 'cols' => 50 ,'placeholder' => 'Descripción del resultado esperado'] )->label('Descripción del resultado esperado')?>
 
-						<?php ActiveForm::end(); ?>
+                                    <?= $form1->field($modelResultadosMomento1, 'id_momento1')->hiddenInput(['value' => $id_momento1])->label(false) ?>
 
-						
-						
-						<!-- data table-->
-						<div class="col-md-6">
-							<div class="gc-resultados-momento1-index">
+                                    <?= $form1->field($modelResultadosMomento1, 'estado')->hiddenInput(['value'=> 1])->label(false) ?>
 
-   
-								<?php $searchModel = new GcResultadosMomento1Buscar();
-									  $dataProvider = $searchModel->search(Yii::$app->request->queryParams); 
-								?>
+                                    <div class="form-group">
+                                        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+                                    </div>
+                                </div>
 
-								<h4>Listado de resultados esperados registrados</h4>
+                                <?php ActiveForm::end(); ?>
 
-								<?= DataTables::widget([
-									'dataProvider' => $dataProvider,
-									'clientOptions' => [
-									'language'=>[
-											'url' => '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json',
-										],
-									"lengthMenu"=> [[20,-1], [20,Yii::t('app',"All")]],
-									"info"=>false,
-									"responsive"=>true,
-									 "dom"=> 'lfTrtip',
-									 "tableTools"=>[
-										 "aButtons"=> [  
-												// [
-												// "sExtends"=> "copy",
-												// "sButtonText"=> Yii::t('app',"Copiar")
-												// ],
-												// [
-												// "sExtends"=> "csv",
-												// "sButtonText"=> Yii::t('app',"CSV")
-												// ],
-												[
-												"sExtends"=> "xls",
-												"oSelectorOpts"=> ["page"=> 'current']
-												],
-												[
-												"sExtends"=> "pdf",
-												"oSelectorOpts"=> ["page"=> 'current']
-												],
-												// [
-												// "sExtends"=> "print",
-												// "sButtonText"=> Yii::t('app',"Imprimir")
-												// ],
-											],
-										],
-								],
-									   'columns' => [
-										['class' => 'yii\grid\SerialColumn'],
 
-										// 'id',
-										'nombre',
-										// 'id_momento1',
-										// 'estado',
-										'descripcion',
 
-										[
-										'class' => 'yii\grid\ActionColumn',
-										'template'=>'{view}{update}{delete}',
-											'buttons' => [
-											'view' => function ($url, $model) {
-												return Html::a('<span name="detalle" class="glyphicon glyphicon-eye-open" value ="'.$url.'" ></span>', $url, [
-															'title' => Yii::t('app', 'lead-view'),
-												]);
-											},
+                                <!-- data table-->
+                                <div class="col-md-6">
+                                    <div class="gc-resultados-momento1-index">
 
-											'update' => function ($url, $model) {
-												return Html::a('<span name="actualizar" class="glyphicon glyphicon-pencil" value ="'.$url.'"></span>', $url, [
-															'title' => Yii::t('app', 'lead-update'),
-												]);
-											}
 
-										  ],
-										
-										],
+                                        <?php $searchModel = new GcResultadosMomento1Buscar();
+                                        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+                                        ?>
 
-									],
-								]); ?>
-							</div>
-						</div>
-					</div>
-				</div>
-						<!-- fin data table-->
-					
-					</fieldset>
-					<!-- Form Step 2 -->
+                                        <h4>Listado de resultados esperados registrados</h4>
+
+                                        <?= DataTables::widget([
+                                            'dataProvider' => $dataProvider,
+                                            'clientOptions' => [
+                                                'language'=>[
+                                                    'url' => '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json',
+                                                ],
+                                                "lengthMenu"=> [[20,-1], [20,Yii::t('app',"All")]],
+                                                "info"=>false,
+                                                "responsive"=>true,
+                                                "dom"=> 'lfTrtip',
+                                                "tableTools"=>[
+                                                    "aButtons"=> [
+                                                        // [
+                                                        // "sExtends"=> "copy",
+                                                        // "sButtonText"=> Yii::t('app',"Copiar")
+                                                        // ],
+                                                        // [
+                                                        // "sExtends"=> "csv",
+                                                        // "sButtonText"=> Yii::t('app',"CSV")
+                                                        // ],
+                                                        [
+                                                            "sExtends"=> "xls",
+                                                            "oSelectorOpts"=> ["page"=> 'current']
+                                                        ],
+                                                        [
+                                                            "sExtends"=> "pdf",
+                                                            "oSelectorOpts"=> ["page"=> 'current']
+                                                        ],
+                                                        // [
+                                                        // "sExtends"=> "print",
+                                                        // "sButtonText"=> Yii::t('app',"Imprimir")
+                                                        // ],
+                                                    ],
+                                                ],
+                                            ],
+                                            'columns' => [
+                                                ['class' => 'yii\grid\SerialColumn'],
+
+                                                // 'id',
+                                                'nombre',
+                                                // 'id_momento1',
+                                                // 'estado',
+                                                'descripcion',
+
+                                                [
+                                                    'class' => 'yii\grid\ActionColumn',
+                                                    'template'=>'{view}{update}{delete}',
+                                                    'buttons' => [
+                                                        'view' => function ($url, $model) {
+                                                            return Html::a('<span name="detalle" class="glyphicon glyphicon-eye-open" value ="'.$url.'" ></span>', $url, [
+                                                                'title' => Yii::t('app', 'lead-view'),
+                                                            ]);
+                                                        },
+
+                                                        'update' => function ($url, $model) {
+                                                            return Html::a('<span name="actualizar" class="glyphicon glyphicon-pencil" value ="'.$url.'"></span>', $url, [
+                                                                'title' => Yii::t('app', 'lead-update'),
+                                                            ]);
+                                                        }
+
+                                                    ],
+
+                                                ],
+
+                                            ],
+                                        ]); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-wizard-buttons">
+                            <button type="button" class="btn btn-previous">Previous</button>
+                            <button type="button" class="btn btn-next">Finalizar</button>
+                        </div>
+                    </fieldset>
+                    <!-- Form Step 2 -->
+                <!-- Form Wizard -->
+            </div>
+        </div>
+
+    </div>
+</section>
 
     
 

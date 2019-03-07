@@ -51,7 +51,7 @@ use dosamigos\datepicker\DatePicker;
 	])->label(null,['style'=>'display:none']) ?>
 	
 	
-	<h3 style='background-color:#ccc;padding:5px;'><?= Html::encode( 'DATOS DE LA SESION' ) ?></h3>
+	<h3 style='background-color:#ccc;padding:5px;'><?= Html::encode( 'DATOS DE LA SESIÓN' ) ?></h3>
 	
 	<?= $form->field( $dataSesion, "[$index]id_sesion" )->dropDownList( $listaSesiones, [ 'prompt' => 'Seleccione...' ])->label( "Sesión" ) ?>
 	

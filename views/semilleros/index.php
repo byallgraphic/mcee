@@ -46,7 +46,7 @@ $tag = [];
 $selectAnios = preg_replace('/\n+/', '', Html::dropDownList( "anio", null, $anios, ['id'=>'swal-anio','class'=>'swal2-input', 'prompt' => 'Seleccione...' ] ) );
 $selectTiposSemilleros = preg_replace('/\n+/', '', Html::dropDownList( "docente", null, $tiposSemilleros, ['id'=>'swal-tipo','class'=>'swal2-input', 'prompt' => 'Seleccione...'] ) );
 
-$this->title = "Semilleros tic";
+$this->title = "Semilleros TIC";
 $this->params['breadcrumbs'][] = $this->title;
 
 $displayEstudiante 	= "display:none;";
@@ -133,7 +133,7 @@ else{
 		<div class="panel-body">
 			
 			<div class="form-group">
-			   <?= Html::a('Creación Semilleros Tic docentes', 
+			   <?= Html::a('Creación Semilleros TIC docentes', 
 										[
 											'semilleros-datos-ieo/create',
 											'anio'	=> $anio,
@@ -230,7 +230,7 @@ else{
 		<div class="form-group">
 		
 		
-		<?= Html::a('Creación semilleros tic estudiantes', 
+		<?= Html::a('Creación semilleros TIC estudiantes', 
 									[
 										'semilleros-datos-ieo-estudiantes/create',
 										'anio'	=> $anio,

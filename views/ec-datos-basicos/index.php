@@ -19,7 +19,7 @@ use yii\bootstrap\Modal;
 /* @var $searchModel app\models\EcDatosBasicosBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Datos Básicos';
+$this->title = 'Planeación y reporte de actividad';
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
@@ -27,6 +27,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/documentos.js',['depends'
 
 $_SESSION["idTipoInforme"] = isset($_GET['idTipoInforme']) ?  $_GET['idTipoInforme'] : 0; 
 
+$idTipoInforme = $_GET['idTipoInforme'];
 
 if( isset($guardado) && $guardado == 1 ){
 	echo Html::hiddenInput( 'guardadoFormulario', '1' );
@@ -41,14 +42,13 @@ if( isset($guardado) && $guardado == 1 ){
     <p>
         <?= Html::a('Volver', [ $urlVolver ], ['class' => 'btn btn-info']) ?>
        	
-		<?= Html::button('Agregar',['value'=>Url::to(['create']), 'class'=>'btn btn-success','id'=>'modalButton'])?>
-
+		<?=  Html::button('Agregar',['value'=>Url::to(['create','idTipoInforme'	=> $idTipoInforme]),'class'=>'btn btn-success','id'=>'modalButton']) ?>
     </p>
 
 	<?php 
 		
 		Modal::Begin([
-			'header'=>'<h3>Datos Básicos</h3>',
+			'header'=>'<h3>Planeación y reporte de actividad</h3>',
 			'id'=>'modal',
 			'size'=>'modal-lg',
 		

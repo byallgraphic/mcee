@@ -143,11 +143,12 @@ class EcinformeplaneacionieoController extends Controller
     }
 	
 	
-	public function actionInfoPorcentajes()
+	public function actionInfoPorcentajes($idProyecto)
 	{
 		
 		$proyectos = new EcProyectos();
-		$proyectos = $proyectos->find()->orderby("id")->all();
+		$proyectos = $proyectos->find()->andWhere("id = $idProyecto")->orderby("id")->all();
+		// $proyectos = $proyectos->find()->orderby("id")->all();
 		$proyectos = ArrayHelper::map($proyectos,'id','descripcion');
 		
 		
@@ -160,15 +161,22 @@ class EcinformeplaneacionieoController extends Controller
 				return $element['descripcion'];
 			});
 			
-		$arrayColorPanel = array
+		// $arrayColorPanel = array
+		// (
+			// "panel panel-danger",
+			// "panel panel-success",
+			// "panel panel-primary",
+			// "panel panel-info",
+		// );
+		
+		
+		$arrayColores = array
 		(
-			"panel panel-danger",
-			"panel panel-success",
-			"panel panel-primary",
-			"panel panel-info",
+			1=>"panel panel-danger",
+			3=>"panel panel-info",
+			2=>"panel panel-success",
+			4=>"panel panel-warning"
 		);
-		
-		
 		$cont=0;
 		$bandera = 0;
 		
@@ -176,7 +184,7 @@ class EcinformeplaneacionieoController extends Controller
 		foreach($proyectos as $pro)
 		{
 			
-			$html.= "<div class='".$arrayColorPanel[$cont]."'><div class='panel-heading'> 
+			$html.= "<div class='".$arrayColores[$idProyecto]."'><div class='panel-heading'> 
 							<h3 class='panel-title'>$pro</h3> 
 							<div class='panel-body'>
 							</div>
@@ -196,10 +204,7 @@ class EcinformeplaneacionieoController extends Controller
 			}
 			
 			$html.= "</div>";
-					
-					
-					
-					$cont++;
+			$cont++;
 		}
 		
 		echo json_encode( $html);

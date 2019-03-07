@@ -89,26 +89,22 @@ class ResumenOperativoFasesDocentesController extends Controller
 							i.id as id_institucion, 
 							s.id as id_sede, 
 							a.descripcion as anio, 
-							c.descripcion as ciclos,
 							fa.descripcion as fase,
 							sdi.personal_a,
 							sdi.id as id_semilleros
 			FROM 	semilleros_tic.datos_ieo_profesional as dip,public.sedes as s,public.instituciones as i, semilleros_tic.anio as a, 
-					semilleros_tic.fases as fa, semilleros_tic.ciclos as c,	semilleros_tic.ejecucion_fase as ef, semilleros_tic.semilleros_datos_ieo as sdi
+					semilleros_tic.fases as fa,	semilleros_tic.ejecucion_fase as ef, semilleros_tic.semilleros_datos_ieo as sdi
 			WHERE 	dip.id_institucion = i.id
 			AND		dip.id_sede = s.id
 			AND 	dip.estado = 1
 			AND 	dip.id = ef.id_datos_ieo_profesional
 			AND 	ef.id_fase=fa.id 
-			AND 	ef.id_ciclo = c.id
-			AND 	c.id_anio = a.id
 			AND 	sdi.id_institucion =dip.id_institucion
 			AND 	sdi.sede = dip.id_sede 
-			AND 	sdi.id_ciclo =ef.id_ciclo
 			GROUP BY dip.id,i.codigo_dane,i.descripcion, 
 			s.codigo_dane, s.descripcion,i.id,s.id, a.descripcion,
-			c.descripcion,fa.descripcion,sdi.personal_a, sdi.id
-			ORDER BY i.id,s.id
+			fa.descripcion,sdi.personal_a, sdi.id
+			ORDER BY i.id, s.id
 			");
 		$datos_ieo_profesional = $command->queryAll();
 	
@@ -186,7 +182,6 @@ class ResumenOperativoFasesDocentesController extends Controller
 				SELECT 
 				fecha_sesion,
 				duracion_sesion
-				
 				FROM semilleros_tic.datos_sesiones
 				WHERE id in($idDatosSesiones)
 				GROUP BY fecha_sesion,duracion_sesion,id
@@ -269,10 +264,6 @@ class ResumenOperativoFasesDocentesController extends Controller
 			//anio
 			$html.="<td style='border: 1px solid black;'>".$dip['anio']."</td>";	
 			
-			
-			//ciclo
-			$html.="<td style='border: 1px solid black;'>".$dip['ciclos']."</td>";	
-			
 			//profesional_a
 			$html.="<td style='border: 1px solid black;'>".$nomresPersonalA ."</td>";
 			
@@ -312,8 +303,7 @@ class ResumenOperativoFasesDocentesController extends Controller
 				("
 					select ai.frecuencias_sesiones, p.descripcion
 					from semilleros_tic.acuerdos_institucionales as ai, semilleros_tic.fases as f, semilleros_tic.semilleros_datos_ieo as sdi,
-						semilleros_tic.datos_ieo_profesional as dip, semilleros_tic.ejecucion_fase_ii as ef, semilleros_tic.anio as a,
-						semilleros_tic.ciclos as c, public.parametro as p
+						semilleros_tic.datos_ieo_profesional as dip, semilleros_tic.ejecucion_fase_ii as ef, semilleros_tic.anio as a, public.parametro as p
 					where f.id = 2
 					and ai.id_fase = f.id
 					and ai.id_semilleros_datos_ieo = sdi.id
@@ -327,7 +317,6 @@ class ResumenOperativoFasesDocentesController extends Controller
 					and sdi.estado = 1
 					and ai.estado = 1
 					and a.estado = 1
-					and c.estado =1
 					and  ai.frecuencias_sesiones = p.id
 					group by ai.frecuencias_sesiones,p.descripcion
 
@@ -445,7 +434,6 @@ class ResumenOperativoFasesDocentesController extends Controller
 			$command = $connection->createCommand("
 			SELECT 
 			id_datos_sesion,
-			id_ciclo,
 			docente_creador
 			FROM semilleros_tic.ejecucion_fase_iii
 			WHERE id_datos_ieo_profesional = $id_datos_ieo_profesional
@@ -571,8 +559,7 @@ class ResumenOperativoFasesDocentesController extends Controller
 				("
 					select ai.frecuencias_sesiones, p.descripcion
 					from semilleros_tic.acuerdos_institucionales as ai, semilleros_tic.fases as f, semilleros_tic.semilleros_datos_ieo as sdi,
-						semilleros_tic.datos_ieo_profesional as dip, semilleros_tic.ejecucion_fase_ii as ef, semilleros_tic.anio as a,
-						semilleros_tic.ciclos as c, public.parametro as p
+						semilleros_tic.datos_ieo_profesional as dip, semilleros_tic.ejecucion_fase_ii as ef, semilleros_tic.anio as a, public.parametro as p
 					where f.id = 3
 					and ai.id_fase = f.id
 					and ai.id_semilleros_datos_ieo = sdi.id
@@ -580,13 +567,11 @@ class ResumenOperativoFasesDocentesController extends Controller
 					and sdi.sede = dip.id_sede
 					and dip.id_institucion = $idInstitucion 
 					and dip.id_sede = $idSede
-					and c.id_anio = a.id
 					and dip.estado = 1
 					and ef.estado = 1
 					and sdi.estado = 1
 					and ai.estado = 1
 					and a.estado = 1
-					and c.estado =1
 					and  ai.frecuencias_sesiones = p.id
 					group by ai.frecuencias_sesiones,p.descripcion
 			
@@ -628,6 +613,12 @@ class ResumenOperativoFasesDocentesController extends Controller
 			'Sesión 4',
 			'Sesión 5',
 			'Sesión 6',
+			'Sesión 7',
+			'Sesión 8',
+			'Sesión 9',
+			'Sesión 10',
+			'Sesión 11',
+			'Sesión 12',
 			);
 			
 			
@@ -640,7 +631,7 @@ class ResumenOperativoFasesDocentesController extends Controller
 			
 			//informacion sesiones fase 3
 			
-			for($i=0;$i<=5;$i++)
+			for($i=0;$i<=11;$i++)
 			{
 				
 				//docentes por sesion fase 3

@@ -16,7 +16,7 @@ use yii\helpers\Url;
 /* @var $model app\models\EcDatosBasicos */
 
 $this->title = "Detalles";
-$this->params['breadcrumbs'][] = ['label' => 'Datos Básicos', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Planeación', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?= Html::a('Volver', 
@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		
 			<div class='col-sm-6'>
 	
-				<h1 style='background-color:#ccc;'><?= Html::encode("PLANEACIÓN MISIONAL") ?></h1>
+				<h1 style='background-color:#ccc;'><?= Html::encode("Planeación misional") ?></h1>
 
 				 <?= DetailView::widget([
 					'model' => $modelPlaneacion,
@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					],
 				]) ?>
 				
-				<h1 style='background-color:#ccc;'><?= Html::encode( "MEDIOS DE VERIFICACIÓN Y PRODUCTOS" ) ?></h1>
+				<h1 style='background-color:#ccc;'><?= Html::encode( "Medios de verificación y productos" ) ?></h1>
 				
 				
 				<?= DetailView::widget([
@@ -123,7 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			
 			<div class='col-sm-6'>
 			
-				<h1 style='background-color:#ccc;'><?= Html::encode( "REPORTES" ) ?></h1>
+				<h1 style='background-color:#ccc;'><?= Html::encode( "Reportes" ) ?></h1>
 				
 				<?= DetailView::widget([
 					'model' => $modelReportes,

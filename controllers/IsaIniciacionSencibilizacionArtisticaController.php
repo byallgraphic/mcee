@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+
 if(@$_SESSION['sesion']=="si")
 { 
 	// echo $_SESSION['nombre'];
@@ -17,6 +18,7 @@ use Yii;
 use app\models\IsaIniciacionSencibilizacionArtistica;
 use app\models\Sedes;
 use app\models\Instituciones;
+use app\models\IsaProyectosGenerales;
 
 use yii\helpers\ArrayHelper;
 use app\models\IsaActividadesIsa;
@@ -24,6 +26,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\bootstrap\Collapse;
 
 /**
  * IsaIniciacionSencibilizacionArtisticaController implements the CRUD actions for IsaIniciacionSencibilizacionArtistica model.
@@ -61,21 +64,45 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
         ]);
     }
 
-    function actionViewFases($model, $form){
+    function actionViewFases($model, $form)
+	{
         
+        $proyectos = new IsaProyectosGenerales();
         $actividades_isa = new IsaActividadesIsa();
-        $proyectos = [ 
-            1 => "Sensibilizar a la comunidad sobre la importancia del arte y la cultura a través de la oferta cultural del municipio.",
-            2 => "Desarrollar programas de iniciación y sensibilización artística desde las instituciones educativas oficiales dirigidos a la comunidad",
-        ];
 		
-		return $this->renderAjax('fases', [
-			'idPE' 	=> null,
-            'fases' => $proyectos,
-            'form' => $form,
-            "model" => $model,
-            'actividades_isa' => $actividades_isa
-        ]);
+		
+		//tipo_proyecto diferenciador para usar la misma tabla para varios proyectos
+		$proyectos = $proyectos->find()->andWhere("tipo_proyecto = 1")->orderby("id")->all();
+		$proyectos = ArrayHelper::map($proyectos,'id','descripcion');
+		
+		
+		$items = [];
+
+		foreach( $proyectos as $idProyecto => $titulo )
+		{
+			
+
+			$items[] = 	[
+							'label' 		=>  $titulo,
+							'content' 		=>  $this->renderAjax( 'faseItem', 
+															[  
+																'form' => $form,
+																"model" => $model,
+																'idProyecto' => $idProyecto,
+																'actividades_isa' => $actividades_isa
+																
+															] 
+												),
+							'contentOptions'=> []
+						];
+						
+		}
+
+	
+
+		echo Collapse::widget([
+			'items' => $items,
+		]);
 		
 	}
 
@@ -101,47 +128,77 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
     {
         $model = new IsaIniciacionSencibilizacionArtistica();
 
-        $idInstitucion = $_SESSION['instituciones'][0];
-
-        if ($model->load(Yii::$app->request->post())) {
-
-            $model->id_institucion = $_SESSION['instituciones'][0];
-            $model->estado = 1;
-            $model->id_sede = intval($model->id_sede);
-
-            if($model->save()){
+        if ($model->load(Yii::$app->request->post())) 
+		{
+				
+            if($model->save())
+			{
                 $isa_id = $model->id;
-                if (Yii::$app->request->post('IsaActividadesIsa')){
-                    $data = Yii::$app->request->post('IsaActividadesIsa');
-                    $count 	= count( $data );
-                    $modelActividades = [];
+				$data = Yii::$app->request->post('IsaActividadesIsa');
+					
+				$arrayDatos = $data;
+				
+				foreach($data as $datos => $valores)
+				{
+					$arrayDatos[$datos]['id_iniciacion_sencibilizacion_artistica']=$isa_id;
+				}
+			
+				// echo "<pre>"; print_r( $arrayDatos ); echo "</pre>"; 
+				// die;
+			
+				
+				// $columnNameArray = 
+				// [
+				// 'fecha_prevista_desde',
+				// 'fecha_prevista_hasta',
+				// 'num_equipo_campo',
+				// 'perfiles',
+				// 'docente_orientador',
+				// 'fases',
+				// 'num_encuentro',
+				// 'nombre_actividad',
+				// 'actividad_desarrollar',
+				// 'lugares_recorrer',
+				// 'tematicas_abordadas',
+				// 'objetivos_especificos',
+				// 'tiempo_previsto',
+				// 'productos',
+				// 'cotenido_si_no',
+				// 'contenido_nombre',
+				// 'contenido_fecha',
+				// 'cotenido_vigencia',
+				// 'contenido_justificacion',
+				// 'arcticulacion',
+				// 'cantidad_participantes',
+				// 'requerimientos_tecnicos',
+				// 'requerimientos_logisticos',
+				// 'destinatarios',
+				// 'fecha_entega_envio',
+				// 'observaciones_generales',
+				// 'nombre_diligencia',
+				// 'rol',
+				// 'fecha',
+				// 'id_procesos_generales',
+				// 'id_iniciacion_sencibilizacion_artistica'
+				// ];
+				// $insertCount = Yii::$app->db->createCommand()
+                   // ->batchInsert(
+                         // 'isa.actividades_isa', $columnNameArray, $arrayDatos
+                     // )
+					 // ->execute();
 
-                    for( $i = 0; $i < 5; $i++ ){
-                        $modelActividades[] = new IsaActividadesIsa();
-                    }
-
-                    if (IsaActividadesIsa::loadMultiple($modelActividades, Yii::$app->request->post() )) {
-                        foreach( $modelActividades as $key => $model) {
-                            if($model->fecha_prevista_desde and $model->fecha_prevista_hasta){
-
-                                $model->id_iniciacion_sencibilizacion_artistica = $isa_id;
-                                $model->estado = 1;
-                                $model->save();    
-                            }                        
-                        }
-                    }
-
-                }
+                
             }
            
             return $this->redirect(['index', 'guardado' => 1]);
         }
-
+		
+		$idInstitucion = $_SESSION['instituciones'][0];
+		$institucion = Instituciones::findOne($idInstitucion);
         $Sedes  = Sedes::find()->where( "id_instituciones = $idInstitucion" )->all();
         $sedes	= ArrayHelper::map( $Sedes, 'id', 'descripcion' );
 
-        $institucion = Instituciones::findOne($idInstitucion);
-
+       
         return $this->renderAjax('create', [
             'model' => $model,
             'sedes' => $sedes,

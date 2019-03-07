@@ -31,7 +31,21 @@ use app\models\PerfilesPersonasInstitucion;
  
 //se extrae los datos que vienen de login (usuario y contraseña) para para validarlos
 extract($_POST['LoginForm']);
-$perfil = $_POST['Perfiles']['descripcion'];
+
+
+if (isset($_POST['Perfiles']['descripcion']) )
+{
+	
+	$perfil = @$_POST['Perfiles']['descripcion'];
+}
+else
+{
+	header('Location: index.php?r=site%2Flogin&mensaje=1');
+	die;
+}
+
+echo "<pre>"; print_r($perfil ); echo "</pre>"; 
+
 //se encripta primero para comparalo con lo que esta en la base de datos
 $psw = hash("sha256",$password);
 

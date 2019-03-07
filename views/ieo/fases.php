@@ -4,6 +4,8 @@ use yii\helpers\Html;
 $items = [];
 $index = 0;
 $colors = ["#cce5ff", "#d4edda", "#f8d7da", "#fff3cd", "#d1ecf1", "#d6d8d9", "#cce5ff"];
+
+
 foreach( $fases as $keyFase => $fase ){
 	
 	/*$sesiones = Sesiones::find()
@@ -37,89 +39,7 @@ foreach( $fases as $keyFase => $fase ){
 		'contentOptions'=> []
 	];
 
-	/*if($keyFase  == 1){
-		$items[] = 	[
-			'label' 		=>  $fase,
-			'content' 		=>  $this->render( 'faseItem', 
-											[  
-												'form' => $form,
-												'numProyecto' 	=> $keyFase,
-												'sesiones' 	=> $index,
-												'fase' 		=> $fase,
-												'documentosReconocimiento' => $documentosReconocimiento,
-												'tiposCantidadPoblacion' => $tiposCantidadPoblacion,
-												'evidencias' => $evidencias,
-												'producto' => $producto,
-												'requerimientoExtra' => $requerimientoExtra,
-												"model" => $model,
-												"estudiantesGrado" =>  $estudiantesGrado,
-												'datos'=> $datos,
-												"persona" => $persona,
-												"nombres" => $nombres,
-												"idTipoInforme" => $idTipoInforme
-											] 
-								),
-			
-			'headerOptions' => ['class' => 'tab1', 'style' => 'background-color: #f2dedf;'],
-			'contentOptions'=> []
-		];
-	}
-	if($keyFase  == 2){
-		$items[] = 	[
-			'label' 		=>  $fase,
-			'content' 		=>  $this->render( 'faseItem', 
-											[  
-												'form' => $form,
-												'numProyecto' 	=> $keyFase,
-												'sesiones' 	=> $index,
-												'fase' 		=> $fase,
-												'documentosReconocimiento' => $documentosReconocimiento,
-												'tiposCantidadPoblacion' => $tiposCantidadPoblacion,
-												'evidencias' => $evidencias,
-												'producto' => $producto,
-												'requerimientoExtra' => $requerimientoExtra,
-												"model" => $model,
-												"estudiantesGrado" =>  $estudiantesGrado,
-												'datos'=> $datos,
-												"persona" => $persona,
-												"nombres" => $nombres,
-												"idTipoInforme" => $idTipoInforme
-											] 
-								),
-			//'options' => ['style' => 'background-color: red;'],
-			'headerOptions' => ['style' => 'background-color: #def0d8;'],
-			'contentOptions'=> []
-		];
-	}
-	if($keyFase  == 3){
-		$items[] = 	[
-			'label' 		=>  $fase,
-			'content' 		=>  $this->render( 'faseItem', 
-											[  
-												'form' => $form,
-												'numProyecto' 	=> $keyFase,
-												'sesiones' 	=> $index,
-												'fase' 		=> $fase,
-												'documentosReconocimiento' => $documentosReconocimiento,
-												'tiposCantidadPoblacion' => $tiposCantidadPoblacion,
-												'evidencias' => $evidencias,
-												'producto' => $producto,
-												'requerimientoExtra' => $requerimientoExtra,
-												"model" => $model,
-												"estudiantesGrado" =>  $estudiantesGrado,
-												'datos'=> $datos,
-												"persona" => $persona,
-												"nombres" => $nombres,
-												"idTipoInforme" => $idTipoInforme
-											] 
-								),
-			//'options' => ['style' => 'background-color: red;'],
-			'headerOptions' => ['style' => 'background-color: #95b3d7'],
-			'options' => ['style' => 'color: black;'],
-			'contentOptions'=> []
-		];
-	}*/
-	
+
 				
 	$index ++;
 }

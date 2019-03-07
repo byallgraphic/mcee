@@ -6,7 +6,12 @@ Fecha: 18-08-2018
 Desarrollador: Maria Viviana Rodas
 Descripción: Formulario diario de campo
 ---------------------------------------
-Modificación: 
+Modificaciones: 
+----------------------------------------------------------------
+Fecha: 2019-02-26
+Desarrollador: Edwin Molina Grisales
+Descripción: Se elimina ciclos y se trabaja con el año de la url
+----------------------------------------------------------------
 Fecha: 22-10-2018
 Desarrollador: Edwin Molina Grisales
 Descripción: Se agrega variables enviadas por GET anio y esDocente para regresar al menu principal
@@ -28,8 +33,13 @@ use app\models\Fases;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = '';
-$nombre = 'Semilleros Tic Diario De Campo';
+$nombre = 'Semilleros TIC Diario De Campo';
 $this->params['breadcrumbs'][] =$nombre;
+
+if( !$sede || $sede < 0 ){
+	$this->registerJs( "$( cambiarSede ).click()" );
+	return;
+}
 ?>
 
 
@@ -53,7 +63,7 @@ $this->params['breadcrumbs'][] =$nombre;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::button('Agregar',['value'=>Url::to(['create']),'class'=>'btn btn-success','id'=>'modalButton'])?>
+        <?= Html::button('Agregar',['value'=>Url::to(['create', 'anio' => $anio, 'esDocente' => $esDocente]),'class'=>'btn btn-success','id'=>'modalButton'])?>
 		
 		
 		<?= Html::a('Volver', 
@@ -108,6 +118,7 @@ $this->params['breadcrumbs'][] =$nombre;
             ['class' => 'yii\grid\SerialColumn'],
 
             // 'id',
+            'anio',
             [
 				'attribute'=>'id_fase',
 				/*
@@ -121,8 +132,8 @@ $this->params['breadcrumbs'][] =$nombre;
 					return  $fases ;	
 				},	
 			],
-            'descripcion',
-            'hallazgos',
+            // 'descripcion',
+            // 'hallazgos',
             // 'estado',
 
             [
@@ -130,12 +141,18 @@ $this->params['breadcrumbs'][] =$nombre;
 			'template'=>'{view}{update}{delete}',
 				'buttons' => [
 				'view' => function ($url, $model) {
+					
+					$url = $url."&anio=".$_GET['anio']."&esDocente=".$_GET['esDocente'];
+					
 					return Html::a('<span name="detalle" class="glyphicon glyphicon-eye-open" value ="'.$url.'" ></span>', $url, [
 								'title' => Yii::t('app', 'lead-view'),
 					]);
 				},
 
 				'update' => function ($url, $model) {
+					
+					$url = $url."&anio=".$_GET['anio']."&esDocente=".$_GET['esDocente'];
+					
 					return Html::a('<span name="actualizar" class="glyphicon glyphicon-pencil" value ="'.$url.'"></span>', $url, [
 								'title' => Yii::t('app', 'lead-update'),
 					]);

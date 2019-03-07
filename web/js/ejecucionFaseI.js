@@ -17,7 +17,7 @@ $( document ).ready(function(){
 		"Nombre del docente",
 		"Nombre de las asignaturas que enseña",
 		"Especialidad de la Media Técnica o Técnica",
-		"Participación Sesiones(1 a 6)",
+		"Participación Sesiones(1 a 12)",
 		"Número de Apps 0.0 creadas",
 		"Nombre de las aplicaciones creadas",
 		"Número de sesiones empleadas para la creación de cada aplicación",

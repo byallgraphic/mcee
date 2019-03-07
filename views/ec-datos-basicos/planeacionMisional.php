@@ -8,6 +8,32 @@ use dosamigos\datepicker\DatePicker;
 /* @var $this yii\web\View */
 /* @var $model app\models\EcDatosBasicos */
 /* @var $form yii\widgets\ActiveForm */
+
+$connection = Yii::$app->getDb();
+		$command = $connection->createCommand(
+		"
+			select p.id
+			from ec.tipo_informe as ti, ec.componentes as c, ec.proyectos as p
+			where ti.id = $idTipoInforme
+			and ti.id_componente = c.id
+			and c.descripcion = p.descripcion
+			
+		");
+		$ecProyectos = $command->queryAll();
+		
+
+//colores del acordeon
+		$arrayColores = array
+		(
+			1=>"bg-danger",
+			3=>"bg-info",
+			2=>"bg-success",
+			4=>"bg-warning"
+		);
+		
+		$color = $arrayColores[$ecProyectos[0]['id']];
+
+
 ?>
 
 
@@ -15,7 +41,7 @@ use dosamigos\datepicker\DatePicker;
 
 	<div class='content-fluid'>
 				
-				<h1 style='background-color:#ccc;'><?= Html::encode("PLANEACIÓN MISIONAL") ?></h1>
+				<h1 class='<?php echo $color; ?>'><?= Html::encode("Planeación misional") ?></h1>
 
 				<?= $form->field($modelPlaneacion, 'tipo_actividad')->dropDownList( [  'prompt' => 'Seleccione...', 'Mesa de trabajo', 'Acompañamiento a la práctica', 'Salidas pedagógicas', 'Evento de ciudad' ] ) ?>
 				
@@ -39,7 +65,7 @@ use dosamigos\datepicker\DatePicker;
 				
 				<?= $form->field($modelPlaneacion, 'descripcion_actividad')->textarea() ?>
 				
-				<h1 style='background-color:#ccc;'><?= Html::encode( "TIPO ACTOR - CANTIDAD ASISTENTES" ) ?></h1>
+				<h1 class='<?php echo $color; ?>'><?= Html::encode( "Tipo actor - Cantidad asistentes" ) ?></h1>
 				
 				<div class="cantidades" style="margin-left: 30px;">
 					<div class="row" style='text-align:center;'>
@@ -80,7 +106,7 @@ use dosamigos\datepicker\DatePicker;
 				</div>
 				<br>
 				
-				<h1 style='background-color:#ccc;'><?= Html::encode( "MEDIOS DE VERIFICACIÓN Y PRODUCTOS" ) ?></h1>
+				<h1 class='<?php echo $color; ?>'><?= Html::encode( "Medios de verificación y productos" ) ?></h1>
 				
 				
 				<?= $form->field($modelVerificacion, "[1]tipo_verificacion")->dropDownList( $tiposVerificacion, ['prompt' => 'Seleccione...' ] ) ?>
@@ -93,7 +119,7 @@ use dosamigos\datepicker\DatePicker;
 			
 			
 			
-				<h1 style='background-color:#ccc;'><?= Html::encode( "REPORTES" ) ?></h1>
+				<h1 class='<?php echo $color; ?>'><?= Html::encode( "Reportes" ) ?></h1>
 				
 				<?= $form->field($modelReportes, 'fecha_diligenciamiento')->widget(
 					DatePicker::className(), [

@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				<?= Html::a('3.A Informe de avance Mensual I.E.O Fase Plan de acción - Misional', 
 										[
 											'ecinformeplaneacionieo/index',
-											'idTipoInforme'		=> 39,
+											'idTipoInforme'		=> 37,
 										], 
 										['class' => 'btn btn-success'
 				]) ?>

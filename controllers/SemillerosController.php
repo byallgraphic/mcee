@@ -90,7 +90,7 @@ class SemillerosController extends Controller
 							->one();
 		
 		$anios	= [];
-        $anios[ 0 ] = '2017';
+        // $anios[ 0 ] = '2017';
 		
 		for( $i = 2016; $i <= date("Y")+1; $i++ ){
 			$anios[ $i ] = $i;

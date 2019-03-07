@@ -7,6 +7,7 @@ use dosamigos\datepicker\DatePicker;
 /* @var $model app\models\ImplementacionIeo */
 /* @var $form yii\widgets\ActiveForm */
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
+// $this->registerJsFile(Yii::$app->request->baseUrl.'/js/implementacionIeo.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
 
 <div class="implementacion-ieo-form">

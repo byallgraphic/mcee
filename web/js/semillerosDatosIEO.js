@@ -60,7 +60,7 @@ $( document ).ready(function(){
 					return true;
 				}
 				else{
-					yii.validation.addMessage(messages,"Debe agregar por lo menos un aucuerdo institucional en cualquier fase", this );
+					yii.validation.addMessage(messages,"Debe agregar por lo menos un acuerdo institucional en cualquier fase", this );
 					return false;
 				}
 			}

@@ -74,7 +74,7 @@
                 <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]directivos", [ 'type' => 'number', 'class' => "form-control docentes-$numActividad-cantidad", 'value' => isset($datos[$numActividad]['directivos']) ? $datos[$numActividad]['directivos'] : ''] ) ?>
             </div>
             <div class="col-sm-1" style='padding:0px;'>
-                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]total", [ 'type' => 'number', 'class' => "form-control", 'value' => isset($datos[$numActividad]['total']) ? $datos[$numActividad]['total'] : ''] ) ?>
+                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]total", [ 'readOnly' => true, 'class' => "form-control", 'value' => isset($datos[$numActividad]['total']) ? $datos[$numActividad]['total'] : ''] ) ?>
             </div>
         </div>
         
@@ -155,7 +155,7 @@
             <div class="col-sm-1" style='padding:0px;'>
                 <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_11", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_11']) ? $datos[$numActividad]['grado_11'] : ''] ) ?>
             </div>
-            <?= $form->field($estudiantesGrado, "[$numActividad]total")->textInput([ 'value' => isset($datos[$numActividad]['total']) ? $datos[$numActividad]['total'] : '' ]) ?>
+            <?= $form->field($estudiantesGrado, "[$numActividad]total")->textInput(['readOnly' => true, 'value' => isset($datos[$numActividad]['total']) ? $datos[$numActividad]['total'] : '' ]) ?>
         </div>
         <h3 style='background-color: #ccc;padding:5px;'>Evidencias </h3>    
         <?php

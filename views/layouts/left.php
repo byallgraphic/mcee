@@ -243,7 +243,7 @@
 															
 														],
 													],
-														['label' => 'Semilleros tic', 
+														['label' => 'Semilleros TIC', 
 														'icon' => 'arrow-right', 
 														'url' => ['semilleros/index'],
 														// 'items' => [

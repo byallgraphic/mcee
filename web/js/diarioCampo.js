@@ -6,10 +6,10 @@ $( document ).ready(function() {
 		
 	
 		// $("#principal").hide();
-		$('#selAnio').trigger('change');	
+		// $('#selAnio').trigger('change');	
 		// $('#selFases').trigger('change');	
 		
-		setTimeout(function(){$('#selFases').trigger('change');}, 600);
+		// setTimeout(function(){$('#selFases').trigger('change');}, 600);
 			// llenarPerfilesSelected();
 	// }
 });
@@ -17,14 +17,28 @@ $( document ).ready(function() {
 
 
 //llenar las fases y el contenido
-$( "#selFases" ).change(function() 
+$( "#semillerosticdiariodecampo-id_fase" ).change(function() 
 {
 	
-	faseO = $( "#selFases" ).val();
-	anio = $( "#selAnio" ).val();
+	faseO = $( "#semillerosticdiariodecampo-id_fase" ).val();
+	anio = $( "#semillerosticdiariodecampo-anio" ).val();
 	ciclo = $( "#selCiclo" ).val();
 	
-	 if(faseO != "" && anio != "" && ciclo != "" )
+	var fase = $( this ).val();
+
+	if( fase )
+	{
+		$.get( "index.php?r=semilleros-tic-diario-de-campo/create&idFase="+fase+"&anio="+anio+"&esDocente=0",
+			function( data )
+			{
+				$( "#modalContent" ).html(data);
+			}
+		);
+	}
+	
+	return;
+	
+	 if(faseO != "" && anio != "" )
 	 {
 		 if(faseO == 1){fase=14; titulo="BITACORA FASE I"; descripcion=17; hallazgo=20;}
 		 else if(faseO == 2){fase = 15; titulo="BITACORA FASE II"; descripcion=18; hallazgo=21;}
@@ -71,16 +85,16 @@ $( "#selFases" ).change(function()
 		 $("#contenido").hide();
 		 $("#encabezado1").hide();
 		 $("#contenido1").hide();
-		 $( "#selFases" ).val('');
+		 $( "#semillerosticdiariodecampo-id_fase" ).val('');
 		 
-		 swal("Importante", "Debe seleccionar año, ciclo y fase", "error");
+		 swal("Importante", "Debe seleccionar año y fase", "error");
 		 }
 });
 
 //llenar los barrios segun la comuna que seleccione
 $( "#selAnio" ).change(function() 
 {
-	 $( "#selFases" ).val('');
+	 $( "#semillerosticdiariodecampo-id_fase" ).val('');
 	 $("#titulo").hide(titulo);
 	 $("#encabezado").hide();
 	 $("#contenido").hide();
@@ -113,7 +127,7 @@ $( "#selAnio" ).change(function()
 
 $( "#selCiclo" ).change(function() 
 {
-	$( "#selFases" ).val('');
+	$( "#semillerosticdiariodecampo-id_fase" ).val('');
 	 $("#titulo").hide(titulo);
 	 $("#encabezado").hide();
 	 $("#contenido").hide();

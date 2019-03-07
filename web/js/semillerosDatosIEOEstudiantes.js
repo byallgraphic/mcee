@@ -32,7 +32,7 @@ $( document ).ready(function(){
 				height: '34px',
 			})
 			.editable({
-				title: 'Ingrese la informoción',
+				title: 'Ingrese la información',
 				rows: 10,
 				emptytext: '',
 			});
@@ -134,7 +134,7 @@ $( document ).ready(function(){
 							height: '34px',
 						})
 						.editable({
-							title: 'Ingrese la informoción',
+							title: 'Ingrese la información',
 							rows: 10,
 							emptytext: '',
 						});
@@ -267,7 +267,7 @@ $( document ).ready(function(){
 				height: '34px',
 			})
 			.editable({
-				title: 'Ingrese la informoción',
+				title: 'Ingrese la información',
 				rows: 10,
 				emptytext: '',
 			});

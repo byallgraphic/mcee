@@ -8,7 +8,8 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/ieo.js',['depends' => [\yii\web\JqueryAsset::className()]]);
-$this->registerJsFile(Yii::$app->request->baseUrl.'/js/ieo-docentes.js',['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $model->id_tipo_informe;
 ?>
 
 <div class="ieo-form">
@@ -25,11 +26,12 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/ieo-docentes.js',['depend
 
     <?= $form->field($model, 'barrio')->dropDownList( [], [ 'prompt' => 'Seleccione...',  ] ) ?>                 
     
-    <?= $model->persona_acargo ?>
+  
+	<?= $form->field($model, 'persona_acargo')->textInput() ?> 
     
     <h3 style='background-color: #ccc;padding:5px;'>I.E.O Avance Ejecución</h3>
 
-    <?= $this->context->actionViewFases($model, $form, isset($datos) ? $datos : 0, isset($model->persona_acargo) ?  $model->persona_acargo : '', $_SESSION["idTipoInforme"]);   ?>
+    <?= $this->context->actionViewFases($model, $form, isset($datos) ? $datos : 0, isset($model->persona_acargo) ?  $model->persona_acargo : '', $idTipoInforme );   ?>
     
     
     <div class="form-group">

@@ -27,7 +27,7 @@ if (@$_GET['mensaje']==1)
 	$this->registerJs( <<< EOT_JS_CODE
 
   swal({
-		text: "Datos incorrectos",
+		text: "Todos los campos son obligatorios",
 		icon: "warning",
 		button: "Cerrar",
 	});

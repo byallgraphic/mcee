@@ -139,9 +139,8 @@ class EcInformeEjecutivoEstadoController extends Controller
 	}
 	
 	
-	public function obtenerProyectosEjes()
+	public function obtenerProyectosEjes($idTipoInforme )
 	{
-		$idTipoInforme = $_GET['idTipoInforme'];
 		
 		$connection = Yii::$app->getDb();
 		$command = $connection->createCommand(
@@ -185,7 +184,7 @@ class EcInformeEjecutivoEstadoController extends Controller
 			'coordinador' =>$this->obtenerNombresXPerfiles(23),
 			'secretario' =>$this->obtenerNombresXPerfiles(24),
 			'instituciones'=> $this->obtenerInstituciones(),
-			'ejes'=> $this->obtenerProyectosEjes(1),
+			'ejes'=> $this->obtenerProyectosEjes($_GET['idTipoInforme']),
         ]);
     }
 
@@ -203,14 +202,14 @@ class EcInformeEjecutivoEstadoController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index','guardado' => 1,'idTipoInforme' => $model->id_tipo_informe]);
         }
-
+		
         return $this->renderAjax('update', [
             'model' => $model,
 			'persona' => $this->obtenerNombrePersona(),
 			'coordinador' =>$this->obtenerNombresXPerfiles(23),
 			'secretario' =>$this->obtenerNombresXPerfiles(24),
 			'instituciones'=> $this->obtenerInstituciones(),
-			'ejes'=> $this->obtenerProyectosEjes(),
+			'ejes'=> $this->obtenerProyectosEjes($model->id_tipo_informe),
         ]);
     }
 	

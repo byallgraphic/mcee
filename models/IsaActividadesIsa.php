@@ -8,7 +8,8 @@ use Yii;
  * This is the model class for table "isa.actividades_isa".
  *
  * @property int $id
- * @property int $id_actividad
+ * @property string $id_iniciacion_sencibilizacion_artistica
+ * @property string $id_procesos_generales
  * @property string $fecha_prevista_desde
  * @property string $fecha_prevista_hasta
  * @property int $num_equipo_campo
@@ -24,11 +25,11 @@ use Yii;
  * @property string $tiempo_previsto
  * @property string $productos
  * @property string $cotenido_si_no
- * @property string $cotenido_nombre
- * @property string $cotenido_fecha
+ * @property string $contenido_nombre
+ * @property string $contenido_fecha
  * @property string $cotenido_vigencia
  * @property string $contenido_justificacion
- * @property string $acticulacion
+ * @property string $arcticulacion
  * @property int $cantidad_participantes
  * @property string $requerimientos_tecnicos
  * @property string $requerimientos_logisticos
@@ -38,18 +39,10 @@ use Yii;
  * @property string $nombre_diligencia
  * @property string $rol
  * @property string $fecha
- * @property int $estado
- * @property int $id_iniciacion_sencibilizacion_artistica
- * @property int $id_componente
+ * @property string $estado
  */
 class IsaActividadesIsa extends \yii\db\ActiveRecord
 {
-    public $id_sede;
-    public $caracterizacion_si_no;
-    public $caracterizacion_nombre;
-    public $caracterizacion_fecha;
-    public $caracterizacion_justificacion;
-    
     /**
      * @inheritdoc
      */
@@ -64,12 +57,13 @@ class IsaActividadesIsa extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_actividad', 'num_equipo_campo', 'num_encuentro', 'cantidad_participantes', 'estado', 'id_iniciacion_sencibilizacion_artistica', 'id_componente'], 'default', 'value' => null],
-            [['id_actividad', 'num_equipo_campo', 'num_encuentro', 'cantidad_participantes', 'estado', 'id_iniciacion_sencibilizacion_artistica', 'id_componente'], 'integer'],
-            [['fecha_prevista_desde', 'fecha_prevista_hasta', 'cotenido_fecha', 'fecha'], 'safe'],
-            [['perfiles', 'docente_orientador', 'fases', 'nombre_actividad', 'actividad_desarrollar', 'lugares_recorrer', 'tematicas_abordadas', 'objetivos_especificos', 'tiempo_previsto', 'productos', 'cotenido_si_no', 'cotenido_nombre', 'cotenido_vigencia', 'contenido_justificacion', 'acticulacion', 'requerimientos_tecnicos', 'requerimientos_logisticos', 'destinatarios', 'fecha_entega_envio', 'observaciones_generales', 'nombre_diligencia', 'rol'], 'string'],
-            [['id_componente'], 'exist', 'skipOnError' => true, 'targetClass' => IsaComponentes::className(), 'targetAttribute' => ['id_componente' => 'id']],
+            [['id_iniciacion_sencibilizacion_artistica', 'id_procesos_generales', 'num_equipo_campo', 'num_encuentro', 'cantidad_participantes', 'estado'], 'default', 'value' => null],
+            [['id_iniciacion_sencibilizacion_artistica', 'id_procesos_generales', 'num_equipo_campo', 'num_encuentro', 'cantidad_participantes', 'estado'], 'integer'],
+            [['fecha_prevista_desde', 'fecha_prevista_hasta', 'contenido_fecha', 'fecha'], 'safe'],
+            [['perfiles', 'docente_orientador', 'fases', 'nombre_actividad', 'actividad_desarrollar', 'lugares_recorrer', 'tematicas_abordadas', 'objetivos_especificos', 'tiempo_previsto', 'productos', 'cotenido_si_no', 'contenido_nombre', 'cotenido_vigencia', 'contenido_justificacion', 'arcticulacion', 'requerimientos_tecnicos', 'requerimientos_logisticos', 'destinatarios', 'fecha_entega_envio', 'observaciones_generales', 'nombre_diligencia', 'rol'], 'string'],
             [['id_iniciacion_sencibilizacion_artistica'], 'exist', 'skipOnError' => true, 'targetClass' => IsaIniciacionSencibilizacionArtistica::className(), 'targetAttribute' => ['id_iniciacion_sencibilizacion_artistica' => 'id']],
+            [['id_procesos_generales'], 'exist', 'skipOnError' => true, 'targetClass' => IsaProcesosGenerales::className(), 'targetAttribute' => ['id_procesos_generales' => 'id']],
+            [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Estados::className(), 'targetAttribute' => ['estado' => 'id']],
         ];
     }
 
@@ -80,7 +74,8 @@ class IsaActividadesIsa extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'id_actividad' => 'Id Actividad',
+            'id_iniciacion_sencibilizacion_artistica' => 'Id Iniciacion Sencibilizacion Artistica',
+            'id_procesos_generales' => 'Id Procesos Generales',
             'fecha_prevista_desde' => 'Fecha Prevista Desde',
             'fecha_prevista_hasta' => 'Fecha Prevista Hasta',
             'num_equipo_campo' => 'Num Equipo Campo',
@@ -95,12 +90,12 @@ class IsaActividadesIsa extends \yii\db\ActiveRecord
             'objetivos_especificos' => 'Objetivos Especificos',
             'tiempo_previsto' => 'Tiempo Previsto',
             'productos' => 'Productos',
-            'cotenido_si_no' => 'Contenido Si No',
-            'cotenido_nombre' => 'Cotenido Nombre',
-            'cotenido_fecha' => 'Cotenido Fecha',
+            'cotenido_si_no' => 'Cotenido Si No',
+            'contenido_nombre' => 'Contenido Nombre',
+            'contenido_fecha' => 'Contenido Fecha',
             'cotenido_vigencia' => 'Cotenido Vigencia',
             'contenido_justificacion' => 'Contenido Justificacion',
-            'acticulacion' => 'Acticulacion',
+            'arcticulacion' => 'Arcticulacion',
             'cantidad_participantes' => 'Cantidad Participantes',
             'requerimientos_tecnicos' => 'Requerimientos Tecnicos',
             'requerimientos_logisticos' => 'Requerimientos Logisticos',
@@ -111,8 +106,6 @@ class IsaActividadesIsa extends \yii\db\ActiveRecord
             'rol' => 'Rol',
             'fecha' => 'Fecha',
             'estado' => 'Estado',
-            'id_iniciacion_sencibilizacion_artistica' => 'Id Iniciacion Sencibilizacion Artistica',
-            'id_componente' => 'Id Componente',
         ];
     }
 }

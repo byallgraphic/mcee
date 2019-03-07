@@ -12,7 +12,7 @@ use app\models\Parametro;
 /* @var $model app\models\EcLevantamientoOrientacion */
 
 $this->title = "Detalles";
-$this->params['breadcrumbs'][] = ['label' => 'Ec Levantamiento Orientacions', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Levantamiento de orientación misional y método', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 ?>

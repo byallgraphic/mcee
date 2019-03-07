@@ -251,7 +251,6 @@
         if( $( this ).val() != '' )
         {
             // $( "#guardar" ).val(0);
-
             var  selectChange = $(this);
             var gradoEstudiantes = $( this ).val();
             var data = {
@@ -343,9 +342,9 @@
             estudiantes.val(JSON.stringify(listEstudiante));
         }
 
-        // $('#guardarEstudiantes').click(function () {
-            // $( "#semillerosticdatosieoprofesionalestudiantes-id_profesional_a" ).submit()
-        // });
+        //$('#guardarEstudiantes').click(function () {
+        // $( "#semillerosticdatosieoprofesionalestudiantes-id_profesional_a" ).submit()
+        //});
     }
 	
 	

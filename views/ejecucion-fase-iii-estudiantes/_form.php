@@ -112,7 +112,7 @@ if( $guardado ){
             <div id="listEstudiantes" class="modal-body">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="guardarEstudiantes">Guardar estudiantes</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Guardar estudiantes</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>

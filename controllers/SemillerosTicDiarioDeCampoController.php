@@ -4,6 +4,16 @@ Versión: 001
 Fecha: Fecha en formato (15-08-2018)
 Desarrollador: Viviana Rodas
 Descripción: diario de campo semilleros tic
+----------------------------------------------------------------
+Modificaciones:
+----------------------------------------------------------------
+Fecha: 2019-03-05
+Desarrollador: Edwin Molina Grisales
+Descripción: Se solicita por cada sesión realizada en las ejecuciones de fase una descripción y hallazgo
+----------------------------------------------------------------
+Fecha: 2019-02-26
+Desarrollador: Edwin Molina Grisales
+Descripción: Se elimina ciclos y se trabaja con el año de la url
 ******************/
 
 namespace app\controllers;
@@ -33,6 +43,8 @@ use app\models\SemillerosTicAnio;
 use app\models\Parametro;
 use app\models\DatosIeoProfesional;
 use app\models\EjecucionFase;
+use app\models\DatosSesiones;
+use app\models\SemillerosTicMovimientoDiarioCampo;
 
 
 /**
@@ -61,18 +73,22 @@ class SemillerosTicDiarioDeCampoController extends Controller
      */
     public function actionIndex()
     {
-		$anio = Yii::$app->request->get('anio');
-		$esDocente = Yii::$app->request->get('esDocente');
+		$anio 		= Yii::$app->request->get('anio');
+		$esDocente 	= Yii::$app->request->get('esDocente');
+		
+		$idInstitucion 	= $_SESSION['instituciones'][0];
+	    $idSedes 		= $_SESSION['sede'][0];
 		
         $searchModel = new SemillerosTicDiarioDeCampoBuscar();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		$dataProvider->query->andWhere('estado=1');
         
 		return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'anio' => $anio,
-            'esDocente' => $esDocente,
+            'searchModel' 	=> $searchModel,
+            'dataProvider'	=> $dataProvider,
+            'anio' 			=> $anio,
+            'esDocente' 	=> $esDocente,
+            'sede' 			=> $idSedes,
         ]);
     }
 
@@ -96,6 +112,258 @@ class SemillerosTicDiarioDeCampoController extends Controller
      */
     public function actionCreate()
     {
+		$idFase 	= Yii::$app->request->get('idFase');
+		
+		$anio 		= Yii::$app->request->get('anio');
+		$esDocente 	= Yii::$app->request->get('esDocente');
+		
+		$ciclos = new SemillerosTicCiclos();
+		
+		$dataResumen = [];
+		
+		/**
+		 * Estructura de datos
+		 * Aquí formo como están estructurados los datos para guardar
+		 *
+		 * Un diario de campo tiene muchos movimientos
+		 */
+		$diarioCampo 	= null;
+		$movimientos	= [];
+		/**/
+		
+		//Si hay un idFase, significa que se debe buscar los datos guardados
+		//Se hace por que significa que el usuario cambio la fase en el select de la vista _form
+		if( $idFase && !Yii::$app->request->post() )
+		{
+			//Consulto todas las Sesiones por ejecuciones de Fase
+			switch( $idFase )
+			{
+				case 1: 
+					$idFaseFase = 14; 
+					$titulo="BITACORA FASE I";
+					break;
+					
+				case 2: 
+					$idFaseFase = 15; 
+					$titulo="BITACORA FASE II";
+					break;
+					
+				case 3: 
+					$idFaseFase = 16; 
+					$titulo="BITACORA FASE III";
+					break;
+			}
+			
+			$dataResumen = $this->actionOpcionesEjecucionDiarioCampo( $idFaseFase, $anio, 1, $idFase );
+			$dataResumen['titulo'] = $titulo;
+			
+			
+			//Busco diario de campo según los datos suministrados
+			$diarioCampo 	= SemillerosTicDiarioDeCampo::findOne([
+										'id_fase' 	=> $idFase,
+										'anio' 		=> $anio,
+										'estado' 	=> 1,
+									]);
+			
+			//Si no encuentra significa que es un registro nuevo
+			if( !$diarioCampo )
+			{
+				$diarioCampo 	= new SemillerosTicDiarioDeCampo();
+				$diarioCampo->id_fase = $idFase;
+			}
+			
+			//Consulto todas las Sesiones por ejecuciones de Fase
+			switch( $idFase )
+			{
+				case 1: 
+					$tabla = ""; 
+					$campoSesiones = 'id_datos_sesiones';
+					break;
+					
+				case 2: 
+					$tabla = "_ii"; 
+					$campoSesiones = 'id_datos_sesiones';
+					break;
+					
+				case 3: 
+					$tabla = "_iii"; 
+					$campoSesiones = 'id_datos_sesion';
+					break;
+			}
+			
+			$datosSesiones	= DatosSesiones::find()
+									->alias('ds')
+									->select( 'id_sesion' )
+									->innerJoin( 'semilleros_tic.ejecucion_fase'.$tabla.' ef', 'ef.'.$campoSesiones.'=ds.id' )
+									->where( 'ds.estado=1' )
+									->andWhere( 'ef.estado=1' )
+									->andWhere( 'ef.anio='.$anio )
+									->andWhere( 'ef.id_fase='.$idFase )
+									->groupby( 'id_sesion' )
+									->all();
+			
+			$sesiones = [];
+			
+			foreach( $datosSesiones as $key => $value )
+			{
+				$sesiones[] =  $value->id_sesion;
+				
+				$mov = SemillerosTicMovimientoDiarioCampo::findOne([
+											'id_diario_de_campo'=> $diarioCampo->id,
+											'id_sesion' 		=> $value->id_sesion,
+										]);
+										
+				if( !$mov )
+				{
+					$mov = new SemillerosTicMovimientoDiarioCampo();
+					$mov->id_sesion = $value->id_sesion;
+				}
+										
+				$movimientos[] = $mov;
+			}
+		}
+		
+		//Si existen datos post, signfica que se pretende guardar los datos ingresados por el usuario
+		if( Yii::$app->request->post() )
+		{
+			//Si no existe un id Fase significa que se procede a guardar los datos
+			//Busco diario de campo según los datos suministrados
+			$diarioCampo 	= SemillerosTicDiarioDeCampo::findOne([
+										'id_fase' 	=> Yii::$app->request->post('SemillerosTicDiarioDeCampo')['id_fase'],
+										'anio' 		=> $anio,
+										'estado'	=> 1,
+									]);
+									
+			if( !$diarioCampo )
+			{
+				$diarioCampo 	= new SemillerosTicDiarioDeCampo();
+				$diarioCampo->load(Yii::$app->request->post());
+			}
+			
+			
+			$postMovimientos = Yii::$app->request->post('SemillerosTicMovimientoDiarioCampo');
+			
+			foreach( $postMovimientos as $key => $mov )
+			{
+				$modelMov = null;
+				
+				if( $mov['id'] )
+				{
+					$modelMov = SemillerosTicMovimientoDiarioCampo::findOne($mov['id']);
+				}
+				else{
+					$modelMov = new SemillerosTicMovimientoDiarioCampo();
+				}
+				
+				$modelMov->load( $mov, '' );
+				
+				$movimientos[] = $modelMov;
+			}
+			
+			//Desde aquí se procede a guardar los datos
+			
+			$valido = true;
+			
+			$valido = $diarioCampo->validate([
+								'id_fase',
+								'anio',
+							]) && $valido;
+			
+			foreach( $movimientos as $key => $mov )
+			{
+				$valido = $mov->validate([
+								'descripcion',
+								'hallazgos',
+								'id_sesion',
+							]) && $valido;
+			}
+			
+			//Si todo esta bien se guarda los datos
+			if( $valido )
+			{
+				$diarioCampo->estado = 1;
+				$diarioCampo->save( false );
+				
+				foreach( $movimientos as $key => $mov )
+				{
+					$mov->id_diario_de_campo = $diarioCampo->id;
+					$mov->anio 				 = $anio;
+					$mov->estado 			 = 1;
+					$mov->save(false);
+				}
+				
+				return $this->redirect(['index',
+									'anio' 		=> $anio,
+									'esDocente' => 1,
+								]);
+			}
+		}
+		
+		if( !$diarioCampo )
+		{
+			$diarioCampo 	= new SemillerosTicDiarioDeCampo();
+		}
+		
+		//se crea una instancia del modelo fases
+		$fasesModel 		 	= new Fases();
+		//se traen los datos de fases
+		$dataFases		 	= $fasesModel->find()->orderby( 'id' )->all();
+		//se guardan los datos en un array
+		$fases	 	 	 	= ArrayHelper::map( $dataFases, 'id', 'descripcion' );
+		
+		$anios	= [ $anio => $anio ];
+		
+		$cicloslist = [];
+		
+		return $this->renderAjax('create', [
+            'diarioCampo' 	=> $diarioCampo,
+            'movimientos' 	=> $movimientos,
+			'fases' 		=> $fases,
+            'fasesModel'	=> $fasesModel,
+			'ciclos' 		=> $ciclos,
+            'cicloslist'	=> $cicloslist,
+            'anios' 		=> $anios,
+            'anio' 			=> $anio,
+            'esDocente' 	=> $esDocente,
+            'dataResumen' 	=> $dataResumen,
+        ]);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		$anio 		= Yii::$app->request->get('anio');
+		$esDocente 	= Yii::$app->request->get('esDocente');
+		
 		$ciclos = new SemillerosTicCiclos();
 		
 		// $ciclos->load( Yii::$app->request->post() );
@@ -111,15 +379,20 @@ class SemillerosTicDiarioDeCampoController extends Controller
 		
 		
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['index', 
+									'anio' 		=> $anio,
+									'esDocente' => $esDocente,
+								]);
         }
 		
-		$dataAnios 	= SemillerosTicAnio::find()
-							->where( 'estado=1' )
-							->orderby( 'descripcion' )
-							->all();
+		// $dataAnios 	= SemillerosTicAnio::find()
+							// ->where( 'estado=1' )
+							// ->orderby( 'descripcion' )
+							// ->all();
 			
-		$anios	= ArrayHelper::map( $dataAnios, 'id', 'descripcion' );
+		// $anios	= ArrayHelper::map( $dataAnios, 'id', 'descripcion' );
+		
+		$anios[] = [ $anio => $anio ];
 		
 		$cicloslist = [];
 		
@@ -142,6 +415,9 @@ class SemillerosTicDiarioDeCampoController extends Controller
             'ciclos' => $ciclos,
             'cicloslist' => $cicloslist,
             'anios' => $anios,
+            'anioSelected' => $anio,
+            'anio' => $anio,
+            'esDocente' => $esDocente,
         ]);
     }
 
@@ -154,51 +430,139 @@ class SemillerosTicDiarioDeCampoController extends Controller
      */
     public function actionUpdate($id)
     {
-        $ciclos = new SemillerosTicCiclos();
+		$idFase 	= Yii::$app->request->get('idFase');
 		
-		// $ciclos->load( Yii::$app->request->post() );
+		$anio 		= Yii::$app->request->get('anio');
+		$esDocente 	= Yii::$app->request->get('esDocente');
 		
-        // $model = new SemillerosTicDiarioDeCampo();
+		$ciclos = new SemillerosTicCiclos();
 		
-		$model = $this->findModel($id);
-
-		//se crea una instancia del modelo fases
-		$fasesModel 		 	= new Fases();
-		//se traen los datos de fases
-		$dataFases		 	= $fasesModel->find()->all();
-		//se guardan los datos en un array
-		$fases	 	 	 	= ArrayHelper::map( $dataFases, 'id', 'descripcion' );
+		$dataResumen = [];
 		
+		/**
+		 * Estructura de datos
+		 * Aquí formo como están estructurados los datos para guardar
+		 *
+		 * Un diario de campo tiene muchos movimientos
+		 */
+		$diarioCampo 	= null;
+		$movimientos	= [];
+		/**/
 		
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        }
-		
-		$dataAnios 	= SemillerosTicAnio::find()
-							->where( 'estado=1' )
-							->all();
+		//Si hay un idFase, significa que se debe buscar los datos guardados
+		//Se hace por que significa que el usuario cambio la fase en el select de la vista _form
+		if( $id )
+		{
+			//Busco diario de campo según los datos suministrados
+			$diarioCampo 	= SemillerosTicDiarioDeCampo::findOne($id);
+			$diarioCampo->isNewRecord =true;
 			
-		$anios	= ArrayHelper::map( $dataAnios, 'id', 'descripcion' );
+			$idFase = $diarioCampo->id_fase;
+			
+			//Consulto todas las Sesiones por ejecuciones de Fase
+			switch( $idFase )
+			{
+				case 1: 
+					$idFaseFase = 14; 
+					$titulo="BITACORA FASE I";
+					break;
+					
+				case 2: 
+					$idFaseFase = 15; 
+					$titulo="BITACORA FASE II";
+					break;
+					
+				case 3: 
+					$idFaseFase = 16; 
+					$titulo="BITACORA FASE III";
+					break;
+			}
+			
+			$dataResumen = $this->actionOpcionesEjecucionDiarioCampo( $idFaseFase, $anio, 1, $idFase );
+			$dataResumen['titulo'] = $titulo;
+			
+			
+			//Si no encuentra significa que es un registro nuevo
+			if( !$diarioCampo )
+			{
+				$diarioCampo 	= new SemillerosTicDiarioDeCampo();
+				$diarioCampo->id_fase = $idFase;
+			}
+			
+			//Consulto todas las Sesiones por ejecuciones de Fase
+			switch( $idFase )
+			{
+				case 1: 
+					$tabla = ""; 
+					$campoSesiones = 'id_datos_sesiones';
+					break;
+					
+				case 2: 
+					$tabla = "_ii"; 
+					$campoSesiones = 'id_datos_sesiones';
+					break;
+					
+				case 3: 
+					$tabla = "_iii"; 
+					$campoSesiones = 'id_datos_sesion';
+					break;
+			}
+			
+			$datosSesiones	= DatosSesiones::find()
+									->alias('ds')
+									->select( 'id_sesion' )
+									->innerJoin( 'semilleros_tic.ejecucion_fase'.$tabla.' ef', 'ef.'.$campoSesiones.'=ds.id' )
+									->where( 'ds.estado=1' )
+									->andWhere( 'ef.estado=1' )
+									->andWhere( 'ef.anio='.$anio )
+									->andWhere( 'ef.id_fase='.$idFase )
+									->groupby( 'id_sesion' )
+									->all();
+			$sesiones = [];
+			
+			foreach( $datosSesiones as $key => $value )
+			{
+				$sesiones[] =  $value->id_sesion;
+				
+				$mov = SemillerosTicMovimientoDiarioCampo::findOne([
+											'id_diario_de_campo' 	=> $diarioCampo->id,
+											'id_sesion' 						=> $value->id_sesion,
+										]);
+										
+				if( !$mov )
+				{
+					$mov = new SemillerosTicMovimientoDiarioCampo();
+					$mov->id_sesion = $value->id_sesion;
+				}
+										
+				$movimientos[] = $mov;
+			}
+		}
 		
-		//Se saca la el id del anio
-		$anioSelected = SemillerosTicCiclos::findOne( $model->id_ciclo )->id_anio;
+		//se crea una instancia del modelo fases
+		$fasesModel 		 	= Fases::findOne( $diarioCampo->id_fase );
 		
+		//se guardan los datos en un array
+		$fases	 	 	 	= [ $fasesModel->id => $fasesModel->descripcion ];
+		
+		$anios	= [ $anio => $anio ];
 		
 		$cicloslist = [];
 			
-			
-		
 
-        return $this->renderAjax('update', [
-            'model' => $model,
-            'fases' => $fases,
-            'fasesModel' => $fasesModel,
-			'ciclos' => $ciclos,
-            'cicloslist' => $cicloslist,
-            'anios' => $anios,
-			'anioSelected' => $anioSelected,
-            'cicloSelected' => $model->id_ciclo,
+        return $this->renderAjax('create', [
+            'diarioCampo' 	=> $diarioCampo,
+            'movimientos' 	=> $movimientos,
+			'fases' 		=> $fases,
+            'fasesModel'	=> $fasesModel,
+			'ciclos' 		=> $ciclos,
+            'cicloslist'	=> $cicloslist,
+            'anios' 		=> $anios,
+            'anio' 			=> $anio,
+            'esDocente' 	=> $esDocente,
+            'dataResumen' 	=> $dataResumen,
         ]);
+		
     }
 
     /**
@@ -214,7 +578,10 @@ class SemillerosTicDiarioDeCampoController extends Controller
 		$model->estado = 2;
 		$model->update(false);
 
-        return $this->redirect(['index']);
+        return $this->redirect(['index', 
+									'anio' 		=> $model->anio,
+									'esDocente' => 1,
+							]);
     }
 
     /**
@@ -240,7 +607,7 @@ class SemillerosTicDiarioDeCampoController extends Controller
      * @return la lista de los campos
      * @throws no tiene excepciones
      */	
-	public function actionOpcionesEjecucionDiarioCampo($idFase, $idAnio, $idCiclo,$faseO)
+	public function actionOpcionesEjecucionDiarioCampo($idFase, $idAnio, $idCiclo, $faseO)
     {
 	   $data = array('mensaje'=>'','html'=>'','contenido'=>'','descripcion'=>'','hallazgos'=>'','html1'=>'','contenido1'=>'',);
 	   
@@ -284,10 +651,9 @@ class SemillerosTicDiarioDeCampoController extends Controller
 			//se traen 6 datos para mostrar
 			
 			$command = $connection->createCommand("select ci.total_docentes_ieo, ef.asignaturas, ef.especiaidad, ef.seiones_empleadas, ef.numero_apps, ef.temas_problama
-			 from semilleros_tic.anio as a, semilleros_tic.ciclos as c, semilleros_tic.fases as f, semilleros_tic.ejecucion_fase as ef, semilleros_tic.datos_ieo_profesional as dip, 
+			 from semilleros_tic.anio as a, semilleros_tic.fases as f, semilleros_tic.ejecucion_fase as ef, semilleros_tic.datos_ieo_profesional as dip, 
 			 semilleros_tic.condiciones_institucionales as ci, semilleros_tic.datos_sesiones as ds
-			 where a.id = $idAnio
-			 and c.id = $idCiclo
+			 where a.descripcion = '$idAnio'
 			 and f.id = $faseO
 			 and ef.id_fase = f.id
 			 and dip.id = ef.id_datos_ieo_profesional
@@ -295,8 +661,21 @@ class SemillerosTicDiarioDeCampoController extends Controller
 			 and dip.id_sede = ".$idSedes."
 			 group by ef.id, ci.total_docentes_ieo, ef.asignaturas, ef.especiaidad, ef.seiones_empleadas, ef.numero_apps, ef.temas_problama
 			 ");
+			 
+			 $command = $connection->createCommand("select ci.total_docentes_ieo, ef.asignaturas, ef.especiaidad, ef.seiones_empleadas, ef.numero_apps, ef.temas_problama
+													  from 	semilleros_tic.fases as f, semilleros_tic.ejecucion_fase as ef, semilleros_tic.datos_ieo_profesional as dip, 
+															semilleros_tic.condiciones_institucionales as ci, semilleros_tic.datos_sesiones as ds
+													 where f.id = $faseO
+													   and ef.id_fase = f.id
+													   and dip.id = ef.id_datos_ieo_profesional
+													   and dip.id_institucion = ".$idInstitucion."
+													   and dip.id_sede = ".$idSedes."
+													   and ef.anio = ".$idAnio."
+												  group by ef.id, ci.total_docentes_ieo, ef.asignaturas, ef.especiaidad, ef.seiones_empleadas, ef.numero_apps, ef.temas_problama
+													 ");
 			$result1 = $command->queryAll();
-			;
+			
+			
 			//se llena el resultado de a consulta en un array
 			foreach($result1 as $key){
 				$datosEjecucionFase1[]=$key;
@@ -367,31 +746,46 @@ class SemillerosTicDiarioDeCampoController extends Controller
 				//para la fecuencia de las sesiones se trae de la conformacion de semilleros
 				$frecuenciaSesiones =array();
 				
-				$command = $connection->createCommand("select ai.frecuencias_sesiones
-				from semilleros_tic.acuerdos_institucionales as ai, semilleros_tic.fases as f, semilleros_tic.semilleros_datos_ieo as sdi,
-					semilleros_tic.datos_ieo_profesional as dip, semilleros_tic.ejecucion_fase as ef, semilleros_tic.anio as a,
-					semilleros_tic.ciclos as c
-				where f.id = ".$faseO."
-				and ai.id_fase = f.id
-				and ai.id_semilleros_datos_ieo = sdi.id
-				and sdi.id_institucion = dip.id_institucion
-				and sdi.sede = dip.id_sede
-				and dip.id_institucion = ".$idInstitucion."
-				and dip.id_sede = ".$idSedes."
-				and c.id = ".$idCiclo."
-				and ai.id_ciclo = c.id 
-				and ef.id_ciclo = c.id
-				and a.id = ".$idAnio." 
-				and c.id_anio = a.id
-				and dip.estado = 1
-				and ef.estado = 1
-				and sdi.estado = 1
-				and ai.estado = 1
-				and a.estado = 1
-				and c.estado =1
-				group by ai.frecuencias_sesiones");
+				// $command = $connection->createCommand("
+				// select ai.frecuencias_sesiones
+				// from semilleros_tic.acuerdos_institucionales as ai, semilleros_tic.fases as f, semilleros_tic.semilleros_datos_ieo as sdi,
+					// semilleros_tic.datos_ieo_profesional as dip, semilleros_tic.ejecucion_fase as ef, semilleros_tic.anio as a
+				// where f.id = ".$faseO."
+				// and ai.id_fase = f.id
+				// and ai.id_semilleros_datos_ieo = sdi.id
+				// and sdi.id_institucion = dip.id_institucion
+				// and sdi.sede = dip.id_sede
+				// and dip.id_institucion = ".$idInstitucion."
+				// and dip.id_sede = ".$idSedes."
+				// and a.descripcion = '$idAnio' 
+				// and dip.estado = 1
+				// and ef.estado = 1
+				// and sdi.estado = 1
+				// and ai.estado = 1
+				// and a.estado = 1
+				// group by ai.frecuencias_sesiones");
+				
+				$command = $connection->createCommand("
+						select ai.frecuencias_sesiones
+						  from semilleros_tic.acuerdos_institucionales as ai, semilleros_tic.fases as f, semilleros_tic.semilleros_datos_ieo as sdi,
+							   semilleros_tic.datos_ieo_profesional as dip, semilleros_tic.ejecucion_fase as ef
+						 where f.id = ".$faseO."
+						   and ai.id_fase = f.id
+						   and ai.id_semilleros_datos_ieo = sdi.id
+						   and sdi.id_institucion = dip.id_institucion
+						   and sdi.sede = dip.id_sede
+						   and dip.id_institucion = ".$idInstitucion."
+						   and dip.id_sede = ".$idSedes."
+						   and dip.estado = 1
+						   and ef.estado = 1
+						   and sdi.estado = 1
+						   and ai.estado = 1
+						   and ef.anio = $idAnio
+					  group by ai.frecuencias_sesiones");
+					  
 				$result2 = $command->queryAll();
 				
+			
 				//se llena el resultado de a consulta en un array
 						foreach($result2 as $key){
 							$frecuenciaSesiones[]=$key;
@@ -561,21 +955,42 @@ class SemillerosTicDiarioDeCampoController extends Controller
 			$datosEjecucionFase2 =array();
 				
 								
-				$command = $connection->createCommand("select ai.total_docentes, ef.asignaturas, ef.especialidad, ef.numero_apps_desarrolladas 
-				from semilleros_tic.anio as a, semilleros_tic.ciclos as c, semilleros_tic.fases as f, 
-				semilleros_tic.ejecucion_fase_ii as ef, semilleros_tic.datos_ieo_profesional as dip, 
-				semilleros_tic.datos_sesiones as ds, semilleros_tic.acuerdos_institucionales as ai
-				where a.id = $idAnio 
-				and c.id = $idCiclo
-				and c.id_anio = a.id
-				and f.id = $faseO 
-				and ef.id_fase = f.id 
-				and dip.id = ef.id_datos_ieo_profesional 
-				and dip.id_institucion = ".$idInstitucion." 
-				and dip.id_sede = ".$idSedes." 
-				and ai.id_fase = $faseO
-				and ai.id_ciclo = $idCiclo
-				group by ef.id, ai.total_docentes, ef.asignaturas, ef.especialidad, ef.numero_apps_desarrolladas
+				// $command = $connection->createCommand("
+				// select 
+					// ai.total_docentes, 
+					// ef.asignaturas, 
+					// ef.especialidad, 
+					// ef.numero_apps_desarrolladas 
+				// from 
+				// semilleros_tic.anio as a, 
+				// semilleros_tic.fases as f, 
+				// semilleros_tic.ejecucion_fase_ii as ef, semilleros_tic.datos_ieo_profesional as dip, 
+				// semilleros_tic.datos_sesiones as ds, semilleros_tic.acuerdos_institucionales as ai
+				// where a.descripcion = '$idAnio' 
+				// and f.id = $faseO 
+				// and ef.id_fase = f.id 
+				// and dip.id = ef.id_datos_ieo_profesional 
+				// and dip.id_institucion = ".$idInstitucion." 
+				// and dip.id_sede = ".$idSedes." 
+				// and ai.id_fase = $faseO
+				// group by ef.id, ai.total_docentes, ef.asignaturas, ef.especialidad, ef.numero_apps_desarrolladas
+				// ");
+				
+				$command = $connection->createCommand("
+				select ai.total_docentes, ef.asignaturas, ef.especialidad, ef.numero_apps_desarrolladas 
+				  from semilleros_tic.fases as f, 
+					   semilleros_tic.ejecucion_fase_ii as ef, 
+					   semilleros_tic.datos_ieo_profesional as dip, 
+					   semilleros_tic.datos_sesiones as ds, 
+					   semilleros_tic.acuerdos_institucionales as ai
+				 where ef.anio = $idAnio 
+				   and f.id = $faseO 
+				   and ef.id_fase = f.id 
+				   and dip.id = ef.id_datos_ieo_profesional 
+				   and dip.id_institucion = ".$idInstitucion." 
+				   and dip.id_sede = ".$idSedes." 
+				   and ai.id_fase = $faseO
+			  group by ef.id, ai.total_docentes, ef.asignaturas, ef.especialidad, ef.numero_apps_desarrolladas
 				");
 				$result1 = $command->queryAll();
 				
@@ -641,29 +1056,52 @@ class SemillerosTicDiarioDeCampoController extends Controller
 					//para la fecuencia de las sesiones se trae de la conformacion de semilleros
 					$frecuenciaSesiones =array();
 					
+					// $command = $connection->createCommand("select ai.frecuencias_sesiones
+					// from semilleros_tic.acuerdos_institucionales as ai, semilleros_tic.fases as f, semilleros_tic.semilleros_datos_ieo as sdi,
+						// semilleros_tic.datos_ieo_profesional as dip, semilleros_tic.ejecucion_fase_ii as ef, semilleros_tic.anio as a,
+						// semilleros_tic.ciclos as c
+					// where f.id = ".$faseO."
+					// and ai.id_fase = f.id
+					// and ai.id_semilleros_datos_ieo = sdi.id
+					// and sdi.id_institucion = dip.id_institucion
+					// and sdi.sede = dip.id_sede
+					// and dip.id_institucion = ".$idInstitucion."
+					// and dip.id_sede = ".$idSedes."
+					// and c.id = ".$idCiclo."
+					// and ai.id_ciclo = c.id 
+					// and ef.id_ciclo = c.id
+					// and a.descripcion = '$idAnio' 
+					// and c.id_anio = a.id
+					// and dip.estado = 1
+					// and ef.estado = 1
+					// and sdi.estado = 1
+					// and ai.estado = 1
+					// and a.estado = 1
+					// and c.estado =1
+					// group by ai.frecuencias_sesiones");
+					
 					$command = $connection->createCommand("select ai.frecuencias_sesiones
-					from semilleros_tic.acuerdos_institucionales as ai, semilleros_tic.fases as f, semilleros_tic.semilleros_datos_ieo as sdi,
-						semilleros_tic.datos_ieo_profesional as dip, semilleros_tic.ejecucion_fase_ii as ef, semilleros_tic.anio as a,
-						semilleros_tic.ciclos as c
-					where f.id = ".$faseO."
-					and ai.id_fase = f.id
-					and ai.id_semilleros_datos_ieo = sdi.id
-					and sdi.id_institucion = dip.id_institucion
-					and sdi.sede = dip.id_sede
-					and dip.id_institucion = ".$idInstitucion."
-					and dip.id_sede = ".$idSedes."
-					and c.id = ".$idCiclo."
-					and ai.id_ciclo = c.id 
-					and ef.id_ciclo = c.id
-					and a.id = ".$idAnio." 
-					and c.id_anio = a.id
-					and dip.estado = 1
-					and ef.estado = 1
-					and sdi.estado = 1
-					and ai.estado = 1
-					and a.estado = 1
-					and c.estado =1
-					group by ai.frecuencias_sesiones");
+															 from semilleros_tic.acuerdos_institucionales as ai, 
+																  semilleros_tic.fases as f, 
+																  semilleros_tic.semilleros_datos_ieo as sdi,
+																  semilleros_tic.datos_ieo_profesional as dip, 
+																  semilleros_tic.ejecucion_fase_ii as ef, 
+																  semilleros_tic.anio as a,
+																  semilleros_tic.ciclos as c
+															where f.id = ".$faseO."
+															and ai.id_fase = f.id
+															and ai.id_semilleros_datos_ieo = sdi.id
+															and sdi.id_institucion = dip.id_institucion
+															and sdi.sede = dip.id_sede
+															and dip.id_institucion = ".$idInstitucion."
+															and dip.id_sede = ".$idSedes."
+															and ai.anio = ef.anio
+															and ef.anio = ".$idAnio."
+															and dip.estado = 1
+															and ef.estado = 1
+															and sdi.estado = 1
+															and ai.estado = 1
+															group by ai.frecuencias_sesiones");
 					$result2 = $command->queryAll();
 					
 					//se llena el resultado de a consulta en un array
@@ -696,17 +1134,29 @@ class SemillerosTicDiarioDeCampoController extends Controller
 					
 					//para traer la duracion de cada sesion  
 					$otrosDatosEjecucionFase1 =array();
-					$command = $connection->createCommand("select s.descripcion, ds.duracion_sesion
-					 from semilleros_tic.sesiones as s, semilleros_tic.datos_sesiones as ds, semilleros_tic.ejecucion_fase_ii as ef
-					 where ef.id_fase = ".$faseO."
-					 and ef.id_ciclo = ".$idCiclo."
-					 and ef.estado = 1
-					 and ds.id = ef.id_datos_sesiones
-					 and s.id = ds.id_sesion
-					 and ds.estado = 1
-					 and s.estado = 1
-					 group by s.id, ds.fecha_sesion, ds.id
-					 order by ds.id");
+					// $command = $connection->createCommand("select s.descripcion, ds.duracion_sesion
+					 // from semilleros_tic.sesiones as s, semilleros_tic.datos_sesiones as ds, semilleros_tic.ejecucion_fase_ii as ef
+					 // where ef.id_fase = ".$faseO."
+					 // and ef.id_ciclo = ".$idCiclo."
+					 // and ef.estado = 1
+					 // and ds.id = ef.id_datos_sesiones
+					 // and s.id = ds.id_sesion
+					 // and ds.estado = 1
+					 // and s.estado = 1
+					 // group by s.id, ds.fecha_sesion, ds.id
+					 // order by ds.id");
+					 
+					 $command = $connection->createCommand("select s.descripcion, ds.duracion_sesion
+															  from semilleros_tic.sesiones as s, semilleros_tic.datos_sesiones as ds, semilleros_tic.ejecucion_fase_ii as ef
+															 where ef.id_fase = ".$faseO."
+															   and ef.anio = ".$idAnio."
+															   and ef.estado = 1
+															   and ds.id = ef.id_datos_sesiones
+															   and s.id = ds.id_sesion
+															   and ds.estado = 1
+															   and s.estado = 1
+														  group by s.id, ds.fecha_sesion, ds.id
+														  order by ds.id");
 					$result3 = $command->queryAll();
 					foreach($result3 as $key){
 						$otrosDatosEjecucionFase1[]=$key;
@@ -735,36 +1185,66 @@ class SemillerosTicDiarioDeCampoController extends Controller
 					
 					//para traer los recursos tic usados
 					
+					// $command = $connection->createCommand("select arf.tic
+						// from semilleros_tic.acciones_recursos_fase_ii as arf, semilleros_tic.datos_sesiones as ds, semilleros_tic.ejecucion_fase_ii as ef, semilleros_tic.datos_ieo_profesional as dip
+						// where arf.id_ciclo = ".$idCiclo."
+						// and arf.id_datos_sesion = ds.id
+						// and arf.estado = 1
+						// and arf.id_datos_sesion = ef.id_datos_sesiones
+						// and ef.id_ciclo = ".$idCiclo."
+						// and ef.id_fase = ".$faseO."
+						// and ef.estado = 1
+						// and ds.estado = 1
+						// and ef.id_datos_ieo_profesional = dip.id
+						// and dip.id_institucion = ".$idInstitucion."
+						// and dip.id_sede = ".$idSedes."");
+						
 					$command = $connection->createCommand("select arf.tic
-						from semilleros_tic.acciones_recursos_fase_ii as arf, semilleros_tic.datos_sesiones as ds, semilleros_tic.ejecucion_fase_ii as ef, semilleros_tic.datos_ieo_profesional as dip
-						where arf.id_ciclo = ".$idCiclo."
-						and arf.id_datos_sesion = ds.id
-						and arf.estado = 1
-						and arf.id_datos_sesion = ef.id_datos_sesiones
-						and ef.id_ciclo = ".$idCiclo."
-						and ef.id_fase = ".$faseO."
-						and ef.estado = 1
-						and ds.estado = 1
-						and ef.id_datos_ieo_profesional = dip.id
-						and dip.id_institucion = ".$idInstitucion."
-						and dip.id_sede = ".$idSedes."");
+															 from semilleros_tic.acciones_recursos_fase_ii as arf, 
+															      semilleros_tic.datos_sesiones as ds, 
+																  semilleros_tic.ejecucion_fase_ii as ef, 
+																  semilleros_tic.datos_ieo_profesional as dip
+															where arf.anio = ".$idAnio."
+															  and arf.id_datos_sesion = ds.id
+															  and arf.estado = 1
+															  and arf.id_datos_sesion = ef.id_datos_sesiones
+															  and ef.anio = ".$idAnio."
+															  and ef.id_fase = ".$faseO."
+															  and ef.estado = 1
+															  and ds.estado = 1
+															  and ef.id_datos_ieo_profesional = dip.id
+															  and dip.id_institucion = ".$idInstitucion."
+															  and dip.id_sede = ".$idSedes."");
 					$result3 = $command->queryAll();
 					
 					$recursosTic = $this->arrayArrayComas($result3,'tic');
 					
 					
 					//para traer sesiones realizadas
+					// $command = $connection->createCommand("select count(ds.fecha_sesion) as sesiones_realizadas
+						// from semilleros_tic.datos_sesiones as ds, 
+						// semilleros_tic.ejecucion_fase_ii as ef, semilleros_tic.datos_ieo_profesional as dip
+						// where ds.id = ef.id_datos_sesiones
+						// and ef.id_ciclo = ".$idCiclo."
+						// and ef.id_fase = ".$faseO."
+						// and ef.estado = 1
+						// and ds.estado = 1
+						// and ef.id_datos_ieo_profesional = dip.id
+						// and dip.id_institucion = ".$idInstitucion."
+						// and dip.id_sede = ".$idSedes."");
+						
 					$command = $connection->createCommand("select count(ds.fecha_sesion) as sesiones_realizadas
-						from semilleros_tic.datos_sesiones as ds, 
-						semilleros_tic.ejecucion_fase_ii as ef, semilleros_tic.datos_ieo_profesional as dip
-						where ds.id = ef.id_datos_sesiones
-						and ef.id_ciclo = ".$idCiclo."
-						and ef.id_fase = ".$faseO."
-						and ef.estado = 1
-						and ds.estado = 1
-						and ef.id_datos_ieo_profesional = dip.id
-						and dip.id_institucion = ".$idInstitucion."
-						and dip.id_sede = ".$idSedes."");
+															 from semilleros_tic.datos_sesiones as ds, 
+																  semilleros_tic.ejecucion_fase_ii as ef, 
+																  semilleros_tic.datos_ieo_profesional as dip
+															where ds.id = ef.id_datos_sesiones
+															  and ef.anio = ".$idAnio."
+															  and ef.id_fase = ".$faseO."
+															  and ef.estado = 1
+															  and ds.estado = 1
+															  and ef.id_datos_ieo_profesional = dip.id
+															  and dip.id_institucion = ".$idInstitucion."
+															  and dip.id_sede = ".$idSedes."");
 					$result4 = $command->queryAll();
 					
 					$sesionesRealizadas = $result4[0]['sesiones_realizadas'];
@@ -868,22 +1348,38 @@ class SemillerosTicDiarioDeCampoController extends Controller
 		$datosEjecucionFase2 =array();
 				
 								
+				// $command = $connection->createCommand("select ai.total_docentes, ef.asignatura, ai.especialidad, ef.numero_apps_usadas, ef.tic
+				// from semilleros_tic.anio as a, semilleros_tic.ciclos as c, semilleros_tic.fases as f, 
+				// semilleros_tic.ejecucion_fase_iii as ef, semilleros_tic.datos_ieo_profesional as dip, 
+				// semilleros_tic.datos_sesiones as ds, semilleros_tic.acuerdos_institucionales as ai
+				// where a.descripcion = '$idAnio'
+				// and c.id = $idCiclo
+				// and c.id_anio = a.id
+				// and f.id = $faseO 
+				// and ef.id_fase = f.id 
+				// and dip.id = ef.id_datos_ieo_profesional 
+				// and dip.id_institucion = ".$idInstitucion." 
+				// and dip.id_sede = ".$idSedes."
+				// and ai.id_fase = $faseO
+				// and ai.id_ciclo = $idCiclo
+				// group by ef.id, ai.total_docentes, ef.asignatura, ai.especialidad, ef.numero_apps_usadas,ef.tic
+				// ");
+				
 				$command = $connection->createCommand("select ai.total_docentes, ef.asignatura, ai.especialidad, ef.numero_apps_usadas, ef.tic
-				from semilleros_tic.anio as a, semilleros_tic.ciclos as c, semilleros_tic.fases as f, 
-				semilleros_tic.ejecucion_fase_iii as ef, semilleros_tic.datos_ieo_profesional as dip, 
-				semilleros_tic.datos_sesiones as ds, semilleros_tic.acuerdos_institucionales as ai
-				where a.id = $idAnio 
-				and c.id = $idCiclo
-				and c.id_anio = a.id
-				and f.id = $faseO 
-				and ef.id_fase = f.id 
-				and dip.id = ef.id_datos_ieo_profesional 
-				and dip.id_institucion = ".$idInstitucion." 
-				and dip.id_sede = ".$idSedes."
-				and ai.id_fase = $faseO
-				and ai.id_ciclo = $idCiclo
-				group by ef.id, ai.total_docentes, ef.asignatura, ai.especialidad, ef.numero_apps_usadas,ef.tic
-				");
+														 from semilleros_tic.fases as f, 
+															  semilleros_tic.ejecucion_fase_iii as ef, 
+															  semilleros_tic.datos_ieo_profesional as dip, 
+															  semilleros_tic.datos_sesiones as ds, 
+															  semilleros_tic.acuerdos_institucionales as ai
+														where f.id = $faseO 
+														  and ef.id_fase = f.id 
+														  and dip.id = ef.id_datos_ieo_profesional 
+														  and dip.id_institucion = ".$idInstitucion." 
+														  and dip.id_sede = ".$idSedes."
+														  and ai.id_fase = $faseO
+														  and ai.anio = $idAnio
+													 group by ef.id, ai.total_docentes, ef.asignatura, ai.especialidad, ef.numero_apps_usadas,ef.tic
+														");
 				$result1 = $command->queryAll();
 				
 				//se llena el resultado de la consulta en un array
@@ -949,17 +1445,31 @@ class SemillerosTicDiarioDeCampoController extends Controller
 					
 					//para traer la duracion de cada sesion  
 					$otrosDatosEjecucionFase1 =array();
-					$command = $connection->createCommand("select s.descripcion, ds.duracion_sesion
-					 from semilleros_tic.sesiones as s, semilleros_tic.datos_sesiones as ds, semilleros_tic.ejecucion_fase_iii as ef
-					 where ef.id_fase = ".$faseO."
-					 and ef.id_ciclo = ".$idCiclo."
-					 and ef.estado = 1
-					 and ds.id = ef.id_datos_sesion
-					 and s.id = ds.id_sesion
-					 and ds.estado = 1
-					 and s.estado = 1
-					 group by s.id, ds.fecha_sesion, ds.id
-					 order by ds.id");
+					// $command = $connection->createCommand("select s.descripcion, ds.duracion_sesion
+					 // from semilleros_tic.sesiones as s, semilleros_tic.datos_sesiones as ds, semilleros_tic.ejecucion_fase_iii as ef
+					 // where ef.id_fase = ".$faseO."
+					 // and ef.id_ciclo = ".$idCiclo."
+					 // and ef.estado = 1
+					 // and ds.id = ef.id_datos_sesion
+					 // and s.id = ds.id_sesion
+					 // and ds.estado = 1
+					 // and s.estado = 1
+					 // group by s.id, ds.fecha_sesion, ds.id
+					 // order by ds.id");
+					 
+					 $command = $connection->createCommand("select s.descripcion, ds.duracion_sesion
+															  from semilleros_tic.sesiones as s, 
+																   semilleros_tic.datos_sesiones as ds, 
+																   semilleros_tic.ejecucion_fase_iii as ef
+															 where ef.id_fase = ".$faseO."
+															   and ef.anio = ".$idAnio."
+															   and ef.estado = 1
+															   and ds.id = ef.id_datos_sesion
+															   and s.id = ds.id_sesion
+															   and ds.estado = 1
+															   and s.estado = 1
+														  group by s.id, ds.fecha_sesion, ds.id
+														  order by ds.id");
 					$result3 = $command->queryAll();
 					foreach($result3 as $key){
 						$otrosDatosEjecucionFase1[]=$key;
@@ -1114,7 +1624,9 @@ class SemillerosTicDiarioDeCampoController extends Controller
         
 		 // echo "<pre>"; print_r($data); echo "</pre>";
 		
-		echo json_encode( $data );
+		return $data;
+		
+		// echo json_encode( $data );
     }
 
 	

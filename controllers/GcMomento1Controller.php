@@ -13,6 +13,7 @@ else
 	die;
 }
 
+use app\models\GcPropositosMomento1;
 use Yii;
 use app\models\GcMomento1;
 use app\models\GcMomento1Buscar;
@@ -173,5 +174,26 @@ class GcMomento1Controller extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionAddObject(){
+        $id = Yii::$app->request->post("id");
+        $arrayCheckPropositos = Yii::$app->request->post("arrayCheckPropositos");
+        $arrayDay = Yii::$app->request->post("arrayDay");
+
+        foreach ($arrayCheckPropositos AS $proposito){
+            $propositoMomento = new GcPropositosMomento1();
+            $propositoMomento->id_proposito = $proposito;
+            $propositoMomento->id_momento1 = $id;
+            $propositoMomento->save();
+        }
+
+        foreach ($arrayDay AS $key => $day){
+            $textoMomento = new GcPlaneacionPorDia();
+            $textoMomento->id_momento1_planeacion = $id;
+            $textoMomento->id_dia = $key;
+            $textoMomento->descripcion_plan = $day;
+            $textoMomento->save();
+        }
     }
 }

@@ -153,7 +153,7 @@ $index = 0;
 				</div>
 				
 				<div class='col-sm-2'>
-					<span total class='form-control' style='background-color:#ccc;'>Indice de problematicas abordadas a través del uso de las  App 0.0</span>
+					<span total class='form-control' style='background-color:#ccc;'>Indice de problemáticas abordadas a través del uso de las  App 0.0</span>
 				</div>
 				
 				<div class='col-sm-2'>

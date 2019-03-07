@@ -67,42 +67,47 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         i.id as id_institucion, 
                         s.id as id_sede, 
                         a.descripcion as anio, 
-                        c.descripcion as ciclos,
                         fa.descripcion as fase,
                         sdi.profecional_a,
                         sdi.id as id_semilleros,
                         dip.curso_participantes
         FROM 	semilleros_tic.datos_ieo_profesional_estudiantes as dip,public.sedes as s,public.instituciones as i, semilleros_tic.anio as a, 
-                semilleros_tic.fases as fa, semilleros_tic.ciclos as c,	semilleros_tic.ejecucion_fase_i_estudiantes as ef, semilleros_tic.semilleros_datos_ieo_estudiantes as sdi
+                semilleros_tic.fases as fa,	semilleros_tic.ejecucion_fase_i_estudiantes as ef, semilleros_tic.semilleros_datos_ieo_estudiantes as sdi
         WHERE 	dip.id_institucion = i.id
         AND		dip.id_sede = s.id
         AND 	dip.estado = 1
         AND 	ef.id_fase=fa.id 
-        AND 	ef.id_ciclo = c.id
-        AND 	c.id_anio = a.id
         AND 	sdi.id_institucion =dip.id_institucion
         AND 	sdi.id_sede = dip.id_sede 
-        AND 	sdi.id_ciclo =ef.id_ciclo
-        GROUP BY dip.id,i.codigo_dane,i.descripcion, 
-        s.codigo_dane, s.descripcion,i.id,s.id, a.descripcion,
-        c.descripcion,fa.descripcion,sdi.profecional_a, sdi.id
+        GROUP BY 
+			dip.id,
+			i.codigo_dane,
+			i.descripcion, 
+			s.codigo_dane, 
+			s.descripcion,i.id,s.id, a.descripcion,
+			fa.descripcion,sdi.profecional_a, sdi.id
         ORDER BY i.id,s.id
         
         ");
         $datos_ieo_profesional = $command->queryAll();
-        
-        $data['48'] = [];
-        $data['49'] = [];
-
-
-        foreach ($datos_ieo_profesional as $dip){
-            if($dip['id_sede'] == '48'){
-                array_push($data['48'], $dip);
-            }else if($dip['id_sede'] == '49'){
-                array_push($data['49'], $dip);
+		$idSedes 		= $_SESSION['sede'][0];
+		
+        $data[$idSedes] = [];
+        foreach ($datos_ieo_profesional as $dip)
+		{
+            if($dip['id_sede'] == $idSedes )
+			{
+                array_push($data[$idSedes], $dip);
             }
+			
+			// else if($dip['id_sede'] == '49'){
+                // array_push($data['49'], $dip);
+            // }
         }
-
+		
+		// echo "<pre>"; print_r($data); echo "</pre>"; 
+		
+		
         $contador =0;
         $totalDatos = [];
 		foreach ($data as $dip)
@@ -135,9 +140,9 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                     ");
                     $fechas = $command->queryAll();
 
-                   
+                  
                     
-                    array_push($data, $dip[0]['codigo_dane_institucion'], $dip[0]['institucion'], $dip[0]['codigo_dane_sede'],$dip[0]['sede'],  $dip[0]['anio'], $dip[0]['ciclos'], $nomresPersonalA, @$fechas[0]['fecha_sesion']);
+                    array_push($data, $dip[0]['codigo_dane_institucion'], $dip[0]['institucion'], $dip[0]['codigo_dane_sede'],$dip[0]['sede'],  $dip[0]['anio'], $nomresPersonalA, @$fechas[0]['fecha_sesion']);
                     
                     
                 /**Inicio datos fases 1 */
@@ -155,6 +160,8 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                     $frecuenciaSesion1 = $this->arrayArrayComas($datoAcuerdosInstitucionales,'frecuencia_sesiones') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales,'frecuencia_sesiones') : "0" ;
                     $cursoSesion1 = $this->arrayArrayComas($datoAcuerdosInstitucionales,'curso') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales,'curso') : "0" ;
 
+					
+					 
                     /**Obtiene nombres descriptivos en base a los id's de las sesiones */
                     $command = $connection->createCommand("
                     SELECT descripcion
@@ -162,8 +169,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                     WHERE id in($frecuenciaSesion1)
                     ORDER BY id ASC ");
                     $frecuenciasSesiones = $command->queryAll();
-                    $frecuenciasSesiones= $this->arrayArrayComas($frecuenciasSesiones,'descripcion');
-
+                    $frecuenciasSesiones= $this->arrayArrayComas($frecuenciasSesiones,'descripcion'); 
                     array_push($data,$frecuenciasSesiones);
                     
                     //Duracion promedio de las sesiones
@@ -178,8 +184,11 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         WHERE id_datos_ieo_profesional_estudiantes = $id_datos_ieo_profesional1 
                     ");
                     $datoSemillerosTicEjecucionFase1 = $command->queryAll();
+					
+						
                     $segundos = 0;
-                    foreach ($datoSemillerosTicEjecucionFase1 as $datosSTEF => $valor){ 
+                    foreach ($datoSemillerosTicEjecucionFase1 as $datosSTEF => $valor)
+					{ 
                         $segundos += $this->conversionSegundos($valor['duracion_sesion']);
                     }
                     $promedioHorasFase1  = @($segundos / count($datoSemillerosTicEjecucionFase1));
@@ -195,7 +204,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                     $cusosSesiones = $command->queryAll();
                     $cusosSesiones= $this->arrayArrayComas($cusosSesiones,'descripcion');
                     array_push($data, $promedioHorasFase1, $cusosSesiones);
-
+					
                     $command = $connection->createCommand("
                         SELECT
                             dts.fecha_sesion,
@@ -210,7 +219,9 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         ");
                     $datosEjeccionFasei = $command->queryAll();
                     $promedioParticipantes1 = 0;
-                    
+					
+                     
+					 
                     if(count($datosEjeccionFasei) > 0){
                         foreach ($datosEjeccionFasei as $datos1 => $valor){
                             @$totalapps1 += $valor['apps_creadas'];
@@ -229,7 +240,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         array_push($data, count($datosEjeccionFasei), $totalparticipantes1, $totalapps1);
                     }
                 /**Fin datos Fase 1 */
-                
+             
                 /**Inicio datos Fase 2 */
                     $id_datos_ieo_profesional2 = $dip[1]['id'];
                     $idSemilleros2 = $dip[1]['id_semilleros'];
@@ -407,12 +418,12 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 array_push($data, ($promedioParticipantes1 + $promedioParticipantes2 + $promedioParticipantes3) / 3 ,(count($datosEjeccionFaseiii) + count($datosEjeccionFaseii) + count($datosEjeccionFasei)));
 
                 array_push($totalDatos, $data);
+				
                 $contador++;
             }
         }
         
         
-       
         $searchModel = new EcDatosBasicosBuscar();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

@@ -32,8 +32,6 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
         'attributes' => [
             'id',
             'id_fase',
-            'descripcion',
-            'hallazgos',
             'estado',
         ],
     ]) ?>

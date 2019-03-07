@@ -93,12 +93,11 @@ section.content {
 		<tr style='background-color:#ccc;text-align:center;'>
 			<th colspan='4' style='border: 1px solid black;'>Datos IEO</th>
 			<th colspan='1' rowspan='3' style='border: 1px solid black;'>Año</th>
-			<th colspan='1' rowspan='3' style='border: 1px solid black;'>Ciclo</th>
 			<th colspan='1' rowspan='3' style='border: 1px solid black;'>Profesional A.</th>
 			<th colspan='1' rowspan='3' style='border: 1px solid black;'>Fecha de inicio del Semillero</th>
-			<th colspan='30' style='border: 1px solid black;'>Fase I Creaci&oacute;n y prueba</th>
-			<th colspan='30' style='border: 1px solid black;'>Fase II Desarrollo e implementaci&oacute;n</th>
-			<th colspan='30' style='border: 1px solid black;'>Fase III  (Uso - Aplicaci&oacute;n)</th>
+			<th colspan='54' style='border: 1px solid black;'>Fase I Creaci&oacute;n y prueba</th>
+			<th colspan='58' style='border: 1px solid black;'>Fase II Desarrollo e implementaci&oacute;n</th>
+			<th colspan='58' style='border: 1px solid black;'>Fase III  (Uso - Aplicaci&oacute;n)</th>
 			<th colspan='1' rowspan='3' style='border: 1px solid black;'>TOTAL PARTICIPANTES FASES I A III (PROMEDIO)</th>
 			<th colspan='1' rowspan='3' style='border: 1px solid black;'>TOTAL NUMERO DE SESIONES FASES I A III</th>
 		</tr>
@@ -116,6 +115,12 @@ section.content {
 			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 4</th>
 			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 5</th>
 			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 6</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 7</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 8</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 9</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 10</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 11</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 12</th>
 			<th colspan='1' rowspan='2' style='border: 1px solid black;'>Total Sesiones</th>
 			<th colspan='1' rowspan='2' style='border: 1px solid black;'>N&uacute;mero de estudiantes participantes (Promedio)</th>
 			<th colspan='1' rowspan='2' style='border: 1px solid black;'>N&uacute;mero de Apps 0.0 creadas y probadas</th>
@@ -128,6 +133,13 @@ section.content {
 			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 4</th>
 			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 5</th>
 			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 6</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 6</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 7</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 8</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 9</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 10</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 11</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 12</th>
 			<th colspan='1' rowspan='2' style='border: 1px solid black;'>Total Sesiones</th>
 			<th colspan='1' rowspan='2' style='border: 1px solid black;'>N&uacute;mero de estudiantes participantes (Promedio)</th>
 			<th colspan='1' rowspan='2' style='border: 1px solid black;'>N&uacute;mero de Apps 0.0 desarrolladas e implementadas</th>
@@ -140,6 +152,13 @@ section.content {
 			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 4</th>
 			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 5</th>
 			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 6</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 6</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 7</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 8</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 9</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 10</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 11</th>
+			<th colspan='4' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 12</th>
 			<th colspan='1' rowspan='2' style='border: 1px solid black;'>Total Sesiones</th>
 			<th colspan='1' rowspan='2' style='border: 1px solid black;'>N&uacute;mero de estudiantes participantes (Promedio)</th>
 			<th colspan='1' rowspan='2' style='border: 1px solid black;'>N&uacute;mero de Apps 0.0 usadas</th>
@@ -163,6 +182,88 @@ section.content {
 			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
 			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
 			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
+			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
+			
 			<th colspan='1' rowspan='1' style='border: 1px solid black;'>&nbsp;</th>
 			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
 			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N° Asistentes</th>
@@ -326,7 +427,86 @@ section.content {
 						<td style='border: 1px solid black;'><?= isset($value[96]) ? $value[96] : '' ?></td>
 						<td style='border: 1px solid black;'><?= isset($value[97]) ? $value[97] : '' ?></td>
 						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
-						<td style='border: 1px solid black;'><?= isset($value[99]) ? $value[99] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
+						<td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
 						
 
 					</tr>

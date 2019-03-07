@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\SemillerosTicSemillerosDatosIeo */
 
-$this->title = 'Agregar Semilleros Tic Semilleros Datos Ieo';
-$this->params['breadcrumbs'][] = ['label' => 'Semilleros Tic Semilleros Datos Ieos', 'url' => ['index']];
+$this->title = 'Agregar Semilleros TIC Semilleros Datos Ieo';
+$this->params['breadcrumbs'][] = ['label' => 'Semilleros TIC Semilleros Datos Ieos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = "Agregar";
 ?>
 <div class="semilleros-tic-semilleros-datos-ieo-create">

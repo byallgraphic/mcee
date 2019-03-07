@@ -20,12 +20,17 @@ use fedemotta\datatables\DataTables;
 use yii\grid\GridView;
 use app\models\Fases;
 
+if( !$sede || $sede < 0 ){
+	$this->registerJs( "$( cambiarSede ).click()" );
+	return;
+}
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\SemillerosTicDiarioDeCampoEstudiantesBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = '';
-$nombre = 'Semilleros Tic Diario De Campo Estudiantes';
+$nombre = 'Semilleros TIC Diario De Campo Estudiantes';
 $this->params['breadcrumbs'][] = $nombre ;
 ?>
 
@@ -48,12 +53,22 @@ $this->params['breadcrumbs'][] = $nombre ;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::button('Agregar',['value'=>Url::to(['create']),'class'=>'btn btn-success','id'=>'modalButton'])?>
+        <?= Html::button('Agregar',[
+									'value'=>Url::to([
+									'create',
+									'anio' => $anio,
+									'esDocente' => $esDocente,
+							]),
+							'class'=>'btn btn-success',
+							'id'=>'modalButton'
+						])?>
 		
 		
 		<?= Html::a('Volver', 
 									[
 										'semilleros/index',
+										'anio' => $anio,
+										'esDocente' => $esDocente,
 									], 
 									['class' => 'btn btn-info']) ?>
 				
@@ -98,6 +113,7 @@ $this->params['breadcrumbs'][] = $nombre ;
            'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
+			'anio',
             [
 				'attribute'=>'id_fase',
 				/*
@@ -111,8 +127,8 @@ $this->params['breadcrumbs'][] = $nombre ;
 					return  $fases ;	
 				},	
 			],
-            'descripcion',
-            'hallazgos',
+            // 'descripcion',
+            // 'hallazgos',
             // 'estado',
 
             [
@@ -120,12 +136,18 @@ $this->params['breadcrumbs'][] = $nombre ;
 			'template'=>'{view}{update}{delete}',
 				'buttons' => [
 				'view' => function ($url, $model) {
+					
+					$url = $url."&anio=".$_GET['anio']."&esDocente=".$_GET['esDocente'];
+					
 					return Html::a('<span name="detalle" class="glyphicon glyphicon-eye-open" value ="'.$url.'" ></span>', $url, [
 								'title' => Yii::t('app', 'lead-view'),
 					]);
 				},
 
 				'update' => function ($url, $model) {
+					
+					$url = $url."&anio=".$_GET['anio']."&esDocente=".$_GET['esDocente'];
+					
 					return Html::a('<span name="actualizar" class="glyphicon glyphicon-pencil" value ="'.$url.'"></span>', $url, [
 								'title' => Yii::t('app', 'lead-update'),
 					]);

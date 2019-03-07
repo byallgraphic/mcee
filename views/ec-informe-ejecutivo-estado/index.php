@@ -13,7 +13,7 @@ use app\models\EcProyectos;
 /* @var $searchModel app\models\EcInformeEjecutivoEstadoBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '4. Informe ejecutivo del estado del eje en la IEO';
+$this->title = 'Informe ejecutivo del estado del eje en la IEO';
 $this->params['breadcrumbs'][] = $this->title;
 $idTipoInforme = $_GET['idTipoInforme'];
 if( @$_GET['guardado'])
@@ -38,7 +38,7 @@ if( @$_GET['guardado'])
 <div class="modal-content">
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-<h3>4. Informe ejecutivo del estado del eje en la IEO</h3>
+<h3>Informe ejecutivo del estado del eje en la IEO</h3>
 </div>
 <div class="modal-body">
 <div id='modalContent'></div>
