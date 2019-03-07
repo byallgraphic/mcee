@@ -19,7 +19,7 @@ use app\models\DocumentosReconocimiento;
 use app\models\TiposCantidadPoblacion;
 use app\models\Evidencias;
 use app\models\TipoDocumentos;
-use app\models\Producto;
+use app\models\EcProducto;
 use yii\bootstrap\Collapse;
 
 use app\models\ZonasEducativas;
@@ -134,45 +134,7 @@ class IeoController extends Controller
 			'items' => $contenedores,
 		]);
 		
-		
-		
-		
-      
-       
-        //$nombres				= $nombres->nombres." ".$nombres->apellidos;
-        
-        /*$proyectos = [ 
-            1 => "Proyectos Pedagógicos Transversales",
-            2 => "Proyectos de Servicio Social Estudiantil",
-            3 => "Articulación Familiar"
-        ];*/
-
-        // $actividades =
-		// [
-            // 1 =>    "Requerimientos extras I.E.O",
-            // 2 =>    "Reconocimiento previo y documentos a desarrollar por el profesional de apoyo",
-            // 3 =>    "Actividad 1.Mesa de trabajo para la presentación de resultados de la caracterización y mapeo (puntos de partida y llegada)",
-            // 4 =>    "Actividad 2. Acompañamiento en práctica",
-            // 5 =>    "Actividad 3. Mesa de trabajo: contrucción del plan de acción",
-            // 6 =>    "Productos"
-        // ];
-		
-		// return $this->renderAjax('fases', [
-            // 'fases' => $actividades,
-            // 'form' => $form,
-            // "model" => $model,
-            // "documentosReconocimiento" =>  $documentosReconocimiento,
-            // "tiposCantidadPoblacion" => $tiposCantidadPoblacion,
-            // "evidencias" => $evidencias,
-            // "producto" => $producto,
-            // "requerimientoExtra" => $requerimientoExtra,
-            // "estudiantesGrado" =>  $estudiantesGrado,
-            // "datos" => $datos,
-            // "persona" => $persona,
-            // "nombres" => $nombres,
-            // "idTipoInforme" => $idTipoInforme
-        // ]);
-		
+	
 	}
 
     /**
@@ -219,24 +181,20 @@ class IeoController extends Controller
          * Se realiza registro del modelo base IEO
          * Obtenemos el id de iserción para usarlo como llave foranea en los demas modelos 
          */
-        //$model = new Ieo();
-        //$requerimientoExtra = new RequerimientoExtraIeo();
-        //$documentosReconocimiento = new DocumentosReconocimiento();
-        //$tiposCantidadPoblacion = new TiposCantidadPoblacion();
-        //$estudiantesGrado = new EstudiantesIeo();
-        //$evidencias = new Evidencias();
+        
         $ieo_id = 0;
         $idInstitucion = $_SESSION['instituciones'][0];
         $data = [];
         $institucion = Instituciones::findOne( $idInstitucion );
-        $status = false;
+      
         
         $ieo_model = new Ieo();
         //$postData = Yii::$app->request->post();
         
-        if ($ieo_model->load(Yii::$app->request->post())) {
+        if ($ieo_model->load(Yii::$app->request->post())) 
+		{
             
-            $ieo_model->institucion_id = $idInstitucion;
+			$ieo_model->institucion_id = $idInstitucion;
             $ieo_model->estado = 1;
             $ieo_model->sede_id = $_SESSION["sede"][0] != "-1" ? $_SESSION["sede"][0] : 2;
             $ieo_model->id_tipo_informe = $_SESSION["idTipoInforme"];   
@@ -248,72 +206,16 @@ class IeoController extends Controller
                 //$ieo_id = 56;
                 
 
-                /*if(Yii::$app->request->post('RequerimientoExtraIeo')){
-                    
-                    $modelRequerimiento = [];
-
-                    for( $i = 0; $i < 14; $i++ ){
-                        $modelRequerimiento[] = new RequerimientoExtraIeo();
-                    }
-
-                    if (RequerimientoExtraIeo::loadMultiple($modelRequerimiento, Yii::$app->request->post() )) {
-                        
-                        foreach($modelRequerimiento as $key => $model3) {
-                            
-                            $file_socializacion_ruta = UploadedFile::getInstance( $model3, "[$key]socializacion_ruta" );
-                            $file_soporte_necesidad = UploadedFile::getInstance( $model3, "[$key]soporte_necesidad" );
-
-                            
-                            if( $file_socializacion_ruta && $file_soporte_necesidad){
-                                
-                                //Se crea carpeta para almecenar los documentos de Soporte Necesidad
-                                $carpetaSocializacion = "../documentos/documentosIeo/requerimientoExtra/".$institucion->codigo_dane;
-                                if (!file_exists($carpetaSocializacion)) {
-                                    mkdir($carpetaSocializacion, 0777, true);
-                                }
-                                
-                                //Construyo la ruta completa del archivo IEO Socialiazacion a guardar 
-                                $rutaFisicaDirectoriaUploadSocializacion  = "../documentos/documentosIeo/requerimientoExtra/".$institucion->codigo_dane."/";
-                                $rutaFisicaDirectoriaUploadSocializacion .= $file_socializacion_ruta->baseName;
-                                $rutaFisicaDirectoriaUploadSocializacion .= date( "_Y_m_d_His" ) . '.' . $file_socializacion_ruta->extension;
-                                $saveSocializacion = $file_socializacion_ruta->saveAs( $rutaFisicaDirectoriaUploadSocializacion );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-                                
-
-                                //Construyo la ruta completa del archivo IEO Soporte Necesidad a guardar 
-                                $rutaFisicaDirectoriaUploadSoporteNecesidad  = "../documentos/documentosIeo/requerimientoExtra/".$institucion->codigo_dane."/";
-                                $rutaFisicaDirectoriaUploadSoporteNecesidad .= $file_soporte_necesidad->baseName;
-                                $rutaFisicaDirectoriaUploadSoporteNecesidad .= date( "_Y_m_d_His" ) . '.' . $file_soporte_necesidad->extension;
-                                $saveSoporteNecesidad = $file_soporte_necesidad->saveAs( $rutaFisicaDirectoriaUploadSoporteNecesidad );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-                            
-                                if( $saveSocializacion && $saveSoporteNecesidad){
-                                    
-                                    //Le asigno la ruta al arhvio
-                                    $modelRequerimiento[$key]->socializacion_ruta = $rutaFisicaDirectoriaUploadSocializacion;
-                                    $modelRequerimiento[$key]->soporte_necesidad = $rutaFisicaDirectoriaUploadSoporteNecesidad;
-                                    $modelRequerimiento[$key]->ieo_id = $ieo_id;
-                                    $modelRequerimiento[$key]->save();
-    
-                                }else{
-                                    echo $file->error;
-                                    exit("finnn....");
-                                }
-                            }
-                            
-                        }
-                    }
-                }*/
-
                 /**Carga de archivos multiples */
-                if($arrayDatosRequerimientos = Yii::$app->request->post('RequerimientoExtraIeo')){
+                if($arrayDatosRequerimientos = Yii::$app->request->post('RequerimientoExtraIeo'))
+				{
                     
                     $modelRequerimiento = [];
 
-                    for( $i = 0; $i < 8; $i++ ){
+                    for( $i = 0; $i < 8; $i++ )
+					{
                         $modelRequerimiento[] = new RequerimientoExtraIeo();
                     }
-
-                   
-                   
                     if (RequerimientoExtraIeo::loadMultiple($modelRequerimiento, Yii::$app->request->post() )) {
                         //die();  
                        
@@ -381,8 +283,6 @@ class IeoController extends Controller
                             $model->proyecto_ieo_id = isset($arrayDatosRequerimientos[$key]['proyecto_ieo_id']) ? $arrayDatosRequerimientos[$key]['proyecto_ieo_id'] : 0;
                             $model->actividad_id = isset($arrayDatosRequerimientos[$key]['proyecto_ieo_id']) ? $arrayDatosRequerimientos[$key]['proyecto_ieo_id'] : 0;
                             
-
-                            
                             //Guarda la informacion que tiene $model en la base de datos
 							foreach( $modelRequerimiento as $key => $model) 
 							{
@@ -395,87 +295,6 @@ class IeoController extends Controller
                         
                     }
                 }
-
-                /*if(Yii::$app->request->post('DocumentosReconocimiento')){
-                    
-                    $modelReconocimiento = [];
-
-                    for( $i = 0; $i < 24; $i++ ){
-                        $modelReconocimiento[] = new DocumentosReconocimiento();
-                    }
-
-                    if (DocumentosReconocimiento::loadMultiple($modelReconocimiento, Yii::$app->request->post() )) {
-                        
-                        foreach($modelReconocimiento as $key => $model3) {
-                            
-                            $file_informe_caracterizacion = UploadedFile::getInstance( $model3, "[$key]informe_caracterizacion" );
-                            $file_matriz_caracterizacion = UploadedFile::getInstance( $model3, "[$key]matriz_caracterizacion" );
-                            $file_revision_pei = UploadedFile::getInstance( $model3, "[$key]revision_pei" );
-                            $file_revision_autoevaluacion = UploadedFile::getInstance( $model3, "[$key]revision_autoevaluacion" );
-                            $file_revision_pmi = UploadedFile::getInstance( $model3, "[$key]revision_pmi" );
-                            $file_resultados_caracterizacion = UploadedFile::getInstance( $model3, "[$key]resultados_caracterizacion" );
-
-                            if( $file_informe_caracterizacion && $file_matriz_caracterizacion && $file_revision_pei && $file_revision_autoevaluacion && $file_revision_pmi && $file_resultados_caracterizacion){   
-                                //die();
-                                //Se crea carpeta para almecenar los documentos de Socializacion
-                                $carpetaDocumentosReconocimiento = "../documentos/documentosIeo/documentosReconocimiento/".$institucion->codigo_dane;
-                                if (!file_exists($carpetaDocumentosReconocimiento)) {
-                                    mkdir($carpetaDocumentosReconocimiento, 0777, true);
-                                }
-
-                                $ruta =   "../documentos/documentosIeo/documentosReconocimiento/".$institucion->codigo_dane."/";
-
-                                $rutaFisicaDirectoriaUploadDocumentosReconocimientoInformeCaracterizacion = $ruta.$file_informe_caracterizacion->baseName;
-                                $rutaFisicaDirectoriaUploadDocumentosReconocimientoInformeCaracterizacion .= date( "_Y_m_d_His" ) . '.' . $file_informe_caracterizacion->extension;
-                                $saveInformeCaracterizacion = $file_informe_caracterizacion->saveAs( $rutaFisicaDirectoriaUploadDocumentosReconocimientoInformeCaracterizacion );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-                                
-                            
-                                $rutaFisicaDirectoriaUploadDocumentosReconocimientoMatrizCaracterizacion = $ruta.$file_matriz_caracterizacion->baseName;
-                                $rutaFisicaDirectoriaUploadDocumentosReconocimientoMatrizCaracterizacion .= date( "_Y_m_d_His" ) . '.' . $file_matriz_caracterizacion->extension;
-                                $saveMatrizCaracterizacion = $file_matriz_caracterizacion->saveAs( $rutaFisicaDirectoriaUploadDocumentosReconocimientoMatrizCaracterizacion );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-
-                                
-                                $rutaFisicaDirectoriaUploadDocumentosReconocimientoRevisionPei = $ruta.$file_revision_pei->baseName;
-                                $rutaFisicaDirectoriaUploadDocumentosReconocimientoRevisionPei .= date( "_Y_m_d_His" ) . '.' . $file_revision_pei->extension;
-                                $saveRevisionPei = $file_revision_pei->saveAs( $rutaFisicaDirectoriaUploadDocumentosReconocimientoRevisionPei );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-
-                                
-                                $rutaFisicaDirectoriaUploadDocumentosReconocimientoAutoevaluacion = $ruta.$file_revision_autoevaluacion->baseName;
-                                $rutaFisicaDirectoriaUploadDocumentosReconocimientoAutoevaluacion .= date( "_Y_m_d_His" ) . '.' . $file_revision_autoevaluacion->extension;
-                                $saveAutoevaluacion = $file_revision_autoevaluacion->saveAs( $rutaFisicaDirectoriaUploadDocumentosReconocimientoAutoevaluacion );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-
-                                $rutaFisicaDirectoriaUploadDocumentosReconocimientoRevisionPmi = $ruta.$file_revision_pmi->baseName;
-                                $rutaFisicaDirectoriaUploadDocumentosReconocimientoRevisionPmi .= date( "_Y_m_d_His" ) . '.' . $file_revision_pmi->extension;
-                                $saveRevisionPmi = $file_revision_pmi->saveAs( $rutaFisicaDirectoriaUploadDocumentosReconocimientoRevisionPmi );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-
-
-                                $rutaFisicaDirectoriaUploadDocumentosReconocimientoResultadosCaracterizacion = $ruta.$file_resultados_caracterizacion->baseName;
-                                $rutaFisicaDirectoriaUploadDocumentosReconocimientoResultadosCaracterizacion .= date( "_Y_m_d_His" ) . '.' . $file_resultados_caracterizacion->extension;
-                                $saveResultadosCaracterizacion = $file_resultados_caracterizacion->saveAs( $rutaFisicaDirectoriaUploadDocumentosReconocimientoResultadosCaracterizacion );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-
-                                if( $saveInformeCaracterizacion && $saveMatrizCaracterizacion && $saveRevisionPei && $saveAutoevaluacion && $saveRevisionPmi && $saveResultadosCaracterizacion){
-                                    
-                                    //Le asigno la ruta al arhvio
-                                    $modelReconocimiento[$key]->informe_caracterizacion = $rutaFisicaDirectoriaUploadDocumentosReconocimientoInformeCaracterizacion;
-                                    $modelReconocimiento[$key]->matriz_caracterizacion = $rutaFisicaDirectoriaUploadDocumentosReconocimientoMatrizCaracterizacion;
-                                    $modelReconocimiento[$key]->revision_pei = $rutaFisicaDirectoriaUploadDocumentosReconocimientoRevisionPei;
-                                    $modelReconocimiento[$key]->revision_autoevaluacion = $rutaFisicaDirectoriaUploadDocumentosReconocimientoAutoevaluacion;
-                                    $modelReconocimiento[$key]->revision_pmi = $rutaFisicaDirectoriaUploadDocumentosReconocimientoRevisionPmi;
-                                    $modelReconocimiento[$key]->resultados_caracterizacion = $rutaFisicaDirectoriaUploadDocumentosReconocimientoResultadosCaracterizacion;
-                                    $modelReconocimiento[$key]->ieo_id = $ieo_id;
-                                    $modelReconocimiento[$key]->save();
-                                    
-                                }else{
-                                    echo $file->error;
-                                    exit("finnn....");
-                                }
-
-                            }
-
-                        }
-                    }
-                    
-                }*/
 
                 /**Carga de archivos multiples */
                 if($arrayDatosDocumentos = Yii::$app->request->post('DocumentosReconocimiento')){
@@ -564,75 +383,6 @@ class IeoController extends Controller
                     }
                 }
 
-                /*if(Yii::$app->request->post('Evidencias')){
-
-                    $modelEvidencias = [];
-
-                    for( $i = 0; $i < 54; $i++ ){
-                        $modelEvidencias[] = new Evidencias();
-                    }
-
-                    if (Evidencias::loadMultiple($modelEvidencias, Yii::$app->request->post() )) {
-
-                        foreach($modelEvidencias as $key => $model4) {
-                            
-                            $file_producto_ruta = UploadedFile::getInstance( $model4, "[$key]producto_ruta" );
-                            $file_resultados_actividad_ruta = UploadedFile::getInstance( $model4, "[$key]resultados_actividad_ruta" );
-                            $file_acta_ruta = UploadedFile::getInstance( $model4, "[$key]acta_ruta" );
-                            $file_listado_ruta = UploadedFile::getInstance( $model4, "[$key]listado_ruta" );
-                            $file_fotografias_ruta = UploadedFile::getInstance( $model4, "[$key]fotografias_ruta" );
-
-                            if( $file_producto_ruta && $file_resultados_actividad_ruta && $file_acta_ruta && $file_listado_ruta){
-                                
-                                //Se crea carpeta para almecenar los documentos de Socializacion
-                                $carpetaEvidencias = "../documentos/documentosIeo/actividades/evidencias/".$institucion->codigo_dane;
-                                if (!file_exists($carpetaEvidencias)) {
-                                    mkdir($carpetaEvidencias, 0777, true);
-                                }
-
-                                $base = "../documentos/documentosIeo/actividades/evidencias/".$institucion->codigo_dane."/";    
-
-                                $rutaFisicaDirectoriaUploadProducto = $base.$file_producto_ruta->baseName;
-                                $rutaFisicaDirectoriaUploadProducto .= date( "_Y_m_d_His" ) . '.' . $file_producto_ruta->extension;
-                                $saveProducto = $file_producto_ruta->saveAs( $rutaFisicaDirectoriaUploadProducto );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-                                
-                                $rutaFisicaDirectoriaUploadResultadosActividad = $base.$file_resultados_actividad_ruta->baseName;
-                                $rutaFisicaDirectoriaUploadResultadosActividad .= date( "_Y_m_d_His" ) . '.' . $file_resultados_actividad_ruta->extension;
-                                $saveResultadosActividad = $file_resultados_actividad_ruta->saveAs( $rutaFisicaDirectoriaUploadResultadosActividad );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-                                
-                                $rutaFisicaDirectoriaUploadActa = $base.$file_acta_ruta->baseName;
-                                $rutaFisicaDirectoriaUploadActa .= date( "_Y_m_d_His" ) . '.' . $file_acta_ruta->extension;
-                                $saveActa = $file_acta_ruta->saveAs( $rutaFisicaDirectoriaUploadActa );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-                                 
-                                $rutaFisicaDirectoriaUploadListado = $base.$file_listado_ruta->baseName;
-                                $rutaFisicaDirectoriaUploadListado .= date( "_Y_m_d_His" ) . '.' . $file_listado_ruta->extension;
-                                $saveListado = $file_listado_ruta->saveAs( $rutaFisicaDirectoriaUploadListado );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-    
-                                $rutaFisicaDirectoriaUploadFotografia = $base.$file_fotografias_ruta->baseName;
-                                $rutaFisicaDirectoriaUploadFotografia .= date( "_Y_m_d_His" ) . '.' . $file_fotografias_ruta->extension;
-                                $saveFotografia = $file_fotografias_ruta->saveAs( $rutaFisicaDirectoriaUploadFotografia );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-
-                                if( $saveProducto && $saveResultadosActividad && $saveActa && $saveListado && $saveFotografia){                                 
-                                    //Le asigno la ruta al arhvio
-                                    $modelEvidencias[$key]->producto_ruta = $rutaFisicaDirectoriaUploadProducto;
-                                    $modelEvidencias[$key]->resultados_actividad_ruta = $rutaFisicaDirectoriaUploadResultadosActividad;
-                                    $modelEvidencias[$key]->acta_ruta = $rutaFisicaDirectoriaUploadActa;
-                                    $modelEvidencias[$key]->listado_ruta = $rutaFisicaDirectoriaUploadListado;
-                                    $modelEvidencias[$key]->fotografias_ruta = $rutaFisicaDirectoriaUploadFotografia;
-                                    $modelEvidencias[$key]->ieo_id = $ieo_id;
-                                    $modelEvidencias[$key]->save();
-    
-                                }else{
-                                    echo $file->error;
-                                    exit("finnn....");
-                                }
-                            }
-
-                        }
-
-                    }
-                }*/
-
                  /**Carga de archivos multiples */
                 if($arrayDatosEvidencias = Yii::$app->request->post('Evidencias')){
 
@@ -714,69 +464,16 @@ class IeoController extends Controller
                     }
                 }
 
-
-                /*if(Yii::$app->request->post('Producto')){
-
-                    $modelProducto = [];
-                    for( $i = 0; $i < 64; $i++ ){
-                        $modelProducto[] = new Producto();
-                    }
-
-                    if (Producto::loadMultiple($modelProducto, Yii::$app->request->post() )) {
-                        foreach($modelProducto as $key => $model5) {
-                            
-                            $file_producto_imforme_ruta = UploadedFile::getInstance( $model5, "[$key]imforme_ruta" );
-                            $file_plan_accion = UploadedFile::getInstance( $model5, "[$key]plan_accion_ruta" );
-                            
-                            if($file_producto_imforme_ruta && $file_plan_accion){
-
-                                //Se crea carpeta para almecenar los documentos de Socializacion
-                                $carpetaProducto = "../documentos/documentosIeo/producto/".$institucion->codigo_dane;
-                                if (!file_exists($carpetaProducto)) {
-                                    mkdir($carpetaProducto, 0777, true);
-                                }
-
-                                //Construyo la ruta completa del archivo IEO Socialiazacion a guardar 
-                                $rutaFisicaDirectoriaUploadProductoInforme  = "../documentos/documentosIeo/producto/".$institucion->codigo_dane."/";
-                                $rutaFisicaDirectoriaUploadProductoInforme .= $file_producto_imforme_ruta->baseName;
-                                $rutaFisicaDirectoriaUploadProductoInforme .= date( "_Y_m_d_His" ) . '.' . $file_producto_imforme_ruta->extension;
-                                $saveProductoInforme = $file_producto_imforme_ruta->saveAs( $rutaFisicaDirectoriaUploadProductoInforme );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-                                
-
-                                //Construyo la ruta completa del archivo IEO Soporte Necesidad a guardar 
-                                $rutaFisicaDirectoriaUploadProductoPlan  = "../documentos/documentosIeo/producto/".$institucion->codigo_dane."/";
-                                $rutaFisicaDirectoriaUploadProductoPlan .= $file_plan_accion->baseName;
-                                $rutaFisicaDirectoriaUploadProductoPlan .= date( "_Y_m_d_His" ) . '.' . $file_plan_accion->extension;
-                                $saveProductoPlan = $file_plan_accion->saveAs( $rutaFisicaDirectoriaUploadProductoPlan );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-
-                                
-                                if($saveProductoInforme && $saveProductoPlan){
-                                    //Le asigno la ruta al arhvio
-                                    $modelProducto[$key]->imforme_ruta = $rutaFisicaDirectoriaUploadProductoInforme;
-                                    $modelProducto[$key]->plan_accion_ruta = $rutaFisicaDirectoriaUploadProductoPlan;
-                                    $modelProducto[$key]->ieo_id = $ieo_id;
-                                    $modelProducto[$key]->save();                                   
-    
-                                }else{
-                                    echo $file->error;
-                                    exit("finnn....");
-                                }
-                            }
-
-                        }
-                    }
-                }*/
-
                 /**Carga de archivos multiples */
-                if($arrayDatosProducto = Yii::$app->request->post('Producto')){
+                if($arrayDatosProducto = Yii::$app->request->post('EcProducto')){
                     
                     $modelProdutos = [];
 
                     for( $i = 0; $i < 8; $i++ ){
-                        $modelProdutos[] = new Producto();
+                        $modelProdutos[] = new EcProducto();
                     }
 
-                    if (Producto::loadMultiple($modelProdutos, Yii::$app->request->post() )) {
+                    if (EcProducto::loadMultiple($modelProdutos, Yii::$app->request->post() )) {
 
                         $idInstitucion 	= $_SESSION['instituciones'][0];
                         $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
@@ -896,21 +593,9 @@ class IeoController extends Controller
                     
                 }
                 return $this->redirect(['index', 'guardado' => 1, 'idTipoInforme' => $_SESSION["idTipoInforme"] ]);
-            }
-            
+            } 
 
         }
-        
-
-        $proyecto = "";
-        if($_SESSION["idTipoInforme"] == 26){
-            $proyecto = 'Articulación Familiar';
-        }else if($_SESSION["idTipoInforme"] == 14){
-            $proyecto = 'Servicio Social Obligatorio';
-        }else if($_SESSION["idTipoInforme"] == 2){
-            $proyecto = 'Proyectos Pedagógicos Transversales';
-        }
-      
         
         $ZonasEducatibas  = ZonasEducativas::find()->where( 'estado=1' )->all();
         $zonasEducativas	 = ArrayHelper::map( $ZonasEducatibas, 'id', 'descripcion' );
@@ -922,7 +607,6 @@ class IeoController extends Controller
         return $this->renderAjax('create', [
             'model' => $ieo_model,
             'zonasEducativas' => $zonasEducativas,
-            'proyecto' => $proyecto,
             'comunas' => $comunas
         ]);
     }
@@ -940,8 +624,10 @@ class IeoController extends Controller
                 ->orderBy('id DESC')
                 ->all();
 
-        if($countBarrios>0){
-            foreach($barrios as $barrio){
+        if($countBarrios>0)
+		{
+            foreach($barrios as $barrio)
+			{
                 echo "<option value='".$barrio->id."'>".$barrio->descripcion."</option>";
             }
         }

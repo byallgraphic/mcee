@@ -152,15 +152,14 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
             
             <div class=row style=''>
                 <div class="col-sm-6" style='padding:0px;'>
-                    <?= $form->field($evidencias, "[$numProyecto]producto_ruta[]")->label('Producto: mapa puntos de partida y llegada')->fileInput(['multiple' => true,  'accept' => ".doc, .docx, .pdf, .xls" ]) ?>
-                    <?= $form->field($evidencias, "[$numProyecto]resultados_actividad_ruta[]")->label('Resultados de la actividad')->fileInput([ 'multiple' => true, 'accept' => ".doc, .docx, .pdf, .xls" ]) ?>
-                    <?= $form->field($evidencias, "[$numProyecto]acta_ruta[]")->label('ACTA')->fileInput(['multiple' => true,  'accept' => ".doc, .docx, .pdf, .xls" ]) ?>
+                    <?= $form->field($evidencias, "[$idactividad]producto_ruta[]")->label('Producto: mapa puntos de partida y llegada')->fileInput(['multiple' => true,  'accept' => ".doc, .docx, .pdf, .xls" ]) ?>
+                    <?= $form->field($evidencias, "[$idactividad]resultados_actividad_ruta[]")->label('Resultados de la actividad')->fileInput([ 'multiple' => true, 'accept' => ".doc, .docx, .pdf, .xls" ]) ?>
+                    <?= $form->field($evidencias, "[$idactividad]acta_ruta[]")->label('ACTA')->fileInput(['multiple' => true,  'accept' => ".doc, .docx, .pdf, .xls" ]) ?>
                 </div>
                 <div class="col-sm-6" style='padding:0px;'>
-                    <?= $form->field($evidencias, "[$numProyecto]listado_ruta[]")->label('LISTADO')->fileInput([ 'multiple' => true, 'accept' => ".doc, .docx, .pdf, .xls" ]) ?>
-                    <?= $form->field($evidencias, "[$numProyecto]fotografias_ruta[]")->label('FOTOGRAFÍAS')->fileInput([ 'multiple' => true, 'accept' => ".doc, .docx, .pdf, .xls" ]) ?>
-                    <?= $form->field($evidencias, "[$numProyecto]actividad_id")->hiddenInput(['value'=> $index])->label(false); ?>
-                    <?= $form->field($evidencias, "[$numProyecto]proyecto_id")->hiddenInput(['value'=> $numProyecto])->label(false); ?>
+                    <?= $form->field($evidencias, "[$idactividad]listado_ruta[]")->label('LISTADO')->fileInput([ 'multiple' => true, 'accept' => ".doc, .docx, .pdf, .xls" ]) ?>
+                    <?= $form->field($evidencias, "[$idactividad]fotografias_ruta[]")->label('FOTOGRAFÍAS')->fileInput([ 'multiple' => true, 'accept' => ".doc, .docx, .pdf, .xls" ]) ?>
+                    <?= $form->field($evidencias, "[$idactividad]actividad_id")->hiddenInput(['value'=> $idactividad])->label(false); ?>
                 </div>
             </div>
             

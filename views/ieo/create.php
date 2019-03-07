@@ -13,7 +13,6 @@ $this->params['breadcrumbs'][] = "Agregar Informe de avance Mensual I.E.O Fase P
 <div class="ieo-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <h2><?= Html::encode($proyecto) ?></h2>
 
     <?= $this->render('_form', [
         'model' => $model,
