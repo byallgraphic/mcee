@@ -10,7 +10,6 @@ use dosamigos\datepicker\DatePicker;
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/ise.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/ise-docentes.js',['depends' => [\yii\web\JqueryAsset::className()]]);
-//$this->registerJsFile(Yii::$app->request->baseUrl.'/js/ise-actividades.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/ise-actividades_.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
 <?php 
@@ -18,18 +17,18 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/ise-actividades_.js',['de
 if( strpos($_GET['r'], 'update') > -1)
 	echo "<script> 
 			var barrio = ". $model->id_barrio .";
-		$('#ecinformeplaneacionieo-comuna').trigger('change'); 	
+		$('#informesemanalejecucionise-id_comuna').trigger('change'); 	
 </script>";
 
 ?>
 
 <script>
-setTimeout(function()
-{ 
-	$("#informesemanalejecucionise-id_barrio" ).val( barrio); 
-}, 800);
 
-
+		
+	setTimeout(function()
+	{ 
+		$("#informesemanalejecucionise-id_barrio" ).val( barrio ); 
+	}, 800);
 </script>
 
 
