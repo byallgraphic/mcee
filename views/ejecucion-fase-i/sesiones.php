@@ -77,5 +77,9 @@ echo Collapse::widget([
 
 $this->registerJs( "consecutivo = $index;" );
 
+// $options = ArrayHelper::getValue($item, 'options', []);
+// Html::addCssClass($options, 'panel panel-default');
+// $items[] = Html::tag('div', $this->renderItem($header, $item, ++$index), $options);
+
 ?>
 

@@ -169,6 +169,40 @@ Cambios realizados: Se cambia los campo input de cada sección por textarea, y s
 	 ************************************************************************************************************************************************/
 	 setTimeout(function(){
 		 
+		$( "#btnAddSession" ).click(function(){
+		
+			var index = $( "#collapseOne > div" ).length;
+		
+			$.get( "index.php?r=ejecucion-fase-ii/add-session-item&index="+index , function( data ){
+				
+				index++;
+				
+				$( "#collapseOne" ).append( data );
+				
+				var id = $( "[id^=btnAddFila]", $( "#collapseOne > div" ) ).last()[0].id.substr( "btnAddFila".length );
+				
+				
+				$( ".panel-body", $( "#collapseOne-collapse"+index ) ).each(function(x){
+		
+					dvsFilas[ $( "[id^=dvFilaSesion]", this ).eq(0)[0].id.substr( "dvFilaSesion".length ) ] = $( "[id^=dvFilaSesion]", this ).eq(0);
+					$( ".chosen-container", this ).remove();
+					$( "[id^=dvFilaSesion]", this ).eq(0).remove();
+				});
+				
+				consecutivos[id] = {
+					inicial : $( "[id^=dvFilaSesion]", this ).length+1,
+					actual  : $( "[id^=dvFilaSesion]", this ).length+1,
+				} 
+				
+				$( ".row-data-2", $( "#collapseOne-collapse"+index ) ).each(cccc);
+				$( ".row-data-3", $( "#collapseOne-collapse"+index ) ).each(dddd);
+				
+				$( "[id^=btnAddFila]", $( "#collapseOne > div" ) ).last().click(aaaa);
+				$( "[id^=btnRemoveFila]", $( "#collapseOne > div" ) ).last().click(bbbb);
+			});
+		})
+		 
+		 
 		$( "input:text[id^=datossesiones]" ).each(function(x){
 			
 			$('#w0').yiiActiveForm('find', this.id ).validate = function (attribute, value, messages, deferred, $form) {
@@ -250,7 +284,7 @@ Cambios realizados: Se cambia los campo input de cada sección por textarea, y s
 	});
 	
 	//Se agrega editables para los campos textarea de condiciones institucionales
-	$( ".row-data-2" ).each(function(){
+	$( ".row-data-2" ).each(cccc=function(){
 		
 		var inputFechaDataSesion = $( "input[id^=datossesiones]:text", $( this ).parent().parent() );
 		
@@ -288,7 +322,7 @@ Cambios realizados: Se cambia los campo input de cada sección por textarea, y s
 	});
 	
 	//Se agrega editables para los campos textarea de condiciones institucionales
-	$( ".row-data-3" ).each(function(){
+	$( ".row-data-3" ).each(dddd=function(){
 	
 		var inputFechaDataSesion = $( "input[id^=datossesiones]:text", $( this ).parent().parent() );
 	
@@ -327,8 +361,10 @@ Cambios realizados: Se cambia los campo input de cada sección por textarea, y s
 	
 	$( "[id^=btnAddFila]" ).each(function(){
 		
-		$( this ).click(function(){
+		$( this ).click(aaaa=function(){
+		try{
 			
+		
 			var id = this.id.substr( "btnAddFila".length );
 			
 			
@@ -463,13 +499,15 @@ Cambios realizados: Se cambia los campo input de cada sección por textarea, y s
 			totalSesiones()
 			
 			consecutivos[id].actual++;
+		}
+		catch(e){alert(e)}
 		});
 		
 	});
 	
 	$( "[id^=btnRemoveFila]" ).each(function(){
 		
-		$( this ).click(function(){
+		$( this ).click(bbbb=function(){
 			
 			var id = this.id.substr( "btnRemoveFila".length );
 			var total = $( "[id^=dvFilaSesion]", $( this ).parent().parent() ).length;

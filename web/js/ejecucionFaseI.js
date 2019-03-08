@@ -110,6 +110,36 @@ $( document ).ready(function(){
 	 ************************************************************************************************************************************************/
 	 setTimeout(function(){
 
+	 
+		$( "#btnAddSession" ).click(function(){
+		
+			var index = $( "#collapseOne > div" ).length;
+		
+			$.get( "index.php?r=ejecucion-fase-i/add-session-item&index="+index , function( data ){
+				
+				index++;
+				
+				$( "#collapseOne" ).append( data );
+				
+				var id = $( "[id^=btnAddFila]", $( "#collapseOne > div" ) ).last()[0].id.substr( "btnAddFila".length );
+				
+				
+				$( ".panel-body", $( "#collapseOne-collapse"+index ) ).each(function(x){
+		
+					dvsFilas[ $( "[id^=dvFilaSesion]", this ).eq(0)[0].id.substr( "dvFilaSesion".length ) ] = $( "[id^=dvFilaSesion]", this ).eq(0);
+					$( ".chosen-container", this ).remove();
+					$( "[id^=dvFilaSesion]", this ).eq(0).remove();
+				});
+				
+				consecutivos[id] = {
+					inicial : $( "[id^=dvFilaSesion]", this ).length+1,
+					actual  : $( "[id^=dvFilaSesion]", this ).length+1,
+				} 
+				
+				$( "[id^=btnAddFila]", $( "#collapseOne > div" ) ).last().click(aaaa);
+				$( "[id^=btnRemoveFila]", $( "#collapseOne > div" ) ).last().click(bbbb);
+			});
+		})
 		
 		 
 		$( "input:text[id$=fecha_sesion]" ).each(function(x){
@@ -227,7 +257,7 @@ $( document ).ready(function(){
 	
 	$( "[id^=btnAddFila]" ).each(function(){
 		
-		$( this ).click(function(){
+		$( this ).click(aaaa=function(){
 			
 			var id = this.id.substr( "btnAddFila".length );
 			
@@ -364,7 +394,7 @@ $( document ).ready(function(){
 	
 	$( "[id^=btnRemoveFila]" ).each(function(){
 		
-		$( this ).click(function(){
+		$( this ).click(bbbb = function(){
 			
 			var id = this.id.substr( "btnRemoveFila".length );
 			var total = $( "[id^=dvFilaSesion]", $( this ).parent().parent() ).length;
@@ -381,5 +411,4 @@ $( document ).ready(function(){
 			}
 		});
 	});
-	
 });

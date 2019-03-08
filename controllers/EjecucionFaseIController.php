@@ -58,6 +58,9 @@ use app\models\SemillerosDatosIeo;
 use app\models\AcuerdosInstitucionales;
 use yii\helpers\ArrayHelper;
 
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use yii\bootstrap\Collapse;
 /**
  * EjecucionFaseIController implements the CRUD actions for EjecucionFase model.
  */
@@ -80,6 +83,84 @@ class EjecucionFaseIController extends Controller
             ],
         ];
     }
+	
+	public function actionAddSessionItem()
+	{
+		$id_sede 		= $_SESSION['sede'][0];
+		$id_institucion	= $_SESSION['instituciones'][0];
+		
+		$idFase 	= $this->id_fase;
+		// $numSesion 	= Yii::$app->request->get('num_sesion');
+		$index 		= Yii::$app->request->get('index');
+		
+		$numSesion = $index;
+		
+		$numSesion++;
+		$index++;
+		
+		// $docentes = [];
+		
+		$datoSesion 	= new DatosSesiones();
+		$ejecucionesFase= [ new EjecucionFase() ];
+		$condiciones 	= null;
+		
+		$form = ActiveForm::begin();
+		
+		$sesion = Sesiones::find()
+						->where( 'id_fase='.$idFase )
+						->andWhere( 'estado=1' )
+						->andWhere( "descripcion='Sesión ".$numSesion."'" )
+						->one();
+						
+		if( !$sesion ){
+			$sesion = new Sesiones();
+			$sesion->descripcion = "Sesión ".$numSesion;
+			$sesion->id_fase 	 = $idFase;
+			$sesion->estado 	 = 1;
+			
+			$sesion->save();
+		}
+		
+		$dataPersonas 		= Personas::find()
+								->select( "( nombres || ' ' || apellidos ) as nombres, personas.id" )
+								->innerJoin( 'perfiles_x_personas pp', 'pp.id_personas=personas.id' )
+								->innerJoin( 'docentes d', 'd.id_perfiles_x_personas=pp.id' )
+								->innerJoin( 'perfiles_x_personas_institucion ppi', 'ppi.id_perfiles_x_persona=pp.id' )
+								->where( 'personas.estado=1' )
+								->andWhere( 'id_institucion='.$id_institucion )
+								->all();
+		
+		$docentes = $profesionales		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
+		
+		$item = 	[
+					'label' 		=>  $sesion->descripcion,
+					'content' 		=>  $this->renderAjax( 'sesionItem', 
+													[ 
+														'idPE' 			=> null, 
+														'index' 		=> 0,
+														'indexEf' 		=> $sesion->id,
+														'sesion' 		=> $sesion,
+														'datosSesion'	=> $datoSesion,
+														'models' 		=> $ejecucionesFase,
+														'condiciones'	=> $condiciones,
+														'form'			=> $form,
+														'datosModelos'	=> null,
+														'docentes' 		=> $docentes,
+													] 
+										),
+					'contentOptions'=> []
+				];
+		
+		
+		$header = $sesion->descripcion;
+		// $index = 9;
+		
+		$a = new Collapse();
+		$a->options['id'] = 'collapseOne';
+		$options = ArrayHelper::getValue($item, 'options', []);
+		Html::addCssClass($options, 'panel panel-default');
+		echo $items = Html::tag('div', $a->renderItem($header, $item, $index), $options);
+	}
 
 	public function actionCiclos()
 	{
