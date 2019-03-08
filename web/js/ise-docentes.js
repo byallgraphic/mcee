@@ -27,11 +27,10 @@ $( document ).ready(function()
 });
 
 
-$('div[class *= docentes],[id *= cantidad]').keyup(function() 
+$('div[class *= docentes],[id *= cantidad]').on('keyup mouseup',function(e) 
 {
-	
 	total =0;
-	
+	console.log('s');
 	//numero del que identifica a la caja de texto Estudiantes Gra para saber a que total debe sumar
 	ValId = $(this).attr("class");
 	num = ValId.split("-");

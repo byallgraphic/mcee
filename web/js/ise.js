@@ -9,12 +9,12 @@ $( document ).ready(function()
 
 });
 	
-//selector para seleccionar solo las celdas de estudiantes
-//hace la sumatoria y la asigna a total
-$('div[id *= ecestudiantesise],[id *= grado]').keyup(function() 
+
+$('div[id *= ecestudiantesise],[id *= grado]').on('keyup mouseup',function(e) 
 {
+
 	total =0;
-	
+	console.log('a');
 	//numero del que identifica a la caja de texto Estudiantes Gra para saber a que total debe sumar
 	ValId = $(this).attr("id");
 	num = ValId.split("-");

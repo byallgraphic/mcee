@@ -33,8 +33,10 @@ $('div[id *= ecactividadesise],[id *= actividad_3]').change(function()
 });
 
 
-function calcularAvances(num){
-    setTimeout(function(){
+function calcularAvances(num)
+{
+    setTimeout(function()
+	{
         
         total ="";
         avance_sede ="";
