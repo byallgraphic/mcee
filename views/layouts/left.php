@@ -276,7 +276,7 @@
 															'url' => '#',
 															'items' => [
 																['label' => 'Articulación Familiar', 'icon' => 'circle-o','url' => ['ec-competencias-basicas-proyectos-articulacion/index'],],
-																['label' => 'Servicio social obligatorio', 'icon' => 'circle-o','url' => ['ec-competencias-basicas-proyectos-obligatorio/index'],],
+																['label' => 'Proyecto de Servicio Social Estudiantil', 'icon' => 'circle-o','url' => ['ec-competencias-basicas-proyectos-obligatorio/index'],],
 																['label' => 'Proyectos pedagógicos transversales',
 																'icon' => 'circle-o',
 																'url' => ['ec-competencias-basicas-proyectos/index'],
