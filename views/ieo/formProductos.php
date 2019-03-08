@@ -8,10 +8,12 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-use app\models\EcProducto;
+// use app\models\EcProducto;
+use app\models\Producto;
 
 
-$producto = new EcProducto();
+// $producto = new EcProducto();
+$producto = new Producto();
 
 use dosamigos\datepicker\DatePicker;
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
@@ -27,4 +29,3 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 			<?= $form->field($producto, "[0]presentacion_plan[]")->label('presentacion_plan')->fileInput(['multiple' => true, 'accept' => ".doc, .docx, .pdf, .xls" ]) ?>
 		</div>
 	</div>
- <?= $form->field($producto, "[0]estado")->hiddenInput(['value'=> 1])->label(false) ?> 

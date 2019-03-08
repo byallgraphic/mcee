@@ -19,7 +19,7 @@ use app\models\DocumentosReconocimiento;
 use app\models\TiposCantidadPoblacion;
 use app\models\Evidencias;
 use app\models\TipoDocumentos;
-use app\models\EcProducto;
+use app\models\Producto;
 use yii\bootstrap\Collapse;
 
 use app\models\ZonasEducativas;
@@ -297,10 +297,6 @@ class IeoController extends Controller
 
                 /**Carga de archivos multiples */
                 if($arrayDatosDocumentos = Yii::$app->request->post('DocumentosReconocimiento')){
-
-				echo "<pre>"; print_r($arrayDatosDocumentos); echo "</pre>"; 
-
-
                     $modelDocumentos = [];
 
                     for( $i = 0; $i < 8; $i++ ){
@@ -323,7 +319,6 @@ class IeoController extends Controller
                         foreach( $modelDocumentos as $key => $model) 
                         {
                             $key +=1;
-                            
                             //recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
                             //para posteriormente guardar en la base de datos
                             foreach($propiedades as $propiedad)
@@ -333,7 +328,6 @@ class IeoController extends Controller
                                 
                                 // se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
                                 $files = UploadedFile::getInstances( $model, "[$key]$propiedad" );
-                                
                                 if( $files )
                                 {
                                     //se suben todos los archivos uno por uno
@@ -346,7 +340,7 @@ class IeoController extends Controller
                                         
                                         // Construyo la ruta completa del archivo a guardar
                                         $rutaFisicaDirectoriaUploads  = "../documentos/documentosIeo/documentosReconocimiento/".$institucion."/".$file->baseName . $d->format("Y_m_d_H_i_s.u") . '.' . $file->extension;
-                                        $save = $file->saveAs( $rutaFisicaDirectoriaUploads );
+                                        // $save = $file->saveAs( $rutaFisicaDirectoriaUploads );
                                         //rutas de todos los archivos
                                         $arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
                                     }
@@ -366,7 +360,7 @@ class IeoController extends Controller
 
                     
 
-                            $model->ieo_id = $ieo_id;
+                            $model->ieo_id = $id_ieo;
                             $model->proyecto_ieo_id = isset($arrayDatosDocumentos[$key]['proyecto_ieo_id']) ? $arrayDatosDocumentos[$key]['proyecto_ieo_id'] : 0;
                             $model->actividad_id = isset($arrayDatosDocumentos[$key]['actividad_id']) ? $arrayDatosDocumentos[$key]['actividad_id'] : 0;
                             $model->horario_trabajo = isset($arrayDatosDocumentos[$key]['horario_trabajo']) ? $arrayDatosDocumentos[$key]['horario_trabajo'] : 0;
@@ -387,7 +381,6 @@ class IeoController extends Controller
 
                  /**Carga de archivos multiples */
                 if($arrayDatosEvidencias = Yii::$app->request->post('Evidencias')){
-
                     $modelEvidencias = [];
 
                     for( $i = 0; $i < 8; $i++ ){
@@ -410,7 +403,6 @@ class IeoController extends Controller
                         foreach( $modelEvidencias as $key => $model) 
                         {
                             $key +=1;
-                            
                             //recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
                             //para posteriormente guardar en la base de datos
                             foreach($propiedades as $propiedad)
@@ -468,25 +460,24 @@ class IeoController extends Controller
 
                 /**Carga de archivos multiples */
 			
-                if($arrayDatosProducto = Yii::$app->request->post('EcProducto'))
+                if($arrayDatosProducto = Yii::$app->request->post('Producto'))
 				{ 
-					
+				
+
 					$modelProductos = [];
 					$cantProductos  = count($arrayDatosProducto);
-                   echo "<pre>"; print_r($arrayDatosProducto); echo "</pre>"; 
-die;
-
+				   
                     for( $i = 0; $i < $cantProductos; $i++ )
 					{
-                        $modelProductos[] = new EcProducto();
+                        $modelProductos[] = new Producto();
                     }
-					
-                    if (EcProducto::loadMultiple( $modelProductos, Yii::$app->request->post() )) 
+						
+                    if (Producto::loadMultiple( $modelProductos, Yii::$app->request->post())) 
 					{
 						
                         $idInstitucion 	= $_SESSION['instituciones'][0];
                         $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
-
+					
                         $carpeta = "../documentos/documentosIeo/producto/".$institucion;
 						if (!file_exists($carpeta)) 
 						{
@@ -494,13 +485,9 @@ die;
                         }
 
                         $propiedades = array( "informe_ruta", "plan_accion_ruta","presentacion_plan");
-
 						
-
-                        foreach( $modelProductos as $key => $model) 
+                        foreach( $modelProductos  as $key => $model1) 
                         {
-							
-                            $key +=1;
                             
                             //recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
                             //para posteriormente guardar en la base de datos
@@ -510,9 +497,8 @@ die;
                                 // se guarda el archivo en file
                               
                                 // se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
-                                $files = UploadedFile::getInstances( $model, "[$key]$propiedad" );
-                                echo "<pre>"; print_r($propiedad); echo "</pre>"; 
-								die;
+                                // $files = UploadedFile::getInstances( $model1, "$propiedad" );
+                                $files = UploadedFile::getInstances( $model1, "[$key]$propiedad" );
                                 if( $files )
                                 {
 									
@@ -540,19 +526,18 @@ die;
                                 else
                                 {
                                     echo "No hay archivo cargado";
-									die;
                                 }
 							}
 
-                            $model->id_ieo = $id_ieo;
+                            $model1->id_ieo = $id_ieo;
                             // $model->id_proyecto = isset($arrayDatosProducto[$key]['id_proyecto']) ? $arrayDatosProducto[$key]['id_proyecto'] : 0;
                             // $model->id_actividad = isset($arrayDatosProducto[$key]['id_actividad']) ? $arrayDatosProducto[$key]['id_actividad'] : 0;
                             
-                            foreach( $modelProdutos as $key => $model) 
+                            foreach( $modelProductos as $key => $model1) 
                             {
-                                if($model->informe_ruta)
+                                if($model1->informe_ruta)
 								{
-                                    $model->save();
+                                    $model1->save();
                                 }								
                             }
                         }
@@ -561,7 +546,7 @@ die;
                 }
 
 
-die;
+die("no entro");
                 // /**Validacion y registro de campos para modelo Tipo de cantidad poblacion */
                 // if (Yii::$app->request->post('TiposCantidadPoblacion')){
                     
