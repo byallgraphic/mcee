@@ -486,7 +486,7 @@ class IeoController extends Controller
 
                         $propiedades = array( "informe_ruta", "plan_accion_ruta","presentacion_plan");
 						
-                        foreach( $modelProductos  as $key => $model1) 
+                        foreach( $modelProductos  as $key => $model) 
                         {
                             
                             //recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
@@ -497,11 +497,9 @@ class IeoController extends Controller
                                 // se guarda el archivo en file
                               
                                 // se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
-                                // $files = UploadedFile::getInstances( $model1, "$propiedad" );
-                                $files = UploadedFile::getInstances( $model1, "[$key]$propiedad" );
+                                $files = UploadedFile::getInstances( $model, "[$key]$propiedad" );
                                 if( $files )
                                 {
-									
                                     //se suben todos los archivos uno por uno
                                     foreach($files as $file)
                                     {
@@ -529,15 +527,15 @@ class IeoController extends Controller
                                 }
 							}
 
-                            $model1->id_ieo = $id_ieo;
+                            $model->id_ieo = $id_ieo;
                             // $model->id_proyecto = isset($arrayDatosProducto[$key]['id_proyecto']) ? $arrayDatosProducto[$key]['id_proyecto'] : 0;
                             // $model->id_actividad = isset($arrayDatosProducto[$key]['id_actividad']) ? $arrayDatosProducto[$key]['id_actividad'] : 0;
                             
-                            foreach( $modelProductos as $key => $model1) 
+                            foreach( $modelProductos as $key => $model) 
                             {
-                                if($model1->informe_ruta)
+                                if($model->informe_ruta)
 								{
-                                    $model1->save();
+                                    $model->save();
                                 }								
                             }
                         }
@@ -546,7 +544,6 @@ class IeoController extends Controller
                 }
 
 
-die("no entro");
                 // /**Validacion y registro de campos para modelo Tipo de cantidad poblacion */
                 // if (Yii::$app->request->post('TiposCantidadPoblacion')){
                     
