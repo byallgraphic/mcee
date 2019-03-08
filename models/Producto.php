@@ -30,8 +30,8 @@ class Producto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_ieo', 'id_proyecto', 'id_actividad'], 'default', 'value' => null],
-            [['id_ieo', 'id_proyecto', 'id_actividad'], 'integer'],
+            [['id_ieo'], 'default', 'value' => null],
+            [['id_ieo'], 'integer'],
             [['informe_ruta', 'plan_accion_ruta','presentacion_plan'], 'string'],
         ];
     }
@@ -46,8 +46,6 @@ class Producto extends \yii\db\ActiveRecord
             'id_ieo' => 'Ieo ID',
             'informe_ruta' => 'Informe Ruta',
             'plan_accion_ruta' => 'Plan Accion Ruta',
-            'id_proyecto' => 'Id Proyecto',
-            'id_actividad' => 'Id Actividad',
 			'presentacion_plan'=>'presentacion_plan'
         ];
     }
