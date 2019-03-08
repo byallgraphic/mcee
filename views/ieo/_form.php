@@ -28,6 +28,8 @@ $idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $m
     
   
 	<?= $form->field($model, 'persona_acargo')->textInput() ?> 
+	
+	<?= $form->field($model, 'id_tipo_informe')->hiddenInput(['value'=> $idTipoInforme])->label(false) ?> 
     
     <h3 style='background-color: #ccc;padding:5px;'>I.E.O Avance Ejecución</h3>
 
