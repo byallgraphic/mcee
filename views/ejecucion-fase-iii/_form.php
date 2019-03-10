@@ -95,7 +95,8 @@ $this->registerJs(
     <?php $form = ActiveForm::begin([
 							'action'=> Yii::$app->urlManager->createUrl([
 												'ejecucion-fase-iii/create', 
-												'anio' 	=> $anio, 
+												'esDocente' => $esDocente, 
+												'anio' 		=> $anio, 
 											]) 
 						]); ?>
 	

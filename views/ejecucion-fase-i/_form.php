@@ -88,7 +88,8 @@ $this->registerJsFile(
     <?php $form = ActiveForm::begin([ 
 							'action'=> Yii::$app->urlManager->createUrl([
 												'ejecucion-fase-i/create', 
-												'anio' 	=> $anio, 
+												'anio' 		=> $anio, 
+												'esDocente' => $esDocente, 
 											]) 
 						]); ?>
 

@@ -53,6 +53,10 @@ use dosamigos\datepicker\DatePicker;
 	
 	<h3 style='background-color:#ccc;padding:5px;'><?= Html::encode( 'DATOS DE LA SESIÓN' ) ?></h3>
 	
+	<div class="form-group">
+        <?= Html::Button('Agregar Sesión', ['class' => 'btn btn-success','name' => 'btnAddSession' ]) ?>
+    </div>
+	
 	<?= $form->field( $dataSesion, "[$index]id_sesion" )->dropDownList( $listaSesiones, [ 'prompt' => 'Seleccione...' ])->label( "Sesión" ) ?>
 	
 	<?= Html::activeHiddenInput($dataSesion, "[$index]id") ?>

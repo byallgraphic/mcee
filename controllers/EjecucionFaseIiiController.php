@@ -9,6 +9,10 @@ Descripción: Controlador EjecucionFaseIIIController
 Modificaciones:
 Fecha: 2019-02-25
 Persona encargada: Edwin Molina Grisales
+Cambios realizados: Se pueden agregar sesiones
+---------------------------------------
+Fecha: 2019-02-25
+Persona encargada: Edwin Molina Grisales
 Cambios realizados: Se quita campo número de estudiantes cultivadores y docentes creadores se deja como multiplo
 ---------------------------------------
 Fecha: 2019-02-12
@@ -77,6 +81,38 @@ class EjecucionFaseIiiController extends Controller
             ],
         ];
     }
+	
+	public function actionAddSessionItem()
+	{
+		$id_sede 		= $_SESSION['sede'][0];
+		$id_institucion	= $_SESSION['instituciones'][0];
+		
+		$index 		= Yii::$app->request->get('index');
+		$numSesion 	= $index + 1;
+		
+		$idFase 	= $this->id_fase;
+		
+		$html_option= "";
+		
+		$sesion = Sesiones::find()
+						->where( 'id_fase='.$idFase )
+						->andWhere( 'estado=1' )
+						->andWhere( "descripcion='Sesión ".$numSesion."'" )
+						->one();
+						
+		if( !$sesion ){
+			$sesion = new Sesiones();
+			$sesion->descripcion = "Sesión ".$numSesion;
+			$sesion->id_fase 	 = $idFase;
+			$sesion->estado 	 = 1;
+			
+			$sesion->save();
+			
+			$html_option = "<option value='".$sesion->id."'>".$sesion->descripcion."</option>";
+		}
+		
+		echo $html_option;
+	}
 	
 	public function actionCiclos()
 	{

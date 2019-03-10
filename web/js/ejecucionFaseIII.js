@@ -412,4 +412,18 @@ Cambios realizados: Se cambia los campo input de cada sección por textarea, y s
 		});
 	});
 	
+	// $( "[name=btnAddSession]" ).click(function(){
+	$( "#collapseOne" ).on( "click", "[name=btnAddSession]", function(){
+		
+		var contenedor = $( this ).parent().parent();
+		
+		var index = $( "[id$=id_sesion] option", contenedor ).length-1;
+	
+		$.get( "index.php?r=ejecucion-fase-iii/add-session-item&index="+index , function( data ){
+			
+			if( data != '' )
+				$( "[id$=id_sesion]", contenedor ).append( data )
+		});
+	})
+	
 // });
