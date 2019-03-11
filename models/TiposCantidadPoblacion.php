@@ -39,9 +39,10 @@ class TiposCantidadPoblacion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['actividad_id', 'ieo_id', 'proyecto_ieo_id'], 'default', 'value' => null],
-            [['actividad_id', 'ieo_id', 'proyecto_ieo_id'], 'integer'],
-            [['tiempo_libre', 'edu_derechos', 'sexualidad', 'ciudadania', 'medio_ambiente', 'familia', 'directivos', 'tipo_actividad', 'docentes', 'psicoorientador'], 'string'],
+            [['actividad_id', 'ieo_id'], 'default', 'value' => null],
+            [['actividad_id', 'ieo_id'], 'integer'],
+            [['tipo_actividad'], 'string'],
+            [['tiempo_libre', 'edu_derechos', 'sexualidad', 'ciudadania', 'medio_ambiente', 'familia', 'directivos', 'docentes', 'psicoorientador'], 'string'],
             [['fecha_creacion'], 'safe'],
         ];
     }
@@ -63,8 +64,6 @@ class TiposCantidadPoblacion extends \yii\db\ActiveRecord
             'familia' => 'Familia',
             'directivos' => 'Directivos',
             'fecha_creacion' => 'Fecha Creación',
-            'proyecto_ieo_id' => 'Proyecto Ieo ID',
-            'tipo_actividad' => 'Tipo actividad',
             'docentes' => 'Docentes',
             'psicoorientador' => 'Psicoorientador',
         ];
