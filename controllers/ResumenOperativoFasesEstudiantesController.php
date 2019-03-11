@@ -219,30 +219,30 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         ");
                     $datosEjeccionFasei = $command->queryAll();
                     $promedioParticipantes1 = 0;
-					
-                     
-					 
+                    $maxSesion1 = 0;
+
                     if(count($datosEjeccionFasei) > 0){
                         foreach ($datosEjeccionFasei as $datos1 => $valor){
                             @$totalapps1 += $valor['apps_creadas'];
                             @$totalparticipantes1  += $valor['participacion_sesiones'];
                             array_push($data, "", $valor['fecha_sesion'], $valor['participacion_sesiones'], $valor['duracion_sesion']);
                             $promedioParticipantes1 += $valor['participacion_sesiones'];
+                            $maxSesion1 = $valor['participacion_sesiones'];
                         }
                         $promedioParticipantes1 =  $promedioParticipantes1 / count($datosEjeccionFasei);
                         /**rellena la cantidad de sesiones vacias */
-                        $restantes = 6 - count($datosEjeccionFasei);
+                        /*$restantes = 6 - count($datosEjeccionFasei);
                         if($restantes > 0 ){
-                            for ($i=0; $i < $restantes; $i++) { 
+                            for ($i=0; $i < $restantes; $i++) {
                                 array_push($data, "", "", "", "");
                             }
-                        }
+                        }*/
                         array_push($data, count($datosEjeccionFasei), $totalparticipantes1, $totalapps1);
                     }
                 /**Fin datos Fase 1 */
              
                 /**Inicio datos Fase 2 */
-                    $id_datos_ieo_profesional2 = $dip[1]['id'];
+                    $id_datos_ieo_profesional2 = 10;
                     $idSemilleros2 = $dip[1]['id_semilleros'];
                 
                     $command = $connection->createCommand
@@ -277,6 +277,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         inner join semilleros_tic.datos_sesiones as dts on dts.id = efe.id_datos_sesion
                         WHERE efe.id_datos_ieo_profesional_estudiantes = $id_datos_ieo_profesional2 
                     ");
+
                     $datoSemillerosTicEjecucionFase2 = $command->queryAll();
                     $segundos2 = 0;
                     foreach ($datoSemillerosTicEjecucionFase2 as $datosSTEF => $valor){ 
@@ -309,21 +310,23 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         ");
                     $datosEjeccionFaseii = $command->queryAll();
                     $promedioParticipantes2 = 0;
+                    $maxSesion2 = 0;
                     if(count($datosEjeccionFaseii) > 0){
                         foreach ($datosEjeccionFaseii as $datos1 => $valor){
                             @$totalapps2 += $valor['apps_desarrolladas'];
                             @$totalparticipantes2  += $valor['estudiantes_participantes'];
                             array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
                             $promedioParticipantes2 += $valor['estudiantes_participantes'];
+                            $maxSesion2++;
                         }
                         $promedioParticipantes2 = ($promedioParticipantes2 / count($datosEjeccionFaseii));
                         /**rellena la cantidad de sesiones vacias */
-                        $restantes = 6 - count($datosEjeccionFaseii);
+                        /*$restantes = 6 - count($datosEjeccionFaseii);
                         if($restantes > 0 ){
                             for ($i=0; $i < $restantes; $i++) { 
                                 array_push($data, "", "", "", "");
                             }
-                        }
+                        }*/
                         array_push($data, count($datosEjeccionFaseii), $totalparticipantes2, $totalapps2);
                     }
                 /**Fin fase 2 */
@@ -397,21 +400,24 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                     ");
                     $datosEjeccionFaseiii = $command->queryAll();
                     $promedioParticipantes3 = 0;
+                    $maxSesion3 = 0;
                     if(count($datosEjeccionFaseiii) > 0){
+
                         foreach ($datosEjeccionFaseiii as $datos1 => $valor){
                             @$totalapps3 += $valor['numero_apps'];
                             @$totalparticipantes3  += $valor['estudiantes_participantes'];
                             array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
                             $promedioParticipantes3 += $valor['estudiantes_participantes'];
+                            $maxSesion3++;
                         }
                         $promedioParticipantes3 =  $promedioParticipantes3 / count($datosEjeccionFaseiii);
                         /**rellena la cantidad de sesiones vacias */
-                        $restantes3 = 6 - count($datosEjeccionFaseiii);
+                        /*$restantes3 = 6 - count($datosEjeccionFaseiii);
                         if($restantes > 0 ){
                             for ($i=0; $i < $restantes; $i++) { 
                                 array_push($data, "", "", "", "");
                             }
-                        }
+                        }*/
                         array_push($data, count($datosEjeccionFaseiii), $totalparticipantes3, $totalapps3);
                     }
                 /**Fin datos fase 3 */
@@ -432,6 +438,9 @@ class ResumenOperativoFasesEstudiantesController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'data' => $totalDatos,
+            'maxSesion1' => $maxSesion1,
+            'maxSesion2' => $maxSesion2,
+            'maxSesion3' => $maxSesion3
         ]);
     }
 
