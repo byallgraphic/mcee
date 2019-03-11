@@ -39,10 +39,9 @@ class EstudiantesIeo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_tipo_cantidad_p', 'total'], 'default', 'value' => null],
-            [['id_tipo_cantidad_p', 'total'], 'integer'],
+            [['total'], 'default', 'value' => null],
+            [['total','id_ieo','id_actividad'], 'integer'],
             [['grado_0', 'grado_1', 'grado_2', 'grado_3', 'grado_4', 'grado_5', 'grado_6', 'grado_7', 'grado_8', 'grado_9', 'grado_10', 'grado_11'], 'string'],
-            [['id_tipo_cantidad_p'], 'exist', 'skipOnError' => true, 'targetClass' => TiposCantidadPoblacion::className(), 'targetAttribute' => ['id_tipo_cantidad_p' => 'id']],
         ];
     }
 
@@ -53,7 +52,6 @@ class EstudiantesIeo extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'id_tipo_cantidad_p' => 'Id Tipo Cantidad P',
             'grado_0' => 'Grado 0',
             'grado_1' => 'Grado 1',
             'grado_2' => 'Grado 2',
@@ -67,6 +65,8 @@ class EstudiantesIeo extends \yii\db\ActiveRecord
             'grado_10' => 'Grado 10',
             'grado_11' => 'Grado 11',
             'total' => 'Total',
+            'id_ieo' => 'id_ieo',
+            'id_actividad' => 'id_actividad',
         ];
     }
 }

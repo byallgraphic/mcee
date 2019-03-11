@@ -201,94 +201,94 @@ class IeoController extends Controller
 			{
                 $id_ieo = $ieo_model->id;
 
-                // /**Carga de archivos multiples */
-                // if($arrayDatosRequerimientos = Yii::$app->request->post('RequerimientoExtraIeo'))
-				// {
-                    
-                    // $modelRequerimiento = [];
-
-                    // for( $i = 0; $i < 8; $i++ )
-					// {
-                        // $modelRequerimiento[] = new RequerimientoExtraIeo();
-                    // }
-                    // if (RequerimientoExtraIeo::loadMultiple($modelRequerimiento, Yii::$app->request->post() )) {
-                       
-                        // // se guarda la informacion en una carpeta con el nombre del codigo dane de la institucion seleccionada
-						// $idInstitucion 	= $_SESSION['instituciones'][0];
-                        // $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
-
-                        // $carpeta = "../documentos/documentosIeo/requerimientoExtra/".$institucion;
-						// if (!file_exists($carpeta)) 
-						// {
-							// mkdir($carpeta, 0777, true);
-                        // }
-
-                        // $propiedades = array( "socializacion_ruta", "soporte_necesidad");
-                        
-                        // // recorre el array $modelRequerimiento con cada modelo creado dinamicamente
-						// foreach( $modelRequerimiento as $key => $model) 
-						// {
-
-                            // $key +=1;
-							
-							// // recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
-							// // para posteriormente guardar en la base de datos
-							// foreach($propiedades as $propiedad)
-							// {
-                                // $arrayRutasFisicas = array();
-								// // se guarda el archivo en file
-								
-								// // se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
-								// $files = UploadedFile::getInstances( $model, "[$key]$propiedad" );
-								
-								// if( $files )
-								// {
-									// // se suben todos los archivos uno por uno
-									// foreach($files as $file)
-									// {
-										// // se usan microsegundos para evitar un nombre de archivo repetido
-										// $t = microtime(true);
-										// $micro = sprintf("%06d",($t - floor($t)) * 1000000);
-										// $d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
-										
-										// // Construyo la ruta completa del archivo a guardar
-										// $rutaFisicaDirectoriaUploads  = "../documentos/documentosIeo/requerimientoExtra/".$institucion."/".$file->baseName . $d->format("Y_m_d_H_i_s.u") . '.' . $file->extension;
-										// $save = $file->saveAs( $rutaFisicaDirectoriaUploads );
-										// // rutas de todos los archivos
-										// $arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
-									// }
-                                    
-									// // asignacion de la ruta al campo de la db
-                                    // $model->$propiedad = implode(",", $arrayRutasFisicas);
-                                    
-									// // $model->$propiedad =  $var;
-									// $arrayRutasFisicas = null;
-								// }
-								// else
-								// {
-									// echo "No hay archivo cargado";
-								// }
-                            // }
-
-                            // // se deben asignar los valores ya que se crean los modelos dinamicamente, yii no los agrega
-							// // los datos que vienen por post
-                            // $model->ieo_id = $id_ieo;
-                            // $model->proyecto_ieo_id = isset($arrayDatosRequerimientos[$key]['proyecto_ieo_id']) ? $arrayDatosRequerimientos[$key]['proyecto_ieo_id'] : 0;
-                            // $model->actividad_id = isset($arrayDatosRequerimientos[$key]['proyecto_ieo_id']) ? $arrayDatosRequerimientos[$key]['proyecto_ieo_id'] : 0;
-                            
-                            // // Guarda la informacion que tiene $model en la base de datos
-							// foreach( $modelRequerimiento as $key => $model) 
-							// {
-                                // if($model->socializacion_ruta){
-                                    // $model->save();
-                                // }								
-							// }
-							
-                        // }
-                        
-                    // }
-                // }
                 /**Carga de archivos multiples */
+                if($arrayDatosRequerimientos = Yii::$app->request->post('RequerimientoExtraIeo'))
+				{
+                    
+                    $modelRequerimiento = [];
+
+                    for( $i = 0; $i < 8; $i++ )
+					{
+                        $modelRequerimiento[] = new RequerimientoExtraIeo();
+                    }
+                    if (RequerimientoExtraIeo::loadMultiple($modelRequerimiento, Yii::$app->request->post() )) {
+                       
+                        // se guarda la informacion en una carpeta con el nombre del codigo dane de la institucion seleccionada
+						$idInstitucion 	= $_SESSION['instituciones'][0];
+                        $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
+
+                        $carpeta = "../documentos/documentosIeo/requerimientoExtra/".$institucion;
+						if (!file_exists($carpeta)) 
+						{
+							mkdir($carpeta, 0777, true);
+                        }
+
+                        $propiedades = array( "socializacion_ruta", "soporte_necesidad");
+                        
+                        // recorre el array $modelRequerimiento con cada modelo creado dinamicamente
+						foreach( $modelRequerimiento as $key => $model) 
+						{
+
+                            $key +=1;
+							
+							// recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
+							// para posteriormente guardar en la base de datos
+							foreach($propiedades as $propiedad)
+							{
+                                $arrayRutasFisicas = array();
+								// se guarda el archivo en file
+								
+								// se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
+								$files = UploadedFile::getInstances( $model, "[$key]$propiedad" );
+								
+								if( $files )
+								{
+									// se suben todos los archivos uno por uno
+									foreach($files as $file)
+									{
+										// se usan microsegundos para evitar un nombre de archivo repetido
+										$t = microtime(true);
+										$micro = sprintf("%06d",($t - floor($t)) * 1000000);
+										$d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
+										
+										// Construyo la ruta completa del archivo a guardar
+										$rutaFisicaDirectoriaUploads  = "../documentos/documentosIeo/requerimientoExtra/".$institucion."/".$file->baseName . $d->format("Y_m_d_H_i_s.u") . '.' . $file->extension;
+										$save = $file->saveAs( $rutaFisicaDirectoriaUploads );
+										// rutas de todos los archivos
+										$arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
+									}
+                                    
+									// asignacion de la ruta al campo de la db
+                                    $model->$propiedad = implode(",", $arrayRutasFisicas);
+                                    
+									// $model->$propiedad =  $var;
+									$arrayRutasFisicas = null;
+								}
+								else
+								{
+									echo "No hay archivo cargado";
+								}
+                            }
+
+                            // se deben asignar los valores ya que se crean los modelos dinamicamente, yii no los agrega
+							// los datos que vienen por post
+                            $model->ieo_id = $id_ieo;
+                            $model->proyecto_ieo_id = isset($arrayDatosRequerimientos[$key]['proyecto_ieo_id']) ? $arrayDatosRequerimientos[$key]['proyecto_ieo_id'] : 0;
+                            $model->actividad_id = isset($arrayDatosRequerimientos[$key]['proyecto_ieo_id']) ? $arrayDatosRequerimientos[$key]['proyecto_ieo_id'] : 0;
+                            
+                            // Guarda la informacion que tiene $model en la base de datos
+							foreach( $modelRequerimiento as $key => $model) 
+							{
+                                if($model->socializacion_ruta){
+                                    $model->save();
+                                }								
+							}
+							
+                        }
+                        
+                    }
+                }
+                // /**Carga de archivos multiples */
                 if($arrayDatosDocumentos = Yii::$app->request->post('DocumentosReconocimiento')){
                     $modelDocumentos = [];
 
@@ -452,11 +452,9 @@ class IeoController extends Controller
                 }
 
                 /**Carga de archivos multiples */
-			
                 if($arrayDatosProducto = Yii::$app->request->post('Producto'))
 				{ 
 				
-
 					$modelProductos = [];
 					$cantProductos  = count($arrayDatosProducto);
 				   
@@ -521,8 +519,6 @@ class IeoController extends Controller
 							}
 
                             $model->id_ieo = $id_ieo;
-                            // $model->id_proyecto = isset($arrayDatosProducto[$key]['id_proyecto']) ? $arrayDatosProducto[$key]['id_proyecto'] : 0;
-                            // $model->id_actividad = isset($arrayDatosProducto[$key]['id_actividad']) ? $arrayDatosProducto[$key]['id_actividad'] : 0;
                             
                             foreach( $modelProductos as $key => $model) 
                             {
@@ -536,61 +532,103 @@ class IeoController extends Controller
 
                 }
 
+			//si el tipo de informe es 14 se hace un insert diferente
+			if($idTipoInforme == 14 )
+			{
+				$arrayDatos = Yii::$app->request->post('TiposCantidadPoblacion');
+			
+				foreach($arrayDatos as $datos => $valores)
+				{
+					$arrayDatos[$datos]['actividad_id']=$datos;
+					$arrayDatos[$datos]['ieo_id']=$id_ieo;
+					unset($arrayDatos[$datos]['total']);
+				}
+		
+				
+				//se agrega el id del informe despues de haber sido creado 
+									
+				$columnName=['fecha_creacion', 'tipo_actividad', 'docentes', 'familia','directivos','actividad_id','ieo_id'];
+				// inserta todos los datos que trae el array 
+				
+				$insertCount = Yii::$app->db->createCommand()
+					   ->batchInsert(
+							 'ec.tipos_cantidad_poblacion', $columnName, $arrayDatos
+						 )->execute();
+						 
+				// insert de los grados -> ecEstudiantesIeo
+				
+				$arrayDatos = Yii::$app->request->post('EstudiantesIeo');
+				//se agrega el id del informe despues de haber sido creado 
+				foreach($arrayDatos as $datos => $valores)
+				{
+					$arrayDatos[$datos]['actividad_id']=$datos;
+					$arrayDatos[$datos]['ieo_id']=$id_ieo;
+					unset($arrayDatos[$datos]['total']);
+				}
+				
+				// echo "<pre>"; print_r($arrayDatos); echo "</pre>"; 
+				// die;
 
-                /**Validacion y registro de campos para modelo Tipo de cantidad poblacion */
-                // if (Yii::$app->request->post('TiposCantidadPoblacion')){
-                    
-                    // $data = Yii::$app->request->post('TiposCantidadPoblacion');
-                    // $count 	= count( $data );
-                    // $modelCantidadPoblacion = [];
-        
-                    // for( $i = 0; $i < $count; $i++ ){
-                        // $modelCantidadPoblacion[] = new TiposCantidadPoblacion();
-                    // }
-                    
-                    // if (TiposCantidadPoblacion::loadMultiple($modelCantidadPoblacion, Yii::$app->request->post() )) 
-					// {
-                      
-                        // foreach( $modelCantidadPoblacion as $key => $model) 
-						// {
-                            // if($model->tiempo_libre)
-							// {
-                                // $model->ieo_id = $id_ieo;
-                                // if($model->save() && Yii::$app->request->post('EstudiantesIeo'))
-								// {
-                                    // $status = true;
-                                    // $dataEstudiantes = Yii::$app->request->post('EstudiantesIeo');
-                                    
-                                    // $countEstudiantes 	= count( $dataEstudiantes );
-                                    // $modelEstudiantesIeo = [];
-                                    
-                                    // for( $i = 0; $i < $countEstudiantes; $i++ )
-									// {
-                                        // $modelEstudiantesIeo[] = new EstudiantesIeo();
-                                    // }
-                                    // if (EstudiantesIeo::loadMultiple($modelEstudiantesIeo, Yii::$app->request->post() )) 
-									// {
-                                        // foreach( $modelEstudiantesIeo as $key => $modelEstudiantes) 
-										// {
-											// if($modelEstudiantes->grado_0)
-											// {
-												// $modelEstudiantes->id_tipo_cantidad_p = $model->id;
-												// if(!$modelEstudiantes->save())
-												// {
-													// $status = false;
-												// }
-											// }     
-                                        // }
-                                    // }
-                                // }
-                            // }
-                        // }
-                    // }
-                // }
-                return $this->redirect(['index', 'guardado' => 1, 'idTipoInforme' => $idTipoInforme ]);
-            } 
+				$columnName=['grado_9','grado_10','grado_11','id_actividad','id_ieo'];
+				// inserta todos los datos que trae el array
+				
+				
+				$insertCount = Yii::$app->db->createCommand()
+					   ->batchInsert(
+							 'ec.estudiantes_ieo', $columnName, $arrayDatos
+						 )->execute();
+				
+			}
+			else
+			{
+			
+				$arrayDatos = Yii::$app->request->post('TiposCantidadPoblacion');
+				
+				foreach($arrayDatos as $datos => $valores)
+				{
+					$arrayDatos[$datos]['actividad_id']=$datos;
+					$arrayDatos[$datos]['ieo_id']=$id_ieo;
+					unset($arrayDatos[$datos]['total']);
+				}
+				
+				//se agrega el id del informe despues de haber sido creado 
+				
+							
+				$columnName=['fecha_creacion', 'tipo_actividad', 'tiempo_libre', 'edu_derechos', 'sexualidad', 'ciudadania', 'medio_ambiente', 'familia','directivos','actividad_id','ieo_id'];
+				// inserta todos los datos que trae el array 
+				
+				$insertCount = Yii::$app->db->createCommand()
+					   ->batchInsert(
+							 'ec.tipos_cantidad_poblacion', $columnName, $arrayDatos
+						 )->execute();
+						 
+						 
+						 
+				//insert de los grados -> ecEstudiantesIeo
+				
+				$arrayDatos = Yii::$app->request->post('EstudiantesIeo');
+				//se agrega el id del informe despues de haber sido creado 
+				foreach($arrayDatos as $datos => $valores)
+				{
+					$arrayDatos[$datos]['actividad_id']=$datos;
+					$arrayDatos[$datos]['ieo_id']=$id_ieo;
+					unset($arrayDatos[$datos]['total']);
+				}
 
+				$columnName=['grado_0', 'grado_1', 'grado_2', 'grado_3', 'grado_4', 'grado_5', 'grado_6', 'grado_7','grado_8','grado_9','grado_10','grado_11','id_actividad','id_ieo'];
+				// inserta todos los datos que trae el array
+				
+				
+				$insertCount = Yii::$app->db->createCommand()
+					   ->batchInsert(
+							 'ec.estudiantes_ieo', $columnName, $arrayDatos
+						 )->execute();
+				} 
+			}
+			return $this->redirect(['index', 'guardado' => 1, 'idTipoInforme' => $idTipoInforme ]);
         }
+		
+		
         
         $ZonasEducatibas  = ZonasEducativas::find()->where( 'estado=1' )->all();
         $zonasEducativas	 = ArrayHelper::map( $ZonasEducatibas, 'id', 'descripcion' );

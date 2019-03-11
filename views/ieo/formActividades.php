@@ -259,7 +259,6 @@ $idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $m
                         </div>
                         <?= $form->field($estudiantesGrado, "[$idactividad]total")->textInput(['readOnly' => true, 'value' => isset($datos[$index."".$numProyecto]['total']) ? $datos[$index."".$numProyecto]['total'] : '' ]) ?>
                     </div>
-				
                     
                 <?php 
 				}
@@ -295,7 +294,6 @@ $idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $m
                             <?=  Html::activeTextInput($estudiantesGrado, "[$idactividad]total", [ 'readOnly' => true, 'class' => 'form-control', 'value' => isset($datos[$index."".$numProyecto]['total']) ? $datos[$index."".$numProyecto]['total'] : ''] ) ?>
                         </div>
                     </div>
-                
 				<?php 
 				}
                 ?>

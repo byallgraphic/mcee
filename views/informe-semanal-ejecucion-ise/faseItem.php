@@ -152,7 +152,7 @@ $contenedores = [];
         foreach ($sedes as $key => $value) {
     ?>
 
-        <h3 style='background-color: #ccc;padding:5px;'>Doncetes <?=$value?></h3>
+        <h3 style='background-color: #ccc;padding:5px;'>Docentes <?=$value?></h3>
         <div class=row style='text-align:center;'>
             <?php
                 if($idTipoInforme == 7){
