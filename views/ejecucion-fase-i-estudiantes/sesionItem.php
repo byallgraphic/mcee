@@ -91,7 +91,7 @@ $index = 0;
 			</div>
 			
 			<div class='col-sm-1'>
-				<span total class='form-control' style='background-color:#ccc;'>Tipo de competencias inferidas y comprometidas en el proceso de creación de App 0.0</span>
+				<span total class='form-control' style='background-color:#ccc;'>Tipo de competencias inferencias y comprometidas en el proceso de creación de App 0.0</span>
 			</div>
 			
 			<div class='col-sm-4'>
