@@ -88,6 +88,9 @@ class ResumenOperativoFasesEstudiantesController extends Controller
         ORDER BY i.id,s.id");
         $datos_ieo_profesional = $command->queryAll();
 		$idSedes 		= $_SESSION['sede'][0];
+        $maxSesion1 = 0;
+        $maxSesion2 = 0;
+        $maxSesion3 = 0;
 
         //echo "<pre>"; print_r($datos_ieo_profesional); echo "</pre>";
         $data[$idSedes] = [];
@@ -97,13 +100,8 @@ class ResumenOperativoFasesEstudiantesController extends Controller
 			{
                 array_push($data[$idSedes], $dip);
             }
-			
-			// else if($dip['id_sede'] == '49'){
-                // array_push($data['49'], $dip);
-            // }
         }
-		
-		// echo "<pre>"; print_r($data); echo "</pre>";
+
 		
 		
         $contador =0;
@@ -137,12 +135,9 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                     ");
                     $fechas = $command->queryAll();
 
-                  
-                    
                     array_push($data, $dip[0]['codigo_dane_institucion'], $dip[0]['institucion'], $dip[0]['codigo_dane_sede'],$dip[0]['sede'],  $dip[0]['anio'], $nomresPersonalA, @$fechas[0]['fecha_sesion']);
-                    
-                    
-                /**Inicio datos fases 1 */
+
+                    /**Inicio datos fases 1 */
                     $id_datos_ieo_profesional1 = $dip[0]['id'];
                     $idSemilleros1 = $dip[0]['id_semilleros'];
                     $command = $connection->createCommand
@@ -157,8 +152,6 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                     $frecuenciaSesion1 = $this->arrayArrayComas($datoAcuerdosInstitucionales,'frecuencia_sesiones') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales,'frecuencia_sesiones') : "0" ;
                     $cursoSesion1 = $this->arrayArrayComas($datoAcuerdosInstitucionales,'curso') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales,'curso') : "0" ;
 
-					
-					 
                     /**Obtiene nombres descriptivos en base a los id's de las sesiones */
                     $command = $connection->createCommand("
                     SELECT descripcion
@@ -181,8 +174,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         WHERE id_datos_ieo_profesional_estudiantes = $id_datos_ieo_profesional1 
                     ");
                     $datoSemillerosTicEjecucionFase1 = $command->queryAll();
-					
-						
+
                     $segundos = 0;
                     foreach ($datoSemillerosTicEjecucionFase1 as $datosSTEF => $valor)
 					{ 
@@ -190,7 +182,6 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                     }
                     $promedioHorasFase1  = @($segundos / count($datoSemillerosTicEjecucionFase1));
                     $promedioHorasFase1 =  $this->conversionSegundosHora($promedioHorasFase1);
-                    
 
                     /**Obtiene nombre de los cursos para fase 1 */
                     $command = $connection->createCommand("
@@ -216,7 +207,6 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         ");
                     $datosEjeccionFasei = $command->queryAll();
                     $promedioParticipantes1 = 0;
-                    $maxSesion1 = 0;
 
                     if(count($datosEjeccionFasei) > 0){
                         foreach ($datosEjeccionFasei as $datos1 => $valor){
@@ -307,7 +297,6 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         ");
                     $datosEjeccionFaseii = $command->queryAll();
                     $promedioParticipantes2 = 0;
-                    $maxSesion2 = 0;
                     if(count($datosEjeccionFaseii) > 0){
                         foreach ($datosEjeccionFaseii as $datos1 => $valor){
                             @$totalapps2 += $valor['apps_desarrolladas'];
@@ -391,13 +380,11 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         dts.duracion_sesion
                     FROM semilleros_tic.ejecucion_fase_iii_estudiantes efe
                     inner join semilleros_tic.datos_sesiones dts on dts.id = efe.id_datos_sesion
-                    WHERE id_datos_ieo_profesional_estudiantes = $id_datos_ieo_profesional3
-                    AND efe.estado = 1
+                    WHERE efe.estado = 1
                     ORDER BY efe.id ASC
                     ");
                     $datosEjeccionFaseiii = $command->queryAll();
                     $promedioParticipantes3 = 0;
-                    $maxSesion3 = 0;
                     if(count($datosEjeccionFaseiii) > 0){
 
                         foreach ($datosEjeccionFaseiii as $datos1 => $valor){
@@ -421,12 +408,12 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 array_push($data, ($promedioParticipantes1 + $promedioParticipantes2 + $promedioParticipantes3) / 3 ,(count($datosEjeccionFaseiii) + count($datosEjeccionFaseii) + count($datosEjeccionFasei)));
 
                 array_push($totalDatos, $data);
-				
+
                 $contador++;
             }
         }
-        
-        
+
+
         $searchModel = new EcDatosBasicosBuscar();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
