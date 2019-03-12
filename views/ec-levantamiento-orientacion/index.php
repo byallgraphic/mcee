@@ -21,7 +21,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\EcLevantamientoOrientacionBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Levantamiento de orientación misional y método';
+$this->title = '7. Levantamiento de orientación misional y método';
 $this->params['breadcrumbs'][] = $this->title;
 $idTipoInforme =$_GET['idTipoInforme'];
 if( @$_GET['guardado'])

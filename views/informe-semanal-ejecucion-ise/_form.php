@@ -11,6 +11,11 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/ise.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/ise-docentes.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/ise-actividades_.js',['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$this->registerJs( file_get_contents( '../web/js/ise.js' ) );
+$this->registerJs( file_get_contents( '../web/js/ise-docentes.js' ) );
+$this->registerJs( file_get_contents( '../web/js/ise-actividades_.js' ) );
+
 ?>
 <?php 
 //triger de la comuna cuando se este actualizando

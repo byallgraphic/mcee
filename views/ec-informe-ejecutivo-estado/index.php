@@ -13,7 +13,7 @@ use app\models\EcProyectos;
 /* @var $searchModel app\models\EcInformeEjecutivoEstadoBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Informe ejecutivo del estado del eje en la IEO';
+$this->title = '4. Informe ejecutivo del estado del eje en la IEO';
 $this->params['breadcrumbs'][] = $this->title;
 $idTipoInforme = $_GET['idTipoInforme'];
 if( @$_GET['guardado'])
