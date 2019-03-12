@@ -282,8 +282,14 @@ class EjecucionFaseIiController extends Controller
 		 * Adicionalmente creo una estructura ya formada para data Modelos
 		 ************************************************************************/
 		$sesiones = Sesiones::find()
-						->where( 'id_fase='.$this->id_fase )
-						->andWhere( 'estado=1' )
+						->alias('s')
+						->innerJoin( 'semilleros_tic.datos_sesiones ds', 'ds.id_sesion=s.id' )
+						->innerJoin( 'semilleros_tic.ejecucion_fase_ii ef', 'ef.id_datos_sesiones=ds.id' )
+						->where( 's.id_fase='.$this->id_fase )
+						->andWhere( 'ef.id_fase='.$this->id_fase )
+						->andWhere( 'ef.estado=1' )
+						->andWhere( 'ds.estado=1' )
+						->andWhere( 's.estado=1' )
 						->all();
 		
 		//Creo 
@@ -383,12 +389,18 @@ class EjecucionFaseIiController extends Controller
 					 * DataSesiones es un array donde el indice es el id de la sesion
 					 ************************************************************************/
 					foreach( Yii::$app->request->post('DatosSesiones') as $sesion => $dataSesion )
-					{
+					{// if( !isset( $datosModelos[$sesion] ) ){ var_dump( $datosModelos ); exit(); }
 						//Solo si es diferente a vacio se cargan los campos
 						//Si es vacio significa que no hay ni ejecución de fase ni acción recurso 
 						//diligenciados y por tanto no se guarda
 						if( $dataSesion['fecha_sesion'] != '' )
 						{
+							if( !isset( $datosModelos[$sesion] ) ){ 
+								$datosModelos[ $sesion ]['dataSesion'] 			= new DatosSesiones();
+								$datosModelos[ $sesion ][ 'ejecucionesFase' ][] = new SemillerosTicEjecucionFaseIi();
+								$datosModelos[ $sesion ][ 'accionesRecursos' ]	= new SemillerosTicAccionesRecursosFaseIi();
+							}
+							
 							$datosModelos[$sesion]['dataSesion']->load( $dataSesion, '');
 						}
 					}
