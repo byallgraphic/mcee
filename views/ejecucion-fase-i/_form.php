@@ -104,7 +104,7 @@ $this->registerJsFile(
 	<?= Html::hiddenInput( 'guardar', 1, [ 'id' => 'guardar', 'value' => 1 ]) ?>
 	
 	<div class="form-group">
-        <?= Html::submitButton('Agregar sesión', ['class' => 'btn btn-success', 'id' => 'btnAddSession' ]) ?>
+        <?= Html::button('Agregar sesión', ['class' => 'btn btn-success', 'id' => 'btnAddSession' ]) ?>
     </div>
 	
 	<?= $this->render( 'sesiones', [ 
