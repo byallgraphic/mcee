@@ -80,6 +80,7 @@ class ResumenOperativoFasesDocentesController extends Controller
 	public function actionObtenerInfo()
 	{
 
+
 		//informacion de la tabla  semilleros_tic.datos_ieo_profesional
 		// variable con la conexion a la base de datos 
 		$connection = Yii::$app->getDb();
@@ -112,8 +113,8 @@ class ResumenOperativoFasesDocentesController extends Controller
 		$contador =0;
 		foreach ($datos_ieo_profesional as $dip)
 		{
-			$html.="<tr>";	
-			
+			$html.="<tr>";
+
 			$idInstitucion = $dip['id_institucion'];
 			$idSede = $dip['id_sede'];
 			
