@@ -5,8 +5,12 @@ $.get( "index.php?r=ec-informe-semanal-total-ejecutivo/reporte-total-ejecutivo",
 			{
 				$("#example").html( data );
 				
-				setTimeout(function(){ crearDataTable(); }, 1000);
+				setTimeout(function()
+				{ 
+					crearDataTable(); 
+				}, 1000);
 				
+
 			},
 		"json");
 
@@ -20,9 +24,13 @@ $.get( "index.php?r=ec-informe-semanal-total-ejecutivo/reporte-total-ejecutivo",
 
 function crearDataTable()
 {
-	$('#example').DataTable( {
+	table= $('#example').DataTable( {
 		
-
+		"language": 
+		{
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+        },
+		
 		'aoColumnDefs': [
 			
             {
@@ -198,5 +206,4 @@ function crearDataTable()
           
         }
     } );
-	
 }
