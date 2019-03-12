@@ -23,6 +23,20 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/ecInformePlaneacionIeo.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $model->id_tipo_informe;
+
+$connection = Yii::$app->getDb();
+$command = $connection->createCommand(
+"
+	select p.descripcion,p.id
+	from ec.tipo_informe as ti, ec.componentes as c, ec.proyectos as p
+	where ti.id = $idTipoInforme
+	and ti.id_componente = c.id
+	and c.descripcion = p.descripcion
+	
+");
+$ecProyectos = $command->queryAll();
+
+$idProyectos = $ecProyectos[0]['id'];
 ?>
 <?php 
 //triger de la comuna cuando se este actualizando
@@ -64,8 +78,10 @@ setTimeout(function()
 
 idSedes = <?php echo $_SESSION['sede'][0]; ?>
 
+idProyecto = <?=$idProyectos ?>;
+
 $("#divPorcentajes").hide();
-$.get( "index.php?r=ecinformeplaneacionieo/info-porcentajes",
+$.get( "index.php?r=ecinformeplaneacionieo/info-porcentajes&idProyecto="+idProyecto,
 			function( data )
 			{
 				// alert(data);
