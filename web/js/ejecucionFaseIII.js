@@ -23,11 +23,11 @@ Cambios realizados: Se cambia los campo input de cada sección por textarea, y s
 	
 	//Copio los titulos y los dejo como arrary para que se más fácil usarlos en los popups
 	var arrayTitles = [
-		// "Nombre del docente creador",
-		"Asignatura en la que se usa la aplicaión",
-		"Nombre del docente usuario de la Aplicación",
+		"Nombre del creador",
+		"Asignatura en la que se usa la aplicación",
+		// "Nombre del docente usuario de la Aplicación",
 		"Grado en el que se usa la aplicación",
-		"Número de estudiantes cultivadores",
+		// "Número de estudiantes cultivadores",
 		"Número de Apps 0.0 usadas",
 		"Nombre de las aplicaciones usadas",
 		"TIC (infraestructura existente en la IEO)",
