@@ -628,10 +628,10 @@ class IeoController extends Controller
 			return $this->redirect(['index', 'guardado' => 1, 'idTipoInforme' => $idTipoInforme ]);
         }
 		
-		
+		$idZonaEducativa = Instituciones::findOne( $idInstitucion )->id_zona_educativa;
         
-        $ZonasEducatibas  = ZonasEducativas::find()->where( 'estado=1' )->all();
-        $zonasEducativas	 = ArrayHelper::map( $ZonasEducatibas, 'id', 'descripcion' );
+		$ZonasEducatibas  = ZonasEducativas::find()->where(" estado=1 and id = $idZonaEducativa " )->all();
+        $zonasEducativas  = ArrayHelper::map( $ZonasEducatibas, 'id', 'descripcion' );
 
         $comunas  = ComunasCorregimientos::find()->where( 'estado=1' )->all();
         $comunas	 = ArrayHelper::map( $comunas, 'id', 'descripcion' );

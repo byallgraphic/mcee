@@ -246,9 +246,10 @@ class InformeAvanceMisionalEjesTpieoController extends Controller
 	
 	public function obtenerZonaEducativa()
 	{
-		$zonaEducativa = new ZonasEducativas();
-		$zonaEducativa = $zonaEducativa->find()->orderby("id")->all();
-		$zonaEducativa = ArrayHelper::map($zonaEducativa,'id','descripcion');
+		$idInstitucion = $_SESSION['instituciones'][0];
+		$idZonaEducativa = Instituciones::findOne( $idInstitucion )->id_zona_educativa;
+		$zonaEducativa  = ZonasEducativas::find()->where(" estado=1 and id = $idZonaEducativa " )->all();
+        $zonaEducativa  = ArrayHelper::map( $zonaEducativa, 'id', 'descripcion' );
 		
 		return $zonaEducativa;
 	}

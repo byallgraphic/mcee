@@ -15,7 +15,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/imp-ieo.js',['depends' =>
 
     <?php $form = ActiveForm::begin(); ?>
        
-        <?= $form->field($model, 'zona_educativa')->dropDownList( $zonasEducativas, [ 'prompt' => 'Seleccione...' ] ) ?>
+        <?= $form->field($model, 'zona_educativa')->dropDownList( $zonasEducativas) ?>
         <?= $form->field($model, 'comuna')->dropDownList( $comunas, [ 'prompt' => 'Seleccione...',  
         'onchange'=>'
             $.post( "index.php?r=ieo/lists&id="+$(this).val(), function( data ) {

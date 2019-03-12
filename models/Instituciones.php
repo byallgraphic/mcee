@@ -51,7 +51,7 @@ class Instituciones extends \yii\db\ActiveRecord
     {
         return [
             [['id_tipos_instituciones', 'id_sectores', 'estado'], 'default', 'value' => null],
-            [['id_tipos_instituciones', 'id_sectores', 'estado'], 'integer'],
+            [['id_tipos_instituciones', 'id_sectores', 'estado','id_zona_educativa'], 'integer'],
             [['descripcion'], 'string', 'max' => 255],
             // [['nit'], 'string', 'max' => 60],
             [['nit','codigo_dane'], 'integer'],
@@ -88,6 +88,7 @@ class Instituciones extends \yii\db\ActiveRecord
             'correo_electronico_institucional' => 'Correo Electronico Institucional',
             'pagina_web' => 'Pagina Web',
             'codigo_dane' => 'Codigo Dane',
+            'id_zona_educativa' => 'id_zona_educativa Dane',
         ];
     }
 
