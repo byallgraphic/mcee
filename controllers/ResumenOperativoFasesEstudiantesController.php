@@ -87,34 +87,30 @@ class ResumenOperativoFasesEstudiantesController extends Controller
 			fa.descripcion,sdi.profecional_a, sdi.id
         ORDER BY i.id,s.id");
         $datos_ieo_profesional = $command->queryAll();
-		$idSedes 		= $_SESSION['sede'][0];
         $maxSesion1 = 0;
         $maxSesion2 = 0;
         $maxSesion3 = 0;
 
         //echo "<pre>"; print_r($datos_ieo_profesional); echo "</pre>";
-        $data[$idSedes] = [];
+        $data = [];
         foreach ($datos_ieo_profesional as $dip)
 		{
-            if($dip['id_sede'] == $idSedes && $dip["anio"] = Yii::$app->request->get("anio"))
+            if($dip["anio"] = Yii::$app->request->get("anio"))
 			{
-                array_push($data[$idSedes], $dip);
+                $data[$dip['id_sede']] =  $dip;
             }
         }
-
-		
-		
         $contador =0;
         $totalDatos = [];
 		foreach ($data as $dip)
 		{
            if(!empty($dip)){
                     $data= [];
-                    $idInstitucion = $dip[0]['id_institucion'];
-                    $idSede = $dip[0]['id_sede'];
+                    $idInstitucion = $dip['id_institucion'];
+                    $idSede = $dip['id_sede'];
                 
                     //nombres de los profesional a
-                    $idProfesionalA = $dip[0]['profecional_a'];
+                    $idProfesionalA = $dip['profecional_a'];
                     $command = $connection->createCommand
                     ("
                         SELECT concat(p.nombres,' ',p.apellidos) as nombre		
@@ -135,11 +131,11 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                     ");
                     $fechas = $command->queryAll();
 
-                    array_push($data, $dip[0]['codigo_dane_institucion'], $dip[0]['institucion'], $dip[0]['codigo_dane_sede'],$dip[0]['sede'],  $dip[0]['anio'], $nomresPersonalA, @$fechas[0]['fecha_sesion']);
+                    array_push($data, $dip['codigo_dane_institucion'], $dip['institucion'], $dip['codigo_dane_sede'],$dip['sede'],  $dip['anio'], $nomresPersonalA, @$fechas[0]['fecha_sesion']);
 
                     /**Inicio datos fases 1 */
-                    $id_datos_ieo_profesional1 = $dip[0]['id'];
-                    $idSemilleros1 = $dip[0]['id_semilleros'];
+                    $id_datos_ieo_profesional1 = $dip['id'];
+                    $idSemilleros1 = $dip['id_semilleros'];
                     $command = $connection->createCommand
                     ("
                         SELECT 
@@ -202,7 +198,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         FROM semilleros_tic.ejecucion_fase_i_estudiantes efe
                         inner join semilleros_tic.datos_sesiones dts on dts.id = efe.id_datos_sesion
                         WHERE id_datos_ieo_profesional_estudiantes = $id_datos_ieo_profesional1
-                        AND efe.estado = 1
+                        AND efe.estado = 10
                         ORDER BY efe.id ASC
                         ");
                     $datosEjeccionFasei = $command->queryAll();
@@ -230,7 +226,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
              
                 /**Inicio datos Fase 2 */
                     $id_datos_ieo_profesional2 = 10;
-                    $idSemilleros2 = $dip[1]['id_semilleros'];
+                    $idSemilleros2 = $dip['id_semilleros'];
                 
                     $command = $connection->createCommand
                     ("
@@ -318,8 +314,8 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 /**Fin fase 2 */
 
                 /**Inicio datos Fase 3 */
-                    $id_datos_ieo_profesional3 = $dip[2]['id'];
-                    $idSemilleros3 = $dip[2]['id_semilleros'];
+                    $id_datos_ieo_profesional3 = $dip['id'];
+                    $idSemilleros3 = $dip['id_semilleros'];
 
                     $command = $connection->createCommand
                     ("
