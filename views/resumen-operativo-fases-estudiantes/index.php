@@ -167,10 +167,9 @@ section.content {
 			foreach ($data as $key => $value) {
 				?>
 					<tr>
-                        <?php for ($i=1;$i<(32+$max1+$max2+$max3);$i++){?>
+                        <?php for ($i=0;$i<(32+$max1+$max2+$max3);$i++){?>
                             <td style='border: 1px solid black;'><?= isset($value[$i]) ? $value[$i] : '' ?></td>
                         <?php } ?>
-                        <td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
                         <td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
                         <td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>
                         <td style='border: 1px solid black;'><?= isset($value[98]) ? $value[98] : '' ?></td>

@@ -76,7 +76,6 @@ class ResumenOperativoFasesEstudiantesController extends Controller
         WHERE 	dip.id_institucion = i.id
         AND		dip.id_sede = s.id
         AND 	dip.estado = 1
-        AND 	ef.id_fase=fa.id 
         AND 	sdi.id_institucion =dip.id_institucion
         AND 	sdi.id_sede = dip.id_sede 
         GROUP BY 
@@ -86,16 +85,15 @@ class ResumenOperativoFasesEstudiantesController extends Controller
 			s.codigo_dane, 
 			s.descripcion,i.id,s.id, a.descripcion,
 			fa.descripcion,sdi.profecional_a, sdi.id
-        ORDER BY i.id,s.id
-        
-        ");
+        ORDER BY i.id,s.id");
         $datos_ieo_profesional = $command->queryAll();
 		$idSedes 		= $_SESSION['sede'][0];
-		
+
+        //echo "<pre>"; print_r($datos_ieo_profesional); echo "</pre>";
         $data[$idSedes] = [];
         foreach ($datos_ieo_profesional as $dip)
 		{
-            if($dip['id_sede'] == $idSedes )
+            if($dip['id_sede'] == $idSedes && $dip["anio"] = Yii::$app->request->get("anio"))
 			{
                 array_push($data[$idSedes], $dip);
             }
@@ -105,7 +103,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
             // }
         }
 		
-		// echo "<pre>"; print_r($data); echo "</pre>"; 
+		// echo "<pre>"; print_r($data); echo "</pre>";
 		
 		
         $contador =0;
@@ -116,7 +114,6 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                     $data= [];
                     $idInstitucion = $dip[0]['id_institucion'];
                     $idSede = $dip[0]['id_sede'];
-                                        
                 
                     //nombres de los profesional a
                     $idProfesionalA = $dip[0]['profecional_a'];
