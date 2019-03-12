@@ -160,6 +160,16 @@ class ImplementacionIeoController extends Controller
         ]);
     }
 
+	public function obtenerZonaEducativa()
+	{
+		$idInstitucion = $_SESSION['instituciones'][0];
+		$idZonaEducativa = Instituciones::findOne( $idInstitucion )->id_zona_educativa;
+		$zonaEducativa  = ZonasEducativas::find()->where(" estado=1 and id = $idZonaEducativa " )->all();
+        $zonaEducativa  = ArrayHelper::map( $zonaEducativa, 'id', 'descripcion' );
+		
+		return $zonaEducativa;
+	}
+	
     /**
      * Creates a new ImplementacionIeo model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -585,15 +595,13 @@ class ImplementacionIeoController extends Controller
         $nombres1 				= Personas::find($perfiles_x_persona)->all();
         $nombres	 = ArrayHelper::map( $nombres1, 'id', 'nombres');
      
-        $ZonasEducatibas  = ZonasEducativas::find()->where( 'estado=1' )->all();
-        $zonasEducativas	 = ArrayHelper::map( $ZonasEducatibas, 'id', 'descripcion' );
 
         $comunas  = ComunasCorregimientos::find()->where( 'estado=1' )->all();
         $comunas	 = ArrayHelper::map( $comunas, 'id', 'descripcion' );
         
         return $this->renderAjax('create', [
             'model' => $ieo_model,
-            'zonasEducativas' => $zonasEducativas,
+            'zonasEducativas' => $this->obtenerZonaEducativa(),
             "nombres" => $nombres,
             'comunas' => $comunas
             
@@ -682,13 +690,9 @@ class ImplementacionIeoController extends Controller
                 $datos[$ids] = $valores;
         }
 
-
-        $ZonasEducatibas  = ZonasEducativas::find()->where( 'estado=1' )->all();
-        $zonasEducativas	 = ArrayHelper::map( $ZonasEducatibas, 'id', 'descripcion' );
-
         return $this->renderAjax('update', [
             'model' => $model,
-            'zonasEducativas' => $zonasEducativas,
+            'zonasEducativas' =>  $this->obtenerZonaEducativa(),
             'datos'=> $datos,
         ]);
     }

@@ -18,7 +18,7 @@ $idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $m
 
     <?php $form = ActiveForm::begin(); ?>
     
-    <?= $form->field($model, 'zonas_educativas_id')->dropDownList( $zonasEducativas, [ 'prompt' => 'Seleccione...' ] ) ?>
+    <?= $form->field($model, 'zonas_educativas_id')->dropDownList( $zonasEducativas ) ?>
 
     <?= $form->field($model, 'comuna')->dropDownList( $comunas, [ 'prompt' => 'Seleccione...',  
                 'onchange'=>'

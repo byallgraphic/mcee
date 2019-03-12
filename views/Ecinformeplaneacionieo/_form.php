@@ -267,7 +267,7 @@ if( strpos($_GET['r'], 'update') > -1)
 
 	<h6 style='border: 1px solid #ccc;padding:10px;border-radius:4px;'><?=$codigoDane?></h6>
 	 
-	<?= $form->field($model, 'zona_educativa')->dropDownList($zonaEducativa,['prompt' => 'Seleccione...']) ?>
+	<?= $form->field($model, 'zona_educativa')->dropDownList($zonaEducativa) ?>
 	
 	
 	   <?= $form->field($model, 'comuna')->dropDownList( $comunas, [ 'prompt' => 'Seleccione...',  

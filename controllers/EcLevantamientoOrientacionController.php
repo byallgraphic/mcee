@@ -44,17 +44,31 @@ class EcLevantamientoOrientacionController extends Controller
             ],
         ];
     }
-	public function obtenerParametros()
+	public function obtenerParametros($idTipoInforme)
 	{
+		
+		if($idTipoInforme == 33)
+			$id = 87;
+		
+		if($idTipoInforme == 21)
+			$id = 88;
+		
+		if($idTipoInforme == 9)
+			$id = 86;
+		
 		$dataParametros = Parametro::find()
 						->where( 'id_tipo_parametro=23' )
-						->andWhere( 'estado=1' )
+						->andWhere( "estado=1 and id = $id" )
 						->orderby( 'id' )
 						->all();
 						
 		$parametros		= ArrayHelper::map( $dataParametros, 'id', 'descripcion' );
+			
+		
 		return $parametros;
 	}
+	
+	
 	public function obtenerSedes()
 	{
 		$idInstitucion = $_SESSION['instituciones'][0];
@@ -125,13 +139,14 @@ class EcLevantamientoOrientacionController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index', 'guardado' => 1,'idTipoInforme' => $idTipoInforme]);
         }
-;
+
+
         return $this->renderAjax('create', [
             'model' => $model,
 			'sedes' => $this->obtenerSedes(),
 			'instituciones' =>$this->obtenerInstituciones(),
 			'estados' =>$this->obtenerEstados(),
-			'parametros' =>$this->obtenerParametros(),
+			'parametros' =>$this->obtenerParametros($idTipoInforme),
 			'idTipoInforme' => $idTipoInforme,
         ]);
     }

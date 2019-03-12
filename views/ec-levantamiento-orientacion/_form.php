@@ -42,7 +42,7 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 
     <?= $form->field($model, 'uso_insumo')->TextArea(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'id_tipo_levantamiento')->DropDownList($parametros,['prompt'=>'Seleccione']) ?>
+    <?= $form->field($model, 'id_tipo_levantamiento')->DropDownList($parametros) ?>
 	
 	<?= $form->field($model, 'id_tipo_informe')->hiddenInput( [ 'value' => $idTipoInforme ] )->label( false ) ?>
 
