@@ -25,7 +25,8 @@ $items = [];
 $index = 0;
 $indexEf = 0;
 
-foreach( $sesiones as $keySesion => $sesion ){
+foreach( $sesiones as $keySesion => $sesion )
+{
 	
 	$dataSesion 	= $datosModelos[ $sesion->id ]['dataSesion'];
 	$ejecucionesFase= $datosModelos[ $sesion->id ]['ejecucionesFase'];

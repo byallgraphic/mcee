@@ -86,7 +86,7 @@ use dosamigos\datepicker\DatePicker;
 		<div class='row text-center title'>
 			
 			<div class='col-sm-2'>
-				<span total class='form-control' style='background-color:#ccc;'>Nombre del docente creador</span>
+				<span total class='form-control' style='background-color:#ccc;'>Nombre del creador</span>
 			</div>
 			
 			<div class='col-sm-2'>
@@ -119,6 +119,14 @@ use dosamigos\datepicker\DatePicker;
 			</div>
 			
 			<div class='col-sm-2'>
+				<?= $form->field( $model, "[$index]docente_usuario" )->textarea( [ 'class' => 'form-control', 'maxlength' => true, 'data-type' => 'textarea'])->label(null,['style'=>'display:none']) ?>
+			</div>
+			
+			<div class='col-sm-2'>
+				<?= $form->field( $model, "[$index]asignatura" )->textarea( [ 'class' => 'form-control', 'maxlength' => true, 'data-type' => 'textarea'])->label(null,['style'=>'display:none']) ?>
+			</div>
+			
+			<div class='col-sm-2'>
 							
 				<?= $form->field( $model, "[$index]docente_creador" )->widget(
 					Chosen::className(), [
@@ -131,14 +139,6 @@ use dosamigos\datepicker\DatePicker;
 						]
 				])->label(null,['style'=>'display:none']) ?>
 				
-			</div>
-			
-			<div class='col-sm-2'>
-				<?= $form->field( $model, "[$index]asignatura" )->textarea( [ 'class' => 'form-control', 'maxlength' => true, 'data-type' => 'textarea'])->label(null,['style'=>'display:none']) ?>
-			</div>
-			
-			<div class='col-sm-2'>
-				<?= $form->field( $model, "[$index]docente_usuario" )->textarea( [ 'class' => 'form-control', 'maxlength' => true, 'data-type' => 'textarea'])->label(null,['style'=>'display:none']) ?>
 			</div>
 			
 			<div class='col-sm-2'>
