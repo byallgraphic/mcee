@@ -27,7 +27,7 @@ foreach( $models as $key => $model ){
 	$model 		 = $model['ejecucionFase'];
 	
 	$items[] = 	[
-					'label' 		=>  "Registro ".$i,
+					'label' 		=>  "Sesión ".$i,
 					'content' 		=>  $this->render( 'sesionItem', 
 													[ 
 														'index' 		=> $i,
