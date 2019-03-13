@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = "Agregar Informe de avance Mensual I.E.O Fase P
         'model' => $model,
         'zonasEducativas' => $zonasEducativas,
         'comunas' => $comunas
-        //'sedes' => $sedes,
+
     ]) ?>
 
 </div>

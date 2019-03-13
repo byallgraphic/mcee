@@ -6,9 +6,9 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\Ieo */
 /* @var $form yii\widgets\ActiveForm */
-$this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
-// $this->registerJsFile(Yii::$app->request->baseUrl.'/js/ieo.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 
+
+$this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 $this->registerJs( file_get_contents( '../web/js/ieo.js' ) );
 
 $idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $model->id_tipo_informe;
