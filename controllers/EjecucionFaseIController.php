@@ -8,6 +8,10 @@ Descripción: Controlador EjecucionFaseController
 ---------------------------------------
 Modificaciones:
 Fecha: 2019-02-12
+Desarrollador:	Edwin Molina Grisales
+Descripción: Se dejan sesiones dinámicas
+---------------------------------------
+Fecha: 2019-02-12
 Descripción: Ya no se pide el ciclo y el año viene por url
 ---------------------------------------
 Fecha: 2019-02-04
@@ -266,6 +270,8 @@ class EjecucionFaseIController extends Controller
 		
 		$datosModelos = [];
 		
+		$sesiones = [];
+		
 		if( true || Yii::$app->request->isPost ){
 		
 			$datosSesiones = [];
@@ -391,6 +397,8 @@ class EjecucionFaseIController extends Controller
 									{
 										$datosModelos[ $datosSesion->id_sesion ][ 'dataSesion' ] 		= $datosSesion;
 										$datosModelos[ $datosSesion->id_sesion ][ 'ejecucionesFase' ][] = new EjecucionFase();
+										
+										$sesiones[] = Sesiones::findOne($datosSesion->id_sesion);
 									}
 
 									$datosModelos[ $datosSesion->id_sesion ]['ejecucionesFase'][] = $ejecFase;
@@ -408,6 +416,8 @@ class EjecucionFaseIController extends Controller
 								{
 									$datosModelos[ $datosSesion->id_sesion ][ 'dataSesion' ] 		= $datosSesion;
 									$datosModelos[ $datosSesion->id_sesion ][ 'ejecucionesFase' ][] = new EjecucionFase();
+									
+									$sesiones[] = Sesiones::findOne($datosSesion->id_sesion);
 								}
 
 								$datosModelos[ $datosSesion->id_sesion ]['ejecucionesFase'][] = $ejecFase;
@@ -494,6 +504,8 @@ class EjecucionFaseIController extends Controller
 									{
 										$datosModelos[ $ds->id_sesion ][ 'dataSesion' ] 		= $ds;
 										$datosModelos[ $ds->id_sesion ][ 'ejecucionesFase' ][]	= new EjecucionFase();
+										
+										$sesiones[] = Sesiones::findOne($ds->id_sesion);
 									}
 
 									$ejecFase->load( $vEjecucionFase, '' );
@@ -632,20 +644,25 @@ class EjecucionFaseIController extends Controller
 		
 		$docentes = $profesionales		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
 		
-		$sesiones = Sesiones::find()
-						->where( 'id_fase=1' )
-						->andWhere( 'estado=1' )
-						->all();
 		
-		//Verifico que la variable datosModelos tenga al menos una posicion por id de sesion
-		//Si en alguna posicion no hay nada, creo los datos vacios
-		foreach( $sesiones as $keySesion => $sesion ){
+		if( empty( $sesiones ) )
+		{
+			$sesiones = Sesiones::find()
+							->where( 'id_fase=1' )
+							->andWhere( 'estado=1' )
+							->andWhere( "descripcion='Sesión 1'" )
+							->all();
 			
-			if( !isset( $datosModelos[ $sesion->id ] ) )
-			{
-				// $datosModelos[ $sesion->id ][ 0 ][] = new EjecucionFase();
-				$datosModelos[ $sesion->id ][ 'dataSesion' ] 		= new DatosSesiones();
-				$datosModelos[ $sesion->id ][ 'ejecucionesFase' ][] = new EjecucionFase();
+			//Verifico que la variable datosModelos tenga al menos una posicion por id de sesion
+			//Si en alguna posicion no hay nada, creo los datos vacios
+			foreach( $sesiones as $keySesion => $sesion ){
+				
+				if( !isset( $datosModelos[ $sesion->id ] ) )
+				{
+					// $datosModelos[ $sesion->id ][ 0 ][] = new EjecucionFase();
+					$datosModelos[ $sesion->id ][ 'dataSesion' ] 		= new DatosSesiones();
+					$datosModelos[ $sesion->id ][ 'ejecucionesFase' ][] = new EjecucionFase();
+				}
 			}
 		}
 		

@@ -62,7 +62,7 @@ class IeoController extends Controller
     function actionViewFases($model, $form, $datos, $persona, $idTipoInforme)
 	{
         
-        $model = new Ieo();
+        // $model = new Ieo();
 		
 		$idInstitucion = $_SESSION['instituciones'][0];
 
@@ -117,11 +117,11 @@ class IeoController extends Controller
                                                         'idProyecto' => $idProyecto,
 														'form' => $form,
 														'datos'=>$datos,
-														"datos" => $datos,
 														"persona" => $persona,
 														"nombres" => $nombres,
 														"idTipoInforme" => $idTipoInforme,
-														'proyecto' =>  $proyecto
+														'proyecto' =>  $proyecto,
+														'model' => $model
 													] 
 										),
 					 'contentOptions' => ['class' => 'in'],
@@ -683,23 +683,20 @@ class IeoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+		$datos = array();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        $command = Yii::$app->db->createCommand("SELECT cantp.actividad_id, cantp.tipo_actividad, cantp.tiempo_libre, cantp.edu_derechos, cantp.sexualidad, cantp.ciudadania, cantp.medio_ambiente, cantp.familia, cantp.directivos, cantp.fecha_creacion, cantp.proyecto_ieo_id,
-                                                        est.grado_0, est.grado_1, est.grado_2, est.grado_3, est.grado_4, est.grado_5, est.grado_6, est.grado_7, est.grado_8, est.grado_9, est.grado_10, est.grado_11, est.total
-                                                FROM ec.tipos_cantidad_poblacion AS cantp
-                                                INNER JOIN ec.estudiantes_ieo AS est ON cantp.id = est.id_tipo_cantidad_p 
-                                                WHERE cantp.ieo_id = $id");
-
-        $result= $command->queryAll();                                       
-
-        $result = ArrayHelper::getColumn($result, function ($element) 
+    
+		$cantidadPoblacion = new TiposCantidadPoblacion();
+		$cantidadPoblacion = $cantidadPoblacion->find()->andWhere("ieo_id=$id")->all();
+	       
+		$resultCantidadPoblacion = ArrayHelper::getColumn($cantidadPoblacion, function ($element) 
         {
-            $index = $element['actividad_id']."".$element['tipo_actividad'];
-            $dato[$index]['tipo_actividad']= $element['tipo_actividad'];
+			
+            $index = $element['actividad_id'];
+            $dato[$index]['ieo_id']	= $element['ieo_id'];
             $dato[$index]['tiempo_libre']= $element['tiempo_libre'];
             $dato[$index]['edu_derechos']= $element['edu_derechos'];
             $dato[$index]['sexualidad']= $element['sexualidad'];
@@ -708,6 +705,30 @@ class IeoController extends Controller
             $dato[$index]['familia']= $element['familia'];
             $dato[$index]['directivos']= $element['directivos'];
             $dato[$index]['fecha_creacion']= $element['fecha_creacion'];
+            $dato[$index]['tipo_actividad']= $element['tipo_actividad'];
+            $dato[$index]['docentes']= $element['docentes'];
+           
+            return $dato;
+        });
+									   
+									   
+		
+        foreach	($resultCantidadPoblacion as $r => $valor)
+        {
+            foreach	($valor as $ids => $valores)
+                
+                $datos['cantidadPoblacion'][$ids] = $valores;
+        }
+
+		
+		$estudiantesIeo = new EstudiantesIeo();
+		$estudiantesIeo = $estudiantesIeo->find()->andWhere("id_ieo=$id")->all();
+	       
+		$resultEstudiantesIeo = ArrayHelper::getColumn($estudiantesIeo, function ($element) 
+        {
+			
+            $index = $element['id_actividad'];
+            $dato[$index]['id_ieo']	= $element['id_ieo'];
             $dato[$index]['grado_0']= $element['grado_0'];
             $dato[$index]['grado_1']= $element['grado_1'];
             $dato[$index]['grado_2']= $element['grado_2'];
@@ -720,24 +741,27 @@ class IeoController extends Controller
             $dato[$index]['grado_9']= $element['grado_9'];
             $dato[$index]['grado_10']= $element['grado_10'];
             $dato[$index]['grado_11']= $element['grado_11'];
-            $dato[$index]['total']= $element['total'];
-
+           
             return $dato;
         });
 		
-		$datos = array();
-        foreach	($result as $r => $valor)
+		
+        foreach	($resultEstudiantesIeo as $r => $valor)
         {
             foreach	($valor as $ids => $valores)
                 
-                $datos[$ids] = $valores;
+                $datos['estudiantesIeo'][$ids] = $valores;
         }
+		
+		
 
         $ZonasEducatibas  = ZonasEducativas::find()->where( 'estado=1' )->all();
 		$zonasEducativas	 = ArrayHelper::map( $ZonasEducatibas, 'id', 'descripcion' );
 
 		$comunas  = ComunasCorregimientos::find()->where( 'estado=1' )->all();
         $comunas	 = ArrayHelper::map( $comunas, 'id', 'descripcion' );
+
+
         return $this->renderAjax('update', [
             'model' => $model,
             'zonasEducativas' => $zonasEducativas,

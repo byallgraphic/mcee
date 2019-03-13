@@ -139,7 +139,6 @@ class EcinformeplaneacionieoController extends Controller
 		]);
 		 
 		 
-		
     }
 	
 	

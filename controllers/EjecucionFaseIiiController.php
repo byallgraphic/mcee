@@ -110,6 +110,9 @@ class EjecucionFaseIiiController extends Controller
 			
 			$html_option = "<option value='".$sesion->id."'>".$sesion->descripcion."</option>";
 		}
+		else{
+			$html_option = "<option value='".$sesion->id."'>".$sesion->descripcion."</option>";
+		}
 		
 		echo $html_option;
 	}

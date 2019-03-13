@@ -7,6 +7,10 @@ Desarrollador: Edwin Molina Grisales
 Descripción: Controlador EjecucionFaseController
 ---------------------------------------
 Modificaciones:
+Fecha: 2019-03-12
+Desarrollador:	Edwin Molina Grisales
+Descripción: Las sesiones se hacen dinámicas y si no hay registros muestra la sesión 1
+---------------------------------------
 Fecha: 2019-02-12
 Descripción: Ya no se pide el ciclo y el año viene por url y todas las realiciones con id_ciclo se cambian a año
 ---------------------------------------
@@ -257,6 +261,8 @@ class EjecucionFaseIiController extends Controller
 		$id_sede 		= $_SESSION['sede'][0];
 		$id_institucion	= $_SESSION['instituciones'][0];
 		
+		$sesiones = [];
+		
 		$guardar = Yii::$app->request->post('guardar') == 1 ? true: false;
 		$valido = true;
 		
@@ -275,31 +281,6 @@ class EjecucionFaseIiController extends Controller
 		$datosModelos = [];
 		
 		$condicionesInstitucionales = new CondicionesInstitucionales();
-		
-		/************************************************************************
-		 * Consultando todas las sesiones para la fase ii y que esten activos
-		 * id_fase es una propiedad de este controlador
-		 * Adicionalmente creo una estructura ya formada para data Modelos
-		 ************************************************************************/
-		$sesiones = Sesiones::find()
-						->alias('s')
-						->innerJoin( 'semilleros_tic.datos_sesiones ds', 'ds.id_sesion=s.id' )
-						->innerJoin( 'semilleros_tic.ejecucion_fase_ii ef', 'ef.id_datos_sesiones=ds.id' )
-						->where( 's.id_fase='.$this->id_fase )
-						->andWhere( 'ef.id_fase='.$this->id_fase )
-						->andWhere( 'ef.estado=1' )
-						->andWhere( 'ds.estado=1' )
-						->andWhere( 's.estado=1' )
-						->all();
-		
-		//Creo 
-		foreach( $sesiones as $keySesion => $sesion )
-		{	
-			$datosModelos[ $sesion->id ][ 'dataSesion' ] 		= new DatosSesiones();
-			$datosModelos[ $sesion->id ][ 'ejecucionesFase' ][] = new SemillerosTicEjecucionFaseIi();
-			$datosModelos[ $sesion->id ][ 'accionesRecursos' ]	= new SemillerosTicAccionesRecursosFaseIi();
-		}
-		
 			
 		/************************************************************************************
 		 * Creo un modelo del profesional IEO en caso de existir
@@ -337,17 +318,27 @@ class EjecucionFaseIiController extends Controller
 										->where( 'id_fase='.$this->id_fase )
 										->andWhere( 'id_datos_ieo_profesional='.$datosIeoProfesional->id )
 										->andWhere( 'anio='.$anio )
-										->orderby(['id_datos_sesiones'=>SORT_DESC])
+										->orderby(['id_datos_sesiones'=>SORT_ASC])
 										->all();
 										
 				foreach( $ejecucionesFases as $keyEjecucionFase => $ejecucionFase )
 				{
+					
 					if( !empty( $ejecucionFase['id_datos_sesiones'] ) )
 					{
 						$ds = DatosSesiones::findOne( $ejecucionFase['id_datos_sesiones'] );
 						
 						//Dando el formato a la fecha yyyy-mm-dd
 						$ds->fecha_sesion = Yii::$app->formatter->asDate($ds->fecha_sesion, "php:d-m-Y");
+						
+						if( !isset( $datosModelos[ $ds->id_sesion ] ) )
+						{
+							// $datosModelos[ $ds->id_sesion ][ 'dataSesion' ] 		= new DatosSesiones();
+							$datosModelos[ $ds->id_sesion ][ 'ejecucionesFase' ][]  = new SemillerosTicEjecucionFaseIi();
+							// $datosModelos[ $ds->id_sesion ][ 'accionesRecursos' ]	= new SemillerosTicAccionesRecursosFaseIi();
+							
+							$sesiones[] = Sesiones::findOne( $ds->id_sesion );
+						}
 						
 						//Consultando acción realizadas y recursos empleados en la ejecución de fase II, solo hay uno por sesion
 						$accionRecurso = SemillerosTicAccionesRecursosFaseIi::findOne([ 'id_datos_sesion' => $ds->id ]);
@@ -399,6 +390,8 @@ class EjecucionFaseIiController extends Controller
 								$datosModelos[ $sesion ]['dataSesion'] 			= new DatosSesiones();
 								$datosModelos[ $sesion ][ 'ejecucionesFase' ][] = new SemillerosTicEjecucionFaseIi();
 								$datosModelos[ $sesion ][ 'accionesRecursos' ]	= new SemillerosTicAccionesRecursosFaseIi();
+								
+								$sesiones[] = Sesiones::findOne( $sesion );
 							}
 							
 							$datosModelos[$sesion]['dataSesion']->load( $dataSesion, '');
@@ -420,7 +413,7 @@ class EjecucionFaseIiController extends Controller
 					foreach( Yii::$app->request->post('SemillerosTicEjecucionFaseIi') as $sesion => $ejecucionesFase )
 					{
 						foreach( $ejecucionesFase as $key => $ejecucionFase )
-						{
+						{	
 							/**
 							 * Si el id de ejecución de fase que viene en el post, significa que es nuevo y se crea 
 							 * el modelo nuevo para dicha ejecución de fase
@@ -593,6 +586,30 @@ class EjecucionFaseIiController extends Controller
 		
 		$institucion = Instituciones::findOne($id_institucion);
 		$sede 		 = Sedes::findOne($id_sede);
+		
+		
+		/************************************************************************
+		 * Consultando todas las sesiones para la fase ii y que esten activos
+		 * id_fase es una propiedad de este controlador
+		 * Adicionalmente creo una estructura ya formada para data Modelos
+		 ************************************************************************/
+		if( empty( $sesiones ) )
+		{
+			$sesiones = Sesiones::find()
+							->where( 'id_fase='.$this->id_fase )
+							->andWhere( 'estado=1' )
+							->andWhere( "descripcion='Sesión 1'" )
+							->all();
+			
+			//Creo 
+			foreach( $sesiones as $keySesion => $sesion )
+			{	
+				$datosModelos[ $sesion->id ][ 'dataSesion' ] 		= new DatosSesiones();
+				$datosModelos[ $sesion->id ][ 'ejecucionesFase' ][] = new SemillerosTicEjecucionFaseIi();
+				$datosModelos[ $sesion->id ][ 'accionesRecursos' ]	= new SemillerosTicAccionesRecursosFaseIi();
+			}
+		}
+		
 		
 		$fase  = Fases::findOne( $this->id_fase );
 		

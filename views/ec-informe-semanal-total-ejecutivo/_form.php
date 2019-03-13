@@ -25,6 +25,7 @@ $this->registerJsFile(
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/informe-semanal-total-ejecutivo.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 
 
+
 	 $dataProvider = new ActiveDataProvider([
             'query' => CbacInformeSemanalCac::find(),
         ]);

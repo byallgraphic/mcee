@@ -1,26 +1,35 @@
 $(document).ready(function() 
 {
-
-
 $.get( "index.php?r=ec-informe-semanal-total-ejecutivo/reporte-total-ejecutivo",
 			function( data )
 			{
 				$("#example").html( data );
 				
-				setTimeout(function(){ crearDataTable(); }, 1000);
+				setTimeout(function()
+				{ 
+					crearDataTable(); 
+				}, 1000);
 				
+
 			},
 		"json");
 
 
     
-	
 } );
+
+
+
 
 
 function crearDataTable()
 {
-	$('#example').DataTable( {
+	table= $('#example').DataTable( {
+		
+		"language": 
+		{
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+        },
 		
 		'aoColumnDefs': [
 			
@@ -68,7 +77,7 @@ function crearDataTable()
 		
         "footerCallback": function ( row, data, start, end, display ) 
 		{
-            var api = this.api(), data;
+            var api = this.api();
             // Remove the formatting to get integer data for summation
             var intVal = function ( i ) {
                 return typeof i === 'string' ?
@@ -79,12 +88,11 @@ function crearDataTable()
 			
 		
 				
-            // Total over all pages
+             // Total over all pages
             total = api
                 .column( 2 )
                 .data()
                 .reduce( function (a, b) {
-					
                     return intVal(a) + intVal(b);
                 }, 0 );
  
@@ -92,21 +100,18 @@ function crearDataTable()
             pageTotal = api
                 .column( 2, { page: 'current'} )
                 .data()
-                .reduce( function (a, b) 
-				{
-					
+                .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
- 
- 
+				
+           
 			// Update footer
             $( api.column( 2 ).footer() ).html(
-                pageTotal
-				);
+                pageTotal +' (total '+ total +')'
+            );
 			
-			
-			
-			  // Total over all pages
+					
+             // Total over all pages
             total = api
                 .column( 3 )
                 .data()
@@ -121,131 +126,15 @@ function crearDataTable()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
- 
- 
+				
+           
 			// Update footer
             $( api.column( 3 ).footer() ).html(
-                pageTotal
-				);
-				
-				
-				
-			  // Total over all pages
-            total = api
-			.column( 4 )
-			.data()
-			.reduce( function (a, b) 
-			{
-				
-				return intVal(a) + intVal(b);
-			}, 0 );
-
-			// Total over this page
-			pageTotal = api
-			.column( 4, { page: 'current'} )
-			.data()
-			.reduce( function (a, b) 
-			{
-				
-				return intVal(a) + intVal(b);
-			},  0);
-				
-			// Update footer
-            $( api.column( 4 ).footer() ).html(
-                pageTotal 
+                pageTotal +' (total '+ total+')'
             );
 			
-			    // Total over all pages
-            total = api
-                .column( 5)
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
- 
-            // Total over this page
-            pageTotal = api
-                .column( 5, { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-				
-           
-			// Update footer
-            $( api.column( 5 ).footer() ).html(
-                pageTotal +'% (total '+ total +'%)'
-            );	
-				
-			
-			   // Total over all pages
-            total = api
-                .column( 6)
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
- 
-            // Total over this page
-            pageTotal = api
-                .column( 6, { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-				
-           
-			// Update footer
-            $( api.column( 6 ).footer() ).html(
-                pageTotal +'% (total '+ total +'%)'
-            );
-			
-
-			// Total over all pages
-            total = api
-                .column( 7)
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
- 
-            // Total over this page
-            pageTotal = api
-                .column( 7, { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-				
-           
-			// Update footer
-            $( api.column( 7 ).footer() ).html(
-                pageTotal +'% (total '+ total +'%)'
-            );
-			
-		// Total over all pages
-            total = api
-                .column( 8)
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
- 
-            // Total over this page
-            pageTotal = api
-                .column( 8, { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-				
-           
-			// Update footer
-            $( api.column( 8 ).footer() ).html(
-                pageTotal +'% (total '+ total +'%)'
-            );
-
-			// Total over all pages
+					
+             // Total over all pages
             total = api
                 .column( 9 )
                 .data()
@@ -260,15 +149,16 @@ function crearDataTable()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
- 
- 
+				
+           
 			// Update footer
             $( api.column( 9 ).footer() ).html(
-                pageTotal
-            );			
+                pageTotal +' (total '+ total+')'
+            );
 			
 			
-			  // Total over all pages
+					
+             // Total over all pages
             total = api
                 .column( 10 )
                 .data()
@@ -283,16 +173,37 @@ function crearDataTable()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
- 
- 
+				
+           
 			// Update footer
             $( api.column( 10 ).footer() ).html(
-                pageTotal
+                pageTotal +' (total '+ total+')'
             );
 			
 			
+			
+			var i;
+			for (i = 4; i <= 8; i++) 
+			{ 
+			  // promedio
+				var columnData = api
+               .column( i, { page: 'current'} )
+                .data();
+ 
+				var theColumnTotal = columnData
+                .reduce( function (a, b) 
+				{
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+				// Update footer
+				$( api.column( i ).footer() ).html(
+				   ('Promedio ')+   (theColumnTotal / columnData.count()).toFixed(2) + '%'
+				);
+				
+			}
+				
           
         }
     } );
-	
 }

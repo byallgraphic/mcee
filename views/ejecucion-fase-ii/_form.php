@@ -105,6 +105,7 @@ if( $guardado ){
 						'action'=> Yii::$app->urlManager->createUrl([
 												'ejecucion-fase-ii/create', 
 												'anio' 	=> $anio, 
+												'esDocente' => $esDocente,
 											]) 
 					]); ?>
 
@@ -126,7 +127,7 @@ if( $guardado ){
 	<?= Html::hiddenInput( 'guardar', 1, [ 'id' => 'guardar', 'value' => 1 ]) ?>
 	
 	<div class="form-group">
-        <?= Html::submitButton('Agregar sesión', ['class' => 'btn btn-success', 'id' => 'btnAddSession' ]) ?>
+        <?= Html::Button('Agregar sesión', ['class' => 'btn btn-success', 'id' => 'btnAddSession' ]) ?>
     </div>
 	
 	<?= $this->render( 'sesiones', [ 
