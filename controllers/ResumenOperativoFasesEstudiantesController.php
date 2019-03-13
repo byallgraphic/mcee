@@ -99,6 +99,10 @@ class ResumenOperativoFasesEstudiantesController extends Controller
         }
         $contador =0;
         $totalDatos = [];
+        $maxSesionFaseI = 0;
+        $maxSesionFaseII = 0;
+        $maxSesionFaseIII = 0;
+        $mayorSesion = [];
 		foreach ($data as $key => $dip)
 		{
             if(!empty($dip)){
@@ -205,12 +209,15 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         dts.duracion_sesion
                     FROM semilleros_tic.ejecucion_fase_i_estudiantes efe
                     inner join semilleros_tic.datos_sesiones dts on dts.id = efe.id_datos_sesion
-                    WHERE id_datos_ieo_profesional_estudiantes = $id_datos_ieo_profesional1
-                    AND efe.estado = 1
+                    WHERE efe.estado = 1
                     ORDER BY efe.id ASC
                     ");
                 $datosEjeccionFasei = $command->queryAll();
                 $promedioParticipantes1 = 0;
+
+                if ($maxSesionFaseI < count($datosEjeccionFasei)){
+                    $maxSesionFaseI = count($datosEjeccionFasei);
+                }
 
                 if(count($datosEjeccionFasei) > 0){
                     foreach ($datosEjeccionFasei as $datos1 => $valor){
@@ -225,7 +232,6 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         $data['fase_1']['sesiones'][$datos1][3] = $valor['duracion_sesion'];
                     }
                     $promedioParticipantes1 =  $promedioParticipantes1 / count($datosEjeccionFasei);
-                    /**rellena la cantidad de sesiones vacias */
                     //array_push($data, count($datosEjeccionFasei), $totalparticipantes1, $totalapps1);
 
                     $data['fase_1']['total_sesiones'] = count($datosEjeccionFasei);
@@ -307,6 +313,9 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         ");
                     $datosEjeccionFaseii = $command->queryAll();
                     $promedioParticipantes2 = 0;
+                    if ($maxSesionFaseII < count($datosEjeccionFaseii)){
+                        $maxSesionFaseII = count($datosEjeccionFaseii);
+                    }
                     if(count($datosEjeccionFaseii) > 0){
                         foreach ($datosEjeccionFaseii as $datos1 => $valor){
                             @$totalapps2 += $valor['apps_desarrolladas'];
@@ -401,6 +410,9 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                     ");
                     $datosEjeccionFaseiii = $command->queryAll();
                     $promedioParticipantes3 = 0;
+                    if ($maxSesionFaseIII < count($datosEjeccionFaseiii)){
+                        $maxSesionFaseIII = count($datosEjeccionFaseiii);
+                    }
                     if(count($datosEjeccionFaseiii) > 0){
 
                         foreach ($datosEjeccionFaseiii as $datos1 => $valor){
@@ -432,6 +444,28 @@ class ResumenOperativoFasesEstudiantesController extends Controller
 
                 //array_push($totalDatos, $data);
 
+                if (isset($data['fase_1']['sesiones'][$datos1])){
+                    if ($maxSesionFaseI < $data['fase_1']['sesiones'][$datos1][0]){
+                        $maxSesionFaseI = $data['fase_1']['sesiones'][$datos1][0];
+                    }
+                }
+
+                if (isset($data['fase_2']['sesiones'][$datos1])){
+                    if ($maxSesionFaseII < $data['fase_2']['sesiones'][$datos1][0]){
+                        $maxSesionFaseII = $data['fase_2']['sesiones'][$datos1][0];
+                    }
+                }
+
+                if (isset($data['fase_3']['sesiones'][$datos1])) {
+                    if ($maxSesionFaseIII < $data['fase_3']['sesiones'][$datos1][0]) {
+                        $maxSesionFaseIII = $data['fase_3']['sesiones'][$datos1][0];
+                    }
+                }
+
+                $mayorSesion['maxSesionFaseI'] = $maxSesionFaseI;
+                $mayorSesion['maxSesionFaseII'] = $maxSesionFaseII;
+                $mayorSesion['maxSesionFaseIII'] = $maxSesionFaseIII;
+
                 $totalDatos[$key] = $data;
 
                 $contador++;
@@ -446,7 +480,8 @@ class ResumenOperativoFasesEstudiantesController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'data' => $totalDatos
+            'data' => $totalDatos,
+            'mayorSesion' => $mayorSesion
         ]);
     }
 
