@@ -29,10 +29,10 @@ use yii\bootstrap\Collapse;
 
 $items = [];
 
-$sesiones = Sesiones::find()
-				->where( 'id_fase=1' )
-				->andWhere( 'estado=1' )
-				->all();
+// $sesiones = Sesiones::find()
+				// ->where( 'id_fase=1' )
+				// ->andWhere( 'estado=1' )
+				// ->all();
 
 foreach( $sesiones as $keySesion => $sesion ){
 	

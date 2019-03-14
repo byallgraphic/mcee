@@ -7,6 +7,10 @@ Desarrollador: Edwin Molina Grisales
 Descripción: Formulario EJECUCION FASE I ESTUDIANTES
 ---------------------------------------
 Modificaciones:
+Fecha: 2019-03-13
+Persona encargada: Edwin Molina Grisales
+Cambios realizados: Se dejan sesiones dinámicas
+---------------------------------------
 Fecha: 2018-11-01
 Persona encargada: Edwin Molina Grisales
 Cambios realizados: Cambios varios para permitir ingresar o actualizar registros
@@ -152,6 +156,10 @@ if( $guardado ){
 			->label(null,['style'=>'display:none'])?>
 
 	<?= Html::hiddenInput( 'guardar', 1, [ 'id' => 'guardar', 'value' => 1 ]) ?>
+	
+	<div class="form-group">
+        <?= Html::Button('Agregar sesión', ['class' => 'btn btn-success', 'id' => 'btnAddSession' ]) ?>
+    </div>
     
 	<?php 	
 		if( true || !empty( $profesional->id_profesional_a ) && !empty( $profesional->curso_participantes ))
@@ -159,6 +167,7 @@ if( $guardado ){
 			echo $this->render( 'sesiones', [ 
 						'datosModelos' 	=> $datosModelos,
 						'form' 			=> $form,
+						'sesiones' 		=> $sesiones,
 					]);
 	?>
 		<div class='container-fluid' style='margin:10px 0;'>
