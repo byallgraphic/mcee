@@ -32,12 +32,9 @@ class AppAsset extends AssetBundle
     ];
     // register the library first after our
     // script
-    public $js = ['js/bootbox.min.js', 'js/main.js','js/sweetalert2.js', 'js/jquery-3.3.1.min.js', 'js/datatables.min.js'];
+    public $js = ['js/bootbox.min.js', 'js/main.js','js/sweetalert2.js'];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
-    public $jsOptions = array(
-        'position' => \yii\web\View::POS_HEAD
-    );
 }
