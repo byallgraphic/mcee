@@ -161,7 +161,7 @@ class IeoController extends Controller
     public function actionIndex($guardado = 0, $idTipoInforme = 0)
     {
 
-        $query = Ieo::find()->where(['estado' => 1]);
+        $query = Ieo::find()->where(['estado' => 1,'id_tipo_informe' => $idTipoInforme]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -705,10 +705,10 @@ class IeoController extends Controller
         if ($model->load(Yii::$app->request->post())) 
 		{
 			
-			
-			
 			$connection = Yii::$app->getDb();
 			
+			
+					
 			//se actualiza la tabla tipos_cantidad_poblacion 
 			foreach(Yii::$app->request->post('TiposCantidadPoblacion') as $actividad_id => $poblacion )
 			{
@@ -791,7 +791,108 @@ class IeoController extends Controller
 				$result = $command->queryAll();
 			}
 				
-			 /**Carga de archivos multiples */
+				
+				/**Carga de archivos multiples */
+			if($arrayDatosRequerimientos = Yii::$app->request->post('RequerimientoExtraIeo'))
+			{
+				
+				$modelRequerimiento = [];
+
+				for( $i = 0; $i < count($arrayDatosRequerimientos); $i++ )
+				{
+					$modelRequerimiento[] = new RequerimientoExtraIeo();
+				}
+				if (RequerimientoExtraIeo::loadMultiple($modelRequerimiento, Yii::$app->request->post() )) {
+				   
+					// se guarda la informacion en una carpeta con el nombre del codigo dane de la institucion seleccionada
+					$idInstitucion 	= $_SESSION['instituciones'][0];
+					$institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
+
+					$carpeta = "../documentos/documentosIeo/requerimientoExtra/".$institucion;
+					if (!file_exists($carpeta)) 
+					{
+						mkdir($carpeta, 0777, true);
+					}
+					else
+					{
+						$this->borrarDirectorio($carpeta);
+						$command = $connection->createCommand(
+						"
+						DELETE FROM ec.requerimiento_extra_ieo
+						WHERE ieo_id = $id
+						");
+						$result = $command->queryAll();
+						mkdir($carpeta, 0777, true);
+					}
+
+					$propiedades = array( "socializacion_ruta", "soporte_necesidad");
+					
+					// recorre el array $modelRequerimiento con cada modelo creado dinamicamente
+					foreach( $modelRequerimiento as $key => $model1) 
+					{
+
+						$key +=1;
+						
+						// recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
+						// para posteriormente guardar en la base de datos
+						foreach($propiedades as $propiedad)
+						{
+							$arrayRutasFisicas = array();
+							// se guarda el archivo en file
+							
+							// se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
+							$files = UploadedFile::getInstances( $model1, "[$key]$propiedad" );
+							
+							if( $files )
+							{
+								// se suben todos los archivos uno por uno
+								foreach($files as $file)
+								{
+									// se usan microsegundos para evitar un nombre de archivo repetido
+									$t = microtime(true);
+									$micro = sprintf("%06d",($t - floor($t)) * 1000000);
+									$d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
+									
+									// Construyo la ruta completa del archivo a guardar
+									$rutaFisicaDirectoriaUploads  = "../documentos/documentosIeo/requerimientoExtra/".$institucion."/".$file->baseName . $d->format("Y_m_d_H_i_s.u") . '.' . $file->extension;
+									$save = $file->saveAs( $rutaFisicaDirectoriaUploads );
+									// rutas de todos los archivos
+									$arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
+								}
+								
+								// asignacion de la ruta al campo de la db
+								$model1->$propiedad = implode(",", $arrayRutasFisicas);
+								
+								// $model->$propiedad =  $var;
+								$arrayRutasFisicas = null;
+							}
+							else
+							{
+								echo "No hay archivo cargado";
+							}
+						}
+
+						// se deben asignar los valores ya que se crean los modelos dinamicamente, yii no los agrega
+						// los datos que vienen por post
+						$model1->ieo_id = $id;
+						$model1->proyecto_ieo_id = isset($arrayDatosRequerimientos[$key]['proyecto_ieo_id']) ? $arrayDatosRequerimientos[$key]['proyecto_ieo_id'] : 0;
+						$model1->actividad_id = isset($arrayDatosRequerimientos[$key]['proyecto_ieo_id']) ? $arrayDatosRequerimientos[$key]['proyecto_ieo_id'] : 0;
+						
+						// Guarda la informacion que tiene $model en la base de datos
+						foreach( $modelRequerimiento as $key => $model1) 
+						{
+							if($model1->socializacion_ruta){
+								$model1->save();
+							}								
+						}
+						
+					}
+					
+				}
+			}
+			
+			die('fin');
+				 /**Carga de archivos multiples */
                 if($arrayDatosProducto = Yii::$app->request->post('Producto'))
 				{ 
 					
