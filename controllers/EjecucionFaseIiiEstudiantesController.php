@@ -6,6 +6,11 @@ Fecha: 2018-08-28
 Desarrollador: Edwin Molina Grisales
 Descripción: Controlador EjecucionFaseIEstudiantesController
 ---------------------------------------
+Modificaciones
+Fecha: 2019-03-13
+Desarrollador: Edwin Molina Grisales
+Descripción: Sesiones dinámicas
+---------------------------------------
 **********/
 
 
@@ -47,6 +52,11 @@ use app\models\SemillerosDatosIeoEstudiantes;
 use app\models\Paralelos;
 use yii\helpers\ArrayHelper;
 
+use yii\helpers\Html;
+use yii\bootstrap\ActiveForm;
+
+use yii\bootstrap\Collapse;
+
 /**
  * EjecucionFaseIController implements the CRUD actions for EjecucionFase model.
  */
@@ -68,6 +78,66 @@ class EjecucionFaseIiiEstudiantesController extends Controller
             ],
         ];
     }
+	
+	public function actionAddSessionItem()
+	{
+		$id_sede 		= $_SESSION['sede'][0];
+		$id_institucion	= $_SESSION['instituciones'][0];
+		
+		$idFase 	= $this->id_fase;
+		// $numSesion 	= Yii::$app->request->get('num_sesion');
+		$index 		= Yii::$app->request->get('index');
+		
+		$numSesion = $index;
+		
+		$numSesion++;
+		$index++;
+		
+		$ejecucionesFases= [ new SemillerosTicEjecucionFaseIiiEstudiantes() ];
+		$datosSesion	 = new DatosSesiones();
+		
+		$condiciones 	= null;
+		
+		$form = ActiveForm::begin();
+		
+		$sesion = Sesiones::find()
+						->where( 'id_fase='.$idFase )
+						->andWhere( 'estado=1' )
+						->andWhere( "descripcion='Sesión ".$numSesion."'" )
+						->one();
+						
+		if( !$sesion ){
+			$sesion = new Sesiones();
+			$sesion->descripcion = "Sesión ".$numSesion;
+			$sesion->id_fase 	 = $idFase;
+			$sesion->estado 	 = 1;
+			
+			$sesion->save();
+		}
+		
+		$item = [
+					'label' 		=>  $sesion->descripcion,
+					'content' 		=>  $this->renderPartial( 'sesionItem', 
+													[ 
+														'sesion' 			=> $sesion,
+														'ejecucionesFases' 	=> $ejecucionesFases,
+														'datosSesion' 		=> $datosSesion,
+														'form' 				=> $form,
+													] 
+										),
+					'contentOptions'=> []
+				];
+		
+		
+		$header = $sesion->descripcion;
+		// $index = 9;
+		
+		$a = new Collapse();
+		$a->options['id'] = 'collapseOne';
+		$options = ArrayHelper::getValue($item, 'options', []);
+		Html::addCssClass($options, 'panel panel-default');
+		echo $items = Html::tag('div', $a->renderItem($header, $item, $index), $options);
+	}
 	
 	public function actionCiclos()
 	{
@@ -185,22 +255,7 @@ class EjecucionFaseIiiEstudiantesController extends Controller
 		 ***************************************************************************************************/
 		$datosModelos = [];
 		
-		/************************************************************************
-		 * Consultando todas las sesiones para la fase i estudiantes y que esten activos
-		 * id_fase es una propiedad de este controlador
-		 * Adicionalmente creo una estructura ya formada para data Modelos
-		 ************************************************************************/
-		$sesiones = Sesiones::find()
-						->where( 'id_fase='.$this->id_fase )
-						->andWhere( 'estado=1' )
-						->all();
-		
-		//Creo 
-		foreach( $sesiones as $keySesion => $sesion )
-		{	
-			$datosModelos[ $sesion->id ][ 'datosSesion' ] 		= new DatosSesiones();
-			$datosModelos[ $sesion->id ][ 'ejecucionesFase' ][] = new SemillerosTicEjecucionFaseIiiEstudiantes();
-		}
+		$sesiones = [];
 		
 		/************************************************************************************
 		 * Creo un modelo del profesional IEO en caso de existir
@@ -256,6 +311,12 @@ class EjecucionFaseIiiEstudiantesController extends Controller
 						
 						$ds->fecha_sesion = Yii::$app->formatter->asDate($ds->fecha_sesion, "php:d-m-Y");
 						
+						if( !isset($datosModelos[ $ds->id_sesion ]) )
+						{
+							$datosModelos[ $ds->id_sesion ][ 'ejecucionesFase' ][]	= new SemillerosTicEjecucionFaseIiiEstudiantes();
+							$sesiones[] = Sesiones::findOne( $ds->id_sesion );
+						}
+						
 						$datosModelos[ $ds->id_sesion ][ 'datosSesion' ] 		= $ds;
 						$datosModelos[ $ds->id_sesion ][ 'ejecucionesFase' ][]	= $ejecucionFase;
 						
@@ -297,6 +358,12 @@ class EjecucionFaseIiiEstudiantesController extends Controller
 								}
 								else{
 									$ds = new DatosSesiones();
+								}
+								
+								if( !isset($datosModelos[ $sesion_id ]) )
+								{
+									$datosModelos[ $sesion_id ][ 'ejecucionesFase' ][]	= new SemillerosTicEjecucionFaseIiiEstudiantes();
+									$sesiones[] = Sesiones::findOne( $sesion_id );
 								}
 								
 								$ds->load( $dataSesion, '' );
@@ -572,6 +639,28 @@ class EjecucionFaseIiiEstudiantesController extends Controller
                     $datosIeoProfesional->curso_participantes = '';
             }
         }
+		
+		
+		/************************************************************************
+		 * Consultando todas las sesiones para la fase i estudiantes y que esten activos
+		 * id_fase es una propiedad de este controlador
+		 * Adicionalmente creo una estructura ya formada para data Modelos
+		 ************************************************************************/
+		if( empty($sesiones) )
+		{
+			$sesiones = Sesiones::find()
+							->where( 'id_fase='.$this->id_fase )
+							->andWhere( 'estado=1' )
+							->andWhere( "descripcion='Sesión 1'" )
+							->all();
+			
+			//Creo 
+			foreach( $sesiones as $keySesion => $sesion )
+			{	
+				$datosModelos[ $sesion->id ][ 'datosSesion' ] 		= new DatosSesiones();
+				$datosModelos[ $sesion->id ][ 'ejecucionesFase' ][] = new SemillerosTicEjecucionFaseIiiEstudiantes();
+			}
+		}
 
 
         return $this->render('create', [
@@ -587,6 +676,7 @@ class EjecucionFaseIiiEstudiantesController extends Controller
 			'cursos'		=> $cursos,
 			'anio'			=> $anio,
 			'esDocente'		=> $esDocente,
+			'sesiones'		=> $sesiones,
         ]);
     }
 

@@ -1,5 +1,20 @@
 <?php
 
+/**********
+Versión: 001
+Fecha: 13-03-2019
+Desarrollador: Oscar David Lopez Villa
+Descripción: crud IEO
+---------------------------------------
+Modificaciones:
+Fecha: 13-03-2019
+Persona encargada: Oscar David Lopez Villa
+Cambios realizados: Se ajusta la funcion actionCreate para subir archivos y guardar la ruta 
+Cambios realizados: Se ajusta la funcion actionUpdate para borrar los archivos subidor y subir archivos y guardar la ruta 
+----------------------------------------
+**********/
+
+
 namespace app\controllers;
 
 if(@$_SESSION['sesion']=="si")
@@ -12,6 +27,8 @@ else
 	echo "<script> window.location=\"index.php?r=site%2Flogin\";</script>";
 	die;
 }
+
+
 
 use Yii;
 use app\models\Ieo;
@@ -144,7 +161,7 @@ class IeoController extends Controller
     public function actionIndex($guardado = 0, $idTipoInforme = 0)
     {
 
-        $query = Ieo::find()->where(['estado' => 1]);
+        $query = Ieo::find()->where(['estado' => 1,'id_tipo_informe' => $idTipoInforme]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -684,11 +701,301 @@ class IeoController extends Controller
     {
         $model = $this->findModel($id);
 		$datos = array();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
+        // if ($model->load(Yii::$app->request->post()) && $model->save()) 
+        if ($model->load(Yii::$app->request->post())) 
+		{
+			
+			$connection = Yii::$app->getDb();
+			
+			
+					
+			//se actualiza la tabla tipos_cantidad_poblacion 
+			foreach(Yii::$app->request->post('TiposCantidadPoblacion') as $actividad_id => $poblacion )
+			{
+				
+				$tiempo_libre	=  isset($poblacion['tiempo_libre']) ? $poblacion['tiempo_libre']: 'null' ;
+				$edu_derechos 	=  isset($poblacion['edu_derechos']) ? $poblacion['edu_derechos']: 'null' ;
+				$sexualidad 	=  isset($poblacion['sexualidad']) ? $poblacion['sexualidad']: 'null' ;
+				$ciudadania 	=  isset($poblacion['ciudadania']) ? $poblacion['ciudadania']: 'null' ;
+				$medio_ambiente	=  isset($poblacion['medio_ambiente']) ? $poblacion['medio_ambiente']: 'null' ;
+				$familia 		=  isset($poblacion['familia']) ? $poblacion['familia']: 'null' ;
+				$directivos 	=  isset($poblacion['directivos']) ? $poblacion['directivos']: 'null' ;
+				$fecha_creacion =  isset($poblacion['fecha_creacion']) ? $poblacion['fecha_creacion']: 'null' ;
+				$tipo_actividad =  isset($poblacion['tipo_actividad']) ? $poblacion['tipo_actividad']: 'null' ;
+				$docentes 		=  isset($poblacion['docentes']) ? $poblacion['docentes']: 'null' ;
+				
+				
+				$command = $connection->createCommand(
+				"
+					UPDATE ec.tipos_cantidad_poblacion
+					SET  
+						
+						tiempo_libre 	= $tiempo_libre ,
+						edu_derechos	= $edu_derechos,
+						sexualidad		= $sexualidad,
+						ciudadania		= $ciudadania,
+						medio_ambiente	= $medio_ambiente ,
+						familia			= $familia,
+						directivos		= $directivos, 
+						fecha_creacion	= '$fecha_creacion',
+						tipo_actividad	= $tipo_actividad,
+						docentes		= $docentes
+						
+					WHERE 
+						ieo_id = $id
+					AND 
+						actividad_id = $actividad_id
+				");
+				$result = $command->queryAll();
+			}
+			
+			foreach(Yii::$app->request->post('EstudiantesIeo') as $actividad_id => $estudiantes )
+			{
+				
+				$grado_0	=  isset($estudiantes['grado_0']) ? $estudiantes['grado_0']: 'null' ;
+				$grado_1	=  isset($estudiantes['grado_1']) ? $estudiantes['grado_1']: 'null' ;
+				$grado_2	=  isset($estudiantes['grado_2']) ? $estudiantes['grado_2']: 'null' ;
+				$grado_3	=  isset($estudiantes['grado_3']) ? $estudiantes['grado_3']: 'null' ;
+				$grado_4	=  isset($estudiantes['grado_4']) ? $estudiantes['grado_4']: 'null' ;
+				$grado_5	=  isset($estudiantes['grado_5']) ? $estudiantes['grado_5']: 'null' ;
+				$grado_6	=  isset($estudiantes['grado_6']) ? $estudiantes['grado_6']: 'null' ;
+				$grado_7	=  isset($estudiantes['grado_7']) ? $estudiantes['grado_7']: 'null' ;
+				$grado_8	=  isset($estudiantes['grado_8']) ? $estudiantes['grado_8']: 'null' ;
+				$grado_9	=  isset($estudiantes['grado_9']) ? $estudiantes['grado_9']: 'null' ;
+				$grado_10	=  isset($estudiantes['grado_10']) ? $estudiantes['grado_10']: 'null' ;
+				$grado_11	=  isset($estudiantes['grado_11']) ? $estudiantes['grado_11']: 'null' ;
+				
+				$command = $connection->createCommand(
+				"
+				
+				UPDATE 
+					ec.estudiantes_ieo
+				SET 
+					grado_0 = $grado_0, 
+					grado_1 = $grado_1, 
+					grado_2 = $grado_2, 
+					grado_3 = $grado_3, 
+					grado_4 = $grado_4, 
+					grado_5 = $grado_5,
+					grado_6 = $grado_6,
+					grado_7 = $grado_7,
+					grado_8 = $grado_8,
+					grado_9 = $grado_9,
+					grado_10 = $grado_10,
+					grado_11 = $grado_11
+				WHERE 
+					id_ieo = $id
+				AND 
+					id_actividad = $actividad_id
+				");
+				$result = $command->queryAll();
+			}
+				
+				
+				/**Carga de archivos multiples */
+			if($arrayDatosRequerimientos = Yii::$app->request->post('RequerimientoExtraIeo'))
+			{
+				
+				$modelRequerimiento = [];
 
-    
+				for( $i = 0; $i < count($arrayDatosRequerimientos); $i++ )
+				{
+					$modelRequerimiento[] = new RequerimientoExtraIeo();
+				}
+				if (RequerimientoExtraIeo::loadMultiple($modelRequerimiento, Yii::$app->request->post() )) {
+				   
+					// se guarda la informacion en una carpeta con el nombre del codigo dane de la institucion seleccionada
+					$idInstitucion 	= $_SESSION['instituciones'][0];
+					$institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
+
+					$carpeta = "../documentos/documentosIeo/requerimientoExtra/".$institucion;
+					if (!file_exists($carpeta)) 
+					{
+						mkdir($carpeta, 0777, true);
+					}
+					else
+					{
+						$this->borrarDirectorio($carpeta);
+						$command = $connection->createCommand(
+						"
+						DELETE FROM ec.requerimiento_extra_ieo
+						WHERE ieo_id = $id
+						");
+						$result = $command->queryAll();
+						mkdir($carpeta, 0777, true);
+					}
+
+					$propiedades = array( "socializacion_ruta", "soporte_necesidad");
+					
+					// recorre el array $modelRequerimiento con cada modelo creado dinamicamente
+					foreach( $modelRequerimiento as $key => $model1) 
+					{
+
+						$key +=1;
+						
+						// recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
+						// para posteriormente guardar en la base de datos
+						foreach($propiedades as $propiedad)
+						{
+							$arrayRutasFisicas = array();
+							// se guarda el archivo en file
+							
+							// se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
+							$files = UploadedFile::getInstances( $model1, "[$key]$propiedad" );
+							
+							if( $files )
+							{
+								// se suben todos los archivos uno por uno
+								foreach($files as $file)
+								{
+									// se usan microsegundos para evitar un nombre de archivo repetido
+									$t = microtime(true);
+									$micro = sprintf("%06d",($t - floor($t)) * 1000000);
+									$d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
+									
+									// Construyo la ruta completa del archivo a guardar
+									$rutaFisicaDirectoriaUploads  = "../documentos/documentosIeo/requerimientoExtra/".$institucion."/".$file->baseName . $d->format("Y_m_d_H_i_s.u") . '.' . $file->extension;
+									$save = $file->saveAs( $rutaFisicaDirectoriaUploads );
+									// rutas de todos los archivos
+									$arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
+								}
+								
+								// asignacion de la ruta al campo de la db
+								$model1->$propiedad = implode(",", $arrayRutasFisicas);
+								
+								// $model->$propiedad =  $var;
+								$arrayRutasFisicas = null;
+							}
+							else
+							{
+								echo "No hay archivo cargado";
+							}
+						}
+
+						// se deben asignar los valores ya que se crean los modelos dinamicamente, yii no los agrega
+						// los datos que vienen por post
+						$model1->ieo_id = $id;
+						$model1->proyecto_ieo_id = isset($arrayDatosRequerimientos[$key]['proyecto_ieo_id']) ? $arrayDatosRequerimientos[$key]['proyecto_ieo_id'] : 0;
+						$model1->actividad_id = isset($arrayDatosRequerimientos[$key]['proyecto_ieo_id']) ? $arrayDatosRequerimientos[$key]['proyecto_ieo_id'] : 0;
+						
+						// Guarda la informacion que tiene $model en la base de datos
+						foreach( $modelRequerimiento as $key => $model1) 
+						{
+							if($model1->socializacion_ruta){
+								$model1->save();
+							}								
+						}
+						
+					}
+					
+				}
+			}
+			
+			die('fin');
+				 /**Carga de archivos multiples */
+                if($arrayDatosProducto = Yii::$app->request->post('Producto'))
+				{ 
+					
+					$modelProductos = [];
+					$cantProductos  = count($arrayDatosProducto);
+				   
+                    for( $i = 0; $i < $cantProductos; $i++ )
+					{
+                        $modelProductos[] = new Producto();
+                    }
+						
+                    if (Producto::loadMultiple( $modelProductos, Yii::$app->request->post())) 
+					{
+						
+                        $idInstitucion 	= $_SESSION['instituciones'][0];
+                        $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
+					
+					
+                        $carpeta = "../documentos/documentosIeo/producto/".$institucion;
+						
+						
+						if (!file_exists($carpeta)) 
+						{
+							mkdir($carpeta, 0777, true);
+                        }
+						else
+						{
+							$this->borrarDirectorio($carpeta);
+							$command = $connection->createCommand(
+							"
+							DELETE FROM ec.producto
+							WHERE 
+								id_ieo = $id
+							");
+							$result = $command->queryAll();
+							mkdir($carpeta, 0777, true);
+						}
+
+                        $propiedades = array( "informe_ruta", "plan_accion_ruta","presentacion_plan");
+						
+                        foreach( $modelProductos  as $key => $model1) 
+                        {
+                            
+                            //recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
+                            //para posteriormente guardar en la base de datos
+                            foreach($propiedades as $propiedad)
+                            {
+                                $arrayRutasFisicas = array();
+                                // se guarda el archivo en file
+                              
+                                // se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
+                                $files = UploadedFile::getInstances( $model1, "[$key]$propiedad" );
+                                if( $files )
+                                {
+                                    //se suben todos los archivos uno por uno
+                                    foreach($files as $file)
+                                    {
+                                        //se usan microsegundos para evitar un nombre de archivo repetido
+                                        $t = microtime(true);
+                                        $micro = sprintf("%06d",($t - floor($t)) * 1000000);
+                                        $d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
+                                        
+                                        // Construyo la ruta completa del archivo a guardar
+                                        $rutaFisicaDirectoriaUploads  = "../documentos/documentosIeo/producto/".$institucion."/".$file->baseName . $d->format("Y_m_d_H_i_s.u") . '.' . $file->extension;
+                                        $save = $file->saveAs( $rutaFisicaDirectoriaUploads );
+                                        //rutas de todos los archivos
+                                        $arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
+                                    }
+                                    
+                                    // asignacion de la ruta al campo de la db
+                                    $model1->$propiedad = implode(",", $arrayRutasFisicas);
+                                    
+                                    // $model->$propiedad =  $var;
+                                    $arrayRutasFisicas = null;
+                                }
+                                else
+                                {
+                                    echo "No hay archivo cargado";
+                                }
+							}
+
+                            $model1->id_ieo = $id;
+                            
+                            foreach( $modelProductos as $key => $model1) 
+                            {
+                                if($model1->informe_ruta)
+								{
+                                    $model1->save();
+                                }								
+                            }
+                        }
+                    }
+
+                }
+				
+				return $this->redirect(['index', 'idTipoInforme' => $model->id_tipo_informe]);
+			}
+		
+		
+            
+        
+
+		//se trae la informacion correspondiente y se agrupa en el array datos
 		$cantidadPoblacion = new TiposCantidadPoblacion();
 		$cantidadPoblacion = $cantidadPoblacion->find()->andWhere("ieo_id=$id")->all();
 	       
@@ -712,7 +1019,6 @@ class IeoController extends Controller
         });
 									   
 									   
-		
         foreach	($resultCantidadPoblacion as $r => $valor)
         {
             foreach	($valor as $ids => $valores)
@@ -786,6 +1092,28 @@ class IeoController extends Controller
         return $this->redirect(['index', 'idTipoInforme' => $_SESSION["idTipoInforme"]]);
     }
 
+	
+	public function borrarDirectorio($src) 
+	{
+		$dir = opendir($src);
+		while(false !== ( $file = readdir($dir)) ) 
+		{
+			if (( $file != '.' ) && ( $file != '..' )) 
+			{
+				$full = $src . '/' . $file;
+				if ( is_dir($full) ) 
+				{
+					rrmdir($full);
+				}
+				else 
+				{
+					unlink($full);
+				}
+			}
+		}
+		closedir($dir);
+		rmdir($src);
+	}
     /**
      * Finds the Ieo model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

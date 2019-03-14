@@ -167,6 +167,10 @@ if( $guardado ){
         ->label(null,['style'=>'display:none'])?>
 
 	<?= Html::hiddenInput( 'guardar', 1, [ 'id' => 'guardar', 'value' => 1 ]) ?>
+	
+	<div class="form-group">
+        <?= Html::Button('Agregar sesión', ['class' => 'btn btn-success', 'id' => 'btnAddSession' ]) ?>
+    </div>
     
 	<?php 	
 		if( true || !empty( $profesional->id_profesional_a ) && !empty( $profesional->curso_participantes ) )
@@ -174,6 +178,7 @@ if( $guardado ){
 			echo $this->render( 'sesiones', [ 
 						'datosModelos' 	=> $datosModelos,
 						'form' 			=> $form,
+						'sesiones' 		=> $sesiones,
 					]);
 	?>
 		<div class='container-fluid' style='margin:10px 0;'>

@@ -20,14 +20,15 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 
 
 $idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $model->id_tipo_informe;
-   $index = 1;
-   $numProyecto = 1;
-
-
 
 ?>
 
-		<?= $form->field($tiposCantidadPoblacion, "[$idactividad]fecha_creacion")->widget(
+
+
+		<?php 
+		
+		$tiposCantidadPoblacion->fecha_creacion = $datos['cantidadPoblacion'][$idactividad]['fecha_creacion'] ;
+		echo $form->field($tiposCantidadPoblacion, "[$idactividad]fecha_creacion")->widget(
             DatePicker::className(), [
                 // modify template for custom rendering
                 'template' => '{addon}{input}',
@@ -37,7 +38,7 @@ $idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $m
                     'format'    => 'yyyy-mm-dd',
             ],
         ]);  ?> 
-         <?= $form->field($tiposCantidadPoblacion, "[$idactividad]tipo_actividad")->textInput() ?>
+         <?= $form->field($tiposCantidadPoblacion, "[$idactividad]tipo_actividad")->textInput([ 'value' =>$datos['cantidadPoblacion'][$idactividad]['tipo_actividad']  ]) ?>
 
 
   <h3 style='background-color: #ccc;padding:5px;'>Docentes</h3>

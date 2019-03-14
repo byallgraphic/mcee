@@ -86,7 +86,7 @@
 	});
 	
 	//this para este caso es el panel al que se dió click
-	$( ".title" ).each(function(x){
+	$( ".title" ).each(cccc=function(x){
 		
 		//Para este caso this es el div con clase .title
 		var alto = $( this ).prop("scrollHeight");
@@ -154,47 +154,6 @@
 	});
 	
 	
-	
-	/************************************************************************************************************************************************
-	 * 
-	 ************************************************************************************************************************************************/
-	 setTimeout(function(){
-		 
-		$( "input:text[id^=datossesiones]" ).each(function(x){
-			
-			$('#w0').yiiActiveForm('find', this.id ).validate = function (attribute, value, messages, deferred, $form) {
-				
-				var cmp = $( "#"+this.id ).val();
-				
-				var hayCamposVacios = false;
-				$( "textarea[id^=semillerosticejecucionfaseiestudiantes]", $( this.container ).parent() ).each(function(){
-					if( $( this ).val() == '' ){
-						hayCamposVacios = true;
-					}
-				});
-				
-				
-				//Si no se ha ingresado fecha y mas de una fila (ejecucion de fase)
-				if( cmp == "" && $( "[id^=dvFilaSesion]", $( this.container ).parent() ).length == 0 ){
-					// alert(1);
-					return true;
-				}
-				else if( cmp != "" && $( "[id^=dvFilaSesion]", $( this.container ).parent() ).length > 0 && !hayCamposVacios ){
-					// alert(1);
-					return true;
-				}
-				else{
-					// alert(2);
-					if( cmp == "" )
-						yii.validation.required(cmp, messages, {"message":"No puede estar vacío"});
-					else
-						yii.validation.addMessage(messages,"Debe agregar por lo menos una ejecución de fase y llenar todos los campos", cmp );
-					 
-					return false;
-				}
-			}
-		});
-	 }, 5000 );
 	
 	
 	// /********************************************************************************
@@ -320,7 +279,7 @@
         //});
     }
 
-	$( "[id^=container]" ).each(function(){
+	$( "[id^=container]" ).each(dddd=function(){
 		
 		var _container = $( this );
 		
@@ -342,7 +301,7 @@
 		 * Le doy funcionalidad a los botones de agregar
 		 * Se hace un each de cada boton
 		 */
-		$( "#btnAddFila"+sesion ).each(function(){
+		$( "#btnAddFila"+sesion ).each(aaaa=function(){
 			 
 			//this es el boton agregar
 			$( this ).click(function(){
@@ -470,7 +429,7 @@
 		$( "#btnRemoveFila"+sesion ).each(function(){
 			 
 			//this es el boton agregar
-			$( this ).click(function(){
+			$( this ).click(bbbb=function(){
 				
 				if( $( "[id^=dvFilaSesion]", _container ).length == min+1 ){
 					$( this ).css({display:'none'});
@@ -501,3 +460,108 @@
 			});
 		});
 	});
+
+	
+	
+	/************************************************************************************************************************************************
+	 * 
+	 ************************************************************************************************************************************************/
+	 setTimeout(function(){
+		
+		$( "input:text[id^=datossesiones]" ).each(eeee=function(){
+
+			console.log( this )
+			console.log( this.id )
+			console.log( $('#w0') )
+			console.log( $('#w0').yiiActiveForm )
+			console.log( $('#w0').yiiActiveForm('find', this.id ) )
+
+			$('#w0').yiiActiveForm('find', this.id ).validate = function (attribute, value, messages, deferred, $form) {
+				
+				var cmp = $( "#"+this.id ).val();
+				
+				var hayCamposVacios = false;
+				$( "textarea[id^=semillerosticejecucionfaseiestudiantes]", $( this.container ).parent() ).each(function(){
+					if( $( this ).val() == '' ){
+						hayCamposVacios = true;
+					}
+				});
+				
+				
+				//Si no se ha ingresado fecha y mas de una fila (ejecucion de fase)
+				if( cmp == "" && $( "[id^=dvFilaSesion]", $( this.container ).parent() ).length == 0 ){
+					// alert(1);
+					return true;
+				}
+				else if( cmp != "" && $( "[id^=dvFilaSesion]", $( this.container ).parent() ).length > 0 && !hayCamposVacios ){
+					// alert(1);
+					return true;
+				}
+				else{
+					// alert(2);
+					if( cmp == "" )
+						yii.validation.required(cmp, messages, {"message":"No puede estar vacío"});
+					else
+						yii.validation.addMessage(messages,"Debe agregar por lo menos una ejecución de fase y llenar todos los campos", cmp );
+					 
+					return false;
+				}
+			}
+		});
+		
+		$( "#btnAddSession" ).click(function(){
+		
+			var index = $( "#collapseOne > div" ).length;
+		
+			$.get( "index.php?r=ejecucion-fase-i-estudiantes/add-session-item&index="+index , function( data ){
+				
+				index++;
+				
+				$( "#collapseOne" ).append( data );
+				
+				var id = $( "[id^=btnAddFila]", $( "#collapseOne > div" ) ).last()[0].id.substr( "btnAddFila".length );
+				
+				
+				// $( ".panel-body", $( "#collapseOne-collapse"+index ) ).each(function(x){
+		
+					// dvsFilas[ $( "[id^=dvFilaSesion]", this ).eq(0)[0].id.substr( "dvFilaSesion".length ) ] = $( "[id^=dvFilaSesion]", this ).eq(0);
+					// $( ".chosen-container", this ).remove();
+					// $( "[id^=dvFilaSesion]", this ).eq(0).remove();
+				// });
+				
+				// consecutivos[id] = {
+					// inicial : $( "[id^=dvFilaSesion]", this ).length+1,
+					// actual  : $( "[id^=dvFilaSesion]", this ).length+1,
+				// } 
+				
+				$( ".title", $( "#collapseOne-collapse"+index ) ).each(cccc);
+				$( "[id^=container]", $( "#collapseOne-collapse"+index ) ).each(dddd);
+				
+				// $( "[id^=btnAddFila]", $( "#collapseOne > div" ) ).last().click(aaaa);
+				// $( "[id^=btnRemoveFila]", $( "#collapseOne > div" ) ).last().click(bbbb);
+				
+				$( "[id$=fecha_sesion]", $( "#collapseOne-collapse"+index ) ).parent().datepicker({"autoclose":true,"format":"dd-mm-yyyy","language":"es"});
+				
+				$( "input:text[id^=datossesiones]", $( "#collapseOne-collapse"+index ) ).each(function(){
+					
+					var _campo = this;
+					
+					$( "#w0" ).yiiActiveForm( 'add', 
+								{
+									"id"		: _campo.id,
+									"name"		: _campo.name,
+									"container"	: ".field-"+_campo.id,
+									"input"		: "#"+_campo.id,
+								},
+							);
+				})
+				
+				$( "input:text[id^=datossesiones]", $( "#collapseOne-collapse"+index ) ).each(eeee);
+			});
+		});
+		
+		
+		
+	 }, 5000 );
+	
+	

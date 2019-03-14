@@ -28,7 +28,6 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
-        'https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css'
     ];
     // register the library first after our
     // script
