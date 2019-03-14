@@ -28,16 +28,12 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
-        'https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css'
     ];
     // register the library first after our
     // script
-    public $js = ['js/bootbox.min.js', 'js/main.js','js/sweetalert2.js', 'js/jquery-3.3.1.min.js', 'js/datatables.min.js'];
+    public $js = ['js/bootbox.min.js', 'js/main.js','js/sweetalert2.js'];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
-    public $jsOptions = array(
-        'position' => \yii\web\View::POS_HEAD
-    );
 }
