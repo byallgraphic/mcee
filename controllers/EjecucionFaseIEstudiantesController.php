@@ -114,7 +114,7 @@ class EjecucionFaseIEstudiantesController extends Controller
 		
 		$item = [
 					'label' 		=>  $sesion->descripcion,
-					'content' 		=>  $this->renderAjax( 'sesionItem', 
+					'content' 		=>  $this->renderPartial( 'sesionItem', 
 													[ 
 														'sesion' 			=> $sesion,
 														'ejecucionesFases' 	=> $ejecucionesFases,

@@ -540,6 +540,8 @@
 				// $( "[id^=btnAddFila]", $( "#collapseOne > div" ) ).last().click(aaaa);
 				// $( "[id^=btnRemoveFila]", $( "#collapseOne > div" ) ).last().click(bbbb);
 				
+				$( "[id$=fecha_sesion]", $( "#collapseOne-collapse"+index ) ).parent().datepicker({"autoclose":true,"format":"dd-mm-yyyy","language":"es"});
+				
 				$( "input:text[id^=datossesiones]", $( "#collapseOne-collapse"+index ) ).each(function(){
 					
 					var _campo = this;
