@@ -90,7 +90,7 @@
 	];
 	
 	//this para este caso es el panel al que se dió click
-	$( ".title" ).each(function(x){
+	$( ".title" ).each(cccc=function(x){
 		
 		//Para este caso this es el div con clase .title
 		var alto = $( this ).prop("scrollHeight");
@@ -168,11 +168,11 @@
 	 ************************************************************************************************************************************************/
 	 setTimeout(function(){
 		 
-		$( "input:text[id^=datossesiones]" ).each(function(x){
+		$( "input:text[id^=datossesiones]" ).each(eeee=function(x){
 			
 			$('#w0').yiiActiveForm('find', this.id ).validate = function (attribute, value, messages, deferred, $form) {
 				
-				/*var cmp = $( "#"+this.id ).val();
+				var cmp = $( "#"+this.id ).val();
 				
 				var hayCamposVacios = false;
 				$( "textarea[id^=semillerosticejecucionfaseiiiestudiantes]", $( this.container ).parent() ).each(function(){
@@ -199,9 +199,48 @@
 						yii.validation.addMessage(messages,"Debe agregar por lo menos una ejecución de fase y llenar todos los campos", cmp );
 					 
 					return false;
-				}*/
+				}
 			}
 		});
+		
+		
+		$( "#btnAddSession" ).click(function(){
+		
+			var index = $( "#collapseOne > div" ).length;
+		
+			$.get( "index.php?r=ejecucion-fase-iii-estudiantes/add-session-item&index="+index , function( data ){
+				
+				index++;
+				
+				$( "#collapseOne" ).append( data );
+				
+				var id = $( "[id^=btnAddFila]", $( "#collapseOne > div" ) ).last()[0].id.substr( "btnAddFila".length );
+				
+				$( ".title", $( "#collapseOne-collapse"+index ) ).each(cccc);
+				$( "[id^=container]", $( "#collapseOne-collapse"+index ) ).each(dddd);
+				
+				$( "[id$=fecha_sesion]", $( "#collapseOne-collapse"+index ) ).parent().datepicker({"autoclose":true,"format":"dd-mm-yyyy","language":"es"});
+				
+				$( "input:text[id^=datossesiones]", $( "#collapseOne-collapse"+index ) ).each(function(){
+					
+					var _campo = this;
+					console.log( this.id );
+					$( '#w0' ).yiiActiveForm
+					$( "#w0" ).yiiActiveForm( 'add', 
+								{
+									"id"		: _campo.id,
+									"name"		: _campo.name,
+									"container"	: ".field-"+_campo.id,
+									"input"		: "#"+_campo.id,
+								},
+							);
+				})
+				
+				$( "input:text[id^=datossesiones]", $( "#collapseOne-collapse"+index ) ).each(eeee);
+			});
+		});
+		
+		
 	 }, 5000 );
 	
 	
@@ -328,7 +367,7 @@
         });
     }
 
-    $( "[id^=container]" ).each(function(){
+    $( "[id^=container]" ).each(dddd=function(){
 		
 		var _container = $( this );
 		
