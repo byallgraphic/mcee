@@ -175,9 +175,10 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 ("
                     SELECT 
                     dts.duracion_sesion
-                    FROM semilleros_tic.ejecucion_fase_i_estudiantes as  efe
-                    inner join semilleros_tic.datos_sesiones as dts on dts.id = efe.id_datos_sesion
-                    WHERE id_datos_ieo_profesional_estudiantes = $id_datos_ieo_profesional1 
+                    FROM semilleros_tic.datos_sesiones as dts
+                    join semilleros_tic.ejecucion_fase_i_estudiantes as efe on efe.id_datos_sesion = dts.id
+                    join semilleros_tic.datos_ieo_profesional_estudiantes dpro on efe.id_datos_ieo_profesional_estudiantes = dpro.id
+                    WHERE dts.id_sesion = 1 and dpro.id_sede =  $idSede ORDER BY dts.id desc 
                 ");
                 $datoSemillerosTicEjecucionFase1 = $command->queryAll();
 
@@ -202,16 +203,15 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 $data['fase_1']['cursos'] = $cusosSesiones;
 
                 $command = $connection->createCommand("
-                    SELECT
+                    SELECT 
                             dts.fecha_sesion,
                             efe.apps_creadas,
                             efe.participacion_sesiones,
                             dts.duracion_sesion
-                        FROM semilleros_tic.ejecucion_fase_i_estudiantes efe
-                        inner join semilleros_tic.datos_sesiones dts on dts.id = efe.id_datos_sesion
-                        WHERE dts.id = $id_datos_ieo_profesional1
-                        AND efe.estado = 1
-                    ORDER BY efe.id ASC
+                    FROM semilleros_tic.datos_sesiones as dts
+                    join semilleros_tic.ejecucion_fase_i_estudiantes as efe on efe.id_datos_sesion = dts.id
+                    join semilleros_tic.datos_ieo_profesional_estudiantes dpro on efe.id_datos_ieo_profesional_estudiantes = dpro.id
+                    WHERE dts.id_sesion = 1 and dpro.id_sede =  $idSede ORDER BY dts.id desc 
                     ");
                 $datosEjeccionFasei = $command->queryAll();
                 $promedioParticipantes1 = 0;
@@ -274,11 +274,12 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 //Datos generales de las sesiones
                 $command = $connection->createCommand
                 ("
-                        SELECT 
+                    SELECT 
                         dts.duracion_sesion
-                        FROM semilleros_tic.ejecucion_fase_ii_estudiantes as  efe
-                        inner join semilleros_tic.datos_sesiones as dts on dts.id = efe.id_datos_sesion
-                        WHERE dts.id = $id_datos_ieo_profesional2 
+                    FROM semilleros_tic.datos_sesiones as dts
+                    join semilleros_tic.ejecucion_fase_i_estudiantes as efe on efe.id_datos_sesion = dts.id
+                    join semilleros_tic.datos_ieo_profesional_estudiantes dpro on efe.id_datos_ieo_profesional_estudiantes = dpro.id
+                    WHERE dts.id_sesion = 1 and dpro.id_sede =  $idSede ORDER BY dts.id desc 
                     ");
 
                 $datoSemillerosTicEjecucionFase2 = $command->queryAll();
@@ -302,16 +303,15 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 $data['fase_2']['cursos'] = $cusosSesiones2;
 
                 $command = $connection->createCommand("
-                        SELECT
+                    SELECT 
                             dts.fecha_sesion,
                             efe.apps_desarrolladas,
                             efe.estudiantes_participantes,
                             dts.duracion_sesion
-                        FROM semilleros_tic.ejecucion_fase_ii_estudiantes efe
-                        inner join semilleros_tic.datos_sesiones dts on dts.id = efe.id_datos_sesion
-                        WHERE dts.id = $id_datos_ieo_profesional2
-                        AND efe.estado = 1
-                        ORDER BY efe.id ASC
+                    FROM semilleros_tic.datos_sesiones as dts
+                    join semilleros_tic.ejecucion_fase_ii_estudiantes as efe on efe.id_datos_sesion = dts.id
+                    join semilleros_tic.datos_ieo_profesional_estudiantes dpro on efe.id_datos_ieo_profesional_estudiantes = dpro.id
+                    WHERE dts.id_sesion = 1 and dpro.id_sede =  $idSede ORDER BY dts.id desc 
                         ");
                 $datosEjeccionFaseii = $command->queryAll();
                 $promedioParticipantes2 = 0;
@@ -373,11 +373,12 @@ class ResumenOperativoFasesEstudiantesController extends Controller
 
                 $command = $connection->createCommand
                 ("
-                        SELECT 
+                    SELECT 
                         dts.duracion_sesion
-                        FROM semilleros_tic.ejecucion_fase_iii_estudiantes as  efe
-                        inner join semilleros_tic.datos_sesiones as dts on dts.id = efe.id_datos_sesion
-                        WHERE efe.id_datos_ieo_profesional_estudiantes = $id_datos_ieo_profesional3
+                    FROM semilleros_tic.datos_sesiones as dts
+                    join semilleros_tic.ejecucion_fase_iii_estudiantes as efe on efe.id_datos_sesion = dts.id
+                    join semilleros_tic.datos_ieo_profesional_estudiantes dpro on efe.id_datos_ieo_profesional_estudiantes = dpro.id
+                    WHERE dts.id_sesion = 1 and dpro.id_sede =  $idSede ORDER BY dts.id desc 
                     ");
                 $datoSemillerosTicEjecucionFase3 = $command->queryAll();
                 $segundos3 = 0;
@@ -400,15 +401,15 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 $data['fase_3']['cursos'] = $cusosSesiones3;
 
                 $command = $connection->createCommand("
-                    SELECT
+                    SELECT 
                         dts.fecha_sesion,
                         efe.numero_apps,
                         efe.estudiantes_participantes,
                         dts.duracion_sesion
-                    FROM semilleros_tic.ejecucion_fase_iii_estudiantes efe
-                    inner join semilleros_tic.datos_sesiones dts on dts.id = efe.id_datos_sesion
-                    WHERE efe.estado = 1
-                    ORDER BY efe.id ASC
+                    FROM semilleros_tic.datos_sesiones as dts
+                    join semilleros_tic.ejecucion_fase_iii_estudiantes as efe on efe.id_datos_sesion = dts.id
+                    join semilleros_tic.datos_ieo_profesional_estudiantes dpro on efe.id_datos_ieo_profesional_estudiantes = dpro.id
+                    WHERE dts.id_sesion = 1 and dpro.id_sede =  $idSede ORDER BY dts.id desc 
                     ");
                 $datosEjeccionFaseiii = $command->queryAll();
                 $promedioParticipantes3 = 0;
@@ -416,7 +417,6 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                     $maxSesionFaseIII = count($datosEjeccionFaseiii);
                 }
                 if(count($datosEjeccionFaseiii) > 0){
-
                     foreach ($datosEjeccionFaseiii as $datos1 => $valor){
                         @$totalapps3 += $valor['numero_apps'];
                         @$totalparticipantes3  += $valor['estudiantes_participantes'];
@@ -473,6 +473,31 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 $contador++;
             }
 
+        }
+
+        foreach ($totalDatos AS $key => $dato) {
+            if (!isset($dato['fase_1']['sesiones'])){
+                $dato['fase_1']['sesiones'] = [];
+            }
+            if (!isset($dato['fase_2']['sesiones'])){
+                $dato['fase_2']['sesiones'] = [];
+            }
+            if (!isset($dato['fase_3']['sesiones'])){
+                $dato['fase_3']['sesiones'] = [];
+            }
+
+            for ($i = count($dato['fase_1']['sesiones']); $i < $maxSesionFaseI; $i++) {
+                $totalDatos[$key]['fase_1']['sesiones'][$i] = [];
+                array_push($totalDatos[$key]['fase_1']['sesiones'][$i], $i,"-","-","-");
+            }
+            for ($i = count($dato['fase_2']['sesiones']); $i < $maxSesionFaseII; $i++) {
+                $totalDatos[$key]['fase_2']['sesiones'][$i] = [];
+                array_push($totalDatos[$key]['fase_2']['sesiones'][$i], $i,"-","-","-");
+            }
+            for ($i = count($dato['fase_3']['sesiones']); $i < $maxSesionFaseIII; $i++) {
+                $totalDatos[$key]['fase_3']['sesiones'][$i] = [];
+                array_push($totalDatos[$key]['fase_3']['sesiones'][$i], $i,"-","-","-");
+            }
         }
 
         /**rellena la cantidad de sesiones vacias */
