@@ -88,217 +88,128 @@ $this->registerJsFile(
     </p>
 </div>
 
-<?php $noSesionI = $mayorSesion['maxSesionFaseI']; ?>
-<?php $noSesionII = $mayorSesion['maxSesionFaseII']; ?>
-<?php $noSesionIII = $mayorSesion['maxSesionFaseIII']; ?>
-<?php if ($mayorSesion['maxSesionFaseI'] == 0){
-    $noSesionI = -1;
-} ?>
-<?php if ($mayorSesion['maxSesionFaseII'] == 0){
-    $noSesionII = -1;
-} ?>
-<?php if ($mayorSesion['maxSesionFaseIII'] == 0){
-    $noSesionIII = -1;
-} ?>
 <style type="text/css">
-    .tg  {border-collapse:collapse;border-spacing:0;}
-    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:15px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
-    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:15px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+    .tg  {border-collapse:collapse;border-spacing:0;border-color:#999;}
+    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:15px 6px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#999;color:#444;background-color:#F7FDFA;}
+    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:15px 6px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#999;color:#fff;background-color:#26ADE4;}
+    .tg .tg-baqh{text-align:center;vertical-align:top}
     .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
     .tg .tg-uys7{border-color:inherit;text-align:center}
-    .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
 </style>
-<table id="datosieo" class="tg">
+<table id="showExcel">
     <thead>
-    <tr>
-        <th colspan="4">Datos IEO</th>
-        <th rowspan="2">Profesional A.</th>
-        <th rowspan="2">Fecha de inicio del Semillero</th>
-        <th rowspan="2">TOTAL PARTICIPANTES FASES I A III (PROMEDIO)</th>
-        <th rowspan="2">TOTAL NUMERO DE SESIONES FASES I A III</th>
-    </tr>
-    <tr>
-        <td>CODIGO DANE IEO</td>
-        <td>Institución educativa</td>
-        <td>CODIGO DANE SEDE</td>
-        <td>Sede</td>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($data as $key => $value) { ?>
         <tr>
-            <td><?= isset($value['datos_ieo']['codigo_dane_institucion'] ) ? $value['datos_ieo']['codigo_dane_institucion'] : ' '; ?></td>
-            <td><?= isset($value['datos_ieo']['institucion'] ) ? $value['datos_ieo']['institucion'] : ' '; ?></td>
-            <td><?= isset($value['datos_ieo']['codigo_dane_sede'] ) ? $value['datos_ieo']['codigo_dane_sede'] : ' '; ?></td>
-            <td><?= isset($value['datos_ieo']['sede'] ) ? $value['datos_ieo']['sede'] : ' '; ?></td>
-            <td><?= isset($value['datos_ieo']['nombre_profesional'] ) ? $value['datos_ieo']['nombre_profesional'] : ' '; ?></td>
-            <td><?= isset($value['datos_ieo']['fecha_inicio_semillero'] ) ? $value['datos_ieo']['fecha_inicio_semillero'] : ' '; ?></td>
-            <td><?= isset($value['total']['promedio'] ) ? $value['total']['promedio'] : ' '; ?></td>
-            <td><?= isset($value['total']['suma_fases'] ) ? $value['total']['suma_fases'] : ' '; ?></td>
+            <th class="tg-c3ow" colspan="4" rowspan="2">Datos IEO</th>
+            <th class="tg-c3ow" rowspan="3">Profesional A.	</th>
+            <th class="tg-c3ow" rowspan="3">Fecha de inicio del Semillero</th>
+            <th class="tg-c3ow" colspan="<?= 6 + ($mayorSesion['maxSesionFaseI']*4) ?>">fase I</th>
+            <th class="tg-uys7" colspan="<?= 6 + ($mayorSesion['maxSesionFaseII']*4) ?>">fase 2</th>
+            <th class="tg-c3ow" colspan="<?= 6 + ($mayorSesion['maxSesionFaseIII']*4) ?>">Fase 3</th>
+            <th class="tg-c3ow" rowspan="3">TOTAL PARTICIPANTES FASES I A III (PROMEDIO)</th>
+            <th class="tg-c3ow" rowspan="3">TOTAL NUMERO DE SESIONES FASES I A III</th>
         </tr>
-    <?php } ?>
-    </tbody>
-</table>
-<br>
-<br>
-<br>
+        <tr>
+            <td class="tg-c3ow" rowspan="2">Frecuencia sesiones mensual</td>
+            <td class="tg-c3ow" rowspan="2">Duración promedio sesiones (horas reloj)</td>
+            <td class="tg-c3ow" rowspan="2">Curso de los Participantes</td>
+            <?php for ($i=0;$i<$mayorSesion['maxSesionFaseI'];$i++) { ?>
+                <td class="tg-0pky" colspan="4">Sesión</td>
+            <?php } ?>
+            <td class="tg-c3ow" rowspan="2">Total Sesiones</td>
+            <td class="tg-c3ow" rowspan="2">Número de participantes por curso en IEO</td>
+            <td class="tg-uys7" rowspan="2">Número de Apps 0.0 creadas y probadas</td>
+            <td class="tg-uys7" rowspan="2">Frecuencia sesiones mensual</td>
+            <td class="tg-uys7" rowspan="2">Duración por cada sesión (horas reloj)</td>
+            <td class="tg-uys7" rowspan="2">Curso de los Participantes</td>
+            <?php for ($i=0;$i<$mayorSesion['maxSesionFaseII'];$i++) { ?>
+                <td class="tg-0pky" colspan="4">Sesión</td>
+            <?php } ?>
+            <td class="tg-uys7" rowspan="2">Total Sesiones</td>
+            <td class="tg-uys7" rowspan="2">Número de participantes por curso en IEO</td>
+            <td class="tg-uys7" rowspan="2">Número de Apps 0.0 desarrolladas e implementadas</td>
+            <td class="tg-c3ow" rowspan="2">Frecuencia sesiones mensual</td>
+            <td class="tg-c3ow" rowspan="2">Duración por cada sesión (horas reloj)</td>
+            <td class="tg-c3ow" rowspan="2">Curso de los Participantes</td>
+            <?php for ($i=0;$i<$mayorSesion['maxSesionFaseIII'];$i++) { ?>
+                <td class="tg-0pky" colspan="4">Sesión</td>
+            <?php } ?>
+            <td class="tg-c3ow" rowspan="2">Total Sesiones</td>
+            <td class="tg-c3ow" rowspan="2">Número de participantes por curso en IEO</td>
+            <td class="tg-c3ow" rowspan="2">Número de Apps 0.0 desarrolladas e implementadas</td>
+        </tr>
+        <tr>
+            <td class="tg-c3ow">CODIGO DANE IEO</td>
+            <td class="tg-uys7">Institución educativa</td>
+            <td class="tg-c3ow">CODIGO DANE SEDE</td>
+            <td class="tg-c3ow">Sede</td>
 
-<?php $noSesionI = $mayorSesion['maxSesionFaseI']; ?>
-<?php $noSesionII = $mayorSesion['maxSesionFaseII']; ?>
-<?php $noSesionIII = $mayorSesion['maxSesionFaseIII']; ?>
-<?php if ($mayorSesion['maxSesionFaseI'] == 0){
-    $noSesionI = -1;
-} ?>
-<?php if ($mayorSesion['maxSesionFaseII'] == 0){
-    $noSesionII = -1;
-} ?>
-<?php if ($mayorSesion['maxSesionFaseIII'] == 0){
-    $noSesionIII = -1;
-} ?>
+            <?php for ($i=0;$i<($mayorSesion['maxSesionFaseI']+$mayorSesion['maxSesionFaseII']+$mayorSesion['maxSesionFaseIII']);$i++) { ?>
+                <td class="tg-0pky"></td>
+                <td class="tg-0pky">Fecha</td>
+                <td class="tg-0pky">N° Asistentes</td>
+                <td class="tg-0pky">Duración</td>
+            <?php } ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($data as $key => $value) { ?>
+            <tr>
+                <td><?= isset($value['datos_ieo']['codigo_dane_institucion'] ) ? $value['datos_ieo']['codigo_dane_institucion'] : ' '; ?></td>
+                <td><?= isset($value['datos_ieo']['institucion'] ) ? $value['datos_ieo']['institucion'] : ' '; ?></td>
+                <td><?= isset($value['datos_ieo']['codigo_dane_sede'] ) ? $value['datos_ieo']['codigo_dane_sede'] : ' '; ?></td>
+                <td><?= isset($value['datos_ieo']['sede'] ) ? $value['datos_ieo']['sede'] : ' '; ?></td>
+                <td><?= isset($value['datos_ieo']['nombre_profesional'] ) ? $value['datos_ieo']['nombre_profesional'] : ' '; ?></td>
+                <td><?= isset($value['datos_ieo']['fecha_inicio_semillero'] ) ? $value['datos_ieo']['fecha_inicio_semillero'] : ' '; ?></td>
 
-<table id="fase1" class="tg">
-    <thead>
-    <tr>
-        <th class="tg-0pky" colspan="<?= 10 + ($noSesionI*4) ?>">Fase I Creación y prueba</th>
-    </tr>
-    <tr>
-        <td class="tg-0pky" rowspan="2">Frecuencia sesiones mensual</td>
-        <td class="tg-0pky" rowspan="2">Duración promedio sesiones (horas reloj)</td>
-        <td class="tg-0pky" rowspan="2">Curso de los Participantes</td>
-        <?php for ($i=0;$i<$mayorSesion['maxSesionFaseI'];$i++) { ?>
-            <td class="tg-0pky" colspan="4">Sesión 1</td>
-        <?php } ?>
-        <td class="tg-0pky" rowspan="2">Total Sesiones</td>
-        <td class="tg-0pky" rowspan="2">Número de participantes por curso en IEO</td>
-        <td class="tg-0pky" rowspan="2">Número de Apps 0.0 creadas y probadas</td>
-    </tr>
-    <tr>
-        <?php for ($i=0;$i<$mayorSesion['maxSesionFaseI'];$i++) { ?>
-            <td class="tg-0pky"></td>
-            <td class="tg-0pky">Fecha</td>
-            <td class="tg-0pky">N° Asistentes</td>
-            <td class="tg-0pky">Duración</td>
-        <?php } ?>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($data as $key => $value) { ?>
-        <tr>
-            <td class="tg-0pky"><?= isset($value['fase_1']['frecuencia_sesion'] ) ? $value['fase_1']['frecuencia_sesion'] : ' '; ?></td>
-            <td class="tg-0pky"><?= isset($value['fase_1']['duracion_promedio'] ) ? $value['fase_1']['duracion_promedio'] : ' '; ?></td>
-            <td class="tg-0pky"><?= isset($value['fase_1']['cursos'] ) ? $value['fase_1']['cursos'] : ' '; ?></td>
-            <?php if (isset($value['fase_1']["sesiones"])){ ?>
-                <?php foreach ($value['fase_1']["sesiones"] as $keyFI => $sesion) { ?>
-                    <td class="tg-0pky"><?= $sesion[0] ?></td>
-                    <td class="tg-0pky"><?= $sesion[1] ?></td>
-                    <td class="tg-0pky"><?= $sesion[2] ?></td>
-                    <td class="tg-0pky"><?= $sesion[3] ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_1']['frecuencia_sesion'] ) ? $value['fase_1']['frecuencia_sesion'] : ' '; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_1']['duracion_promedio'] ) ? $value['fase_1']['duracion_promedio'] : ' '; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_1']['cursos'] ) ? $value['fase_1']['cursos'] : ' '; ?></td>
+                <?php if (isset($value['fase_1']["sesiones"])){ ?>
+                    <?php foreach ($value['fase_1']["sesiones"] as $keyFI => $sesion) { ?>
+                        <td class="tg-0pky"><?= $sesion[0] ?></td>
+                        <td class="tg-0pky"><?= $sesion[1] ?></td>
+                        <td class="tg-0pky"><?= $sesion[2] ?></td>
+                        <td class="tg-0pky"><?= $sesion[3] ?></td>
+                    <?php } ?>
                 <?php } ?>
-            <?php } ?>
-            <td class="tg-0pky"><?= isset($value['fase_1']['total_sesiones'] ) ? $value['fase_1']['total_sesiones'] : ' '; ?></td>
-            <td class="tg-0lax"><?= isset($value['fase_1']['total_participaciones'] ) ? $value['fase_1']['total_participaciones'] : ' '; ?></td>
-            <td class="tg-0pky"><?= isset($value['fase_1']['totalapps'] ) ? $value['fase_1']['totalapps'] : ' '; ?></td>
-        </tr>
-    <?php } ?>
-    </tbody>
-</table>
-<br>
-<br>
-<br>
-<br>
-<table class="tg">
-    <thead>
-    <tr>
-        <th class="tg-0pky" colspan="<?= 10 + ($noSesionII*4) ?>">Fase II Desarrollo e implementación</th>
-    </tr>
-    <tr>
-        <td class="tg-0pky" rowspan="2">Frecuencia sesiones mensual</td>
-        <td class="tg-0pky" rowspan="2">Duración promedio sesiones (horas reloj)</td>
-        <td class="tg-0pky" rowspan="2">Curso de los Participantes</td>
-        <?php for ($i=0;$i<$mayorSesion['maxSesionFaseII'];$i++) { ?>
-            <td class="tg-0pky" colspan="4">Sesión 1</td>
-        <?php } ?>
-        <td class="tg-0pky" rowspan="2">Total Sesiones</td>
-        <td class="tg-0pky" rowspan="2">Número de participantes por curso en IEO</td>
-        <td class="tg-0pky" rowspan="2">Número de Apps 0.0 creadas y probadas</td>
-    </tr>
-    <tr>
-        <?php for ($i=0;$i<$mayorSesion['maxSesionFaseII'];$i++) { ?>
-            <td class="tg-0pky"></td>
-            <td class="tg-0pky">Fecha</td>
-            <td class="tg-0pky">N° Asistentes</td>
-            <td class="tg-0pky">Duración</td>
-        <?php } ?>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($data as $key => $value) { ?>
-        <tr>
-            <td class="tg-0pky"><?= isset($value['fase_2']['frecuencia_sesion'] ) ? $value['fase_2']['frecuencia_sesion'] : ' '; ?></td>
-            <td class="tg-0pky"><?= isset($value['fase_2']['duracion_promedio'] ) ? $value['fase_2']['duracion_promedio'] : ' '; ?></td>
-            <td class="tg-0pky"><?= isset($value['fase_2']['cursos'] ) ? $value['fase_2']['cursos'] : ' '; ?></td>
-            <?php if (isset($value['fase_2']["sesiones"])){ ?>
-                <?php foreach ($value['fase_2']["sesiones"] as $keyFI => $sesion) { ?>
-                    <td class="tg-0pky"><?= $sesion[0] ?></td>
-                    <td class="tg-0pky"><?= $sesion[1] ?></td>
-                    <td class="tg-0pky"><?= $sesion[2] ?></td>
-                    <td class="tg-0pky"><?= $sesion[3] ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_1']['total_sesiones'] ) ? $value['fase_1']['total_sesiones'] : ' '; ?></td>
+                <td class="tg-0lax"><?= isset($value['fase_1']['total_participaciones'] ) ? $value['fase_1']['total_participaciones'] : ' '; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_1']['totalapps'] ) ? $value['fase_1']['totalapps'] : ' '; ?></td>
+
+                <td class="tg-0pky"><?= isset($value['fase_2']['frecuencia_sesion'] ) ? $value['fase_2']['frecuencia_sesion'] : ' '; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_2']['duracion_promedio'] ) ? $value['fase_2']['duracion_promedio'] : ' '; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_2']['cursos'] ) ? $value['fase_2']['cursos'] : ' '; ?></td>
+                <?php if (isset($value['fase_2']["sesiones"])){ ?>
+                    <?php foreach ($value['fase_2']["sesiones"] as $keyFI => $sesion) { ?>
+                        <td class="tg-0pky"><?= $sesion[0] ?></td>
+                        <td class="tg-0pky"><?= $sesion[1] ?></td>
+                        <td class="tg-0pky"><?= $sesion[2] ?></td>
+                        <td class="tg-0pky"><?= $sesion[3] ?></td>
+                    <?php } ?>
                 <?php } ?>
-            <?php } ?>
-            <td class="tg-0pky"><?= isset($value['fase_2']['total_sesiones'] ) ? $value['fase_2']['total_sesiones'] : ' '; ?></td>
-            <td class="tg-0lax"><?= isset($value['fase_2']['total_participaciones'] ) ? $value['fase_2']['total_participaciones'] : ' '; ?></td>
-            <td class="tg-0pky"><?= isset($value['fase_2']['totalapps'] ) ? $value['fase_2']['totalapps'] : ' '; ?></td>
-        </tr>
-    <?php } ?>
-    </tbody>
-</table>
-<br>
-<br>
-<br>
-<br>
-<table class="tg">
-    <thead>
-    <tr>
-        <th class="tg-0pky" colspan="<?= 10 + ($noSesionIII*4) ?>">Fase III  (Uso - Aplicación)</th>
-    </tr>
-    <tr>
-        <td class="tg-0pky" rowspan="2">Frecuencia sesiones mensual</td>
-        <td class="tg-0pky" rowspan="2">Duración promedio sesiones (horas reloj)</td>
-        <td class="tg-0pky" rowspan="2">Curso de los Participantes</td>
-        <?php for ($i=0;$i<$mayorSesion['maxSesionFaseIII'];$i++) { ?>
-            <td class="tg-0pky" colspan="4">Sesión 1</td>
-        <?php } ?>
-        <td class="tg-0pky" rowspan="2">Total Sesiones</td>
-        <td class="tg-0pky" rowspan="2">Número de participantes por curso en IEO</td>
-        <td class="tg-0pky" rowspan="2">Número de Apps 0.0 creadas y probadas</td>
-    </tr>
-    <tr>
-        <?php for ($i=0;$i<$mayorSesion['maxSesionFaseIII'];$i++) { ?>
-            <td class="tg-0pky"></td>
-            <td class="tg-0pky">Fecha</td>
-            <td class="tg-0pky">N° Asistentes</td>
-            <td class="tg-0pky">Duración</td>
-        <?php } ?>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($data as $key => $value) { ?>
-        <tr>
-            <td class="tg-0pky"><?= isset($value['fase_3']['frecuencia_sesion'] ) ? $value['fase_3']['frecuencia_sesion'] : ' '; ?></td>
-            <td class="tg-0pky"><?= isset($value['fase_3']['duracion_promedio'] ) ? $value['fase_3']['duracion_promedio'] : ' '; ?></td>
-            <td class="tg-0pky"><?= isset($value['fase_3']['cursos'] ) ? $value['fase_3']['cursos'] : ' '; ?></td>
-            <?php if (isset($value['fase_3']["sesiones"])){ ?>
-                <?php foreach ($value['fase_3']["sesiones"] as $keyFI => $sesion) { ?>
-                    <td class="tg-0pky"><?= $sesion[0] ?></td>
-                    <td class="tg-0pky"><?= $sesion[1] ?></td>
-                    <td class="tg-0pky"><?= $sesion[2] ?></td>
-                    <td class="tg-0pky"><?= $sesion[3] ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_2']['total_sesiones'] ) ? $value['fase_2']['total_sesiones'] : ' '; ?></td>
+                <td class="tg-0lax"><?= isset($value['fase_2']['total_participaciones'] ) ? $value['fase_2']['total_participaciones'] : ' '; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_2']['totalapps'] ) ? $value['fase_2']['totalapps'] : ' '; ?></td>
+
+
+                <td class="tg-0pky"><?= isset($value['fase_3']['frecuencia_sesion'] ) ? $value['fase_3']['frecuencia_sesion'] : ' '; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_3']['duracion_promedio'] ) ? $value['fase_3']['duracion_promedio'] : ' '; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_3']['cursos'] ) ? $value['fase_3']['cursos'] : ' '; ?></td>
+                <?php if (isset($value['fase_3']["sesiones"])){ ?>
+                    <?php foreach ($value['fase_3']["sesiones"] as $keyFI => $sesion) { ?>
+                        <td class="tg-0pky"><?= $sesion[0] ?></td>
+                        <td class="tg-0pky"><?= $sesion[1] ?></td>
+                        <td class="tg-0pky"><?= $sesion[2] ?></td>
+                        <td class="tg-0pky"><?= $sesion[3] ?></td>
+                    <?php } ?>
                 <?php } ?>
-            <?php } ?>
-            <td class="tg-0pky"><?= isset($value['fase_3']['total_sesiones'] ) ? $value['fase_3']['total_sesiones'] : ' '; ?></td>
-            <td class="tg-0lax"><?= isset($value['fase_3']['total_participaciones'] ) ? $value['fase_3']['total_participaciones'] : ' '; ?></td>
-            <td class="tg-0pky"><?= isset($value['fase_3']['totalapps'] ) ? $value['fase_3']['totalapps'] : ' '; ?></td>
-        </tr>
-    <?php } ?>
+                <td class="tg-0pky"><?= isset($value['fase_3']['total_sesiones'] ) ? $value['fase_3']['total_sesiones'] : ' '; ?></td>
+                <td class="tg-0lax"><?= isset($value['fase_3']['total_participaciones'] ) ? $value['fase_3']['total_participaciones'] : ' '; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_3']['totalapps'] ) ? $value['fase_3']['totalapps'] : ' '; ?></td>
+
+                <td><?= isset($value['total']['promedio'] ) ? $value['total']['promedio'] : ' '; ?></td>
+                <td><?= isset($value['total']['suma_fases'] ) ? $value['total']['suma_fases'] : ' '; ?></td>
+            </tr>
+        <?php } ?>
     </tbody>
 </table>

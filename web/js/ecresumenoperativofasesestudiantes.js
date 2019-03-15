@@ -7,21 +7,22 @@ Descripción: RESUMEN OPERATIVO FASES ESTUDIANTES
 **********/
 
 $( document ).ready(function(){
-	console.log('ok');
-    $('table.tg').DataTable({
+    $('#showExcel').DataTable({
 		"language"	: {"url":"//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"},
 		"lengthMenu": [[20,-1],[20,"All"]],
 		"info"		: false,
 		"responsive": true,
 		"dom"		: "lfTrtip",
-		"tableTools":{
+        "bPaginate": false,
+        "bFilter": false,
+        "tableTools":{
 			"aButtons":[
 				{
 					sExtends		:"div",
 					sButtonText		:"Excel",
 					oSelectorOpts	:{ page: "current" },
 					fnClick			:function(){
-                        $('table.tg').tblToExcel();
+                        $('#showExcel').tblToExcel();
 					},
 				},
 			],
