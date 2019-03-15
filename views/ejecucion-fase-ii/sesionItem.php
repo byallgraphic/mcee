@@ -62,19 +62,19 @@ use dosamigos\datepicker\DatePicker;
 		
 		<div class='row text-center title2'>
 			
-			<div class='col-sm-6'>
+			<div class='col-sm-6 mod-col-sm-6'>
 				<span total class='form-control' style='background-color:#ccc;'></span>
 			</div>
 			
-			<div class='col-sm-3'>
+			<div class='col-sm-3 mod-col-sm-3'>
 				<span total class='form-control' style='background-color:#ccc;'>Obras derivadas con el desarrollo e implementación de las App 0.0</span>
 			</div>
 			
-			<div class='col-sm-2'>
+			<div class='col-sm-2 mod-col-sm-2'>
 				<span total class='form-control' style='background-color:#ccc;'>Mejoras realizadas a las App 0.0</span>
 			</div>
 			
-			<div class='col-sm-1'>
+			<div class='col-sm-1 mod-col-sm-2'>
 				<span total class='form-control' style='background-color:#ccc;'></span>
 			</div>
 			
@@ -127,6 +127,10 @@ use dosamigos\datepicker\DatePicker;
 			</div>
 			
 			<div class='col-sm-1'>
+				<span total class='form-control' style='background-color:#ccc;'>Tipo de competencias inferencias y comprometidas en el proceso de creación de la App 0.0</span>
+			</div>
+			
+			<div class='col-sm-1'>
 				<span total class='form-control' style='background-color:#ccc;'>OBSERVACIONES GENERALES</span>
 			</div>
 			
@@ -136,7 +140,7 @@ use dosamigos\datepicker\DatePicker;
 		
 		<?php foreach( $ejecucionesFase as $key => $ejecucionFase ) :  ?>
 		
-			<div class='row text-center' id='dvFilaSesion<?= $sesion->id ?>'>
+			<div class='row text-center mod-sesion' id='dvFilaSesion<?= $sesion->id ?>'>
 				
 				<div class='col-sm-1' style='display:none;'>
 					<?= $form->field($ejecucionFase, "[$indexEf][$index]id")->hiddenInput( [ 'class' => 'form-control', 'maxlength' => true, 'data-type' => 'textarea'])->label(null, ['style' => 'display:none' ] ) ?>
@@ -194,6 +198,10 @@ use dosamigos\datepicker\DatePicker;
 				
 				<div class='col-sm-1'>
 					<?= $form->field($ejecucionFase, "[$indexEf][$index]numero_disecciones")->textarea( [ 'class' => 'form-control', 'maxlength' => true, 'data-type' => 'number'])->label(null, ['style' => 'display:none' ] ) ?>
+				</div>
+				
+				<div class='col-sm-1'>
+					<?= $form->field($ejecucionFase, "[$indexEf][$index]tipo_conpetencias")->textarea( [ 'class' => 'form-control', 'maxlength' => true, 'data-type' => 'textarea'])->label(null, ['style' => 'display:none' ] ) ?>
 				</div>
 				
 				<div class='col-sm-1'>

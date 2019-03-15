@@ -85,6 +85,33 @@ if( $guardado ){
 	.title3 > div > span{
 		height: 120px;
 	}
+	
+	
+	.mod > div, .title div {
+		width: calc(100%/13);
+	}
+	
+	.mod-col-sm-6{
+		width: calc(100%/13*6);
+	}
+	
+	.mod-col-sm-3{
+		width: calc(100%/13*3);
+	}
+	
+	.mod-col-sm-2{
+		width: calc(100%/13*2);
+	}
+	
+	.mod-col-sm-1{
+		width: calc(100%/13*1);
+	}
+	
+	.mod-sesion > div{
+		width: calc(100%/13*1);
+	}
+	
+	
 </style>
 <div class="form-group">
 		

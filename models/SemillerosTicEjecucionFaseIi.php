@@ -54,7 +54,7 @@ class SemillerosTicEjecucionFaseIi extends \yii\db\ActiveRecord
             [['id_datos_ieo_profesional','id_fase','estado','id_datos_sesiones','id_ciclo'], 'required'],
             [['id_datos_ieo_profesional', 'id_fase', 'estado'], 'default', 'value' => null],
             [['id_datos_ieo_profesional', 'id_fase', 'estado','id_ciclo'], 'integer'],
-            [['asignaturas', 'especialidad', 'numero_apps_desarrolladas', 'nombre_aplicaciones_desarrolladas', 'nombre_aplicaciones_creadas', 'numero', 'tipo_obra', 'temas_abordados', 'numero_pruebas', 'numero_disecciones', 'observaciones_generales'], 'string'],
+            [['asignaturas', 'especialidad', 'numero_apps_desarrolladas', 'nombre_aplicaciones_desarrolladas', 'nombre_aplicaciones_creadas', 'numero', 'tipo_obra', 'temas_abordados', 'numero_pruebas', 'numero_disecciones', 'observaciones_generales','tipo_conpetencias'], 'string'],
             [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Estados::className(), 'targetAttribute' => ['estado' => 'id']],
             [['id_datos_ieo_profesional'], 'exist', 'skipOnError' => true, 'targetClass' => SemillerosTicDatosIeoProfesional::className(), 'targetAttribute' => ['id_datos_ieo_profesional' => 'id']],
             [['id_fase'], 'exist', 'skipOnError' => true, 'targetClass' => SemillerosTicFases::className(), 'targetAttribute' => ['id_fase' => 'id']],
@@ -86,6 +86,7 @@ class SemillerosTicEjecucionFaseIi extends \yii\db\ActiveRecord
             'estado' => 'Estado',
             'id_datos_sesiones' => 'Datos Sesiones',
             'anio' => 'Año',
+            'tipo_conpetencias' => 'Tipo de competencias inferencias y comprometidas en el proceso de creación de la App 0.0',
         ];
     }
 }
