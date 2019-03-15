@@ -15,6 +15,7 @@ $( document ).ready(function(){
 		"dom"		: "lfTrtip",
         "bPaginate": false,
         "bFilter": false,
+		"scrollX": true,
         "tableTools":{
 			"aButtons":[
 				{
