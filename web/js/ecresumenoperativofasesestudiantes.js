@@ -7,8 +7,8 @@ Descripción: RESUMEN OPERATIVO FASES ESTUDIANTES
 **********/
 
 $( document ).ready(function(){
-	
-	$( "#tb" ).DataTable({
+	console.log('ok');
+    $('table.tg').DataTable({
 		"language"	: {"url":"//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"},
 		"lengthMenu": [[20,-1],[20,"All"]],
 		"info"		: false,
@@ -21,7 +21,7 @@ $( document ).ready(function(){
 					sButtonText		:"Excel",
 					oSelectorOpts	:{ page: "current" },
 					fnClick			:function(){
-						$( "#tb" ).tblToExcel();
+                        $('table.tg').tblToExcel();
 					},
 				},
 			],
