@@ -134,7 +134,7 @@ class EjecucionFaseIiController extends Controller
 		
 		$item = 	[
 					'label' 		=>  $sesion->descripcion,
-					'content' 		=>  $this->renderAjax( 'sesionItem', 
+					'content' 		=>  $this->renderPartial( 'sesionItem', 
 													[ 
 														'idPE' 				=> null, 
 														'index' 			=> 0,

@@ -224,8 +224,7 @@
 				$( "input:text[id^=datossesiones]", $( "#collapseOne-collapse"+index ) ).each(function(){
 					
 					var _campo = this;
-					console.log( this.id );
-					$( '#w0' ).yiiActiveForm
+					
 					$( "#w0" ).yiiActiveForm( 'add', 
 								{
 									"id"		: _campo.id,

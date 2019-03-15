@@ -440,4 +440,7 @@ Cambios realizados: Se cambia los campo input de cada sección por textarea, y s
 		});
 	})
 	
+	$( "[id$=id_sesion] option" ).css({disabled:true,display:"none"})
+	$( "[id$=id_sesion] option:selected" ).css({disabled:false,display:""})
+	
 // });

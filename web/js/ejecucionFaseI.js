@@ -123,6 +123,24 @@ $( document ).ready(function(){
 				
 				var id = $( "[id^=btnAddFila]", $( "#collapseOne > div" ) ).last()[0].id.substr( "btnAddFila".length );
 				
+				$( "[id$=fecha_sesion]", $( "#collapseOne-collapse"+index ) ).parent().datepicker({"autoclose":true,"format":"dd-mm-yyyy","language":"es"});
+				
+				$( "input:text[id^=datossesiones]", $( "#collapseOne-collapse"+index ) ).each(function(){
+					
+					var _campo = this;
+					
+					$( "#w0" ).yiiActiveForm( 'add', 
+								{
+									"id"		: _campo.id,
+									"name"		: _campo.name,
+									"container"	: ".field-"+_campo.id,
+									"input"		: "#"+_campo.id,
+								},
+							);
+				});
+				
+				$( "[id$=fecha_sesion]", $( "#collapseOne-collapse"+index ) ).each(fncFechaSesion);
+				$( "[id$=duracion_sesion]", $( "#collapseOne-collapse"+index ) ).each(fncDuracion);
 				
 				$( ".panel-body", $( "#collapseOne-collapse"+index ) ).each(function(x){
 		
@@ -142,7 +160,7 @@ $( document ).ready(function(){
 		})
 		
 		 
-		$( "input:text[id$=fecha_sesion]" ).each(function(x){
+		$( "input:text[id$=fecha_sesion]" ).each(fncFechaSesion=function(x){
 			
 			$('#w0').yiiActiveForm('find', this.id ).validate = function (attribute, value, messages, deferred, $form) {
 				
@@ -177,7 +195,7 @@ $( document ).ready(function(){
 			}
 		});
 		
-		$( "input:text[id$=duracion_sesion]" ).each(function(x){
+		$( "input:text[id$=duracion_sesion]" ).each(fncDuracion=function(x){
 			
 			$('#w0').yiiActiveForm('find', this.id ).validate = function (attribute, value, messages, deferred, $form) {
 				

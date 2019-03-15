@@ -194,6 +194,24 @@ Cambios realizados: Se cambia los campo input de cada sección por textarea, y s
 					actual  : $( "[id^=dvFilaSesion]", this ).length+1,
 				} 
 				
+				$( "input:text[id^=datossesiones]", $( "#collapseOne-collapse"+index ) ).each(function(){
+					
+					var _campo = this;
+					
+					$( "#w0" ).yiiActiveForm( 'add', 
+								{
+									"id"		: _campo.id,
+									"name"		: _campo.name,
+									"container"	: ".field-"+_campo.id,
+									"input"		: "#"+_campo.id,
+								},
+							);
+				});
+				
+				$( "[id$=fecha_sesion]", $( "#collapseOne-collapse"+index ) ).parent().datepicker({"autoclose":true,"format":"dd-mm-yyyy","language":"es"});
+				
+				$( "input:text[id^=datossesiones]", $( "#collapseOne-collapse"+index ) ).each(fncValidaciones);
+				
 				$( ".row-data-2", $( "#collapseOne-collapse"+index ) ).each(cccc);
 				$( ".row-data-3", $( "#collapseOne-collapse"+index ) ).each(dddd);
 				
@@ -203,7 +221,7 @@ Cambios realizados: Se cambia los campo input de cada sección por textarea, y s
 		})
 		 
 		 
-		$( "input:text[id^=datossesiones]" ).each(function(x){
+		$( "input:text[id^=datossesiones]" ).each(fncValidaciones=function(x){
 			
 			$('#w0').yiiActiveForm('find', this.id ).validate = function (attribute, value, messages, deferred, $form) {
 				
