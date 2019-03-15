@@ -96,7 +96,7 @@ $this->registerJsFile(
     .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
     .tg .tg-uys7{border-color:inherit;text-align:center}
 </style>
-<table id="showExcel">
+<table id="showExcel" class="tg">
     <thead>
         <tr>
             <th class="tg-c3ow" colspan="4" rowspan="2">Datos IEO</th>
