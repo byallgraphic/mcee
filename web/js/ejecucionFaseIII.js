@@ -42,6 +42,7 @@ Cambios realizados: Se cambia los campo input de cada sección por textarea, y s
 		"Indice de temas escolares disciplinares tratados y abordados a través del uso de las App 0.0",
 		"Indice de problematicas abordadas a través del uso de las App 0.0",
 		"Fecha de Uso de las aplicaciones",
+		"Tipo de competencias inferidas y comprometidas en el proceso de creación de la app 0.0",
 		"OBSERVACIONES GENERALES",
 	];
 	

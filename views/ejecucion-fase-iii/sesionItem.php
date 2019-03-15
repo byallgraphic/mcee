@@ -252,7 +252,7 @@ use dosamigos\datepicker\DatePicker;
 		
 		<div class='row text-center title2'>
 			
-			<div class='col-sm-2'>
+			<div class='col-sm-1'>
 				<span total class='form-control' style='background-color:#ccc;'>Número</span>
 			</div>
 			
@@ -268,8 +268,12 @@ use dosamigos\datepicker\DatePicker;
 				<span total class='form-control' style='background-color:#ccc;'>Indice de problematicas abordadas a través del uso de las  App 0.0</span>
 			</div>
 			
-			<div class='col-sm-2'>
+			<div class='col-sm-1'>
 				<span total class='form-control' style='background-color:#ccc;'>Fecha de Uso de las aplicaciones</span>
+			</div>
+			
+			<div class='col-sm-2'>
+				<span total class='form-control' style='background-color:#ccc;'>Tipo de competencias inferidas y comprometidas en el proceso de creación de la app 0.0</span>
 			</div>
 			
 			<div class='col-sm-2'>
@@ -280,7 +284,7 @@ use dosamigos\datepicker\DatePicker;
 		
 		<div class='row text-center'>
 			
-			<div class='col-sm-2'>
+			<div class='col-sm-1'>
 				<?= $form->field( $model, "[$index]numero" )->textarea( [ 'class' => 'form-control', 'maxlength' => true, 'data-type' => 'number'])->label(null,['style'=>'display:none']) ?>
 			</div>
 			
@@ -296,8 +300,12 @@ use dosamigos\datepicker\DatePicker;
 				<?= $form->field( $model, "[$index]indice_problematicas" )->textarea( [ 'class' => 'form-control', 'maxlength' => true, 'data-type' => 'textarea'])->label(null,['style'=>'display:none']) ?>
 			</div>
 			
-			<div class='col-sm-2'>
+			<div class='col-sm-1'>
 				<?= $form->field( $model, "[$index]fecha_uso_aplicaciones" )->textarea( [ 'class' => 'form-control', 'maxlength' => true, 'data-type' => 'date'])->label(null,['style'=>'display:none']) ?>
+			</div>
+			
+			<div class='col-sm-2'>
+				<?= $form->field( $model, "[$index]tipo_conpetencias" )->textarea( [ 'class' => 'form-control', 'maxlength' => true, 'data-type' => 'textarea'])->label(null,['style'=>'display:none']) ?>
 			</div>
 			
 			<div class='col-sm-2'>

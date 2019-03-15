@@ -61,7 +61,7 @@ class SemillerosTicEjecucionFaseIii extends \yii\db\ActiveRecord
             [['id_fase', 'id_datos_ieo_profesional', 'estado'], 'default', 'value' => null],
             [['total_aplicaciones_usadas'], 'default', 'value' => ''],
             [['id_fase', 'id_datos_ieo_profesional', 'estado','anio'], 'integer'],
-            [['asignatura', 'docente_usuario', 'grado', 'numero_apps_usadas', 'nombre_aplicaciones', 'tic', 'tipo_recurso_tic', 'digitales', 'tipo_recurso_digital', 'escolares_no_tic', 'tipo_recurso_no_tic', 'tiempo_uso_recurso_tic', 'observaciones', 'total_aplicaciones_usadas', 'numero', 'tipo_de_produccion', 'temas_escolares', 'indice_problematicas', 'fecha_uso_aplicaciones','estudiantes_cultivadores'], 'string'],
+            [['asignatura', 'docente_usuario', 'grado', 'numero_apps_usadas', 'nombre_aplicaciones', 'tic', 'tipo_recurso_tic', 'digitales', 'tipo_recurso_digital', 'escolares_no_tic', 'tipo_recurso_no_tic', 'tiempo_uso_recurso_tic', 'observaciones', 'total_aplicaciones_usadas', 'numero', 'tipo_de_produccion', 'temas_escolares', 'indice_problematicas', 'fecha_uso_aplicaciones','estudiantes_cultivadores','tipo_conpetencias'], 'string'],
             [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Estados::className(), 'targetAttribute' => ['estado' => 'id']],
             [['id_datos_ieo_profesional'], 'exist', 'skipOnError' => true, 'targetClass' => SemillerosTicDatosIeoProfesional::className(), 'targetAttribute' => ['id_datos_ieo_profesional' => 'id']],
             [['id_fase'], 'exist', 'skipOnError' => true, 'targetClass' => SemillerosTicFases::className(), 'targetAttribute' => ['id_fase' => 'id']],
@@ -102,6 +102,7 @@ class SemillerosTicEjecucionFaseIii extends \yii\db\ActiveRecord
             'estudiantes_cultivadores' 	=> 'Estudiantes cultivadores',
             'id_datos_sesion' 			=> 'Datos sesion',
             'anio' 						=> 'Año',
+            'tipo_conpetencias'			=> 'Tipo de competencias inferidas y comprometidas en el proceso de creación de la app 0.0',
         ];
     }
 }
