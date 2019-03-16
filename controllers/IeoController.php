@@ -334,7 +334,7 @@ class IeoController extends Controller
                             //para posteriormente guardar en la base de datos
                             foreach($propiedades as $propiedad)
                             {
-								 echo "aca2";
+								 
                                 $arrayRutasFisicas = array();
                                 // se guarda el archivo en file
                                 
@@ -342,7 +342,6 @@ class IeoController extends Controller
                                 $files = UploadedFile::getInstances( $model, "[$key]$propiedad" );
                                 if( $files )
                                 {
-									
                                     //se suben todos los archivos uno por uno
                                     foreach($files as $file)
                                     {
@@ -359,7 +358,6 @@ class IeoController extends Controller
                                         $arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
                                     }
                                     
-                                
                                     // asignacion de la ruta al campo de la db
                                     $model->$propiedad = implode(",", $arrayRutasFisicas);
                                     
@@ -370,18 +368,21 @@ class IeoController extends Controller
                                 {
                                     echo "No hay archivo cargado";
                                 }
-                        }
+							}
 
-                    
+                 
                             $model->ieo_id = $id_ieo;
                             $model->proyecto_ieo_id = isset($arrayDatosDocumentos[$key]['proyecto_ieo_id']) ? $arrayDatosDocumentos[$key]['proyecto_ieo_id'] : 0;
                             $model->actividad_id = isset($arrayDatosDocumentos[$key]['actividad_id']) ? $arrayDatosDocumentos[$key]['actividad_id'] : 0;
                             $model->horario_trabajo = isset($arrayDatosDocumentos[$key]['horario_trabajo']) ? $arrayDatosDocumentos[$key]['horario_trabajo'] : 0;
 
+							
+							
                             //Guarda la informacion que tiene $model en la base de datos
                             foreach( $modelDocumentos as $key => $model) 
                             {
-                                if($model->informe_caracterizacion){
+                                if($model->informe_caracterizacion)
+								{
 
                                     $model->save();
                                 }								
@@ -391,8 +392,6 @@ class IeoController extends Controller
                     
                     }
                 }
-
-
                  /**Carga de archivos multiples */
                 if($arrayDatosEvidencias = Yii::$app->request->post('Evidencias'))
 				{
@@ -588,9 +587,6 @@ class IeoController extends Controller
 					unset($arrayDatos[$datos]['total']);
 				}
 				
-				// echo "<pre>"; print_r($arrayDatos); echo "</pre>"; 
-				// die;
-
 				$columnName=['grado_9','grado_10','grado_11','id_actividad','id_ieo'];
 				// inserta todos los datos que trae el array
 				
@@ -706,14 +702,17 @@ class IeoController extends Controller
     {
         $model = $this->findModel($id);
 		$datos = array();
+		
+	
+		$documentosRe = new DocumentosReconocimiento();
+		$documentosRe = $documentosRe->find()->where("ieo_id =  $id")->all();
+		$documentosRe = ArrayHelper::map($documentosRe,'id','horario_trabajo');
+		
         // if ($model->load(Yii::$app->request->post()) && $model->save()) 
         if ($model->load(Yii::$app->request->post())) 
 		{
 			
-			$connection = Yii::$app->getDb();
-			
-			
-					
+			$connection = Yii::$app->getDb();		
 			//se actualiza la tabla tipos_cantidad_poblacion 
 			foreach(Yii::$app->request->post('TiposCantidadPoblacion') as $actividad_id => $poblacion )
 			{
@@ -797,14 +796,19 @@ class IeoController extends Controller
 			}
 				
 
+				$datosDocumentos = Yii::$app->request->post('DocumentosReconocimiento');
+				//actualizar el campo horario_trabajo de la tabla ec.documentos_reconocimiento
+				//id del registro para actualizarlo key($documentosRe)
+				$documentoR = DocumentosReconocimiento::findOne(key($documentosRe));
+				$documentoR->horario_trabajo =	$datosDocumentos[1]['horario_trabajo'];
+				$documentoR->save(false);
 				
-
+				
 				/**Carga de archivos multiples */
                 if($arrayDatosDocumentos = Yii::$app->request->post('DocumentosReconocimiento'))
 				{
-                   
+						
 					$modelDocumentos = [];
-					
 					// se deben crear modelos igual al valor maximo del indice que tenga  Yii::$app->request->post('DocumentosReconocimiento') en esta caso es 2
                     for( $i = 0; $i <= 2 ; $i++ )
 					{
@@ -813,7 +817,6 @@ class IeoController extends Controller
 					
                     if (DocumentosReconocimiento::loadMultiple($modelDocumentos, Yii::$app->request->post())) 
 					{
-						echo "aca";
                         $idInstitucion 	= $_SESSION['instituciones'][0];
                         $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
 
@@ -823,20 +826,23 @@ class IeoController extends Controller
 							mkdir($carpeta, 0777, true);
 							
                         }
-						else
-						{
-							$this->borrarDirectorio($carpeta);
-							$command = $connection->createCommand(
-							"
-							DELETE FROM ec.documentos_reconocimiento
-							WHERE 
-								ieo_id = $id
-							");
-							$result = $command->queryAll();
-							mkdir($carpeta, 0777, true);
-						}
+						
+						$connection = Yii::$app->getDb();
+						$command = $connection->createCommand("
+							SELECT * FROM ec.documentos_reconocimiento
+						");
+						$resul = $command->queryAll();
+						
+						$informe_caracterizacion	= explode(",",$resul[0]['informe_caracterizacion'] ); 
+						$matriz_caracterizacion 	= explode(",",$resul[0]['matriz_caracterizacion'] ); 
+						$revision_pei 				= explode(",",$resul[0]['revision_pei'] ); 
+						$revision_autoevaluacion 	= explode(",",$resul[0]['revision_autoevaluacion'] ); 
+						$revision_pmi 				= explode(",",$resul[0]['revision_pmi'] ); 
+						$resultados_caracterizacion	= explode(",",$resul[0]['resultados_caracterizacion'] ); 
+						
                         $propiedades = array( "informe_caracterizacion", "matriz_caracterizacion", "revision_pei", "revision_autoevaluacion", "revision_pmi", "resultados_caracterizacion");
                         
+					
                         foreach( $modelDocumentos as $key => $model1) 
                         {
                             // $key +=1;
@@ -854,16 +860,37 @@ class IeoController extends Controller
 								
                                 if( $files )
                                 {
+									
                                     //se suben todos los archivos uno por uno
                                     foreach($files as $file)
                                     {
-                                        //se usan microsegundos para evitar un nombre de archivo repetido
+										
+										//se usan microsegundos para evitar un nombre de archivo repetido
                                         $t = microtime(true);
                                         $micro = sprintf("%06d",($t - floor($t)) * 1000000);
                                         $d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
-                                        
-                                        // Construyo la ruta completa del archivo a guardar
+										// Construyo la ruta completa del archivo a guardar
                                         $rutaFisicaDirectoriaUploads  = "../documentos/documentosIeo/documentosReconocimiento/".$institucion."/".$file->baseName . $d->format("Y_m_d_H_i_s.u") . '.' . $file->extension;
+										
+										
+										//saber si el archivo ya existe
+										foreach ($$propiedad as $arrayPropiedad)
+										{
+											$nombreArchivo = $file->name;
+											$extensionArchivo =   pathinfo($nombreArchivo, PATHINFO_EXTENSION );
+											$nombre_base = basename($nombreArchivo, '.'.$extensionArchivo); 
+											$extensionArchPropiedad = pathinfo($arrayPropiedad, PATHINFO_EXTENSION);
+											//saber si el nombre y la extencion del archivo ya existe en la base de datos / saber si ya existe el archivo
+											if (strpos ($arrayPropiedad,$nombre_base) > 0 and strtolower($extensionArchivo) === $extensionArchPropiedad )
+											{
+												//si archivo ya existe se sobreescribe sobreescribiendo la ruta de guardado
+												// Construyo la ruta completa del archivo a guardar
+												$rutaFisicaDirectoriaUploads  = $arrayPropiedad;
+												// echo $rutaFisicaDirectoriaUploads;
+												//si el archivo existe sale del foreach;
+												break 1;
+											}
+										}
                                         $save = $file->saveAs( $rutaFisicaDirectoriaUploads );
                                         //rutas de todos los archivos
                                         $arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
@@ -878,9 +905,9 @@ class IeoController extends Controller
                                 }
                                 else
                                 {
-                                    echo "No hay archivo cargado";
+                                    // echo "No hay archivo cargado";
                                 }
-                        }
+							}
 
                             $model1->ieo_id = $id;
                             $model1->proyecto_ieo_id = isset($arrayDatosDocumentos[$key]['proyecto_ieo_id']) ? $arrayDatosDocumentos[$key]['proyecto_ieo_id'] : 0;
@@ -890,7 +917,8 @@ class IeoController extends Controller
                             //Guarda la informacion que tiene $model en la base de datos
                             foreach( $modelDocumentos as $key => $model1) 
                             {
-                                if($model1->informe_caracterizacion){
+                                if($model1->informe_caracterizacion)
+								{
 
                                     $model1->save();
                                 }								
@@ -901,7 +929,8 @@ class IeoController extends Controller
                     }
                 }
 			
-
+			die;
+				
 			   /**Carga de archivos multiples */
                 if($arrayDatosEvidencias = Yii::$app->request->post('Evidencias'))
 				{
@@ -910,8 +939,10 @@ class IeoController extends Controller
                     for( $i = 0; $i <= 7; $i++ ){
                         $modelEvidencias[] = new Evidencias();
                     }  
-						
-                    if (Evidencias::loadMultiple($modelEvidencias, Yii::$app->request->post() )) {
+					
+				
+                    if (Evidencias::loadMultiple($modelEvidencias, Yii::$app->request->post() )) 
+					{
                         
                         $idInstitucion 	= $_SESSION['instituciones'][0];
                         $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
@@ -935,7 +966,7 @@ class IeoController extends Controller
 						}
                         $propiedades = array( "producto_ruta", "resultados_actividad_ruta", "acta_ruta", "listado_ruta", "fotografias_ruta");
                         
-                        foreach( $modelEvidencias as $key => $modal1) 
+                        foreach( $modelEvidencias as $key => $model1) 
                         {
                             // $key +=1;
                             //recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
@@ -980,7 +1011,7 @@ class IeoController extends Controller
 
                             $model1->ieo_id = $id;
                             // $model1->proyecto_id = isset($arrayDatosEvidencias[$key-1]['proyecto_id']) ? $arrayDatosEvidencias[$key-1]['proyecto_id'] : 0;
-                            $model1->actividad_id = isset($arrayDatosEvidencias[$key]['actividad_id']) ? $arrayDatosEvidencias[$key-1]['actividad_id'] : 0;
+                            $model1->actividad_id = isset($arrayDatosEvidencias[$key]['actividad_id']) ? $arrayDatosEvidencias[$key]['actividad_id'] : 0;
 
                             foreach( $modelEvidencias as $key => $model1) 
                             {
@@ -993,7 +1024,6 @@ class IeoController extends Controller
                         }
                     }
                 }
-			
 			
 				 /**Carga de archivos multiples */
                 if($arrayDatosProducto = Yii::$app->request->post('Producto'))
@@ -1161,8 +1191,8 @@ class IeoController extends Controller
                 
                 $datos['estudiantesIeo'][$ids] = $valores;
         }
-		
-		
+		//llener el campo horario_trabajo de la tabla ec.documentos_reconocimiento
+		$datos['DocumentosReconocimiento'] = $documentosRe[key($documentosRe)];
 
         $ZonasEducatibas  = ZonasEducativas::find()->where( 'estado=1' )->all();
 		$zonasEducativas	 = ArrayHelper::map( $ZonasEducatibas, 'id', 'descripcion' );
@@ -1192,7 +1222,7 @@ class IeoController extends Controller
 		$model->estado = 2;
         $model->update(false);
        
-        return $this->redirect(['index', 'idTipoInforme' => $_SESSION["idTipoInforme"]]);
+        return $this->redirect(['index', 'idTipoInforme' => $model->id_tipo_informe]);
     }
 
 	

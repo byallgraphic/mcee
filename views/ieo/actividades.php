@@ -33,7 +33,8 @@ foreach( $procesos as $idprocesos => $proceso )
 												"persona" => $persona,
 												"nombres" => $nombres,
 												'idprocesos' => $idprocesos,
-												'model' => $model
+												'model' => $model,
+												'datos'=>$datos,
 											] 
 								),
 			
