@@ -161,54 +161,54 @@ $this->registerJsFile(
                 <td><?= isset($value['datos_ieo']['nombre_profesional'] ) ? $value['datos_ieo']['nombre_profesional'] : ' '; ?></td>
                 <td><?= isset($value['datos_ieo']['fecha_inicio_semillero'] ) ? $value['datos_ieo']['fecha_inicio_semillero'] : ' '; ?></td>
 
-                <td class="tg-0pky"><?= isset($value['fase_1']['frecuencia_sesion'] ) ? $value['fase_1']['frecuencia_sesion'] : ' '; ?></td>
-                <td class="tg-0pky"><?= isset($value['fase_1']['duracion_promedio'] ) ? $value['fase_1']['duracion_promedio'] : ' '; ?></td>
-                <td class="tg-0pky"><?= isset($value['fase_1']['cursos'] ) ? $value['fase_1']['cursos'] : ' '; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_1']['frecuencia_sesion'] ) ? $value['fase_1']['frecuencia_sesion'] : '---'; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_1']['duracion_promedio'] ) ? $value['fase_1']['duracion_promedio'] : '---'; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_1']['cursos'] ) ? $value['fase_1']['cursos'] : '---'; ?></td>
                 <?php if (isset($value['fase_1']["sesiones"])){ ?>
                     <?php foreach ($value['fase_1']["sesiones"] as $keyFI => $sesion) { ?>
-                        <td class="tg-0pky"><?= $sesion[0] ?></td>
+                        <td class="tg-0pky"><?= $sesion[0] + 1 ?></td>
                         <td class="tg-0pky"><?= $sesion[1] ?></td>
                         <td class="tg-0pky"><?= $sesion[2] ?></td>
                         <td class="tg-0pky"><?= $sesion[3] ?></td>
                     <?php } ?>
                 <?php } ?>
-                <td class="tg-0pky"><?= isset($value['fase_1']['total_sesiones'] ) ? $value['fase_1']['total_sesiones'] : ' '; ?></td>
-                <td class="tg-0lax"><?= isset($value['fase_1']['total_participaciones'] ) ? $value['fase_1']['total_participaciones'] : ' '; ?></td>
-                <td class="tg-0pky"><?= isset($value['fase_1']['totalapps'] ) ? $value['fase_1']['totalapps'] : ' '; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_1']['total_sesiones'] ) ? $value['fase_1']['total_sesiones'] : 0; ?></td>
+                <td class="tg-0lax"><?= isset($value['fase_1']['total_participaciones'] ) ? $value['fase_1']['total_participaciones'] : 0; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_1']['totalapps'] ) ? $value['fase_1']['totalapps'] : 0; ?></td>
 
-                <td class="tg-0pky"><?= isset($value['fase_2']['frecuencia_sesion'] ) ? $value['fase_2']['frecuencia_sesion'] : ' '; ?></td>
-                <td class="tg-0pky"><?= isset($value['fase_2']['duracion_promedio'] ) ? $value['fase_2']['duracion_promedio'] : ' '; ?></td>
-                <td class="tg-0pky"><?= isset($value['fase_2']['cursos'] ) ? $value['fase_2']['cursos'] : ' '; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_2']['frecuencia_sesion'] ) ? $value['fase_2']['frecuencia_sesion'] : '---'; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_2']['duracion_promedio'] ) ? $value['fase_2']['duracion_promedio'] : '---'; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_2']['cursos'] ) ? $value['fase_2']['cursos'] : '---'; ?></td>
                 <?php if (isset($value['fase_2']["sesiones"])){ ?>
                     <?php foreach ($value['fase_2']["sesiones"] as $keyFI => $sesion) { ?>
-                        <td class="tg-0pky"><?= $sesion[0] ?></td>
+                        <td class="tg-0pky"><?= $sesion[0] + 1 ?></td>
                         <td class="tg-0pky"><?= $sesion[1] ?></td>
                         <td class="tg-0pky"><?= $sesion[2] ?></td>
                         <td class="tg-0pky"><?= $sesion[3] ?></td>
                     <?php } ?>
                 <?php } ?>
-                <td class="tg-0pky"><?= isset($value['fase_2']['total_sesiones'] ) ? $value['fase_2']['total_sesiones'] : ' '; ?></td>
-                <td class="tg-0lax"><?= isset($value['fase_2']['total_participaciones'] ) ? $value['fase_2']['total_participaciones'] : ' '; ?></td>
-                <td class="tg-0pky"><?= isset($value['fase_2']['totalapps'] ) ? $value['fase_2']['totalapps'] : ' '; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_2']['total_sesiones'] ) ? $value['fase_2']['total_sesiones'] : 0; ?></td>
+                <td class="tg-0lax"><?= isset($value['fase_2']['total_participaciones'] ) ? $value['fase_2']['total_participaciones'] : 0; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_2']['totalapps'] ) ? $value['fase_2']['totalapps'] : 0; ?></td>
 
 
-                <td class="tg-0pky"><?= isset($value['fase_3']['frecuencia_sesion'] ) ? $value['fase_3']['frecuencia_sesion'] : ' '; ?></td>
-                <td class="tg-0pky"><?= isset($value['fase_3']['duracion_promedio'] ) ? $value['fase_3']['duracion_promedio'] : ' '; ?></td>
-                <td class="tg-0pky"><?= isset($value['fase_3']['cursos'] ) ? $value['fase_3']['cursos'] : ' '; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_3']['frecuencia_sesion'] ) ? $value['fase_3']['frecuencia_sesion'] : '----'; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_3']['duracion_promedio'] ) ? $value['fase_3']['duracion_promedio'] : '----'; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_3']['cursos'] ) ? $value['fase_3']['cursos'] : '---'; ?></td>
                 <?php if (isset($value['fase_3']["sesiones"])){ ?>
                     <?php foreach ($value['fase_3']["sesiones"] as $keyFI => $sesion) { ?>
-                        <td class="tg-0pky"><?= $sesion[0] ?></td>
+                        <td class="tg-0pky"><?= $sesion[0] + 1 ?></td>
                         <td class="tg-0pky"><?= $sesion[1] ?></td>
                         <td class="tg-0pky"><?= $sesion[2] ?></td>
                         <td class="tg-0pky"><?= $sesion[3] ?></td>
                     <?php } ?>
                 <?php } ?>
-                <td class="tg-0pky"><?= isset($value['fase_3']['total_sesiones'] ) ? $value['fase_3']['total_sesiones'] : ' '; ?></td>
-                <td class="tg-0lax"><?= isset($value['fase_3']['total_participaciones'] ) ? $value['fase_3']['total_participaciones'] : ' '; ?></td>
-                <td class="tg-0pky"><?= isset($value['fase_3']['totalapps'] ) ? $value['fase_3']['totalapps'] : ' '; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_3']['total_sesiones'] ) ? $value['fase_3']['total_sesiones'] : 0; ?></td>
+                <td class="tg-0lax"><?= isset($value['fase_3']['total_participaciones'] ) ? $value['fase_3']['total_participaciones'] : 0; ?></td>
+                <td class="tg-0pky"><?= isset($value['fase_3']['totalapps'] ) ? $value['fase_3']['totalapps'] : 0; ?></td>
 
-                <td><?= isset($value['total']['promedio'] ) ? $value['total']['promedio'] : ' '; ?></td>
-                <td><?= isset($value['total']['suma_fases'] ) ? $value['total']['suma_fases'] : ' '; ?></td>
+                <td><?= isset($value['total']['promedio'] ) ? $value['total']['promedio'] : 0; ?></td>
+                <td><?= isset($value['total']['suma_fases'] ) ? $value['total']['suma_fases'] : 0; ?></td>
             </tr>
         <?php } ?>
     </tbody>
