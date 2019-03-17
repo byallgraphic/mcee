@@ -55,6 +55,7 @@ use app\models\SemillerosTicCiclos;
 use app\models\SemillerosTicAnio;
 use app\models\SemillerosDatosIeo;
 use app\models\AcuerdosInstitucionales;
+use app\models\EspecialidadesTecnicas;
 use yii\helpers\ArrayHelper;
 
 
@@ -104,6 +105,12 @@ class EjecucionFaseIiController extends Controller
 		
 		$condiciones 	= null;
 		
+		$institucion = Instituciones::findOne($id_institucion);
+		
+		$dataEspecialidades = EspecialidadesTecnicas::findOne( $institucion->especialidad );
+		
+		$especialidades = [ $dataEspecialidades->id => $dataEspecialidades->descripcion ];
+		
 		$form = ActiveForm::begin();
 		
 		$sesion = Sesiones::find()
@@ -145,6 +152,7 @@ class EjecucionFaseIiController extends Controller
 														'ejecucionesFase'	=> $ejecucionesFase,
 														'accioneRecurso'	=> $accioneRecurso,
 														'docentes' 			=> $docentes,
+														'especialidades' 	=> $especialidades,
 													] 
 										),
 					'contentOptions'=> []
@@ -625,6 +633,10 @@ class EjecucionFaseIiController extends Controller
 		$docentes		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
 		$profesionales  = $docentes;
 		
+		$dataEspecialidades = EspecialidadesTecnicas::findOne( $institucion->especialidad );
+		
+		$especialidades = [ $dataEspecialidades->id => $dataEspecialidades->descripcion ];
+		
 		// $profesionales = [];
 		// $dataProfesionales = SemillerosDatosIeo::find()
 								// ->where( 'id_institucion='.$id_institucion )
@@ -685,6 +697,7 @@ class EjecucionFaseIiController extends Controller
             'profesionales'			=> $profesionales,
 			'anio'					=> $anio,
 			'esDocente'				=> $esDocente,
+			'especialidades'		=> $especialidades,
         ]);
     }
 

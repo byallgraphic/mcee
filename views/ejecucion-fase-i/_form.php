@@ -115,6 +115,7 @@ $this->registerJsFile(
 										'condiciones'	=> $condiciones,
 										'datosModelos'	=> $datosModelos,
 										'docentes' 		=> $docentes,
+										'especialidades'=> $especialidades,
 									]) ?>
 
 									

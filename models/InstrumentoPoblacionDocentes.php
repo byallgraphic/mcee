@@ -36,7 +36,7 @@ class InstrumentoPoblacionDocentes extends \yii\db\ActiveRecord
         return [
             // [['id_institucion', 'id_sede', 'id_persona', 'profesion', 'ultimo_nivel', 'id_escalafon', 'id_asignaturas_niveles_sedes', 'id_niveles', 'estado'], 'required'],
             [['id_institucion', 'id_sede', 'id_persona', 'id_escalafon', 'id_asignaturas_niveles_sedes', 'id_niveles', 'estado'], 'default', 'value' => null],
-            [['id_institucion', 'id_sede', 'id_persona', 'id_escalafon', 'id_asignaturas_niveles_sedes', 'id_niveles', 'estado'], 'integer'],
+            [['id_institucion', 'id_escalafon', 'id_asignaturas_niveles_sedes', 'id_niveles', 'estado'], 'integer'],
             [['profesion', 'ultimo_nivel'], 'string', 'max' => 200],
             [['id_asignaturas_niveles_sedes'], 'exist', 'skipOnError' => true, 'targetClass' => AsignaturasXNivelesSedes::className(), 'targetAttribute' => ['id_asignaturas_niveles_sedes' => 'id']],
             [['id_escalafon'], 'exist', 'skipOnError' => true, 'targetClass' => Escalafones::className(), 'targetAttribute' => ['id_escalafon' => 'id']],

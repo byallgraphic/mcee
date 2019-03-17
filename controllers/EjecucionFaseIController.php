@@ -60,6 +60,7 @@ use app\models\SemillerosTicCiclos;
 use app\models\SemillerosTicAnio;
 use app\models\SemillerosDatosIeo;
 use app\models\AcuerdosInstitucionales;
+use app\models\EspecialidadesTecnicas;
 use yii\helpers\ArrayHelper;
 
 use yii\helpers\Html;
@@ -93,6 +94,8 @@ class EjecucionFaseIController extends Controller
 		$id_sede 		= $_SESSION['sede'][0];
 		$id_institucion	= $_SESSION['instituciones'][0];
 		
+		$institucion = Instituciones::findOne($id_institucion);
+		
 		$idFase 	= $this->id_fase;
 		// $numSesion 	= Yii::$app->request->get('num_sesion');
 		$index 		= Yii::$app->request->get('index');
@@ -101,6 +104,10 @@ class EjecucionFaseIController extends Controller
 		
 		$numSesion++;
 		$index++;
+		
+		$dataEspecialidades = EspecialidadesTecnicas::findOne( $institucion->especialidad );
+		
+		$especialidades = [ $dataEspecialidades->id => $dataEspecialidades->descripcion ];
 		
 		// $docentes = [];
 		
@@ -150,6 +157,7 @@ class EjecucionFaseIController extends Controller
 														'form'			=> $form,
 														'datosModelos'	=> null,
 														'docentes' 		=> $docentes,
+														'especialidades'=> $especialidades,
 													] 
 										),
 					'contentOptions'=> []
@@ -644,6 +652,10 @@ class EjecucionFaseIController extends Controller
 		
 		$docentes = $profesionales		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
 		
+		$dataEspecialidades = EspecialidadesTecnicas::findOne( $institucion->especialidad );
+		
+		$especialidades = [ $dataEspecialidades->id => $dataEspecialidades->descripcion ];
+		
 		
 		if( empty( $sesiones ) )
 		{
@@ -723,6 +735,7 @@ class EjecucionFaseIController extends Controller
             'profesionales'			=> $profesionales,
             'anio'					=> $anio,
             'esDocente'				=> $esDocente,
+            'especialidades'		=> $especialidades,
         ]);
 	
 	}

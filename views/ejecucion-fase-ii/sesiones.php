@@ -44,7 +44,8 @@ foreach( $sesiones as $keySesion => $sesion )
 														'dataSesion'		=> $dataSesion,
 														'ejecucionesFase'	=> $ejecucionesFase,
 														'accioneRecurso'	=> $accioneRecurso,
-														'docentes' 		=> $docentes,
+														'docentes' 			=> $docentes,
+														'especialidades' 	=> $especialidades,
 													] 
 										),
 					'contentOptions'=> []

@@ -163,6 +163,7 @@ if( $guardado ){
 										'datosModelos' 	=> $datosModelos,
 										'form' 			=> $form,
 										'docentes' 		=> $docentes,
+										'especialidades'=> $especialidades,
 									]) ?>
 	
 	<div class='container-fluid' style='margin:10px 0;'>

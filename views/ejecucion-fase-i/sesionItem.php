@@ -168,7 +168,7 @@ use nex\chosen\Chosen;
 				
 				<div class='col-sm-1 prueba'>
 					<?= $form->field( $ejecucionFase, "[$indexEf][$index]especiaidad" )
-							->textarea( [ 'class' => 'form-control', 'maxlength' => true, 'data-type' => 'textarea'] )
+							->dropDownList( $especialidades )
 							->label( null, ['style' => 'display:none'] ) ?>
 				</div>
 				

@@ -19,7 +19,7 @@ Cambios realizados: Se cambia los campo input de cada sección por textarea, y s
 	var arrayTitles = [
 		// "Nombre de docentes participantes",
 		"Nombre de las asignaturas que enseña",
-		"Especialidad de la Media Técnica o Técnica",
+		// "Especialidad de la Media Técnica o Técnica",
 		"Número de Apps 0.0 desarrolladas e implementadas",
 		"Nombre de las aplicaciones desarrolladas",
 		"Nombre de las aplicaciones creadas",

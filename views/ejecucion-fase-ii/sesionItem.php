@@ -165,7 +165,7 @@ use dosamigos\datepicker\DatePicker;
 				</div>
 				
 				<div class='col-sm-1'>
-					<?= $form->field($ejecucionFase, "[$indexEf][$index]especialidad")->textarea( [ 'class' => 'form-control', 'maxlength' => true, 'data-type' => 'textarea'])->label(null, ['style' => 'display:none' ] ) ?>
+					<?= $form->field($ejecucionFase, "[$indexEf][$index]especialidad")->dropDownList( $especialidades )->label(null, ['style' => 'display:none' ] ) ?>
 				</div>
 				
 				<div class='col-sm-1'>
