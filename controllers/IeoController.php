@@ -830,6 +830,7 @@ class IeoController extends Controller
 						$connection = Yii::$app->getDb();
 						$command = $connection->createCommand("
 							SELECT * FROM ec.documentos_reconocimiento
+							WHERE ieo_id = $id
 						");
 						$resul = $command->queryAll();
 						
@@ -880,20 +881,35 @@ class IeoController extends Controller
 											$extensionArchivo =   pathinfo($nombreArchivo, PATHINFO_EXTENSION );
 											$nombre_base = basename($nombreArchivo, '.'.$extensionArchivo); 
 											$extensionArchPropiedad = pathinfo($arrayPropiedad, PATHINFO_EXTENSION);
-											//saber si el nombre y la extencion del archivo ya existe en la base de datos / saber si ya existe el archivo
+											
+											//saber si el nombre y la extencion del archivo ya existe en la base de datos / saber si ya existe el archivo se y se sobreescribe sin cambios en la db
 											if (strpos ($arrayPropiedad,$nombre_base) > 0 and strtolower($extensionArchivo) === $extensionArchPropiedad )
 											{
 												//si archivo ya existe se sobreescribe sobreescribiendo la ruta de guardado
 												// Construyo la ruta completa del archivo a guardar
 												$rutaFisicaDirectoriaUploads  = $arrayPropiedad;
-												// echo $rutaFisicaDirectoriaUploads;
 												//si el archivo existe sale del foreach;
-												break 1;
+												exit;
+											}
+											else
+											{
+												$command = $connection->createCommand(
+												"
+													UPDATE ec.documentos_reconocimiento
+													set $propiedad = '". implode(",", $$propiedad).",".$rutaFisicaDirectoriaUploads."'
+													WHERE ieo_id = $id
+												");
+												$resul = $command->queryAll();
+												
 											}
 										}
+										
+										//guardar el archivo fisicamente en el servidor
                                         $save = $file->saveAs( $rutaFisicaDirectoriaUploads );
                                         //rutas de todos los archivos
                                         $arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
+										echo "<pre>"; print_r($arrayRutasFisicas); echo "</pre>"; 
+										echo "<pre>"; print_r($$propiedad); echo "</pre>"; 
                                     }
                                     
                                 
@@ -919,11 +935,10 @@ class IeoController extends Controller
                             {
                                 if($model1->informe_caracterizacion)
 								{
-
                                     $model1->save();
                                 }								
                             }
-
+							
                         }
                     
                     }
