@@ -810,7 +810,7 @@ class IeoController extends Controller
 						
 					$modelDocumentos = [];
 					// se deben crear modelos igual al valor maximo del indice que tenga  Yii::$app->request->post('DocumentosReconocimiento') en esta caso es 2
-                    for( $i = 0; $i <= 2 ; $i++ )
+                    for( $i = 0; $i <= 1 ; $i++ )
 					{
                         $modelDocumentos[] = new DocumentosReconocimiento();
                     } 
@@ -834,12 +834,12 @@ class IeoController extends Controller
 						");
 						$resul = $command->queryAll();
 						
-						$informe_caracterizacion	= explode(",",$resul[0]['informe_caracterizacion'] ); 
-						$matriz_caracterizacion 	= explode(",",$resul[0]['matriz_caracterizacion'] ); 
-						$revision_pei 				= explode(",",$resul[0]['revision_pei'] ); 
-						$revision_autoevaluacion 	= explode(",",$resul[0]['revision_autoevaluacion'] ); 
-						$revision_pmi 				= explode(",",$resul[0]['revision_pmi'] ); 
-						$resultados_caracterizacion	= explode(",",$resul[0]['resultados_caracterizacion'] ); 
+						$informe_caracterizacion	= $resul[0]['informe_caracterizacion']; 
+						$matriz_caracterizacion 	= $resul[0]['matriz_caracterizacion']; 
+						$revision_pei 				= $resul[0]['revision_pei']; 
+						$revision_autoevaluacion 	= $resul[0]['revision_autoevaluacion']; 
+						$revision_pmi 				= $resul[0]['revision_pmi']; 
+						$resultados_caracterizacion	= $resul[0]['resultados_caracterizacion']; 
 						
                         $propiedades = array( "informe_caracterizacion", "matriz_caracterizacion", "revision_pei", "revision_autoevaluacion", "revision_pmi", "resultados_caracterizacion");
                         
@@ -858,132 +858,117 @@ class IeoController extends Controller
                                 // se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
                                 $files = UploadedFile::getInstances( $model1, "[$key]$propiedad" );
 								
-								
                                 if( $files )
                                 {
-									
                                     //se suben todos los archivos uno por uno
                                     foreach($files as $file)
                                     {
 										
 										//se usan microsegundos para evitar un nombre de archivo repetido
-                                        $t = microtime(true);
-                                        $micro = sprintf("%06d",($t - floor($t)) * 1000000);
-                                        $d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
 										// Construyo la ruta completa del archivo a guardar
-                                        $rutaFisicaDirectoriaUploads  = "../documentos/documentosIeo/documentosReconocimiento/".$institucion."/".$file->baseName . $d->format("Y_m_d_H_i_s.u") . '.' . $file->extension;
-										
+                                        $rutaFisicaDirectoriaUploads  = "../documentos/documentosIeo/documentosReconocimiento/".$institucion."/".$file->baseName . $this->microSegundos() . '.' . $file->extension;
 										
 										//saber si el archivo ya existe
-										foreach ($$propiedad as $arrayPropiedad)
+										$nombreArchivo = $file->name;
+										$extensionArchivo =  pathinfo($nombreArchivo, PATHINFO_EXTENSION );
+										$nombre_base = basename($nombreArchivo, '.'.$extensionArchivo);
+										
+										//la extencion debe estar en minuisculas para la combrobacion
+										$extensionArchivo = strtolower($extensionArchivo);
+										
+										//se pasan las rutas que estan en la db en el campo $$propiedad para saber en que parte esta el archivo y sobreescribirlo
+										$arrayRuta = explode(",",$$propiedad);	
+										//saber si el nombre y la extencion del archivo ya existe en la base de datos / saber si ya existe el archivo se y se sobreescribe sin cambios en la db
+										if (strpos ($$propiedad,$nombre_base) > 0 and strpos($$propiedad,$extensionArchivo ) > 0 )
 										{
-											$nombreArchivo = $file->name;
-											$extensionArchivo =   pathinfo($nombreArchivo, PATHINFO_EXTENSION );
-											$nombre_base = basename($nombreArchivo, '.'.$extensionArchivo); 
-											$extensionArchPropiedad = pathinfo($arrayPropiedad, PATHINFO_EXTENSION);
-											
-											//saber si el nombre y la extencion del archivo ya existe en la base de datos / saber si ya existe el archivo se y se sobreescribe sin cambios en la db
-											if (strpos ($arrayPropiedad,$nombre_base) > 0 and strtolower($extensionArchivo) === $extensionArchPropiedad )
+											//si archivo ya existe se sobreescribe sobreescribiendo la ruta de guardado
+											// Construyo la ruta completa del archivo a guardar
+											foreach ($arrayRuta as $ar)
 											{
-												//si archivo ya existe se sobreescribe sobreescribiendo la ruta de guardado
-												// Construyo la ruta completa del archivo a guardar
-												$rutaFisicaDirectoriaUploads  = $arrayPropiedad;
-												//si el archivo existe sale del foreach;
-												exit;
-											}
-											else
-											{
-												$command = $connection->createCommand(
-												"
-													UPDATE ec.documentos_reconocimiento
-													set $propiedad = '". implode(",", $$propiedad).",".$rutaFisicaDirectoriaUploads."'
-													WHERE ieo_id = $id
-												");
-												$resul = $command->queryAll();
-												
+												if (strpos ($ar,$nombre_base) > 0 and strpos($ar,$extensionArchivo) > 0 )
+												{
+													$rutaFisicaDirectoriaUploads  = $ar;
+												}
 											}
 										}
 										
+									
 										//guardar el archivo fisicamente en el servidor
                                         $save = $file->saveAs( $rutaFisicaDirectoriaUploads );
                                         //rutas de todos los archivos
                                         $arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
-										echo "<pre>"; print_r($arrayRutasFisicas); echo "</pre>"; 
-										echo "<pre>"; print_r($$propiedad); echo "</pre>"; 
                                     }
-                                    
-                                
-                                    // asignacion de la ruta al campo de la db
-                                    $model1->$propiedad = implode(",", $arrayRutasFisicas);
-                                    
-                                    // $model->$propiedad =  $var;
-                                    $arrayRutasFisicas = null;
                                 }
                                 else
                                 {
                                     // echo "No hay archivo cargado";
                                 }
+								
+								//se actualiza el campo en la base de datos con las rutas; cuando se agregar un archivo nuevo se agrega esta ruta a las ya existentes
+								$command = $connection->createCommand("
+								UPDATE ec.documentos_reconocimiento
+								set $propiedad = '". implode(",", $arrayRutasFisicas)."'
+								WHERE ieo_id = $id
+								");
+								$resul = $command->queryAll();
+								$arrayRutasFisicas = null;
 							}
-
-                            $model1->ieo_id = $id;
-                            $model1->proyecto_ieo_id = isset($arrayDatosDocumentos[$key]['proyecto_ieo_id']) ? $arrayDatosDocumentos[$key]['proyecto_ieo_id'] : 0;
-                            $model1->actividad_id = isset($arrayDatosDocumentos[$key]['actividad_id']) ? $arrayDatosDocumentos[$key]['actividad_id'] : 0;
-                            $model1->horario_trabajo = isset($arrayDatosDocumentos[$key]['horario_trabajo']) ? $arrayDatosDocumentos[$key]['horario_trabajo'] : 0;
-
-                            //Guarda la informacion que tiene $model en la base de datos
-                            foreach( $modelDocumentos as $key => $model1) 
-                            {
-                                if($model1->informe_caracterizacion)
-								{
-                                    $model1->save();
-                                }								
-                            }
-							
                         }
                     
                     }
                 }
 			
-			die;
+			
 				
-			   /**Carga de archivos multiples */
+			   /**Carga de archivos multiples evidencias -> actividades */ 
                 if($arrayDatosEvidencias = Yii::$app->request->post('Evidencias'))
 				{
                     $modelEvidencias = [];
-
-                    for( $i = 0; $i <= 7; $i++ ){
-                        $modelEvidencias[] = new Evidencias();
-                    }  
 					
-				
+					
+					foreach ($arrayDatosEvidencias as $llave => $valor)
+					{
+						 $modelEvidencias[$llave] = new Evidencias();
+					}
+                       
                     if (Evidencias::loadMultiple($modelEvidencias, Yii::$app->request->post() )) 
 					{
                         
-                        $idInstitucion 	= $_SESSION['instituciones'][0];
-                        $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
-
-                        $carpeta = "../documentos/documentosIeo/actividades/evidencias/".$institucion;
-						if (!file_exists($carpeta)) 
-						{
-							mkdir($carpeta, 0777, true);
-                        }
-						else
-						{
-							$this->borrarDirectorio($carpeta);
-							$command = $connection->createCommand(
-							"
-							DELETE FROM ec.evidencias
+						
+						$connection = Yii::$app->getDb();
+						$command = $connection->createCommand("
+							SELECT 
+								id,
+								producto_ruta,
+								resultados_actividad_ruta, 
+								acta_ruta, listado_ruta, 
+								fotografias_ruta, 
+								actividad_id
+							FROM 
+								ec.evidencias
 							WHERE 
 								ieo_id = $id
-							");
-							$result = $command->queryAll();
-							mkdir($carpeta, 0777, true);
-						}
+						");
+						$resul = $command->queryAll();
+						
+                        $idInstitucion 	= $_SESSION['instituciones'][0];
+                        $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
+						
+						
+						$producto_ruta				= $resul[0]['producto_ruta'];
+						$resultados_actividad_ruta 	= $resul[0]['resultados_actividad_ruta'];
+						$acta_ruta 					= $resul[0]['acta_ruta'];
+						$listado_ruta				= $resul[0]['listado_ruta'];
+						$fotografias_ruta			= $resul[0]['fotografias_ruta'];
+						
+						
                         $propiedades = array( "producto_ruta", "resultados_actividad_ruta", "acta_ruta", "listado_ruta", "fotografias_ruta");
-                        
+                        $llave =0;
                         foreach( $modelEvidencias as $key => $model1) 
                         {
-                            // $key +=1;
+							$llave++;
+							echo "<pre>"; print_r($key); echo "</pre>"; 
+							echo "<br>";
                             //recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
                             //para posteriormente guardar en la base de datos
                             foreach($propiedades as $propiedad)
@@ -992,53 +977,69 @@ class IeoController extends Controller
                                 // se guarda el archivo en file
                                 
                                 // se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
-                                $files = UploadedFile::getInstances( $model1, "[$key]$propiedad" );
+                                $files = UploadedFile::getInstances( $model1, "[$llave]$propiedad" );
                                 
+								echo "<pre>"; print_r($files); echo "</pre>"; 
                                 if( $files )
                                 {
                                     //se suben todos los archivos uno por uno
                                     foreach($files as $file)
                                     {
                                         //se usan microsegundos para evitar un nombre de archivo repetido
-                                        $t = microtime(true);
-                                        $micro = sprintf("%06d",($t - floor($t)) * 1000000);
-                                        $d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
-                                        
-                                        // Construyo la ruta completa del archivo a guardar
-                                        $rutaFisicaDirectoriaUploads  = "../documentos/documentosIeo/actividades/evidencias/".$institucion."/".$file->baseName . $d->format("Y_m_d_H_i_s.u") . '.' . $file->extension;
+										// Construyo la ruta completa del archivo a guardar
+                                        $rutaFisicaDirectoriaUploads  = "../documentos/documentosIeo/documentosReconocimiento/".$institucion."/".$file->baseName . $this->microSegundos() . '.' . $file->extension;
+										
+										//saber si el archivo ya existe
+										$nombreArchivo = $file->name;
+										$extensionArchivo =  pathinfo($nombreArchivo, PATHINFO_EXTENSION );
+										$nombre_base = basename($nombreArchivo, '.'.$extensionArchivo);
+										
+										//la extencion debe estar en minuisculas para la combrobacion
+										$extensionArchivo = strtolower($extensionArchivo);
+										
+										//se pasan las rutas que estan en la db en el campo $$propiedad para saber en que parte esta el archivo y sobreescribirlo
+										$arrayRuta = explode(",",$$propiedad);	
+										//saber si el nombre y la extencion del archivo ya existe en la base de datos / saber si ya existe el archivo se y se sobreescribe sin cambios en la db
+										if (strpos ($$propiedad,$nombre_base) > 0 and strpos($$propiedad,$extensionArchivo ) > 0 )
+										{
+											//si archivo ya existe se sobreescribe sobreescribiendo la ruta de guardado
+											// Construyo la ruta completa del archivo a guardar
+											foreach ($arrayRuta as $ar)
+											{
+												if (strpos ($ar,$nombre_base) > 0 and strpos($ar,$extensionArchivo) > 0 )
+												{
+													$rutaFisicaDirectoriaUploads  = $ar;
+												}
+											}
+										}
+										
+										//guardar el archivo fisicamente en el servidor
                                         $save = $file->saveAs( $rutaFisicaDirectoriaUploads );
                                         //rutas de todos los archivos
                                         $arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
                                     }
                                     
-                                
-                                    // asignacion de la ruta al campo de la db
-                                    $model1->$propiedad = implode(",", $arrayRutasFisicas);
                                     
-                                    // $model->$propiedad =  $var;
-                                    $arrayRutasFisicas = null;
+                                $command = $connection->createCommand("
+								UPDATE ec.evidencias
+								set $propiedad = '". implode(",", $arrayRutasFisicas)."'
+								WHERE 
+									ieo_id = $id
+								AND
+									actividad_id = $key
+								");
+								$resul = $command->queryAll();
+								$arrayRutasFisicas = null;
                                 }
                                 else
                                 {
                                     echo "No hay archivo cargado";
                                 }
                             }
-
-                            $model1->ieo_id = $id;
-                            // $model1->proyecto_id = isset($arrayDatosEvidencias[$key-1]['proyecto_id']) ? $arrayDatosEvidencias[$key-1]['proyecto_id'] : 0;
-                            $model1->actividad_id = isset($arrayDatosEvidencias[$key]['actividad_id']) ? $arrayDatosEvidencias[$key]['actividad_id'] : 0;
-
-                            foreach( $modelEvidencias as $key => $model1) 
-                            {
-                                if($model1->producto_ruta)
-								{
-
-                                    $model1->save();
-                                }								
-                            }
                         }
                     }
                 }
+				die;
 			
 				 /**Carga de archivos multiples */
                 if($arrayDatosProducto = Yii::$app->request->post('Producto'))
@@ -1240,6 +1241,17 @@ class IeoController extends Controller
         return $this->redirect(['index', 'idTipoInforme' => $model->id_tipo_informe]);
     }
 
+	
+	public function microSegundos()
+	{
+	
+		$t = microtime(true);
+		$micro = sprintf("%06d",($t - floor($t)) * 1000000);
+		$d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
+		
+		return $d->format("Y_m_d_H_i_s.u");
+	}
+	
 	
 	public function borrarDirectorio($src) 
 	{
