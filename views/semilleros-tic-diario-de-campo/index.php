@@ -74,7 +74,7 @@ if( !$sede || $sede < 0 ){
 									], 
 									['class' => 'btn btn-info']) ?>
 				
-		<?= Html::a('Eportar a Excel', Url::to('@web/helloWorld.docx'), ['class' => 'btn btn-warning']) ?>
+		<?= Html::a('Eportar', Url::to('@web/diarioDeCampoDocentes.docx'), ['class' => 'btn btn-warning']) ?>
 
     </p>
 	

@@ -71,6 +71,8 @@ $this->params['breadcrumbs'][] = $nombre ;
 										'esDocente' => $esDocente,
 									], 
 									['class' => 'btn btn-info']) ?>
+									
+		<?= Html::a('Eportar', Url::to('@web/diarioDeCampoEstudiantes.docx'), ['class' => 'btn btn-warning']) ?>
 				
 
     </p>

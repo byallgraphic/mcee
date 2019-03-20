@@ -64,6 +64,234 @@ class SemillerosTicDiarioDeCampoEstudiantesController extends Controller
             ],
         ];
     }
+	
+	/**
+     * Creates a new SemillerosTicDiarioDeCampo model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionExportar()
+    {
+		// Creando Nuevo documento
+		$phpWord = new \PhpOffice\PhpWord\PhpWord();
+		
+		$idFase 	= Yii::$app->request->get('idFase');
+		
+		$anio 		= Yii::$app->request->get('anio');
+		$esDocente 	= Yii::$app->request->get('esDocente');
+		
+		$ciclos = new SemillerosTicCiclos();
+		
+		$datos = [];
+		
+		/**
+		 * Estructura de datos
+		 * Aquí formo como están estructurados los datos para guardar
+		 *
+		 * Un diario de campo tiene muchos movimientos
+		 */
+		$diarioCampo 	= null;
+		$movimientos	= [];
+		/**/
+			
+		//Busco diario de campo según los datos suministrados
+		$diarioCampo 	= SemillerosTicDiarioDeCampoEstudiantes::find()
+									->where( 'estado=1' )
+									->orderby( ['anio' => SORT_DESC ] )
+									->all();
+								
+		foreach( $diarioCampo as $dcKey => $dcValue )
+		{
+			$movimientos = SemillerosTicMovimientoDiarioCampoEstudiantes::find()
+									->where( 'id_diario_de_campo_estudiantes='.$dcValue->id )
+									->andWhere( 'estado=1' )
+									->orderby(['id_sesion' => SORT_ASC])
+									->all();
+									
+			foreach( $movimientos as $key => $value )
+			{
+				$datos[ $value->anio ][ $dcValue->id_fase ][] =	[ 
+																'descripcion' 	=> $value->descripcion,
+																'hallazgos' 	=> $value->hallazgos,
+																'id_sesion' 	=> $value->id_sesion,
+															];
+			}
+		}
+		
+		if( count( $datos ) > 0 )
+		{
+			$fontStyleName = 'Titulo Anio';
+			$array_options = [ 
+								'name' 	=> 'Tahoma', 
+								'size' 	=> 16, 
+								'color'	=> '1B2232', 
+								'bold' 	=> true ,
+							];
+			$phpWord->addFontStyle( $fontStyleName, $array_options );
+			
+			$fontStyleName = 'Titulo Fase';
+			$array_options = [ 
+								'name' 	=> 'Tahoma', 
+								'size' 	=> 14, 
+								'color'	=> '1B2232', 
+								'bold' 	=> true ,
+							];
+			$phpWord->addFontStyle( $fontStyleName, $array_options );
+			
+			$fontStyleName = 'Titulo Sesion';
+			$array_options = [ 
+								'name' 	=> 'Tahoma', 
+								'size' 	=> 12, 
+								'color'	=> '1B2232', 
+								'bold' 	=> true ,
+							];
+			$phpWord->addFontStyle( $fontStyleName, $array_options );
+			
+			$fontStyleName = 'Titulo Bitacora';
+			$array_options = [ 
+								'name' 	=> 'Tahoma', 
+								'size' 	=> 12, 
+								'color'	=> '1B2232', 
+								'bold' 	=> true ,
+							];
+			$phpWord->addFontStyle( $fontStyleName, $array_options );
+			
+			$fontStyleName = 'Titulo Resumen';
+			$array_options = [ 
+								'name' 	=> 'Tahoma', 
+								'size' 	=> 12, 
+								'color'	=> '1B2232', 
+								'bold' 	=> true ,
+							];
+			$phpWord->addFontStyle( $fontStyleName, $array_options );
+			
+			$fontStyleName = 'Titulo Escritura';
+			$array_options = [ 
+								'name' 	=> 'Tahoma', 
+								'size' 	=> 12, 
+								'color'	=> '1B2232', 
+								'bold' 	=> true ,
+							];
+			$phpWord->addFontStyle( $fontStyleName, $array_options );
+			
+			//Creando el archivo word
+			foreach( $datos as $anios => $fase )
+			{
+				// Agregando una sección vacía
+				$section = $phpWord->addSection();
+				
+				$section->addText( "Año ".$anios, 'Titulo Anio' );
+			
+				foreach( $fase as $id_fase => $datos )
+				{
+					$section->addText( Fases::findOne( $id_fase )->descripcion, 'Titulo Fase' );
+					
+					//Consulto todas las Sesiones por ejecuciones de Fase
+					switch( $id_fase )
+					{
+						case 1: 
+							$idFaseFase = 14; 
+							$titulo="BITACORA FASE I";
+							break;
+							
+						case 2: 
+							$idFaseFase = 15; 
+							$titulo="BITACORA FASE II";
+							break;
+							
+						case 3: 
+							$idFaseFase = 16; 
+							$titulo="BITACORA FASE III";
+							break;
+					}
+					
+					$dataResumen = $this->actionOpcionesEjecucionDiarioCampo( $idFaseFase, $anios, 1, $id_fase );
+					$dataResumen['titulo'] = $titulo;
+					
+					$section->addText( $dataResumen[ 'titulo' ], 'Titulo Bitacora' );
+					
+					$section->addText( 'RESUMEN CUANTITATIVO DEL RESULTADO', 'Titulo Bitacora' );
+					
+					if( !empty( $dataResumen['html'] ) )
+					{
+						//Agregando una tabla
+						$table = $section->addTable();
+						
+						$table->addRow();
+						
+						$titulosTabla = explode( "</div>", $dataResumen['html'] );
+						// var_dump( $titulosTabla );
+						
+						foreach( $titulosTabla as $key => $value )
+						{
+							$cell = $table->addCell(null, [ 'bgColor' => 'cccccc' ]);
+							$cell->addText( strip_tags( $value ), [ 'bold' => true ] );
+						}
+						// var_dump( $dataResumen['contenido'] );
+						
+						$table->addRow();
+						
+						if( !empty( $dataResumen['contenido'] ) )
+						{
+							$contenidoCeldas = explode( "</div>", $dataResumen['contenido'] );
+							
+							foreach( $contenidoCeldas as $key => $value )
+							{
+								$cell = $table->addCell();
+								$cell->addText( strip_tags( $value ) );
+							}
+						}
+					}
+					
+					if( !empty( $dataResumen['html1'] ) )
+					{
+						//Agregando una tabla
+						$table = $section->addTable();
+						
+						$table->addRow();
+						
+						$titulosTabla = explode( "</div>", $dataResumen['html1'] );
+						
+						foreach( $titulosTabla as $key => $value )
+						{
+							$cell = $table->addCell(null, [ 'bgColor' => 'cccccc' ]);
+							$cell->addText( strip_tags( $value ), [ 'bold' => true ] );
+						}
+						
+						$table->addRow();
+						
+						if( !empty( $dataResumen['contenido1'] ) )
+						{
+							$contenidoCeldas = explode( "</div>", $dataResumen['contenido1'] );
+							
+							foreach( $contenidoCeldas as $key => $value )
+							{
+								$cell = $table->addCell();
+								$cell->addText( strip_tags( $value ) );
+							}
+						}
+					}
+					
+					foreach( $datos as $key => $value )
+					{
+						$section->addText( Sesiones::findOne( $value[ 'id_sesion' ] )->descripcion, 'Titulo Sesion' );
+						
+						
+						$section->addText( $dataResumen[ 'descripcion' ] );
+						$section->addText( $value[ 'descripcion' ] );
+						
+						$section->addText( $dataResumen[ 'hallazgos' ] );
+						$section->addText( $value[ 'hallazgos' ] );
+					}
+				}
+			}
+			
+			// Guardando el archivo
+			$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+			$objWriter->save('diarioDeCampoEstudiantes.docx');
+		}
+    }
+
 
 	public function actionSesiones( $id_fase )
 	{
@@ -85,6 +313,8 @@ class SemillerosTicDiarioDeCampoEstudiantesController extends Controller
      */
     public function actionIndex()
     {
+		$this->actionExportar();
+		
 		$anio 		= Yii::$app->request->get('anio');
 		$esDocente 	= Yii::$app->request->get('esDocente');
 		
