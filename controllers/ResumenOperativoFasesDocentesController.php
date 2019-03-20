@@ -66,674 +66,485 @@ class ResumenOperativoFasesDocentesController extends Controller
      */
     public function actionIndex()
     {
-        
+
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand('SELECT
+"public".sedes.descripcion AS sede,
+"public".instituciones.descripcion AS institucion,
+semilleros_tic.ejecucion_fase.id_fase,
+semilleros_tic.fases.descripcion AS fase,
+"public".instituciones.codigo_dane AS codigo_dane_institucion,
+"public".sedes."id" AS id_sede,
+"public".instituciones."id" AS id_institucion,
+semilleros_tic.datos_ieo_profesional.id_profesional_a AS profecional_a,
+"public".sedes.codigo_dane AS codigo_dane_sede,
+semilleros_tic.datos_ieo_profesional."id"
+FROM
+semilleros_tic.datos_ieo_profesional
+INNER JOIN semilleros_tic.ejecucion_fase ON semilleros_tic.ejecucion_fase.id_datos_ieo_profesional = semilleros_tic.datos_ieo_profesional."id"
+INNER JOIN "public".sedes ON semilleros_tic.datos_ieo_profesional.id_sede = "public".sedes."id"
+INNER JOIN "public".instituciones ON "public".sedes.id_instituciones = "public".instituciones."id"
+INNER JOIN semilleros_tic.fases ON semilleros_tic.ejecucion_fase.id_fase = semilleros_tic.fases."id"');
+        $datos_ieo_profesional = $command->queryAll();
+
+        //echo "<pre>"; print_r($datos_ieo_profesional); echo "</pre>";
+        $data = [];
+        foreach ($datos_ieo_profesional as $key =>  $dip)
+        {
+            if($dip["anio"] = Yii::$app->request->get("anio"))
+            {
+                $data[$dip['id_sede']] =  $dip;
+            }
+        }
+        $contador =0;
+        $totalDatos = [];
+        $maxSesionFaseI = 0;
+        $maxSesionFaseII = 0;
+        $maxSesionFaseIII = 0;
+        $mayorSesion['maxSesionFaseI']  = 0;
+        $mayorSesion['maxSesionFaseII']  = 0;
+        $mayorSesion['maxSesionFaseIII'] = 0;
+        foreach ($data as $key => $dip)
+        {
+            if(!empty($dip)){
+                $data= [];
+                $idInstitucion = $dip['id_institucion'];
+                $idSede = $dip['id_sede'];
+
+                //nombres de los profesional a
+                $idProfesionalA = $dip['profecional_a'];
+                $command = $connection->createCommand
+                ("
+                    SELECT concat(p.nombres,' ',p.apellidos) as nombre		
+                    FROM public.personas as p
+                    WHERE id in($idProfesionalA)
+                ");
+                $datoPersonalA = $command->queryAll();
+                $nomresPersonalA = $this->arrayArrayComas($datoPersonalA,'nombre');
+
+                //obtener las fecha de inicio de semillero con respecto a la sesion 1
+                $command = $connection->createCommand
+                ("
+                    SELECT dts.fecha_sesion 
+                    FROM semilleros_tic.datos_sesiones as dts
+                    join semilleros_tic.ejecucion_fase as efe on efe.id_datos_sesiones = dts.id
+                    join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
+                    WHERE dpro.id_sede =  $idSede 
+                ");
+                $fechas = $command->queryAll();
+
+                //array_push($data, $dip['codigo_dane_institucion'], $dip['institucion'], $dip['codigo_dane_sede'],$dip['sede'],  $dip['anio'], $nomresPersonalA, @$fechas[0]['fecha_sesion']);
+
+                $data['datos_ieo']['codigo_dane_institucion'] = $dip['codigo_dane_institucion'];
+                $data['datos_ieo']['institucion'] = $dip['institucion'];
+                $data['datos_ieo']['codigo_dane_sede'] = $dip['codigo_dane_sede'];
+                $data['datos_ieo']['sede'] = $dip['sede'];
+                $data['datos_ieo']['nombre_profesional'] = $nomresPersonalA;
+
+
+                /**Inicio datos fases 1 */
+                $id_datos_ieo_profesional1 = $dip['id'];
+                $idSemilleros1 = 1;//$dip['id_semilleros'];
+                $command = $connection->createCommand
+                ("
+                    SELECT 
+                    frecuencias_sesiones, asignatura
+                    FROM semilleros_tic.acuerdos_institucionales
+                    WHERE id_semilleros_datos_ieo = $idSemilleros1 and id_fase = 1
+                ");
+
+                $datoAcuerdosInstitucionales = $command->queryAll();
+                $frecuenciaSesion1 = $this->arrayArrayComas($datoAcuerdosInstitucionales,'frecuencias_sesiones') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales,'frecuencias_sesiones') : "0" ;
+                $cursoSesion1 = $this->arrayArrayComas($datoAcuerdosInstitucionales,'curso') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales,'curso') : "0" ;
+
+                /**Obtiene nombres descriptivos en base a los id's de las sesiones */
+                $command = $connection->createCommand("
+                SELECT descripcion
+                FROM public.parametro
+                WHERE id in($frecuenciaSesion1)
+                ORDER BY id ASC ");
+                $frecuenciasSesiones = $command->queryAll();
+                $frecuenciasSesiones= $this->arrayArrayComas($frecuenciasSesiones,'descripcion');
+                //array_push($data,$frecuenciasSesiones);
+                $data['fase_1']['frecuencia_sesion'] = $frecuenciasSesiones;
+
+                //Duracion promedio de las sesiones
+                //Datos generales de las sesiones
+
+                $command = $connection->createCommand
+                ("
+                    SELECT 
+                    dts.duracion_sesion
+                    FROM semilleros_tic.datos_sesiones as dts
+                    join semilleros_tic.ejecucion_fase as efe on efe.id_datos_sesiones = dts.id
+                    join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
+                    WHERE dpro.id_sede =  $idSede 
+                ");
+                $datoSemillerosTicEjecucionFase1 = $command->queryAll();
+
+                $segundos = 0;
+                foreach ($datoSemillerosTicEjecucionFase1 as $datosSTEF => $valor)
+                {
+                    $segundos += $this->conversionSegundos($valor['duracion_sesion']);
+                }
+                $promedioHorasFase1  = @($segundos / count($datoSemillerosTicEjecucionFase1));
+                $promedioHorasFase1 =  $this->conversionSegundosHora($promedioHorasFase1);
+
+                /**Obtiene nombre de los cursos para fase 1 */
+                //array_push($data, $promedioHorasFase1, $cusosSesiones);
+                $data['fase_1']['duracion_promedio'] = $promedioHorasFase1;
+                $data['fase_1']['cursos'] = 0;//$cusosSesiones;
+
+                $command = $connection->createCommand("
+                    SELECT 
+                    DISTINCT(dts.id_sesion),
+                            dts.fecha_sesion,
+                            efe.numero_apps,
+                            efe.paricipacion_sesiones,
+                            dts.duracion_sesion
+                    FROM semilleros_tic.datos_sesiones as dts
+                    join semilleros_tic.ejecucion_fase as efe on efe.id_datos_sesiones = dts.id
+                    join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
+                    WHERE dpro.id_sede =  $idSede 
+                    ");
+                $datosEjeccionFasei = $command->queryAll();
+                $promedioParticipantes1 = 0;
+
+                if ($maxSesionFaseI < count($datosEjeccionFasei)){
+                    $maxSesionFaseI = count($datosEjeccionFasei);
+                }
+
+                if(count($datosEjeccionFasei) > 0){
+                    foreach ($datosEjeccionFasei as $datos1 => $valor){
+                        @$totalapps1 += $valor['numero_apps'];
+                        @$totalparticipantes1  += $valor['paricipacion_sesiones'];
+                        //array_push($data, "", $valor['fecha_sesion'], $valor['participacion_sesiones'], $valor['duracion_sesion']);
+                        $promedioParticipantes1 += $valor['paricipacion_sesiones'];
+
+                        $data['fase_1']['sesiones'][$datos1][0] = $datos1;
+                        $data['fase_1']['sesiones'][$datos1][1] = $valor['fecha_sesion'];
+                        $data['fase_1']['sesiones'][$datos1][2] = $valor['paricipacion_sesiones'];
+                        $data['fase_1']['sesiones'][$datos1][3] = $valor['duracion_sesion'];
+                    }
+
+                    $promedioParticipantes1 =  $promedioParticipantes1 / count($datosEjeccionFasei);
+                    //array_push($data, count($datosEjeccionFasei), $totalparticipantes1, $totalapps1);
+
+                    $data['fase_1']['total_sesiones'] = count($datosEjeccionFasei);
+                    $data['fase_1']['total_participaciones'] = $totalparticipantes1;
+                    $data['fase_1']['totalapps'] = $totalapps1;
+                }
+                /**Fin datos Fase 1 */
+
+                /**Inicio datos Fase 2 */
+                $id_datos_ieo_profesional2 = $dip['id'];
+                $idSemilleros2 = 1;//$dip['id_semilleros'];
+
+                $command = $connection->createCommand
+                ("
+                        SELECT 
+                        frecuencias_sesiones, asignatura
+                        FROM semilleros_tic.acuerdos_institucionales
+                        WHERE id_semilleros_datos_ieo = $idSemilleros2 and id_fase = 2
+                    ");
+                $datoAcuerdosInstitucionales2 = $command->queryAll();
+                $frecuenciaSesion2 = $this->arrayArrayComas($datoAcuerdosInstitucionales2,'frecuencias_sesiones') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales2,'frecuencias_sesiones') : "0" ;
+                $cursoSesion2 = $this->arrayArrayComas($datoAcuerdosInstitucionales2,'curso') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales2,'curso') : "0" ;
+
+                /**Obtiene nombres descriptivos en base a los id's de las sesiones */
+                $command = $connection->createCommand("
+                    SELECT descripcion
+                    FROM public.parametro
+                    WHERE id in($frecuenciaSesion2)
+                    ORDER BY id ASC ");
+                $frecuenciasSesiones2 = $command->queryAll();
+                $frecuenciasSesiones2= $this->arrayArrayComas($frecuenciasSesiones2,'descripcion');
+
+                //array_push($data,$frecuenciasSesiones2);
+                $data['fase_2']['frecuencia_sesion'] = $frecuenciasSesiones2;
+
+
+                //Duracion promedio de las sesiones
+                //Datos general de las sesiones
+                $command = $connection->createCommand
+                ("
+                    SELECT 
+                        dts.duracion_sesion
+                    FROM semilleros_tic.datos_sesiones as dts
+                    join semilleros_tic.ejecucion_fase_ii as efe on efe.id_datos_sesiones = dts.id
+                    join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
+                    WHERE dpro.id_sede =  $idSede 
+                    ");
+
+                $datoSemillerosTicEjecucionFase2 = $command->queryAll();
+                $segundos2 = 0;
+                foreach ($datoSemillerosTicEjecucionFase2 as $datosSTEF => $valor){
+                    $segundos2 += $this->conversionSegundos($valor['duracion_sesion']);
+                }
+                $promedioHorasFase2  = @($segundos2 / count($datoSemillerosTicEjecucionFase2));
+                $promedioHorasFase2 =  $this->conversionSegundosHora($promedioHorasFase2);
+
+                /**Obtiene nombre de los cursos para fase 2 */
+                $command = $connection->createCommand("
+                    SELECT descripcion
+                    FROM public.paralelos
+                    WHERE id in($cursoSesion2)
+                    ORDER BY id ASC ");
+                $cusosSesiones2 = $command->queryAll();
+                $cusosSesiones2= $this->arrayArrayComas($cusosSesiones2,'descripcion');
+                //array_push($data, $promedioHorasFase2, $cusosSesiones2);
+                $data['fase_2']['duracion_promedio'] = $promedioHorasFase2;
+                $data['fase_2']['cursos'] = $cusosSesiones2;
+
+                $command = $connection->createCommand("
+                    SELECT 
+                    DISTINCT(dts.id_sesion),
+                            dts.fecha_sesion,
+                            efe.numero_apps_desarrolladas,
+                            dts.duracion_sesion
+                    FROM semilleros_tic.datos_sesiones as dts
+                    join semilleros_tic.ejecucion_fase_ii as efe on efe.id_datos_sesiones = dts.id
+                    join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
+                    WHERE dpro.id_sede =  $idSede 
+                        ");
+                $datosEjeccionFaseii = $command->queryAll();
+                $promedioParticipantes2 = 0;
+                if ($maxSesionFaseII < count($datosEjeccionFaseii)){
+                    $maxSesionFaseII = count($datosEjeccionFaseii);
+                }
+                if(count($datosEjeccionFaseii) > 0){
+                    foreach ($datosEjeccionFaseii as $datos1 => $valor){
+                        @$totalapps2 += $valor['apps_desarrolladas'];
+                        @$totalparticipantes2  += 0;//$valor['estudiantes_participantes'];
+                        //array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
+                        $promedioParticipantes2 += 0;//$valor['estudiantes_participantes'];
+
+                        $data['fase_2']['sesiones'][$datos1][0] = $datos1;
+                        $data['fase_2']['sesiones'][$datos1][1] = $valor['fecha_sesion'];
+                        $data['fase_2']['sesiones'][$datos1][2] = 0;//$valor['estudiantes_participantes'];
+                        $data['fase_2']['sesiones'][$datos1][3] = $valor['duracion_sesion'];
+                    }
+                    $promedioParticipantes2 = ($promedioParticipantes2 / count($datosEjeccionFaseii));
+                    /**rellena la cantidad de sesiones vacias */
+
+                    //array_push($data, count($datosEjeccionFaseii), $totalparticipantes2, $totalapps2);
+
+                    $data['fase_2']['total_sesiones'] = count($datosEjeccionFaseii);
+                    $data['fase_2']['total_participaciones'] = $totalparticipantes2;
+                    $data['fase_2']['totalapps'] = $totalapps2;
+                }
+                /**Fin fase 2 */
+
+                /**Inicio datos Fase 3 */
+                $id_datos_ieo_profesional3 = $dip['id'];
+                $idSemilleros3 = 1;//$dip['id_semilleros'];
+
+                $command = $connection->createCommand
+                ("
+                        SELECT 
+                        frecuencias_sesiones, asignatura
+                        FROM semilleros_tic.acuerdos_institucionales
+                        WHERE id_semilleros_datos_ieo = $idSemilleros3 and id_fase = 3
+                    ");
+                $datoAcuerdosInstitucionales3 = $command->queryAll();
+                $frecuenciaSesion3 = $this->arrayArrayComas($datoAcuerdosInstitucionales3,'frecuencias_sesiones') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales3,'frecuencias_sesiones') : "0" ;
+                $cursoSesion3 = $this->arrayArrayComas($datoAcuerdosInstitucionales3,'curso') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales3,'curso') : "0" ;
+
+                /**Obtiene nombres descriptivos en base a los id's de las sesiones */
+                $command = $connection->createCommand("
+                    SELECT descripcion
+                    FROM public.parametro
+                    WHERE id in($frecuenciaSesion3)
+                    ORDER BY id ASC ");
+                $frecuenciasSesiones3 = $command->queryAll();
+                $frecuenciasSesiones3= $this->arrayArrayComas($frecuenciasSesiones3,'descripcion');
+
+                //array_push($data,$frecuenciasSesiones3);
+                $data['fase_3']['frecuencia_sesion'] = $frecuenciasSesiones3;
+
+                //Duracion promedio de las sesiones
+                //Datos generales de las sesiones
+
+                $command = $connection->createCommand
+                ("
+                    SELECT 
+                        dts.duracion_sesion
+                    FROM semilleros_tic.datos_sesiones as dts
+                    join semilleros_tic.ejecucion_fase_iii as efe on efe.id_datos_sesion = dts.id
+                    join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
+                    WHERE dpro.id_sede =  $idSede 
+                    ");
+                $datoSemillerosTicEjecucionFase3 = $command->queryAll();
+                $segundos3 = 0;
+                foreach ($datoSemillerosTicEjecucionFase3 as $datosSTEF => $valor){
+                    $segundos3 += $this->conversionSegundos($valor['duracion_sesion']);
+                }
+                $promedioHorasFase3  = @($segundos3 / count($datoSemillerosTicEjecucionFase3));
+                $promedioHorasFase3 =  $this->conversionSegundosHora($promedioHorasFase3);
+
+                /**Obtiene nombre de los cursos para fase 1 */
+                $command = $connection->createCommand("
+                    SELECT descripcion
+                    FROM public.paralelos
+                    WHERE id in($cursoSesion3)
+                    ORDER BY id ASC ");
+                $cusosSesiones3 = $command->queryAll();
+                $cusosSesiones3= $this->arrayArrayComas($cusosSesiones3,'descripcion');
+                //array_push($data, $promedioHorasFase3, $cusosSesiones3);
+                $data['fase_3']['duracion_promedio'] = $promedioHorasFase3;
+                $data['fase_3']['cursos'] = $cusosSesiones3;
+
+                $command = $connection->createCommand("
+                    SELECT 
+                    DISTINCT(dts.id_sesion),
+                        dts.fecha_sesion,
+                        efe.numero_apps_usadas,
+                        dts.duracion_sesion
+                    FROM semilleros_tic.datos_sesiones as dts
+                    join semilleros_tic.ejecucion_fase_iii as efe on efe.id_datos_sesion = dts.id
+                    join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
+                    WHERE dpro.id_sede =  $idSede 
+                    ");
+                $datosEjeccionFaseiii = $command->queryAll();
+                $promedioParticipantes3 = 0;
+                if ($maxSesionFaseIII < count($datosEjeccionFaseiii)){
+                    $maxSesionFaseIII = count($datosEjeccionFaseiii);
+                }
+                if(count($datosEjeccionFaseiii) > 0){
+                    foreach ($datosEjeccionFaseiii as $datos1 => $valor){
+                        @$totalapps3 += $valor['numero_apps'];
+                        @$totalparticipantes3  += 0;//$valor['estudiantes_participantes'];
+                        //array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
+
+                        $data['fase_3']['sesiones'][$datos1][0] = $datos1;
+                        $data['fase_3']['sesiones'][$datos1][1] = $valor['fecha_sesion'];
+                        $data['fase_3']['sesiones'][$datos1][2] = 0;//$valor['estudiantes_participantes'];
+                        $data['fase_3']['sesiones'][$datos1][3] = $valor['duracion_sesion'];
+
+                        $promedioParticipantes3 += 0;//$valor['estudiantes_participantes'];
+                    }
+                    $promedioParticipantes3 =  $promedioParticipantes3 / count($datosEjeccionFaseiii);
+                    /**rellena la cantidad de sesiones vacias */
+
+                    //array_push($data, count($datosEjeccionFaseiii), $totalparticipantes3, $totalapps3);
+
+                    $data['fase_3']['total_sesiones'] = count($datosEjeccionFaseiii);
+                    $data['fase_3']['total_participaciones'] = $totalparticipantes3;
+                    $data['fase_3']['totalapps'] = $totalapps3;
+                }
+                /**Fin datos fase 3 */
+                //array_push($data, ($promedioParticipantes1 + $promedioParticipantes2 + $promedioParticipantes3) / 3 ,(count($datosEjeccionFaseiii) + count($datosEjeccionFaseii) + count($datosEjeccionFasei)));
+
+
+                //array_push($totalDatos, $data);
+
+                if (isset($data['fase_1']['sesiones'][$datos1])){
+                    if ($maxSesionFaseI < $data['fase_1']['sesiones'][$datos1][0]){
+                        $maxSesionFaseI = $data['fase_1']['sesiones'][$datos1][0];
+                    }
+                }
+
+                if (isset($data['fase_2']['sesiones'][$datos1])){
+                    if ($maxSesionFaseII < $data['fase_2']['sesiones'][$datos1][0]){
+                        $maxSesionFaseII = $data['fase_2']['sesiones'][$datos1][0];
+                    }
+                }
+
+                if (isset($data['fase_3']['sesiones'][$datos1])) {
+                    if ($maxSesionFaseIII < $data['fase_3']['sesiones'][$datos1][0]) {
+                        $maxSesionFaseIII = $data['fase_3']['sesiones'][$datos1][0];
+                    }
+                }
+
+                $mayorSesion['maxSesionFaseI'] = $maxSesionFaseI;
+                $mayorSesion['maxSesionFaseII'] = $maxSesionFaseII;
+                $mayorSesion['maxSesionFaseIII'] = $maxSesionFaseIII;
+
+                $lastSesion = 0;
+                if (isset($data['fase_3']['sesiones'])){
+                    $lastSesion = end($data['fase_3']['sesiones']);
+                }
+
+                $data['datos_ieo']['fecha_inicio_semillero'] = $lastSesion[1];
+
+
+                $data['total']['promedio'] = ($promedioParticipantes1 + $promedioParticipantes2 + $promedioParticipantes3) / 3 ;
+                $data['total']['suma_fases'] = (count($datosEjeccionFaseiii) + count($datosEjeccionFaseii) + count($datosEjeccionFasei));
+
+                $totalDatos[$key] = $data;
+
+                $contador++;
+            }
+
+        }
+
+        foreach ($totalDatos AS $key => $dato) {
+            if (!isset($dato['fase_1']['sesiones'])){
+                $dato['fase_1']['sesiones'] = [];
+            }
+            if (!isset($dato['fase_2']['sesiones'])){
+                $dato['fase_2']['sesiones'] = [];
+            }
+            if (!isset($dato['fase_3']['sesiones'])){
+                $dato['fase_3']['sesiones'] = [];
+            }
+
+            for ($i = count($dato['fase_1']['sesiones']); $i < $maxSesionFaseI; $i++) {
+                $totalDatos[$key]['fase_1']['sesiones'][$i] = [];
+                array_push($totalDatos[$key]['fase_1']['sesiones'][$i], $i,"---","---","---");
+            }
+            for ($i = count($dato['fase_2']['sesiones']); $i < $maxSesionFaseII; $i++) {
+                $totalDatos[$key]['fase_2']['sesiones'][$i] = [];
+                array_push($totalDatos[$key]['fase_2']['sesiones'][$i], $i,"---","---","---");
+            }
+            for ($i = count($dato['fase_3']['sesiones']); $i < $maxSesionFaseIII; $i++) {
+                $totalDatos[$key]['fase_3']['sesiones'][$i] = [];
+                array_push($totalDatos[$key]['fase_3']['sesiones'][$i], $i,"---","---","---");
+            }
+        }
+
+        /**rellena la cantidad de sesiones vacias */
         $searchModel = new EcDatosBasicosBuscar();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'data' => $totalDatos,
+            'mayorSesion' => $mayorSesion
         ]);
     }
 
-	//retorna la informacion del Resumen_Operativo_ Estudiantes_Docentes_Operativo docentes
-	public function actionObtenerInfo()
-	{
+
+    public function conversionSegundos($hora)
+    {
+        list($horas, $minutos) = explode(':',$hora);
+        $hora_en_segundos = ($horas * 3600 ) + ($minutos * 60 );
+
+        return $hora_en_segundos;
+    }
 
 
-		//informacion de la tabla  semilleros_tic.datos_ieo_profesional
-		// variable con la conexion a la base de datos 
-		$connection = Yii::$app->getDb();
-		$command = $connection->createCommand("
-			SELECT	dip.id ,i.codigo_dane as codigo_dane_institucion, i.descripcion as institucion, s.codigo_dane as codigo_dane_sede,
-							s.descripcion as sede, 
-							i.id as id_institucion, 
-							s.id as id_sede, 
-							a.descripcion as anio, 
-							fa.descripcion as fase,
-							sdi.personal_a,
-							sdi.id as id_semilleros
-			FROM 	semilleros_tic.datos_ieo_profesional as dip,public.sedes as s,public.instituciones as i, semilleros_tic.anio as a, 
-					semilleros_tic.fases as fa,	semilleros_tic.ejecucion_fase as ef, semilleros_tic.semilleros_datos_ieo as sdi
-			WHERE 	dip.id_institucion = i.id
-			AND		dip.id_sede = s.id
-			AND 	dip.estado = 1
-			AND 	dip.id = ef.id_datos_ieo_profesional
-			AND 	ef.id_fase=fa.id 
-			AND 	sdi.id_institucion =dip.id_institucion
-			AND 	sdi.sede = dip.id_sede 
-			GROUP BY dip.id,i.codigo_dane,i.descripcion, 
-			s.codigo_dane, s.descripcion,i.id,s.id, a.descripcion,
-			fa.descripcion,sdi.personal_a, sdi.id
-			ORDER BY i.id, s.id
-			");
-		$datos_ieo_profesional = $command->queryAll();
-	
-		$html="";
-		$contador =0;
-		foreach ($datos_ieo_profesional as $dip)
-		{
-			$html.="<tr>";
+    public function conversionSegundosHora($segundos) {
+        $h = floor($segundos / 3600);
+        $m = floor(($segundos % 3600) / 60);
 
-			$idInstitucion = $dip['id_institucion'];
-			$idSede = $dip['id_sede'];
-			
-			//obtener las fecha de inicio de semillero 
-			$command = $connection->createCommand
-			("
-				SELECT fecha_sesion FROM semilleros_tic.datos_sesiones WHERE id_sesion = 1 ORDER BY id ASC 
-			");
-			$fechas = $command->queryAll();
+        return sprintf('%02d:%02d', $h, $m);
+    }
 
-			$id_datos_ieo_profesional = $dip['id'];
-			$command = $connection->createCommand
-			("
-				SELECT 
-				id_datos_sesiones,
-				docente,
-				asignaturas,
-				especiaidad,
-				seiones_empleadas,
-				numero_apps,
-				docente
-				FROM semilleros_tic.ejecucion_fase 
-				WHERE id_datos_ieo_profesional = $id_datos_ieo_profesional 
-			");
-			$datoSemillerosTicEjecucionFase = $command->queryAll();
-			
-			
-			$docente = array();
-			$especiaidad = array();
-			
-			
-			//se agrupa la informacion de todas las sesiones para luego ser concatenada
-			foreach ($datoSemillerosTicEjecucionFase as $datosSTEF => $valor)
-			{	
-				
-				@$asignatura[$valor['id_datos_sesiones']][]= $valor['asignaturas'];
-				@$especiaidad[$valor['id_datos_sesiones']][]= $valor['especiaidad'];
-				@$datosSesion[$valor['id_datos_sesiones']]= $valor['id_datos_sesiones'];
-				@$seionesEmpleadas[$valor['id_datos_sesiones']]= $valor['id_datos_sesiones'];
-				@$numeroApps+= $valor['numero_apps'];
-				@$cantidadDocente [$valor['id_datos_sesiones']][]= $valor['docente'];
-			}
-				
-		
-			$idDatosSesiones = implode(",",$datosSesion);			
-			//se pasa a por comas para mostrar todas la materias
-			//variable que guarda los datos a mostrar
-			$asignaturas="";
-			foreach ($asignatura as $asig)
-			{
-				$asignaturas .= implode(",",$asig).",";
-			}
-			$asignaturas = substr($asignaturas,0,-1);
-			
-			
-			
-			//cantidad docentes fase 1 sesiones
-			foreach ($cantidadDocente as $cd => $value)
-			{
-				$cantidadDocentes[] = count($value);
-			}
-			
-		
-			$command = $connection->createCommand
-			("
-				SELECT 
-				fecha_sesion,
-				duracion_sesion
-				FROM semilleros_tic.datos_sesiones
-				WHERE id in($idDatosSesiones)
-				GROUP BY fecha_sesion,duracion_sesion,id
-				ORDER BY id ASC 
-			");
-			$datos_sesiones = $command->queryAll();
-			
-		
-		
-			$idProfesionalA = $dip['personal_a'];
-			//nombres de los profesional a
-			$command = $connection->createCommand
-			("
-				SELECT concat(p.nombres,' ',p.apellidos) as nombre		
-				FROM public.personas as p
-				WHERE id in($idProfesionalA )
-			");
-			$datoPersonalA = $command->queryAll();	
-			$nomresPersonalA = $this->arrayArrayComas($datoPersonalA,'nombre');
-		
-			
-
-			//nombres de los docentes 
-			$idSemilleros = $dip['id_semilleros'];
-			$command = $connection->createCommand
-			("
-				SELECT 
-				id_docente,
-				especialidad,
-				frecuencias_sesiones
-				FROM semilleros_tic.acuerdos_institucionales
-				WHERE id_semilleros_datos_ieo = $idSemilleros
-			");
-			$datoAcuerdosInstitucionales = $command->queryAll();	
-			$datosIdDocentes = $this->arrayArrayComas($datoAcuerdosInstitucionales,'id_docente');
-			$especialidades= $this->arrayArrayComas($datoAcuerdosInstitucionales,'especialidad');
-			//id de la frecuencia sesiones mensual
-			$frecuenciaSesion= $this->arrayArrayComas($datoAcuerdosInstitucionales,'frecuencias_sesiones');
-			
-			$command = $connection->createCommand
-			("
-				SELECT concat(p.nombres,' ',p.apellidos) as nombre		
-				FROM public.personas as p
-				WHERE id in($datosIdDocentes )
-			");
-			$datosDocentes = $command->queryAll();	
-			$nombresDocentes = $this->arrayArrayComas($datosDocentes,'nombre');
-			//datos Fase II
-			
-			
-			//Promedio de duración por cada sesión (hora reloj)
-			$totalDuracionSesiones =0;
-			
-				
-			$segundos = 0;
-			foreach($datos_sesiones as $ds)
-			{
-				
-				$segundos += $this->horasSegundos($ds['duracion_sesion']);
-			}
-			
-			$promedioHorasFase1  = $segundos / count($datos_sesiones);
-			$promedioHorasFase1 =  $this->SegundosHora($promedioHorasFase1);
-			
-			
-			$command = $connection->createCommand("
-			SELECT descripcion 
-			FROM public.parametro
-			WHERE id in($frecuenciaSesion)
-			ORDER BY id ASC ");
-			$frecuenciasSesiones = $command->queryAll();
-			$frecuenciasSesiones= $this->arrayArrayComas($frecuenciasSesiones,'descripcion');
-			
-	
-			$html.="<td style='border: 1px solid black;'>".$dip['codigo_dane_institucion']."</td>";	
-			$html.="<td style='border: 1px solid black;'>".$dip['institucion']."</td>";	
-			$html.="<td style='border: 1px solid black;'>".$dip['codigo_dane_sede']."</td>";	
-			$html.="<td style='border: 1px solid black;'>".$dip['sede']."</td>";
-			
-			//anio
-			$html.="<td style='border: 1px solid black;'>".$dip['anio']."</td>";	
-			
-			//profesional_a
-			$html.="<td style='border: 1px solid black;'>".$nomresPersonalA ."</td>";
-			
-			//Fecha de inicio del Semillero
-			$html.="<td style='border: 1px solid black;'>".@$fechas[$contador]['fecha_sesion']."</td>";	
-			
-			//nombre del docente
-			$html.="<td style='border: 1px solid black;'>".$nombresDocentes."</td>";
-			
-			//Nombre de las asignaturas que enseña
-			$html.="<td style='border: 1px solid black;'>".$asignaturas."</td>";	
-			
-			//Especialidad de la Media Técnica o Técnica	
-			$html.="<td style='border: 1px solid black;'>".$especialidades."</td>";
-			
-			//Frecuencia sesiones mensual fase 1
-			$html.="<td style='border: 1px solid black;'>".$frecuenciasSesiones ."</td>";	
-			
-			//Promedio de duración por cada sesión (hora reloj) fase 1
-			$html.="<td style='border: 1px solid black;'>".$promedioHorasFase1 ."</td>";
-				
-				
-		
-			//docente por sesion fase 1
-			for($i=0;$i<=5;$i++)
-			{
-				//docentes por sesion fase 1
-				$html.="<td style='border: 1px solid black;'>".@$cantidadDocentes[$i]."</td>";
-				//fecha de la sesion fase 1
-				$html.="<td style='border: 1px solid black;'>".@$datos_sesiones[$i]['fecha_sesion']."</td>";
-				//duración de la sesion fase 1
-				$html.="<td style='border: 1px solid black;'>".@$datos_sesiones[$i]['duracion_sesion']."</td>";
-				
-			}
-			
-			$command = $connection->createCommand
-				("
-					select ai.frecuencias_sesiones, p.descripcion
-					from semilleros_tic.acuerdos_institucionales as ai, semilleros_tic.fases as f, semilleros_tic.semilleros_datos_ieo as sdi,
-						semilleros_tic.datos_ieo_profesional as dip, semilleros_tic.ejecucion_fase_ii as ef, semilleros_tic.anio as a, public.parametro as p
-					where f.id = 2
-					and ai.id_fase = f.id
-					and ai.id_semilleros_datos_ieo = sdi.id
-					and sdi.id_institucion = dip.id_institucion
-					and sdi.sede = dip.id_sede
-					and dip.id_institucion = $idInstitucion 
-					and dip.id_sede = $idSede
-					and c.id_anio = a.id
-					and dip.estado = 1
-					and ef.estado = 1
-					and sdi.estado = 1
-					and ai.estado = 1
-					and a.estado = 1
-					and  ai.frecuencias_sesiones = p.id
-					group by ai.frecuencias_sesiones,p.descripcion
-
-				");
-				$frecuenciaSesiones = $command->queryAll();
-			
-			// echo "<pre>"; print_r($frecuenciaSesiones); echo "</pre>"; 
-			$frecunciaSesionesFase2 = $this->arrayArrayComas($frecuenciaSesiones,'descripcion');
-			
-			//total Sesiones
-			$html.="<td style='border: 1px solid black;'>".count($seionesEmpleadas)."</td>";
-			
-			//Número de Apps 0.0 creadas
-			$html.="<td style='border: 1px solid black;'>$numeroApps</td>";
-			
-			//frecuencia sesiones mensual fase ii
-			$html.="<td style='border: 1px solid black;'>$frecunciaSesionesFase2</td>";
-			
-			
-			
-			//datos de la fase 2
-			$command = $connection->createCommand("
-			SELECT 
-			id_datos_sesiones,
-			docentes,
-			numero_apps_desarrolladas
-			FROM semilleros_tic.ejecucion_fase_ii
-			WHERE id_datos_ieo_profesional = $id_datos_ieo_profesional
-			AND estado = 1
-			ORDER BY id ASC ");
-			$datosEjeccionFaseii = $command->queryAll();
-			
-			
-			$cantidadDocenteFase2 = array();
-			
-			$datosSesionFase2= array();
-			foreach ($datosEjeccionFaseii as $datosSTEF2 => $valor)
-			{	
-				
-				@$asignaturaFase2[$valor['id_datos_sesiones']][]= $valor['asignaturas'];
-				@$especiaidadFase2[$valor['id_datos_sesiones']][]= $valor['especiaidad'];
-				@$datosSesionFase2[$valor['id_datos_sesiones']]= $valor['id_datos_sesiones'];
-				@$seionesEmpleadasFase2[$valor['id_datos_sesiones']]= $valor['id_datos_sesiones'];
-				@$numeroAppsFase2+= $valor['numero_apps_desarrolladas'];
-				@$cantidadDocenteFase2[$valor['id_datos_sesiones']][]= $valor['docente'];
-			}
-				
-			//cantidad docentes fase 1 sesiones
-			foreach ($cantidadDocenteFase2 as $cd => $value)
-			{
-				$cantidadDocentesFase2[] = count($value);
-			}
-			
-			if(isset($cantidadDocentesFase2))
-			{
-				
-				$idDatosSesionesFase2 = implode(",",$datosSesionFase2);	
-				
-				$command = $connection->createCommand
-				("
-					SELECT 
-					id,
-					fecha_sesion,
-					duracion_sesion
-					FROM semilleros_tic.datos_sesiones
-					WHERE id in($idDatosSesionesFase2)
-					GROUP BY fecha_sesion,duracion_sesion,id
-					ORDER BY id ASC 
-				");
-				$datos_sesionesFase2 = $command->queryAll();
-				
-				$cantidadSesionesEmpleadasFase2 =  count($seionesEmpleadasFase2);
-					
-			
-				$totalDuracionSesionesFse2 =0;
-				foreach($datos_sesionesFase2 as $ddsf2)
-				{
-					
-					$totalDuracionSesionesFse2+=$this->horasSegundos( $ddsf2['duracion_sesion']);
-				}
-				
-				$promedio =  $this->SegundosHora( $totalDuracionSesionesFse2 / count($datos_sesionesFase2));
-				
-			}
-			else
-			{
-				$cantidadSesionesEmpleadasFase2 = "";
-			}
-			
-		
-			$html.="<td style='border: 1px solid black;'>$promedio</td>";
-			
-			//informacion sesiones fase 2
-			for($i=0;$i<=5;$i++)
-			{
-				//docentes por sesion fase 2
-				$html.="<td style='border: 1px solid black;'>".@$cantidadDocentesFase2[$i]."</td>";
-				// fecha de la sesion fase 2
-				$html.="<td style='border: 1px solid black;'>".@$datos_sesionesFase2[$i]['fecha_sesion']."</td>";
-				//duración de la sesion fase 2
-				$html.="<td style='border: 1px solid black;'>".@$datos_sesionesFase2[$i]['duracion_sesion']."</td>";
-				
-			}
-			
-			
-			//total Sesiones fase2
-			$html.="<td style='border: 1px solid black;'>".$cantidadSesionesEmpleadasFase2."</td>";
-			
-			//Número de Apps 0.0 creadas
-			$html.="<td style='border: 1px solid black;'>$numeroAppsFase2</td>";
-			
-			
-			
-			//datos de la fase 3
-			$command = $connection->createCommand("
-			SELECT 
-			id_datos_sesion,
-			docente_creador
-			FROM semilleros_tic.ejecucion_fase_iii
-			WHERE id_datos_ieo_profesional = $id_datos_ieo_profesional
-			AND estado = 1
-			ORDER BY id ASC ");
-			$datosEjeccionFaseiii = $command->queryAll();
-			
-			// echo "<pre>"; print_r($datosEjeccionFaseiii); echo "</pre>"; 
-			$cantidadDocenteFase3 = array();
-			
-			// $datosSesionFase3= array();
-			foreach ($datosEjeccionFaseiii as $datosSTEF2 => $valor)
-			{	
-				
-				@$asignaturaFase3[$valor['id_datos_sesion']][]= $valor['asignaturas'];
-				@$especiaidadFase3[$valor['id_datos_sesion']][]= $valor['especiaidad'];
-				@$datosSesionFase3[$valor['id_datos_sesion']]= $valor['id_datos_sesion'];
-				@$seionesEmpleadasFase3[$valor['id_datos_sesion']]= $valor['id_datos_sesiones'];
-					
-			}
-				
-			//cantidad docentes fase 3 sesiones
-			
-			if(isset($datosSesionFase3))
-			{
-				$idDatosSesionesFase3 = implode(",",array_filter ( $datosSesionFase3));	
-				
-			
-				$command = $connection->createCommand
-				("
-					SELECT 
-					ds.id_sesion, 
-					ds.fecha_sesion, 
-					ds.duracion_sesion, 
-					se.descripcion as sesion 
-					FROM semilleros_tic.datos_sesiones as ds, semilleros_tic.sesiones as se
-					where ds.id in($idDatosSesionesFase3)
-					AND ds.id_sesion = se.id
-					ORDER BY ds.id ASC 
-				");
-				$datos_sesionesFase3 = $command->queryAll();
-			
-				foreach ($datos_sesionesFase3 as $dsF3 => $value)
-				{
-					$fechaSesionFase3[$value['id_sesion']][] =$value['fecha_sesion'];
-					$duracionSesionFase3[$value['id_sesion']][] =$value['duracion_sesion'];
-				}
-				
-				$cantidadSesionesEmpleadasFase3 =  count($duracionSesionFase3);
-				// $nombresDocentes = array();
-				
-				
-				foreach($fechaSesionFase3 as $fs3 => $value)
-				{
-					$fechasSesionesFase3[] =$value[0];
-				}
-
-				$contador = 0;
-				$totalpromedio=0;
-				foreach($duracionSesionFase3 as $ds3 => $value)
-				{
-					$total= 0;
-					foreach($value as $dato)
-					{
-						$contador++;
-						$total +=$this->horasSegundos($dato);
-					}
-					$totalpromedio +=$total;
-					$duracionesSesionesFase3[]= $this->SegundosHora($total);
-				}
-				
-				$promedioFase3 = $this->SegundosHora($totalpromedio / $contador);
-				$contador = 0;
-				
-				$promedio =  $this->SegundosHora( $totalDuracionSesionesFse2 / count($datos_sesionesFase2));
-				
-				
-								
-				$command = $connection->createCommand
-				("
-				SELECT ds.id_sesion, 
-				ef.docente_creador, 
-				ai.id_docente
-				FROM semilleros_tic.ejecucion_fase_iii as ef, semilleros_tic.datos_sesiones as ds, semilleros_tic.acuerdos_institucionales as ai
-				where ef.id_datos_sesion in ($idDatosSesionesFase3)
-				AND ef.id_datos_sesion = ds.id
-				AND ai.id = ef.docente_creador
-				ORDER BY ef.id ASC
-				");
-				$docenteCreador = $command->queryAll();
-				
-				foreach($docenteCreador as $dc)
-				{
-					$iddocenteCreador[$dc['id_sesion']][] = $dc['id_docente'];
-				}
-				
-				foreach($iddocenteCreador as $id)
-				{
-					
-					$command = $connection->createCommand
-					("
-						SELECT concat(p.nombres,' ',p.apellidos) as nombre		
-						FROM public.personas as p
-						WHERE id in(".implode(",",$id) ." )
-					");
-					$datoDocenteCreador = $command->queryAll();
-					
-					
-					foreach ($datoDocenteCreador as $ncreador)
-					{
-						// echo "<pre>"; print_r($ncreador); echo "</pre>"; 
-						$nomCredor[]=$ncreador['nombre'];
-					}
-					
-					$nombreDocenteCreador[]=count($nomCredor);
-					$nomCredor=null;
-					
-
-				}
-				
-					
-			$command = $connection->createCommand
-				("
-					select ai.frecuencias_sesiones, p.descripcion
-					from semilleros_tic.acuerdos_institucionales as ai, semilleros_tic.fases as f, semilleros_tic.semilleros_datos_ieo as sdi,
-						semilleros_tic.datos_ieo_profesional as dip, semilleros_tic.ejecucion_fase_ii as ef, semilleros_tic.anio as a, public.parametro as p
-					where f.id = 3
-					and ai.id_fase = f.id
-					and ai.id_semilleros_datos_ieo = sdi.id
-					and sdi.id_institucion = dip.id_institucion
-					and sdi.sede = dip.id_sede
-					and dip.id_institucion = $idInstitucion 
-					and dip.id_sede = $idSede
-					and dip.estado = 1
-					and ef.estado = 1
-					and sdi.estado = 1
-					and ai.estado = 1
-					and a.estado = 1
-					and  ai.frecuencias_sesiones = p.id
-					group by ai.frecuencias_sesiones,p.descripcion
-			
-				");
-				$frecuenciaSesiones3 = $command->queryAll();
-			
-			$frecunciaSesionesFase3 = $this->arrayArrayComas($frecuenciaSesiones3,'descripcion');
-							
-				// $nomresPersonalA = $this->arrayArrayComas($datoPersonalA,'nombre');
-				
-				$command = $connection->createCommand
-					("
-						SELECT asignatura,
-						numero_estudiantes,
-						grado
-						FROM semilleros_tic.ejecucion_fase_iii
-					");
-					$asignaturasFase3 = $command->queryAll();
-					
-					$nombreAsignaturasFase3 = $this->arrayArrayComas($asignaturasFase3,'asignatura');
-					$numeroEstudiantes = $this->arrayArrayComas($asignaturasFase3,'numero_estudiantes');
-					$numeroEstudiantes = explode(",", $numeroEstudiantes);
-					$numeroEstudiantes = array_sum($numeroEstudiantes);
-					$nombreGradosFase3 = $this->arrayArrayComas($asignaturasFase3,'grado');
-					
-					
-			}
-			else
-			{
-
-				$cantidadSesionesEmpleadasFase3 = "";
-			}
-			
-			
-			$arrayFases = array(
-			'Sesión 1',
-			'Sesión 2',
-			'Sesión 3',
-			'Sesión 4',
-			'Sesión 5',
-			'Sesión 6',
-			'Sesión 7',
-			'Sesión 8',
-			'Sesión 9',
-			'Sesión 10',
-			'Sesión 11',
-			'Sesión 12',
-			);
-			
-			
-			//datos sesion iii
-			//frecuencia sesiones mensual fase iii
-			$html.="<td style='border: 1px solid black;'>$frecunciaSesionesFase3</td>";
-			
-			//frecuencia sesiones mensual fase iii
-			$html.="<td style='border: 1px solid black;'>$promedioFase3</td>";
-			
-			//informacion sesiones fase 3
-			
-			for($i=0;$i<=11;$i++)
-			{
-				
-				//docentes por sesion fase 3
-				$html.="<td style='border: 1px solid black;'>".@$nombreDocenteCreador[$i]."</td>";
-				// fecha de la sesion fase 3
-				$html.="<td style='border: 1px solid black;'>".@$fechasSesionesFase3[$i]."</td>";
-				//duración de la sesion fase 3
-				$html.="<td style='border: 1px solid black;'>".@$duracionesSesionesFase3[$i]."</td>";
-				// $cantidadDocenteCreador = "";	
-			}
-				
-			//total Sesiones fase3
-			$html.="<td style='border: 1px solid black;'>".$cantidadSesionesEmpleadasFase3."</td>";
-			
-			//Número de Apps 0.0 creadas
-			$html.="<td style='border: 1px solid black;'>$numeroAppsFase2</td>";
-			
-			//Nombres asignaturas en las que uso la App fase3
-			$html.="<td style='border: 1px solid black;'>$nombreAsignaturasFase3</td>";
-			
-			//Número de estudiantes fase3
-			$html.="<td style='border: 1px solid black;'>$numeroEstudiantes</td>";
-				
-				
-			//Grado de estudiantes fase3 
-			$html.="<td style='border: 1px solid black;'>$nombreGradosFase3</td>";
-			
-			
-			@$totalSesiones  = @count($seionesEmpleadas) + @$cantidadSesionesEmpleadasFase2 + @$cantidadSesionesEmpleadasFase3;
-			$html.="<td style='border: 1px solid black;'>$totalSesiones</td>";
-			
-			// nombresDocentes;
-			
-			
-		
-			$cantidadDocentes = explode(",",$nombresDocentes);
-			$numeroDocentes =count($cantidadDocentes);
-			$html.="<td style='border: 1px solid black;'>$numeroDocentes</td>";
-			
-			
-			$html.="</tr>";
-			
-			//se borra le variable para que quede vacia en el siguiente ciclo del foreach
-			$asignaturas	= null;
-			$especiaidades	= null;
-			$datosSesion	= null;
-			$seionesEmpleadas = null;
-			$asignatura		= null;
-			$especiaidad	= null;
-			$datosSesion	= null;
-			$seionEmpleada	= null;
-			$numeroApp		= null;
-			$numeroApps		= null;
-			$cantidadDocente= null;
-			$cantidadDocentes = null;
-			$cantidadDocenteFase2= null;
-			$cantidadDocentesFase2= null;
-			$datosSesionFase2 = null;
-			$datos_sesionesFase2 = null;
-			$seionesEmpleadasFase2 = null;
-			$numeroAppsFase2 = null;
-			$cantidadDocenteFase3= null;
-			$cantidadDocentesFase3= null;
-			$datosSesionFase3 = null;
-			$datos_sesionesFase3 = null;
-			$seionesEmpleadasFase3 = null;
-			$numeroAppsFase3 = null;
-			$fechasSesionesFase3 = null;
-			$duracionesSesionesFase3 =null;
-			$docenteXSesion = null;
-			$nombresDocentes =null;
-			$nombres = null;
-			$nomCredor = null;
-			$iddocenteCreador = null;
-			$idDatosSesionesFase3 = null;
-			$datoDocenteCreador = null;
-			$nombreDocenteCreador = null;
-			$promedio=null;
-			$frecunciaSesionesFase2 = null;
-			$frecunciaSesionesFase3=null;
-			$promedioFase3=null;
-			$nombreAsignaturasFase3 = null;	
-			$numeroEstudiantes = null;
-			$nombreGradosFase3 = null;
-			$numeroApps= null;
-			$cantidadDocenteCreador = null;
-			$contador++;
-		}
-		echo $html;
-	}
     /**
      * Displays a single EcDatosBasicos model.
      * @param string $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-	 
+
 	public function arrayArrayComas($array,$nombrePos)
 	{
+	    $datos = [];
 		foreach ($array as $ar)
-		{		
+		{
 			$datos[] = $ar[$nombrePos];
 		}
 		return  implode(",",$datos);

@@ -69,23 +69,39 @@ section.content {
 	overflow: auto;
 }
 
+<style>
+
+ table > thead >tr > th {
+     text-align:center;
+ }
+
+table, th, td {
+    border: 1px solid black;
+}
+
+table.dataTable {
+    border-collapse: collapse;
+}
+
+section.content {
+    overflow: auto;
+}
+
 </style>
 
 <div class="ec-datos-basicos-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-	
-	
-	<div class="form-group">
-			
-			<?= Html::a('Volver', 
-										[
-											'semilleros/index',
-										], 
-										['class' => 'btn btn-info']) ?>
-					
-	</div>
 
+    <div class="form-group">
+
+        <?= Html::a('Volver',
+            [
+                'semilleros/index',
+            ],
+            ['class' => 'btn btn-info']) ?>
+
+    </div>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -93,199 +109,133 @@ section.content {
         <?php //echo Html::a('Agregar', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-	<p>
+    <p>
         <?php //echo Html::button('Excel', ['class' => 'btn btn-success', 'onclick' => 'exportar()' ]) ?>
     </p>
 </div>
-<table id='tb'>
-	<thead>
-		<tr style='background-color:#ccc;text-align:center;'>
-			<th colspan='4' style='border: 1px solid black;'>Datos IEO</th>
-			<th colspan='1' rowspan='3' style='border: 1px solid black;'>Año</th>
-			<th colspan='1' rowspan='3' style='border: 1px solid black;'>Profesional A.</th>
-			<th colspan='1' rowspan='3' style='border: 1px solid black;'>Fecha de inicio del Semillero(dd/mm/aaaa)</th>
-			<th colspan='1' rowspan='3' style='border: 1px solid black;'>Nombre del Docente</th>
-			<th colspan='1' rowspan='3' style='border: 1px solid black;'>Nombre de las asignaturas que enseña</th>
-			<th colspan='1' rowspan='3' style='border: 1px solid black;'>Especialidad de la Media Técnica o Técnica</th>
-			<th colspan='40' style='border: 1px solid black;'>Fase I Creaci&oacute;n y prueba</th>
-			<th colspan='40' style='border: 1px solid black;'>Fase II Desarrollo e implementaci&oacute;n</th>
-			<th colspan='43' style='border: 1px solid black;'>Fase III  (Uso - Aplicaci&oacute;n)</th>
-			<th colspan='1' rowspan='3' style='border: 1px solid black;'>TOTAL NUMERO DE SESIONES FASES I A III </th>
-			<th colspan='1' rowspan='3' style='border: 1px solid black;'>TOTAL DOCENTES PARTICIPANTES DE FASE I A III</th>
-		</tr>
-		<tr style='background-color:#ccc'>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>CODIGO DANE IEO</th>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>Instituci&oacute;n educativa</th>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>CODIGO DANE SEDE</th>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>Sede</th>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>Frecuencia sesiones mensual</th>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>Promedio de duraci&oacute;n por cada sesi&oacute;n (hora reloj)</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 1</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 2</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 3</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 4</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 5</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 6</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 7</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 8</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 9</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 10</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 11</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 12</th>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>Total Sesiones</th>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>N&uacute;mero de Apps 0.0 creadas</th>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>Frecuencia sesiones mensual</th>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>Duraci&oacute;n por cada sesi&oacute;n (horas reloj)</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 1</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 2</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 3</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 4</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 5</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 6</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 7</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 8</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 9</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 10</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 11</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 12</th>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>Total Sesiones</th>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>N&uacute;mero de Apps 0.0 desarrolladas e implementadas</th>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>Frecuencia sesiones mensual</th>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>Promedio de duración por cada sesión (hora reloj))</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 1</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 2</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 3</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 4</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 5</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 6</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 7</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 8</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 9</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 10</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 11</th>
-			<th colspan='3' rowspan='1' style='border: 1px solid black;'>Sesi&oacute;n 12</th>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>Total Sesiones</th>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>N&uacute;mero de Apps 0.0 usadas</th>
-			<th colspan='1' rowspan='2' style='border: 1px solid black;'>Nombres asignaturas en las que uso la App</th>
-			<th colspan='2' rowspan='1' style='border: 1px solid black;'>Participantes del uso de la App</th>
-		</tr>
-		<tr style='background-color:#ccc'>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>	
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Docentes por sesión</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Fecha</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Duraci&oacute;n</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>N&uacute;mero de estudiantes</th>
-			<th colspan='1' rowspan='1' style='border: 1px solid black;'>Grado de estudiantes</th>
-			
-		</tr>
-	</thead>
-	<tbody>
-			
-			 <?= $this->context->actionObtenerInfo(); ?>
-			</div>
-	</tbody>
+
+<style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;border-color:#999;}
+    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:15px 6px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#999;color:#444;background-color:#F7FDFA;}
+    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:15px 6px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#999;color:#fff;background-color:#26ADE4;}
+    .tg .tg-baqh{text-align:center;vertical-align:top}
+    .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+    .tg .tg-uys7{border-color:inherit;text-align:center}
+</style>
+<table id="showExcel" class="tg">
+    <thead>
+    <tr>
+        <th class="tg-c3ow" colspan="4" rowspan="2">Datos IEO</th>
+        <th class="tg-c3ow" rowspan="3">Profesional A.	</th>
+        <th class="tg-c3ow" rowspan="3">Fecha de inicio del Semillero</th>
+        <th class="tg-c3ow" colspan="<?= 6 + ($mayorSesion['maxSesionFaseI']*4) ?>">fase I</th>
+        <th class="tg-uys7" colspan="<?= 6 + ($mayorSesion['maxSesionFaseII']*4) ?>">fase 2</th>
+        <th class="tg-c3ow" colspan="<?= 6 + ($mayorSesion['maxSesionFaseIII']*4) ?>">Fase 3</th>
+        <th class="tg-c3ow" rowspan="3">TOTAL PARTICIPANTES FASES I A III (PROMEDIO)</th>
+        <th class="tg-c3ow" rowspan="3">TOTAL NUMERO DE SESIONES FASES I A III</th>
+    </tr>
+    <tr>
+        <td class="tg-c3ow" rowspan="2">Frecuencia sesiones mensual</td>
+        <td class="tg-c3ow" rowspan="2">Duración promedio sesiones (horas reloj)</td>
+        <td class="tg-c3ow" rowspan="2">Curso de los Participantes</td>
+        <?php for ($i=0;$i<$mayorSesion['maxSesionFaseI'];$i++) { ?>
+            <td class="tg-0pky" colspan="4">Sesión</td>
+        <?php } ?>
+        <td class="tg-c3ow" rowspan="2">Total Sesiones</td>
+        <td class="tg-c3ow" rowspan="2">Número de participantes por curso en IEO</td>
+        <td class="tg-uys7" rowspan="2">Número de Apps 0.0 creadas y probadas</td>
+        <td class="tg-uys7" rowspan="2">Frecuencia sesiones mensual</td>
+        <td class="tg-uys7" rowspan="2">Duración por cada sesión (horas reloj)</td>
+        <td class="tg-uys7" rowspan="2">Curso de los Participantes</td>
+        <?php for ($i=0;$i<$mayorSesion['maxSesionFaseII'];$i++) { ?>
+            <td class="tg-0pky" colspan="4">Sesión</td>
+        <?php } ?>
+        <td class="tg-uys7" rowspan="2">Total Sesiones</td>
+        <td class="tg-uys7" rowspan="2">Número de participantes por curso en IEO</td>
+        <td class="tg-uys7" rowspan="2">Número de Apps 0.0 desarrolladas e implementadas</td>
+        <td class="tg-c3ow" rowspan="2">Frecuencia sesiones mensual</td>
+        <td class="tg-c3ow" rowspan="2">Duración por cada sesión (horas reloj)</td>
+        <td class="tg-c3ow" rowspan="2">Curso de los Participantes</td>
+        <?php for ($i=0;$i<$mayorSesion['maxSesionFaseIII'];$i++) { ?>
+            <td class="tg-0pky" colspan="4">Sesión</td>
+        <?php } ?>
+        <td class="tg-c3ow" rowspan="2">Total Sesiones</td>
+        <td class="tg-c3ow" rowspan="2">Número de participantes por curso en IEO</td>
+        <td class="tg-c3ow" rowspan="2">Número de Apps 0.0 desarrolladas e implementadas</td>
+    </tr>
+    <tr>
+        <td class="tg-c3ow">CODIGO DANE IEO</td>
+        <td class="tg-uys7">Institución educativa</td>
+        <td class="tg-c3ow">CODIGO DANE SEDE</td>
+        <td class="tg-c3ow">Sede</td>
+
+        <?php for ($i=0;$i<($mayorSesion['maxSesionFaseI']+$mayorSesion['maxSesionFaseII']+$mayorSesion['maxSesionFaseIII']);$i++) { ?>
+            <td class="tg-0pky"></td>
+            <td class="tg-0pky">Fecha</td>
+            <td class="tg-0pky">N° Asistentes</td>
+            <td class="tg-0pky">Duración</td>
+        <?php } ?>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($data as $key => $value) { ?>
+        <tr>
+            <td><?= isset($value['datos_ieo']['codigo_dane_institucion'] ) ? $value['datos_ieo']['codigo_dane_institucion'] : ' '; ?></td>
+            <td><?= isset($value['datos_ieo']['institucion'] ) ? $value['datos_ieo']['institucion'] : ' '; ?></td>
+            <td><?= isset($value['datos_ieo']['codigo_dane_sede'] ) ? $value['datos_ieo']['codigo_dane_sede'] : ' '; ?></td>
+            <td><?= isset($value['datos_ieo']['sede'] ) ? $value['datos_ieo']['sede'] : ' '; ?></td>
+            <td><?= isset($value['datos_ieo']['nombre_profesional'] ) ? $value['datos_ieo']['nombre_profesional'] : ' '; ?></td>
+            <td><?= isset($value['datos_ieo']['fecha_inicio_semillero'] ) ? $value['datos_ieo']['fecha_inicio_semillero'] : ' '; ?></td>
+
+            <td class="tg-0pky"><?= isset($value['fase_1']['frecuencia_sesion'] ) ? $value['fase_1']['frecuencia_sesion'] : '---'; ?></td>
+            <td class="tg-0pky"><?= isset($value['fase_1']['duracion_promedio'] ) ? $value['fase_1']['duracion_promedio'] : '---'; ?></td>
+            <td class="tg-0pky"><?= isset($value['fase_1']['cursos'] ) ? $value['fase_1']['cursos'] : '---'; ?></td>
+            <?php if (isset($value['fase_1']["sesiones"])){ ?>
+                <?php foreach ($value['fase_1']["sesiones"] as $keyFI => $sesion) { ?>
+                    <td class="tg-0pky"><?= $sesion[0] + 1 ?></td>
+                    <td class="tg-0pky"><?= $sesion[1] ?></td>
+                    <td class="tg-0pky"><?= $sesion[2] ?></td>
+                    <td class="tg-0pky"><?= $sesion[3] ?></td>
+                <?php } ?>
+            <?php } ?>
+            <td class="tg-0pky"><?= isset($value['fase_1']['total_sesiones'] ) ? $value['fase_1']['total_sesiones'] : 0; ?></td>
+            <td class="tg-0lax"><?= isset($value['fase_1']['total_participaciones'] ) ? $value['fase_1']['total_participaciones'] : 0; ?></td>
+            <td class="tg-0pky"><?= isset($value['fase_1']['totalapps'] ) ? $value['fase_1']['totalapps'] : 0; ?></td>
+
+            <td class="tg-0pky"><?= isset($value['fase_2']['frecuencia_sesion'] ) ? $value['fase_2']['frecuencia_sesion'] : '---'; ?></td>
+            <td class="tg-0pky"><?= isset($value['fase_2']['duracion_promedio'] ) ? $value['fase_2']['duracion_promedio'] : '---'; ?></td>
+            <td class="tg-0pky"><?= isset($value['fase_2']['cursos'] ) ? $value['fase_2']['cursos'] : '---'; ?></td>
+            <?php if (isset($value['fase_2']["sesiones"])){ ?>
+                <?php foreach ($value['fase_2']["sesiones"] as $keyFI => $sesion) { ?>
+                    <td class="tg-0pky"><?= $sesion[0] + 1 ?></td>
+                    <td class="tg-0pky"><?= $sesion[1] ?></td>
+                    <td class="tg-0pky"><?= $sesion[2] ?></td>
+                    <td class="tg-0pky"><?= $sesion[3] ?></td>
+                <?php } ?>
+            <?php } ?>
+            <td class="tg-0pky"><?= isset($value['fase_2']['total_sesiones'] ) ? $value['fase_2']['total_sesiones'] : 0; ?></td>
+            <td class="tg-0lax"><?= isset($value['fase_2']['total_participaciones'] ) ? $value['fase_2']['total_participaciones'] : 0; ?></td>
+            <td class="tg-0pky"><?= isset($value['fase_2']['totalapps'] ) ? $value['fase_2']['totalapps'] : 0; ?></td>
+
+
+            <td class="tg-0pky"><?= isset($value['fase_3']['frecuencia_sesion'] ) ? $value['fase_3']['frecuencia_sesion'] : '----'; ?></td>
+            <td class="tg-0pky"><?= isset($value['fase_3']['duracion_promedio'] ) ? $value['fase_3']['duracion_promedio'] : '----'; ?></td>
+            <td class="tg-0pky"><?= isset($value['fase_3']['cursos'] ) ? $value['fase_3']['cursos'] : '---'; ?></td>
+            <?php if (isset($value['fase_3']["sesiones"])){ ?>
+                <?php foreach ($value['fase_3']["sesiones"] as $keyFI => $sesion) { ?>
+                    <td class="tg-0pky"><?= $sesion[0] + 1 ?></td>
+                    <td class="tg-0pky"><?= $sesion[1] ?></td>
+                    <td class="tg-0pky"><?= $sesion[2] ?></td>
+                    <td class="tg-0pky"><?= $sesion[3] ?></td>
+                <?php } ?>
+            <?php } ?>
+            <td class="tg-0pky"><?= isset($value['fase_3']['total_sesiones'] ) ? $value['fase_3']['total_sesiones'] : 0; ?></td>
+            <td class="tg-0lax"><?= isset($value['fase_3']['total_participaciones'] ) ? $value['fase_3']['total_participaciones'] : 0; ?></td>
+            <td class="tg-0pky"><?= isset($value['fase_3']['totalapps'] ) ? $value['fase_3']['totalapps'] : 0; ?></td>
+
+            <td><?= isset($value['total']['promedio'] ) ? $value['total']['promedio'] : 0; ?></td>
+            <td><?= isset($value['total']['suma_fases'] ) ? $value['total']['suma_fases'] : 0; ?></td>
+        </tr>
+    <?php } ?>
+    </tbody>
 </table>
