@@ -202,51 +202,51 @@ $( document ).ready(function(){
 				
 				
 				
-				$.post(
-					"index.php?r=instrumento-poblacion-docentes/view-fases",
-					{
-						institucion	: institucion.val(),
-						sede		: sedes.val(),
-						docente		: docentes.val(),
-						asignatura	: asignaturas.val(),
-						nivel		: niveles.val(),
-					},
-					function( data ){
-						// console.log(data);
-						$( "#dv-fases" ).html( data );
+				// $.post(
+					// "index.php?r=instrumento-poblacion-docentes/view-fases",
+					// {
+						// institucion	: institucion.val(),
+						// sede		: sedes.val(),
+						// docente		: docentes.val(),
+						// asignatura	: asignaturas.val(),
+						// nivel		: niveles.val(),
+					// },
+					// function( data ){
+						// // console.log(data);
+						// $( "#dv-fases" ).html( data );
 						
-						$( ".panel-body" ).each(function(){
+						// $( ".panel-body" ).each(function(){
 		
-							var spanTotal 	= $( "[total]", this );
-							var inputs		= $( "input:text", this );
-							var _self = this;
+							// var spanTotal 	= $( "[total]", this );
+							// var inputs		= $( "input:text", this );
+							// var _self = this;
 							
-							function calcularTotal(){
+							// function calcularTotal(){
 								
-								var sum = 0;
+								// var sum = 0;
 								
-								inputs.each(function(){
-									sum += $( this ).val()*1;
-								});
+								// inputs.each(function(){
+									// sum += $( this ).val()*1;
+								// });
 								
-								spanTotal.html( sum );
-							}
+								// spanTotal.html( sum );
+							// }
 							
-							inputs
-								.change(function(){
-									calcularTotal();
-								})
-								.keyup(function (){
-									this.value = (this.value + '').replace(/[^0-9]/g, '');
-								});
+							// inputs
+								// .change(function(){
+									// calcularTotal();
+								// })
+								// .keyup(function (){
+									// this.value = (this.value + '').replace(/[^0-9]/g, '');
+								// });
 							
-							calcularTotal();
-						});
+							// calcularTotal();
+						// });
 						
-						$( "#tbInfo" ).dataTable();
+						// $( "#tbInfo" ).dataTable();
 
-					},
-				);
+					// },
+				// );
 				
 				
 				
@@ -287,6 +287,7 @@ $( document ).ready(function(){
 				"index.php?r=instrumento-poblacion-docentes/docentes-por-institucion",
 				{
 					institucion:	institucion.val(),
+					sede:			sedes.val(),
 				},
 				function( data ){
 					
@@ -316,51 +317,51 @@ $( document ).ready(function(){
 		
 		
 		
-		$.post(
-			"index.php?r=instrumento-poblacion-docentes/view-fases",
-			{
-				institucion	: institucion.val(),
-				sede		: sedes.val(),
-				docente		: docentes.val(),
-				asignatura	: asignaturas.val(),
-				nivel		: niveles.val(),
-			},
-			function( data ){
-				// console.log(data);
-				$( "#dv-fases" ).html( data );
+		// $.post(
+			// "index.php?r=instrumento-poblacion-docentes/view-fases",
+			// {
+				// institucion	: institucion.val(),
+				// sede		: sedes.val(),
+				// docente		: docentes.val(),
+				// asignatura	: asignaturas.val(),
+				// nivel		: niveles.val(),
+			// },
+			// function( data ){
+				// // console.log(data);
+				// $( "#dv-fases" ).html( data );
 				
-				$( ".panel-body" ).each(function(){
+				// $( ".panel-body" ).each(function(){
 
-					var spanTotal 	= $( "[total]", this );
-					var inputs		= $( "input:text", this );
-					var _self = this;
+					// var spanTotal 	= $( "[total]", this );
+					// var inputs		= $( "input:text", this );
+					// var _self = this;
 					
-					function calcularTotal(){
+					// function calcularTotal(){
 						
-						var sum = 0;
+						// var sum = 0;
 						
-						inputs.each(function(){
-							sum += $( this ).val()*1;
-						});
+						// inputs.each(function(){
+							// sum += $( this ).val()*1;
+						// });
 						
-						spanTotal.html( sum );
-					}
+						// spanTotal.html( sum );
+					// }
 					
-					inputs
-						.change(function(){
-							calcularTotal();
-						})
-						.keyup(function (){
-							this.value = (this.value + '').replace(/[^0-9]/g, '');
-						});
+					// inputs
+						// .change(function(){
+							// calcularTotal();
+						// })
+						// .keyup(function (){
+							// this.value = (this.value + '').replace(/[^0-9]/g, '');
+						// });
 					
-					calcularTotal();
-				});
+					// calcularTotal();
+				// });
 				
-				$( "#tbInfo" ).dataTable();
+				// $( "#tbInfo" ).dataTable();
 
-			},
-		);
+			// },
+		// );
 		
 		
 		
@@ -467,7 +468,7 @@ $( document ).ready(function(){
 		
 		$( "#dv-fases" ).html( '' );
 		
-		if( institucion.val() && sedes.val() && docentes.val() && niveles.val() && asignaturas.val() ){
+		// if( institucion.val() && sedes.val() && docentes.val() && niveles.val() && asignaturas.val() ){
 			
 			$.post(
 				"index.php?r=instrumento-poblacion-docentes/view-fases",
@@ -514,6 +515,6 @@ $( document ).ready(function(){
 
 				},
 			);
-		}
+		// }
 	}
 });

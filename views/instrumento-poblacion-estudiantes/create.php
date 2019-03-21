@@ -20,6 +20,8 @@ $this->title = 'Instrumento Población Estudiantes';
 		'sedes' 		=> $sedes,
 		'estudiantes'	=> $estudiantes,
 		'estados'		=> $estados,
+		'anio'			=> $anio,
+		'esDocente'		=> $esDocente,
     ]) ?>
 
 </div>
