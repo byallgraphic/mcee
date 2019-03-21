@@ -925,7 +925,6 @@ class IeoController extends Controller
 				{
                     $modelEvidencias = [];
 					
-					
 					foreach ($arrayDatosEvidencias as $llave => $valor)
 					{
 						 $modelEvidencias[$llave] = new Evidencias();
@@ -948,27 +947,34 @@ class IeoController extends Controller
 								ec.evidencias
 							WHERE 
 								ieo_id = $id
+							ORDER BY id
 						");
 						$resul = $command->queryAll();
+						
+						
 						
                         $idInstitucion 	= $_SESSION['instituciones'][0];
                         $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
 						
+						foreach  ($resul as $r )
+						{
+							$producto_ruta[]				= $r['producto_ruta'];
+							$resultados_actividad_ruta[] 	= $r['resultados_actividad_ruta'];
+							$acta_ruta[] 					= $r['acta_ruta'];
+							$listado_ruta[]					= $r['listado_ruta'];
+							$fotografias_ruta[]				= $r['fotografias_ruta'];
+						}
 						
-						$producto_ruta				= $resul[0]['producto_ruta'];
-						$resultados_actividad_ruta 	= $resul[0]['resultados_actividad_ruta'];
-						$acta_ruta 					= $resul[0]['acta_ruta'];
-						$listado_ruta				= $resul[0]['listado_ruta'];
-						$fotografias_ruta			= $resul[0]['fotografias_ruta'];
+						// echo "<pre>"; print_r($producto_ruta); echo "</pre>"; 
+						// die;
 						
 						
                         $propiedades = array( "producto_ruta", "resultados_actividad_ruta", "acta_ruta", "listado_ruta", "fotografias_ruta");
                         $llave =0;
                         foreach( $modelEvidencias as $key => $model1) 
                         {
-							$llave++;
-							echo "<pre>"; print_r($key); echo "</pre>"; 
-							echo "<br>";
+							
+							
                             //recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
                             //para posteriormente guardar en la base de datos
                             foreach($propiedades as $propiedad)
@@ -977,9 +983,7 @@ class IeoController extends Controller
                                 // se guarda el archivo en file
                                 
                                 // se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
-                                $files = UploadedFile::getInstances( $model1, "[$llave]$propiedad" );
-                                
-								echo "<pre>"; print_r($files); echo "</pre>"; 
+                                $files = UploadedFile::getInstances( $model1, "[$key]$propiedad" );
                                 if( $files )
                                 {
                                     //se suben todos los archivos uno por uno
@@ -996,23 +1000,29 @@ class IeoController extends Controller
 										
 										//la extencion debe estar en minuisculas para la combrobacion
 										$extensionArchivo = strtolower($extensionArchivo);
+
+										echo $$propiedad[$llave];
+										echo "<br>";
+										echo $nombre_base;
+										echo substr ($$propiedad[$llave],strpos ($$propiedad[$llave],$nombre_base),strlen ($nombre_base));
+										echo "<br>";
 										
-										//se pasan las rutas que estan en la db en el campo $$propiedad para saber en que parte esta el archivo y sobreescribirlo
-										$arrayRuta = explode(",",$$propiedad);	
+										//se pasan las rutas que estan en la db en el campo $$propiedad[$llave] para saber en que parte esta el archivo y sobreescribirlo
+										$arrayRuta = explode(",",$$propiedad[$llave]);	
 										//saber si el nombre y la extencion del archivo ya existe en la base de datos / saber si ya existe el archivo se y se sobreescribe sin cambios en la db
-										if (strpos ($$propiedad,$nombre_base) > 0 and strpos($$propiedad,$extensionArchivo ) > 0 )
+										if (substr ($$propiedad[$llave],strpos ($$propiedad[$llave],$nombre_base),strlen ($nombre_base)) == $nombre_base & substr ($$propiedad[$llave],strpos ($$propiedad[$llave],$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )
 										{
 											//si archivo ya existe se sobreescribe sobreescribiendo la ruta de guardado
 											// Construyo la ruta completa del archivo a guardar
 											foreach ($arrayRuta as $ar)
 											{
-												if (strpos ($ar,$nombre_base) > 0 and strpos($ar,$extensionArchivo) > 0 )
+												// if (strpos ($ar,$nombre_base) > 0 and strpos($ar,$extensionArchivo) > 0 )
+												if (substr ($ar,strpos ($$propiedad[$llave],$nombre_base),strlen ($nombre_base)) == $nombre_base & substr ($ar,strpos ($$propiedad[$llave],$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )
 												{
 													$rutaFisicaDirectoriaUploads  = $ar;
 												}
 											}
 										}
-										
 										//guardar el archivo fisicamente en el servidor
                                         $save = $file->saveAs( $rutaFisicaDirectoriaUploads );
                                         //rutas de todos los archivos
@@ -1020,26 +1030,27 @@ class IeoController extends Controller
                                     }
                                     
                                     
-                                $command = $connection->createCommand("
-								UPDATE ec.evidencias
-								set $propiedad = '". implode(",", $arrayRutasFisicas)."'
-								WHERE 
-									ieo_id = $id
-								AND
-									actividad_id = $key
-								");
-								$resul = $command->queryAll();
-								$arrayRutasFisicas = null;
+									$command = $connection->createCommand("
+									UPDATE ec.evidencias
+									set $propiedad = '". implode(",", $arrayRutasFisicas)."'
+									WHERE 
+										ieo_id = $id
+									AND
+										actividad_id = $key
+									");
+									$resul = $command->queryAll();
+									$arrayRutasFisicas = null;
                                 }
                                 else
                                 {
                                     echo "No hay archivo cargado";
                                 }
                             }
+							$llave++;
                         }
                     }
                 }
-				die;
+			
 			
 				 /**Carga de archivos multiples */
                 if($arrayDatosProducto = Yii::$app->request->post('Producto'))
