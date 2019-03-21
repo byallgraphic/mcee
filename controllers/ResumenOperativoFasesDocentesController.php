@@ -495,9 +495,8 @@ class ResumenOperativoFasesDocentesController extends Controller
                 $dato['fase_3']['sesiones'] = [];
             }
 
-            $i = (count($dato['fase_1']['sesiones'])+1);
-            while ($i < $maxSesionFaseI) {
-                $i++;
+
+            for ($i = count($dato['fase_1']['sesiones']); $i < $maxSesionFaseI; $i++) {
                 $totalDatos[$key]['fase_1']['sesiones'][$i] = [];
                 array_push($totalDatos[$key]['fase_1']['sesiones'][$i], $i,"---","---","---");
             }
