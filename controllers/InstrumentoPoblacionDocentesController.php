@@ -2,10 +2,14 @@
 
 /**
  * Modificaciones:
+ * Fecha: 20-03-2019
+ * Desarrollador: Edwin Molina Grisales
+ * Descripción: La sede no es obligatoria, se puede seleccionar el docente según la sede e institución seleccionada
+ *	------------------------------------------------------------
  * Fecha: 22-10-2018
  * Desarrollador: Edwin Molina Grisales
  * Descripción: Se agrega variables enviadas por GET anio y esDocente para regresar al menu principal
-	------------------------------------------------------------
+ * ------------------------------------------------------------
  */
 
 namespace app\controllers;
@@ -308,6 +312,7 @@ class InstrumentoPoblacionDocentesController extends Controller
 	function actionDocentesPorInstitucion(){
 		
 		$institucion = Yii::$app->request->get('institucion');
+		$sede 		 = Yii::$app->request->get('sede');
 					
 		$data = Personas::find()
 					// ->select( "( nombres || ' ' || apellidos ) as nombres, personas.id" )
@@ -315,10 +320,30 @@ class InstrumentoPoblacionDocentesController extends Controller
 					->innerJoin( 'docentes d', 'd.id_perfiles_x_personas=pp.id' )
 					->innerJoin( 'perfiles_x_personas_institucion ppi', 'ppi.id_perfiles_x_persona=pp.id' )
 					->where( 'personas.estado=1' )
-					->andWhere( 'id_institucion='.$institucion )
-					->all();
+					->andWhere( 'ppi.id_institucion='.$institucion );
+					
+		// if( !empty($docente) && is_numeric($docente) ){
+			// $data->andWhere('andWhere');
+		// }
 		
-		return Json::encode( $data );
+		
+		if( !empty($sede) && is_numeric($sede) )
+		{
+			$data = Personas::find()
+										->select( "p.*" )
+										->from( 'distribuciones_academicas da' )
+										->innerJoin( 'asignaturas_x_niveles_sedes ans', 'ans.id=da.id_asignaturas_x_niveles_sedes' )
+										->innerJoin( 'asignaturas a' , 'a.id=ans.id_asignaturas' )
+										->innerJoin( 'perfiles_x_personas pp' , 'pp.id=da.id_perfiles_x_personas_docentes' )
+										->innerJoin( 'personas p' , 'p.id=pp.id_personas' )
+										->innerJoin( 'sedes_niveles sn' , 'sn.id=ans.id_sedes_niveles' )
+										->andWhere( 'sn.id_sedes='.$sede )
+										->groupby( 'p.id' );
+										
+			// $data->andWhere( 'a.id_sedes='.$sede )
+		}
+		
+		return Json::encode( $data->all() );
 	}
 	
 	function actionViewFases()
@@ -332,18 +357,54 @@ class InstrumentoPoblacionDocentesController extends Controller
 		
 		
 								
-		if( !empty($docente) && is_numeric($docente) ){
+		if( ( !empty($docente) && is_numeric($docente) ) || ( !empty($sede) && is_numeric($sede) ) ){
 			
-			$dataPersonas 		= Personas::find()
-										->select( "( nombres || ' ' || apellidos ) as nombres, personas.id, personas.identificacion, personas.id_tipos_identificaciones" )
-										->innerJoin( 'perfiles_x_personas pp', 'pp.id_personas=personas.id' )
-										->innerJoin( 'docentes d', 'd.id_perfiles_x_personas=pp.id' )
-										->innerJoin( 'perfiles_x_personas_institucion ppi', 'ppi.id_perfiles_x_persona=pp.id' )
-										->where( 'personas.estado=1' )
-										->andWhere( 'id_institucion='.$institucion )
-										->andWhere( 'personas.id='.$docente )
-										->all();
+			// $dataPersonas 		= Personas::find()
+										// ->select( "( nombres || ' ' || apellidos ) as nombres, personas.id, personas.identificacion, personas.id_tipos_identificaciones" )
+										// ->innerJoin( 'perfiles_x_personas pp', 'pp.id_personas=personas.id' )
+										// ->innerJoin( 'docentes d', 'd.id_perfiles_x_personas=pp.id' )
+										// ->innerJoin( 'perfiles_x_personas_institucion ppi', 'ppi.id_perfiles_x_persona=pp.id' )
+										// ->where( 'personas.estado=1' )
+										// ->andWhere( 'id_institucion='.$institucion )
+										// ->andWhere( 'personas.id='.$docente )
+										// ->all();
+										
+			// $dataPersonas = Personas::find()
+									// ->select( "( nombres || ' ' || apellidos ) as nombres, p.id, p.identificacion, p.id_tipos_identificaciones" )
+									// ->from( 'distribuciones_academicas da' )
+									// ->innerJoin( 'asignaturas_x_niveles_sedes ans', 'ans.id=da.id_asignaturas_x_niveles_sedes' )
+									// ->innerJoin( 'asignaturas a' , 'a.id=ans.id_asignaturas' )
+									// ->innerJoin( 'perfiles_x_personas pp' , 'pp.id=da.id_perfiles_x_personas_docentes' )
+									// ->innerJoin( 'personas p' , 'p.id=pp.id_personas' )
+									// ->innerJoin( 'sedes_niveles sn' , 'sn.id=ans.id_sedes_niveles' )
+									// ->where( 'a.id_sedes='.$sede )
+									// ->andWhere( 'p.id='.$docente )
+									// ->andWhere( 'sn.id_sedes='.$sede )
+									// ->groupby( 'p.id' )
+									// ->all();
+									
+			$dataPersonasQuery = Personas::find()
+									->select( "( nombres || ' ' || apellidos ) as nombres, p.id, p.identificacion, p.id_tipos_identificaciones" )
+									->from( 'distribuciones_academicas da' )
+									->innerJoin( 'asignaturas_x_niveles_sedes ans', 'ans.id=da.id_asignaturas_x_niveles_sedes' )
+									->innerJoin( 'asignaturas a' , 'a.id=ans.id_asignaturas' )
+									->innerJoin( 'perfiles_x_personas pp' , 'pp.id=da.id_perfiles_x_personas_docentes' )
+									->innerJoin( 'personas p' , 'p.id=pp.id_personas' )
+									->innerJoin( 'sedes_niveles sn' , 'sn.id=ans.id_sedes_niveles' )
+									->groupby( 'p.id' );
 			
+			if( !empty($docente) && is_numeric($docente) )
+			{
+				$dataPersonasQuery->where( 'p.id='.$docente );
+			}
+			
+			if( !empty($sede) && is_numeric($sede) )
+			{
+				$dataPersonasQuery->andWhere( 'a.id_sedes='.$sede )
+								  ->andWhere( 'sn.id_sedes='.$sede );
+			}
+			
+			$dataPersonas = $dataPersonasQuery->all();
 		}
 		else{
 			
@@ -355,6 +416,8 @@ class InstrumentoPoblacionDocentesController extends Controller
 										->where( 'personas.estado=1' )
 										->andWhere( 'id_institucion='.$institucion )
 										->all();
+										
+										
 			
 		}
 		

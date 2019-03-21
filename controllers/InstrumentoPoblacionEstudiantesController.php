@@ -141,7 +141,7 @@ class InstrumentoPoblacionEstudiantesController extends Controller
 		
 		
 		if( !empty($estudiante) && is_numeric($estudiante) )
-		{	
+		{
 			$dataPersonas 		= Personas::find()
 										->select( "( nombres || ' ' || apellidos ) as nombres, personas.id, personas.identificacion, personas.id_tipos_identificaciones" )
 										->innerJoin( 'perfiles_x_personas pp', 'pp.id_personas=personas.id' )
@@ -512,6 +512,9 @@ class InstrumentoPoblacionEstudiantesController extends Controller
     public function actionCreate()
     {
 		
+		$anio = Yii::$app->request->get('anio');
+		$esDocente = Yii::$app->request->get('esDocente');
+		
 		// echo "<pre>"; var_dump( $_POST );  echo "</pre>"; exit();
         $model = new InstrumentoPoblacionEstudiantes();
 		
@@ -558,6 +561,8 @@ class InstrumentoPoblacionEstudiantesController extends Controller
             'sedes' 		=> [],
             'estudiantes'	=> [],
             'estados'		=> 1,
+            'anio'			=> $anio,
+            'esDocente'		=> $esDocente,
         ]);
     }
 
