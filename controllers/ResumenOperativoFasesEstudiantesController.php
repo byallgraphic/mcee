@@ -468,7 +468,10 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 $mayorSesion['maxSesionFaseII'] = $maxSesionFaseII;
                 $mayorSesion['maxSesionFaseIII'] = $maxSesionFaseIII;
 
-                $lastSesion = end($data['fase_3']['sesiones']);
+                $lastSesion = 0;
+                if (isset($data['fase_1']['sesiones'])){
+                    $lastSesion = array_shift($data['fase_1']['sesiones']);
+                }
 
                 $data['datos_ieo']['fecha_inicio_semillero'] = $lastSesion[1];
 

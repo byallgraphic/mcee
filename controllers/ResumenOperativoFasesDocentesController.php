@@ -69,31 +69,31 @@ class ResumenOperativoFasesDocentesController extends Controller
 
         $connection = Yii::$app->getDb();
         $command = $connection->createCommand('SELECT
-"public".sedes.descripcion AS sede,
-"public".instituciones.descripcion AS institucion,
-semilleros_tic.ejecucion_fase.id_fase,
-semilleros_tic.fases.descripcion AS fase,
-"public".instituciones.codigo_dane AS codigo_dane_institucion,
-"public".sedes."id" AS id_sede,
-"public".instituciones."id" AS id_institucion,
-semilleros_tic.datos_ieo_profesional.id_profesional_a AS profecional_a,
-"public".sedes.codigo_dane AS codigo_dane_sede,
-semilleros_tic.datos_ieo_profesional."id"
-FROM
-semilleros_tic.datos_ieo_profesional
-INNER JOIN semilleros_tic.ejecucion_fase ON semilleros_tic.ejecucion_fase.id_datos_ieo_profesional = semilleros_tic.datos_ieo_profesional."id"
-INNER JOIN "public".sedes ON semilleros_tic.datos_ieo_profesional.id_sede = "public".sedes."id"
-INNER JOIN "public".instituciones ON "public".sedes.id_instituciones = "public".instituciones."id"
-INNER JOIN semilleros_tic.fases ON semilleros_tic.ejecucion_fase.id_fase = semilleros_tic.fases."id"');
+            "public".sedes.descripcion AS sede,
+            "public".instituciones.descripcion AS institucion,
+            semilleros_tic.ejecucion_fase.id_fase,
+            semilleros_tic.fases.descripcion AS fase,
+            "public".instituciones.codigo_dane AS codigo_dane_institucion,
+            "public".sedes."id" AS id_sede,
+            "public".instituciones."id" AS id_institucion,
+            semilleros_tic.datos_ieo_profesional.id_profesional_a AS profecional_a,
+            "public".sedes.codigo_dane AS codigo_dane_sede,
+            semilleros_tic.datos_ieo_profesional."id"
+            FROM
+            semilleros_tic.datos_ieo_profesional
+            INNER JOIN semilleros_tic.ejecucion_fase ON semilleros_tic.ejecucion_fase.id_datos_ieo_profesional = semilleros_tic.datos_ieo_profesional."id"
+            INNER JOIN "public".sedes ON semilleros_tic.datos_ieo_profesional.id_sede = "public".sedes."id"
+            INNER JOIN "public".instituciones ON "public".sedes.id_instituciones = "public".instituciones."id"
+            INNER JOIN semilleros_tic.fases ON semilleros_tic.ejecucion_fase.id_fase = semilleros_tic.fases."id"');
         $datos_ieo_profesional = $command->queryAll();
 
         //echo "<pre>"; print_r($datos_ieo_profesional); echo "</pre>";
-        $data = [];
+        $dataFirst = [];
         foreach ($datos_ieo_profesional as $key =>  $dip)
         {
             if($dip["anio"] = Yii::$app->request->get("anio"))
             {
-                $data[$dip['id_sede']] =  $dip;
+                $dataFirst[$dip['id_sede']] =  $dip;
             }
         }
         $contador =0;
@@ -104,7 +104,7 @@ INNER JOIN semilleros_tic.fases ON semilleros_tic.ejecucion_fase.id_fase = semil
         $mayorSesion['maxSesionFaseI']  = 0;
         $mayorSesion['maxSesionFaseII']  = 0;
         $mayorSesion['maxSesionFaseIII'] = 0;
-        foreach ($data as $key => $dip)
+        foreach ($dataFirst as $key => $dip)
         {
             if(!empty($dip)){
                 $data= [];
@@ -181,7 +181,6 @@ INNER JOIN semilleros_tic.fases ON semilleros_tic.ejecucion_fase.id_fase = semil
                     WHERE dpro.id_sede =  $idSede 
                 ");
                 $datoSemillerosTicEjecucionFase1 = $command->queryAll();
-
                 $segundos = 0;
                 foreach ($datoSemillerosTicEjecucionFase1 as $datosSTEF => $valor)
                 {
@@ -208,23 +207,27 @@ INNER JOIN semilleros_tic.fases ON semilleros_tic.ejecucion_fase.id_fase = semil
                     WHERE dpro.id_sede =  $idSede 
                     ");
                 $datosEjeccionFasei = $command->queryAll();
+
                 $promedioParticipantes1 = 0;
 
                 if ($maxSesionFaseI < count($datosEjeccionFasei)){
                     $maxSesionFaseI = count($datosEjeccionFasei);
                 }
 
+                $newKeyFI = 1;
                 if(count($datosEjeccionFasei) > 0){
                     foreach ($datosEjeccionFasei as $datos1 => $valor){
+
                         @$totalapps1 += $valor['numero_apps'];
                         @$totalparticipantes1  += $valor['paricipacion_sesiones'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['participacion_sesiones'], $valor['duracion_sesion']);
                         $promedioParticipantes1 += $valor['paricipacion_sesiones'];
 
-                        $data['fase_1']['sesiones'][$datos1][0] = $datos1;
-                        $data['fase_1']['sesiones'][$datos1][1] = $valor['fecha_sesion'];
-                        $data['fase_1']['sesiones'][$datos1][2] = $valor['paricipacion_sesiones'];
-                        $data['fase_1']['sesiones'][$datos1][3] = $valor['duracion_sesion'];
+                        $data['fase_1']['sesiones'][$newKeyFI][0] = $newKeyFI;
+                        $data['fase_1']['sesiones'][$newKeyFI][1] = $valor['fecha_sesion'];
+                        $data['fase_1']['sesiones'][$newKeyFI][2] = $valor['paricipacion_sesiones'];
+                        $data['fase_1']['sesiones'][$newKeyFI][3] = $valor['duracion_sesion'];
+                        $newKeyFI++;
                     }
 
                     $promedioParticipantes1 =  $promedioParticipantes1 / count($datosEjeccionFasei);
@@ -312,6 +315,8 @@ INNER JOIN semilleros_tic.fases ON semilleros_tic.ejecucion_fase.id_fase = semil
                 if ($maxSesionFaseII < count($datosEjeccionFaseii)){
                     $maxSesionFaseII = count($datosEjeccionFaseii);
                 }
+
+                $newKeyFII = 1;
                 if(count($datosEjeccionFaseii) > 0){
                     foreach ($datosEjeccionFaseii as $datos1 => $valor){
                         @$totalapps2 += $valor['apps_desarrolladas'];
@@ -319,10 +324,11 @@ INNER JOIN semilleros_tic.fases ON semilleros_tic.ejecucion_fase.id_fase = semil
                         //array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
                         $promedioParticipantes2 += 0;//$valor['estudiantes_participantes'];
 
-                        $data['fase_2']['sesiones'][$datos1][0] = $datos1;
-                        $data['fase_2']['sesiones'][$datos1][1] = $valor['fecha_sesion'];
-                        $data['fase_2']['sesiones'][$datos1][2] = 0;//$valor['estudiantes_participantes'];
-                        $data['fase_2']['sesiones'][$datos1][3] = $valor['duracion_sesion'];
+                        $data['fase_2']['sesiones'][$newKeyFII][0] = $datos1;
+                        $data['fase_2']['sesiones'][$newKeyFII][1] = $valor['fecha_sesion'];
+                        $data['fase_2']['sesiones'][$newKeyFII][2] = 0;//$valor['estudiantes_participantes'];
+                        $data['fase_2']['sesiones'][$newKeyFII][3] = $valor['duracion_sesion'];
+                        $newKeyFII++;
                     }
                     $promedioParticipantes2 = ($promedioParticipantes2 / count($datosEjeccionFaseii));
                     /**rellena la cantidad de sesiones vacias */
@@ -461,8 +467,8 @@ INNER JOIN semilleros_tic.fases ON semilleros_tic.ejecucion_fase.id_fase = semil
                 $mayorSesion['maxSesionFaseIII'] = $maxSesionFaseIII;
 
                 $lastSesion = 0;
-                if (isset($data['fase_3']['sesiones'])){
-                    $lastSesion = end($data['fase_3']['sesiones']);
+                if (isset($data['fase_1']['sesiones'])){
+                    $lastSesion = array_shift($data['fase_1']['sesiones']);
                 }
 
                 $data['datos_ieo']['fecha_inicio_semillero'] = $lastSesion[1];
@@ -489,10 +495,13 @@ INNER JOIN semilleros_tic.fases ON semilleros_tic.ejecucion_fase.id_fase = semil
                 $dato['fase_3']['sesiones'] = [];
             }
 
-            for ($i = count($dato['fase_1']['sesiones']); $i < $maxSesionFaseI; $i++) {
+            $i = (count($dato['fase_1']['sesiones'])+1);
+            while ($i < $maxSesionFaseI) {
+                $i++;
                 $totalDatos[$key]['fase_1']['sesiones'][$i] = [];
                 array_push($totalDatos[$key]['fase_1']['sesiones'][$i], $i,"---","---","---");
             }
+
             for ($i = count($dato['fase_2']['sesiones']); $i < $maxSesionFaseII; $i++) {
                 $totalDatos[$key]['fase_2']['sesiones'][$i] = [];
                 array_push($totalDatos[$key]['fase_2']['sesiones'][$i], $i,"---","---","---");

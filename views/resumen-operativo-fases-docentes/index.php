@@ -190,9 +190,16 @@ section.content {
             <td class="tg-0pky"><?= isset($value['fase_1']['frecuencia_sesion'] ) ? $value['fase_1']['frecuencia_sesion'] : '---'; ?></td>
             <td class="tg-0pky"><?= isset($value['fase_1']['duracion_promedio'] ) ? $value['fase_1']['duracion_promedio'] : '---'; ?></td>
             <td class="tg-0pky"><?= isset($value['fase_1']['cursos'] ) ? $value['fase_1']['cursos'] : '---'; ?></td>
-            <?php if (isset($value['fase_1']["sesiones"])){ ?>
+            <?php if (isset($value['fase_1']["sesiones"])){
+
+
+                echo "<pre>";
+                print_r($value['fase_1']);
+                echo "</pre>";
+
+                ?>
                 <?php foreach ($value['fase_1']["sesiones"] as $keyFI => $sesion) { ?>
-                    <td class="tg-0pky"><?= $sesion[0] + 1 ?></td>
+                    <td class="tg-0pky"><?= $sesion[0] ?></td>
                     <td class="tg-0pky"><?= $sesion[1] ?></td>
                     <td class="tg-0pky"><?= $sesion[2] ?></td>
                     <td class="tg-0pky"><?= $sesion[3] ?></td>
@@ -207,7 +214,7 @@ section.content {
             <td class="tg-0pky"><?= isset($value['fase_2']['cursos'] ) ? $value['fase_2']['cursos'] : '---'; ?></td>
             <?php if (isset($value['fase_2']["sesiones"])){ ?>
                 <?php foreach ($value['fase_2']["sesiones"] as $keyFI => $sesion) { ?>
-                    <td class="tg-0pky"><?= $sesion[0] + 1 ?></td>
+                    <td class="tg-0pky"><?= $sesion[0] ?></td>
                     <td class="tg-0pky"><?= $sesion[1] ?></td>
                     <td class="tg-0pky"><?= $sesion[2] ?></td>
                     <td class="tg-0pky"><?= $sesion[3] ?></td>
@@ -223,7 +230,7 @@ section.content {
             <td class="tg-0pky"><?= isset($value['fase_3']['cursos'] ) ? $value['fase_3']['cursos'] : '---'; ?></td>
             <?php if (isset($value['fase_3']["sesiones"])){ ?>
                 <?php foreach ($value['fase_3']["sesiones"] as $keyFI => $sesion) { ?>
-                    <td class="tg-0pky"><?= $sesion[0] + 1 ?></td>
+                    <td class="tg-0pky"><?= $sesion[0] ?></td>
                     <td class="tg-0pky"><?= $sesion[1] ?></td>
                     <td class="tg-0pky"><?= $sesion[2] ?></td>
                     <td class="tg-0pky"><?= $sesion[3] ?></td>

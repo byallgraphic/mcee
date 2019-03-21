@@ -8,27 +8,29 @@ Descripción: RESUMEN OPERATIVO FASES ESTUDIANTES
 
 
 $( document ).ready(function(){
-	console.log('ok');
-    $('table.tg').DataTable({
-		"language"	: {"url":"//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"},
-		"lengthMenu": [[20,-1],[20,"All"]],
-		"info"		: false,
-		"responsive": true,
-		"dom"		: "lfTrtip",
-		"tableTools":{
-			"aButtons":[
-				{
-					sExtends		:"div",
-					sButtonText		:"Excel",
-					oSelectorOpts	:{ page: "current" },
-					fnClick			:function(){
-						$( "#tb" ).tblToExcel();
-					},
-				},
-			],
-			"sSwfPath":"/yii/mcee/web/assets/da3a8eca/swf/copy_csv_xls_pdf.swf",
-		}
-	});
+    $('#showExcel').DataTable({
+        "language"	: {"url":"//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"},
+        "lengthMenu": [[20,-1],[20,"All"]],
+        "info"		: false,
+        "responsive": true,
+        "dom"		: "lfTrtip",
+        "bPaginate": false,
+        "bFilter": false,
+        "scrollX": true,
+        "tableTools":{
+            "aButtons":[
+                {
+                    sExtends		:"div",
+                    sButtonText		:"Excel",
+                    oSelectorOpts	:{ page: "current" },
+                    fnClick			:function(){
+                        $('#showExcel').tblToExcel();
+                    },
+                },
+            ],
+            "sSwfPath":"/yii/mcee/web/assets/da3a8eca/swf/copy_csv_xls_pdf.swf",
+        }
+    });
 	
 });
 
