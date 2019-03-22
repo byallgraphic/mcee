@@ -86,7 +86,8 @@ if( $guardado ){
     <?php $form = ActiveForm::begin([
 							'action'=> Yii::$app->urlManager->createUrl([
 												'semilleros-datos-ieo/create', 
-												'anio' 	=> $anio, 
+												'anio' 		=> $anio, 
+												'esDocente' => $esDocente, 
 											]) 
 						]); ?>
 
