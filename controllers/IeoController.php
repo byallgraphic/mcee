@@ -217,7 +217,6 @@ class IeoController extends Controller
             if($ieo_model->save())
 			{
                 $id_ieo = $ieo_model->id;
-
                 /**Carga de archivos multiples */
                 // if($arrayDatosRequerimientos = Yii::$app->request->post('RequerimientoExtraIeo'))
 				// {
@@ -392,6 +391,8 @@ class IeoController extends Controller
                     
                     }
                 }
+				
+			
                  /**Carga de archivos multiples */
                 if($arrayDatosEvidencias = Yii::$app->request->post('Evidencias'))
 				{
@@ -808,15 +809,16 @@ class IeoController extends Controller
                 if($arrayDatosDocumentos = Yii::$app->request->post('DocumentosReconocimiento'))
 				{
 						
-					$modelDocumentos = [];
+					// $modelDocumentos = [];
 					// se deben crear modelos igual al valor maximo del indice que tenga  Yii::$app->request->post('DocumentosReconocimiento') en esta caso es 2
-                    for( $i = 0; $i <= 1 ; $i++ )
-					{
-                        $modelDocumentos[] = new DocumentosReconocimiento();
-                    } 
-					
+                    // for( $i = 0; $i <= 1 ; $i++ )
+					// {
+                        $modelDocumentos[1] = new DocumentosReconocimiento();
+                    // } 
+				
                     if (DocumentosReconocimiento::loadMultiple($modelDocumentos, Yii::$app->request->post())) 
 					{
+							
                         $idInstitucion 	= $_SESSION['instituciones'][0];
                         $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
 
@@ -840,6 +842,7 @@ class IeoController extends Controller
                         
                         foreach( $modelDocumentos as $key => $model1) 
                         {
+							
                             //recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
                             //para posteriormente guardar en la base de datos
                             foreach($propiedades as $propiedad)
@@ -847,9 +850,10 @@ class IeoController extends Controller
 								
                                 $arrayRutasFisicas = array();
                                 // se guarda el archivo en file
-                              
                                 // se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
                                 $files = UploadedFile::getInstances( $model1, "[$key]$propiedad" );
+								// die;
+								
                                 if( $files )
                                 {
                                     //se suben todos los archivos uno por uno
@@ -869,15 +873,18 @@ class IeoController extends Controller
 										$extensionArchivo = strtolower($extensionArchivo);
 										
 										//se pasan las rutas que estan en la db en el campo $$propiedad para saber en que parte esta el archivo y sobreescribirlo
-										$arrayRuta = explode(",",$$propiedad);	
+										$arrayRuta = explode(",",$$propiedad);
+										
+										echo "aca no if 1";
 										//saber si el nombre y la extencion del archivo ya existe en la base de datos / saber si ya existe el archivo se y se sobreescribe sin cambios en la db
-										if (strpos ($$propiedad,$nombre_base) > 0 and strpos($$propiedad,$extensionArchivo ) > 0 )
+										if (substr ($$propiedad,strpos ($$propiedad,$nombre_base),strlen ($nombre_base)) == $nombre_base & substr ($$propiedad,strpos ($$propiedad,$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )
 										{
+											echo "acaif 1";
 											//si archivo ya existe se sobreescribe sobreescribiendo la ruta de guardado
 											// Construyo la ruta completa del archivo a guardar
 											foreach ($arrayRuta as $ar)
 											{
-												if (strpos ($ar,$nombre_base) > 0 and strpos($ar,$extensionArchivo) > 0 )
+												if (substr ($ar,strpos ($ar,$nombre_base),strlen ($nombre_base)) == $nombre_base & substr ($ar,strpos ($ar,$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )
 												{
 													$rutaFisicaDirectoriaUploads  = $ar;
 												}
@@ -909,7 +916,6 @@ class IeoController extends Controller
                     
                     }
                 }
-			
 				
 			   /**Carga de archivos multiples evidencias -> actividades */ 
                 if($arrayDatosEvidencias = Yii::$app->request->post('Evidencias'))
@@ -922,9 +928,7 @@ class IeoController extends Controller
 					}
                        
                     if (Evidencias::loadMultiple($modelEvidencias, Yii::$app->request->post() )) 
-					{
-                        
-						
+					{	
 						$connection = Yii::$app->getDb();
 						$command = $connection->createCommand("
 							SELECT 
@@ -942,8 +946,6 @@ class IeoController extends Controller
 						");
 						$resul = $command->queryAll();
 						
-						
-						
                         $idInstitucion 	= $_SESSION['instituciones'][0];
                         $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
 						
@@ -956,19 +958,16 @@ class IeoController extends Controller
 							$fotografias_ruta[]				= $r['fotografias_ruta'];
 						}
 						
-						
                         $propiedades = array( "producto_ruta", "resultados_actividad_ruta", "acta_ruta", "listado_ruta", "fotografias_ruta");
                         $llave =0;
                         foreach( $modelEvidencias as $key => $model1) 
                         {
-							
                             //recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
                             //para posteriormente guardar en la base de datos
                             foreach($propiedades as $propiedad)
                             {
                                 $arrayRutasFisicas = array();
                                 // se guarda el archivo en file
-                                
                                 // se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
                                 $files = UploadedFile::getInstances( $model1, "[$key]$propiedad" );
                                 if( $files )
@@ -1033,20 +1032,13 @@ class IeoController extends Controller
                 }
 			
 			
-
 				 /**Carga de archivos multiples */
                 if($arrayDatosProducto = Yii::$app->request->post('Producto'))
 				{ 
 			
-					// $modelProductos = [];
 					$cantProductos  = count($arrayDatosProducto);
 				   
-                    // for( $i = 0; $i < $cantProductos; $i++ )
-					// {
-                        $modelProductos[] = new Producto();
-                    // }
-						
-						
+                    $modelProductos[] = new Producto();
 						
                     if (Producto::loadMultiple( $modelProductos, Yii::$app->request->post())) 
 					{
@@ -1106,14 +1098,12 @@ class IeoController extends Controller
 										if (substr ($$propiedad,strpos ($$propiedad,$nombre_base),strlen ($nombre_base)) == $nombre_base & substr ($$propiedad,strpos ($$propiedad,$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )
 										{
 											//si archivo ya existe se sobreescribe sobreescribiendo la ruta de guardado
-											// Construyo la ruta completa del archivo a guardar	
-											// echo 
+											// Construyo la ruta completa del archivo a guardar	 
 											foreach ($arrayRuta as $ar)
 											{
 												if (substr ($ar,strpos ($ar,$nombre_base),strlen ($nombre_base)) == $nombre_base & substr ($ar,strpos ($ar,$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )
 												{
 													$rutaFisicaDirectoriaUploads  = $ar;
-													echo "entro if2";
 												}
 											}
 										}	
@@ -1144,7 +1134,7 @@ class IeoController extends Controller
                     }
 
                 }
-				die();  
+
 				
 			return $this->redirect(['index', 'idTipoInforme' => $model->id_tipo_informe]);
 		}
