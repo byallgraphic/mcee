@@ -659,7 +659,8 @@ class IeoController extends Controller
         return $this->renderAjax('create', [
             'model' => $ieo_model,
             'zonasEducativas' => $zonasEducativas,
-            'comunas' => $comunas
+            'comunas' => $comunas,
+			'personaACargo' => $this->obtenerNombresXPerfilesInstitucion()
         ]);
     }
 
@@ -708,9 +709,7 @@ class IeoController extends Controller
 		$documentosRe = new DocumentosReconocimiento();
 		$documentosRe = $documentosRe->find()->where("ieo_id =  $id")->all();
 		$documentosRe = ArrayHelper::map($documentosRe,'id','horario_trabajo');
-		
-        // if ($model->load(Yii::$app->request->post()) && $model->save()) 
-        if ($model->load(Yii::$app->request->post())) 
+        if ($model->load(Yii::$app->request->post()) && $model->save()) 
 		{
 			
 			$connection = Yii::$app->getDb();		
@@ -1141,8 +1140,6 @@ class IeoController extends Controller
 		
 		
             
-    
-
 		//se trae la informacion correspondiente y se agrupa en el array datos
 		$cantidadPoblacion = new TiposCantidadPoblacion();
 		$cantidadPoblacion = $cantidadPoblacion->find()->andWhere("ieo_id=$id")->all();
@@ -1206,6 +1203,9 @@ class IeoController extends Controller
                 
                 $datos['estudiantesIeo'][$ids] = $valores;
         }
+		
+		
+
 		//llener el campo horario_trabajo de la tabla ec.documentos_reconocimiento
 		$datos['DocumentosReconocimiento'] = $documentosRe[key($documentosRe)];
 
@@ -1215,14 +1215,50 @@ class IeoController extends Controller
 		$comunas  = ComunasCorregimientos::find()->where( 'estado=1' )->all();
         $comunas	 = ArrayHelper::map( $comunas, 'id', 'descripcion' );
 
-
+		
+		
+		
         return $this->renderAjax('update', [
             'model' => $model,
             'zonasEducativas' => $zonasEducativas,
             'datos'=> $datos,
             'comunas'=> $comunas,
+			'personaACargo' => $this->obtenerNombresXPerfilesInstitucion()
         ]);
     }
+	
+	public function obtenerNombresXPerfilesInstitucion()
+	{
+		$idInstitucion 	= $_SESSION['instituciones'][0];
+		/**
+		* Llenar nombre de los cooordinadores-eje
+		*/
+		//variable con la conexion a la base de datos 
+		$connection = Yii::$app->getDb();
+		$command = $connection->createCommand("
+			SELECT 
+				ppi.id,
+				concat(pe.nombres,' ',pe.apellidos) as nombres
+			FROM 
+				perfiles_x_personas as pp, 
+				personas as pe,
+				perfiles_x_personas_institucion ppi
+			WHERE 
+				pp.id_personas = pe.id
+			AND 
+				ppi.id_perfiles_x_persona = pp.id
+			AND 
+				ppi.id_institucion = $idInstitucion
+		");
+		$result = $command->queryAll();
+		$nombresPerfil = array();
+		foreach ($result as $r)
+		{
+			$nombresPerfil[$r['id']]= $r['nombres'];
+		}
+		
+		return $nombresPerfil;
+	}
 
     /**
      * Deletes an existing Ieo model.

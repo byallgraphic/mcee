@@ -19,6 +19,7 @@ $idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $m
 ?>
 <script>
 	idTipoInforme = <?php echo $idTipoInforme; ?>;
+	barrio = <?php echo $model->barrio; ?>;
 </script>
 
 <?php 
@@ -27,10 +28,16 @@ $idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $m
 //triger para calcular los totales de estudiantes y docentes
 if( strpos($_GET['r'], 'update') > -1)
 {
+	
+	
 	echo "	
 	<script> 
+	$( '#ieo-comuna' ).trigger( 'onchange' );
 	
-
+		setTimeout(function(){
+			
+			$( '#ieo-barrio' ).val( barrio ); 
+			}, 500);
     
 	$('div[id *= estudiantesieo],[id *= grado]').each(  function( i, val ) 
 	{
@@ -140,7 +147,7 @@ if( strpos($_GET['r'], 'update') > -1)
     <?= $form->field($model, 'barrio')->dropDownList( [], [ 'prompt' => 'Seleccione...',  ] ) ?>                 
     
   
-	<?= $form->field($model, 'persona_acargo')->textInput() ?> 
+	<?= $form->field($model, 'persona_acargo')->dropDownList($personaACargo,['prompt'=> 'Seleccione...']) ?> 
 	
 	<?= $form->field($model, 'id_tipo_informe')->hiddenInput(['value'=> $idTipoInforme])->label(false) ?> 
     
