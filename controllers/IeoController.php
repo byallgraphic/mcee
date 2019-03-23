@@ -194,6 +194,8 @@ class IeoController extends Controller
      */
     public function actionCreate($idTipoInforme)
     {
+		
+		
         /**
          * Se realiza registro del modelo base IEO
          * Obtenemos el id de iserción para usarlo como llave foranea en los demas modelos 
@@ -555,95 +557,140 @@ class IeoController extends Controller
                 }
 
 			//si el tipo de informe es 14 se hace un insert diferente
-			if($idTipoInforme == 14 )
-			{
-				$arrayDatos = Yii::$app->request->post('TiposCantidadPoblacion');
+				if($idTipoInforme == 14 )
+				{
+					$arrayDatos = Yii::$app->request->post('TiposCantidadPoblacion');
+				
+					foreach($arrayDatos as $datos => $valores)
+					{
+						$arrayDatos[$datos]['actividad_id']=$datos;
+						$arrayDatos[$datos]['ieo_id']=$id_ieo;
+						unset($arrayDatos[$datos]['total']);
+					}
 			
-				foreach($arrayDatos as $datos => $valores)
-				{
-					$arrayDatos[$datos]['actividad_id']=$datos;
-					$arrayDatos[$datos]['ieo_id']=$id_ieo;
-					unset($arrayDatos[$datos]['total']);
+					
+					//se agrega el id del informe despues de haber sido creado 
+										
+					$columnName=['fecha_creacion', 'tipo_actividad', 'docentes', 'familia','directivos','actividad_id','ieo_id'];
+					// inserta todos los datos que trae el array 
+					
+					$insertCount = Yii::$app->db->createCommand()
+						   ->batchInsert(
+								 'ec.tipos_cantidad_poblacion', $columnName, $arrayDatos
+							 )->execute();
+							 
+					// insert de los grados -> ecEstudiantesIeo
+					
+					$arrayDatos = Yii::$app->request->post('EstudiantesIeo');
+					//se agrega el id del informe despues de haber sido creado 
+					foreach($arrayDatos as $datos => $valores)
+					{
+						$arrayDatos[$datos]['actividad_id']=$datos;
+						$arrayDatos[$datos]['ieo_id']=$id_ieo;
+						unset($arrayDatos[$datos]['total']);
+					}
+					
+					$columnName=['grado_9','grado_10','grado_11','id_actividad','id_ieo'];
+					// inserta todos los datos que trae el array
+					
+					
+					$insertCount = Yii::$app->db->createCommand()
+						   ->batchInsert(
+								 'ec.estudiantes_ieo', $columnName, $arrayDatos
+							 )->execute();
+					
 				}
-		
-				
-				//se agrega el id del informe despues de haber sido creado 
-									
-				$columnName=['fecha_creacion', 'tipo_actividad', 'docentes', 'familia','directivos','actividad_id','ieo_id'];
-				// inserta todos los datos que trae el array 
-				
-				$insertCount = Yii::$app->db->createCommand()
-					   ->batchInsert(
-							 'ec.tipos_cantidad_poblacion', $columnName, $arrayDatos
-						 )->execute();
-						 
-				// insert de los grados -> ecEstudiantesIeo
-				
-				$arrayDatos = Yii::$app->request->post('EstudiantesIeo');
-				//se agrega el id del informe despues de haber sido creado 
-				foreach($arrayDatos as $datos => $valores)
+				elseif($idTipoInforme == 2 )
 				{
-					$arrayDatos[$datos]['actividad_id']=$datos;
-					$arrayDatos[$datos]['ieo_id']=$id_ieo;
-					unset($arrayDatos[$datos]['total']);
-				}
 				
-				$columnName=['grado_9','grado_10','grado_11','id_actividad','id_ieo'];
-				// inserta todos los datos que trae el array
-				
-				
-				$insertCount = Yii::$app->db->createCommand()
-					   ->batchInsert(
-							 'ec.estudiantes_ieo', $columnName, $arrayDatos
-						 )->execute();
-				
-			}
-			else
-			{
-			
-				$arrayDatos = Yii::$app->request->post('TiposCantidadPoblacion');
-				
-				foreach($arrayDatos as $datos => $valores)
-				{
-					$arrayDatos[$datos]['actividad_id']=$datos;
-					$arrayDatos[$datos]['ieo_id']=$id_ieo;
-					unset($arrayDatos[$datos]['total']);
-				}
-				
-				//se agrega el id del informe despues de haber sido creado 
-				
-							
-				$columnName=['fecha_creacion', 'tipo_actividad', 'tiempo_libre', 'edu_derechos', 'sexualidad', 'ciudadania', 'medio_ambiente', 'familia','directivos','actividad_id','ieo_id'];
-				// inserta todos los datos que trae el array 
-				
-				$insertCount = Yii::$app->db->createCommand()
-					   ->batchInsert(
-							 'ec.tipos_cantidad_poblacion', $columnName, $arrayDatos
-						 )->execute();
-						 
-						 
-						 
-				//insert de los grados -> ecEstudiantesIeo
-				
-				$arrayDatos = Yii::$app->request->post('EstudiantesIeo');
-				//se agrega el id del informe despues de haber sido creado 
-				foreach($arrayDatos as $datos => $valores)
-				{
-					$arrayDatos[$datos]['actividad_id']=$datos;
-					$arrayDatos[$datos]['ieo_id']=$id_ieo;
-					unset($arrayDatos[$datos]['total']);
-				}
+					$arrayDatos = Yii::$app->request->post('TiposCantidadPoblacion');
+					
+					foreach($arrayDatos as $datos => $valores)
+					{
+						$arrayDatos[$datos]['actividad_id']=$datos;
+						$arrayDatos[$datos]['ieo_id']=$id_ieo;
+						unset($arrayDatos[$datos]['total']);
+					}
+					
+					//se agrega el id del informe despues de haber sido creado 
+					
+								
+					$columnName=['fecha_creacion', 'tipo_actividad', 'tiempo_libre', 'edu_derechos', 'sexualidad', 'ciudadania', 'medio_ambiente', 'familia','directivos','actividad_id','ieo_id'];
+					// inserta todos los datos que trae el array 
+					
+					$insertCount = Yii::$app->db->createCommand()
+						   ->batchInsert(
+								 'ec.tipos_cantidad_poblacion', $columnName, $arrayDatos
+							 )->execute();
+							 
+							 
+							 
+					//insert de los grados -> ecEstudiantesIeo
+					
+					$arrayDatos = Yii::$app->request->post('EstudiantesIeo');
+					//se agrega el id del informe despues de haber sido creado 
+					foreach($arrayDatos as $datos => $valores)
+					{
+						$arrayDatos[$datos]['actividad_id']=$datos;
+						$arrayDatos[$datos]['ieo_id']=$id_ieo;
+						unset($arrayDatos[$datos]['total']);
+					}
 
-				$columnName=['grado_0', 'grado_1', 'grado_2', 'grado_3', 'grado_4', 'grado_5', 'grado_6', 'grado_7','grado_8','grado_9','grado_10','grado_11','id_actividad','id_ieo'];
-				// inserta todos los datos que trae el array
-				
-				
-				$insertCount = Yii::$app->db->createCommand()
-					   ->batchInsert(
-							 'ec.estudiantes_ieo', $columnName, $arrayDatos
-						 )->execute();
+					$columnName=['grado_0', 'grado_1', 'grado_2', 'grado_3', 'grado_4', 'grado_5', 'grado_6', 'grado_7','grado_8','grado_9','grado_10','grado_11','id_actividad','id_ieo'];
+					// inserta todos los datos que trae el array
+					
+					
+					$insertCount = Yii::$app->db->createCommand()
+						   ->batchInsert(
+								 'ec.estudiantes_ieo', $columnName, $arrayDatos
+							 )->execute();
 				} 
+				elseif($idTipoInforme == 26 )
+				{
+					$arrayDatos = Yii::$app->request->post('TiposCantidadPoblacion');
+				
+					foreach($arrayDatos as $datos => $valores)
+					{
+						$arrayDatos[$datos]['actividad_id']=$datos;
+						$arrayDatos[$datos]['ieo_id']=$id_ieo;
+						unset($arrayDatos[$datos]['total']);
+					}
+			
+					
+					//se agrega el id del informe despues de haber sido creado 
+										
+					$columnName=['fecha_creacion', 'tipo_actividad', 'docentes', 'psicoorientador','familia','directivos','actividad_id','ieo_id'];
+					// inserta todos los datos que trae el array 
+					
+					$insertCount = Yii::$app->db->createCommand()
+						   ->batchInsert(
+								 'ec.tipos_cantidad_poblacion', $columnName, $arrayDatos
+							 )->execute();
+							 
+					
+					//insert de los grados en la tabla ecEstudiantesIeo
+					
+					$arrayDatos = Yii::$app->request->post('EstudiantesIeo');
+					//se agrega el id del informe despues de haber sido creado 
+					foreach($arrayDatos as $datos => $valores)
+					{
+						$arrayDatos[$datos]['actividad_id']=$datos;
+						$arrayDatos[$datos]['ieo_id']=$id_ieo;
+						unset($arrayDatos[$datos]['total']);
+					}
+
+					$columnName=['grado_0', 'grado_1', 'grado_2', 'grado_3', 'grado_4', 'grado_5', 'grado_6', 'grado_7','grado_8','grado_9','grado_10','grado_11','id_actividad','id_ieo'];
+					// inserta todos los datos que trae el array
+					
+					
+					$insertCount = Yii::$app->db->createCommand()
+						   ->batchInsert(
+								 'ec.estudiantes_ieo', $columnName, $arrayDatos
+							 )->execute();
+						
+				}
 			}
+		
 			return $this->redirect(['index', 'guardado' => 1, 'idTipoInforme' => $idTipoInforme ]);
         }
 		
@@ -727,6 +774,7 @@ class IeoController extends Controller
 				$fecha_creacion =  isset($poblacion['fecha_creacion']) ? $poblacion['fecha_creacion']: 'null' ;
 				$tipo_actividad =  isset($poblacion['tipo_actividad']) ? $poblacion['tipo_actividad']: 'null' ;
 				$docentes 		=  isset($poblacion['docentes']) ? $poblacion['docentes']: 'null' ;
+				$psicoorientador =  isset($poblacion['psicoorientador']) ? $poblacion['psicoorientador']: 'null' ;
 				
 				
 				$command = $connection->createCommand(
@@ -743,7 +791,8 @@ class IeoController extends Controller
 						directivos		= $directivos, 
 						fecha_creacion	= '$fecha_creacion',
 						tipo_actividad	= $tipo_actividad,
-						docentes		= $docentes
+						docentes		= $docentes,
+						psicoorientador	= $psicoorientador
 						
 					WHERE 
 						ieo_id = $id
@@ -1159,6 +1208,7 @@ class IeoController extends Controller
             $dato[$index]['fecha_creacion']= $element['fecha_creacion'];
             $dato[$index]['tipo_actividad']= $element['tipo_actividad'];
             $dato[$index]['docentes']= $element['docentes'];
+            $dato[$index]['psicoorientador']= $element['psicoorientador'];
            
             return $dato;
         });
@@ -1167,7 +1217,6 @@ class IeoController extends Controller
         foreach	($resultCantidadPoblacion as $r => $valor)
         {
             foreach	($valor as $ids => $valores)
-                
                 $datos['cantidadPoblacion'][$ids] = $valores;
         }
 

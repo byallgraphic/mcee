@@ -20,6 +20,7 @@ $idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $m
 <script>
 	idTipoInforme = <?php echo $idTipoInforme; ?>;
 	barrio = <?php echo $model->barrio; ?>;
+	alert();
 </script>
 
 <?php 
@@ -61,7 +62,7 @@ if( strpos($_GET['r'], 'update') > -1)
 	</script>";
 	
 	
-	if ($idTipoInforme  != 14)
+	if ($idTipoInforme  == 2)
 	{
 		
 	echo "	
@@ -126,7 +127,33 @@ if( strpos($_GET['r'], 'update') > -1)
 		
 	
 	
-	
+	if ($idTipoInforme  == 26)
+	{
+		
+		echo "	
+		<script> 
+		$('div[id *= tiposcantidadpoblacion],[id *= docentes],[id *= psicoorientador],[id *= familia],[id *= directivos]').each(  function( i, val ) 
+		{
+				total =0;
+				
+				//numero del que identifica a la caja de texto Estudiantes Gra para saber a que total debe sumar
+				ValId = $(this).attr('id');
+				num = ValId.split('-');
+				
+				//cuando se presione un numero se hace la suma
+				total += $('#tiposcantidadpoblacion-'+num[1]+'-docentes').val() * 1 ;
+				total += $('#tiposcantidadpoblacion-'+num[1]+'-psicoorientador').val() * 1 ;
+				total += $('#tiposcantidadpoblacion-'+num[1]+'-familia').val() * 1 ;
+				total += $('#tiposcantidadpoblacion-'+num[1]+'-directivos').val() * 1 ;
+				
+				//se asigna la suma total a la caja de texto correspondiente
+				$('#tiposcantidadpoblacion-'+num[1]+'-total').val(total);
+			
+		});
+		
+		</script>";
+	}
+		
 	
 }
 ?>
