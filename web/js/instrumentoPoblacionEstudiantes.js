@@ -182,7 +182,7 @@ $( document ).ready(function(){
 		
 		$( "#dv-fases" ).html( '' );
 		
-		if( institucion.val() && sedes.val() /*&& estudiantes.val()*/ ){
+		// if( institucion.val() && sedes.val() /*&& estudiantes.val()*/ ){
 			
 			$.post(
 				"index.php?r=instrumento-poblacion-estudiantes/view-fases",
@@ -254,6 +254,6 @@ $( document ).ready(function(){
 
 				},
 			);
-		}
+		// }
 	}
 });

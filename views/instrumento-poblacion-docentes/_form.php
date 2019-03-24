@@ -71,7 +71,7 @@ $this->registerJsFile(
 
 	<div class='row'>
 		
-		<div class='col-sm-4'>
+		<div class='col-sm-6'>
 		
 			<?= $form->field($model, 'id_institucion')->widget(
 				Chosen::className(), [
@@ -97,14 +97,14 @@ $this->registerJsFile(
 		
 		</div>
 		
-		<div id='dv-institucion-sede' class='col-sm-8'>
+		<div id='dv-institucion-sede' class='col-sm-6'>
 		</div>
 	</div>
 
 	
 	<div class='row'>
 		
-		<div class='col-sm-4'>
+		<div class='col-sm-6'>
 			<?= $form->field($model, 'id_persona')->widget(
 				Chosen::className(), [
 					'items' => $estudiantes,
@@ -118,7 +118,7 @@ $this->registerJsFile(
 		
 		</div>
 			
-		<div class='col-sm-4' style='display:none;'>
+		<div class='col-sm-6' style='display:none;'>
 			<?= $form->field($model, 'id_niveles')->widget(
 				Chosen::className(), [
 					'items' => $estudiantes,

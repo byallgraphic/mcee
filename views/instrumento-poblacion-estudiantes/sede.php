@@ -3,9 +3,9 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
 
-$sede->descripcion;
-$sede->codigo_dane;
-$institucion->descripcion;
+// $sede->descripcion;
+// $sede->codigo_dane;
+// $institucion->descripcion;
 
 ?>
 <style>
@@ -22,14 +22,18 @@ $institucion->descripcion;
 		</span>
 	</div>
 
-	<div class='row rowinf' style='text-align:center;background-color:#eee;'>
-		
-		<span class='col-sm-6'>
-			<h4><?= $sede->descripcion; ?></h4>
-		</span>
-		
-		<span class='col-sm-6'>
-			<h4>CÓDIGO DANE <?= $sede->codigo_dane; ?></h4>
-		</span>
-	</div>
+	<?php if( $sede ) : ?>	
+	
+		<div class='row rowinf' style='text-align:center;background-color:#eee;'>
+			
+			<span class='col-sm-6'>
+				<h4><?= $sede->descripcion; ?></h4>
+			</span>
+			
+			<span class='col-sm-6'>
+				<h4>CÓDIGO DANE <?= $sede->codigo_dane; ?></h4>
+			</span>
+		</div>
+	
+	<?php endif; ?>	
 </div>

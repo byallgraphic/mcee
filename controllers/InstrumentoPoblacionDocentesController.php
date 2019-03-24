@@ -285,11 +285,15 @@ class InstrumentoPoblacionDocentesController extends Controller
 		$sede 		 = Yii::$app->request->post('sede');
 		$institucion = Yii::$app->request->post('institucion');
 		
-		$sede 		 = Sedes::findOne( $sede );
+		if( is_numeric($sede) )
+			$sede 		 = Sedes::findOne( $sede );
+		else
+			$sede = null;
+		
 		$institucion = Instituciones::findOne( $institucion );
 		
 		return $this->renderPartial( 'sede', [
-			'sede' 		=> $sede,
+			'sede' 			=> $sede,
 			'institucion' 	=> $institucion,
         ]);
 	}
