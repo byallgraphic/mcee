@@ -129,6 +129,8 @@ cicloSelected = '<?php //echo $cicloSelected; ?>';
 					'options' => [ "id" => "collapseOne" ],
 				]); ?>
 
+				<?php echo count( $items) == 0 ? "<div style='text-align:center;font-weight:bold;' >NO SE ENCONTRARON DATOS ALMACENADOS</div>" : ''; ?>
+				
 				<div class="form-group">
 					<?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
 				</div>
