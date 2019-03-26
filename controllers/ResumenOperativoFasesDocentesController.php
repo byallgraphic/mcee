@@ -553,7 +553,8 @@ class ResumenOperativoFasesDocentesController extends Controller
 	    $datos = [];
 		foreach ($array as $ar)
 		{
-			$datos[] = $ar[$nombrePos];
+			if( isset($ar[$nombrePos]) )
+				$datos[] = $ar[$nombrePos];
 		}
 		return  implode(",",$datos);
 	}
