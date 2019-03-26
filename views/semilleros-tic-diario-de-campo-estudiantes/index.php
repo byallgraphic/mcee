@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $nombre ;
 									], 
 									['class' => 'btn btn-info']) ?>
 									
-		<?= Html::a('Eportar', Url::to('@web/diarioDeCampoEstudiantes.docx'), ['class' => 'btn btn-warning']) ?>
+		<?= Html::a('Exportar', Url::to('@web/diarioDeCampoEstudiantes.docx'), ['class' => 'btn btn-warning']) ?>
 				
 
     </p>
