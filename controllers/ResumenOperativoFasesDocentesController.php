@@ -223,11 +223,9 @@ class ResumenOperativoFasesDocentesController extends Controller
                         @$totalapps1 += $valor['apps_creadas'];
                         @$totalparticipantes1  += $valor['participacion_sesiones'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['participacion_sesiones'], $valor['duracion_sesion']);
-                        $promedioParticipantes1 += 0;//$valor['participacion_sesiones'];
 
                         $data['fase_1']['sesiones'][$datos1][0] = $valor['num_sesion'];
                         $data['fase_1']['sesiones'][$datos1][1] = $valor['fecha_sesion'];
-                        $data['fase_1']['sesiones'][$datos1][2] = 0;//$valor['participacion_sesiones'];
                         $data['fase_1']['sesiones'][$datos1][3] = $valor['duracion_sesion'];
                     }
 
@@ -235,7 +233,6 @@ class ResumenOperativoFasesDocentesController extends Controller
                     //array_push($data, count($datosEjeccionFasei), $totalparticipantes1, $totalapps1);
 
                     $data['fase_1']['total_sesiones'] = count($datosEjeccionFasei);
-                    $data['fase_1']['total_participaciones'] = $totalparticipantes1;
                     $data['fase_1']['totalapps'] = $totalapps1;
                 }
                 /**Fin datos Fase 1 */
@@ -322,22 +319,18 @@ class ResumenOperativoFasesDocentesController extends Controller
                 if(count($datosEjeccionFaseii) > 0){
                     foreach ($datosEjeccionFaseii as $datos1 => $valor){
                         @$totalapps2 += $valor['apps_desarrolladas'];
-                        @$totalparticipantes2  += 0;//$valor['estudiantes_participantes'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
                         $promedioParticipantes2 += $valor['estudiantes_participantes'];
 
                         $data['fase_2']['sesiones'][$valor['num_sesion']][0] = $valor['num_sesion'];
                         $data['fase_2']['sesiones'][$valor['num_sesion']][1] = $valor['fecha_sesion'];
-                        $data['fase_2']['sesiones'][$valor['num_sesion']][2] = $valor['estudiantes_participantes'];
                         $data['fase_2']['sesiones'][$valor['num_sesion']][3] = $valor['duracion_sesion'];
                     }
-                    $promedioParticipantes2 = ($promedioParticipantes2 / count($datosEjeccionFaseii));
                     /**rellena la cantidad de sesiones vacias */
 
                     //array_push($data, count($datosEjeccionFaseii), $totalparticipantes2, $totalapps2);
 
                     $data['fase_2']['total_sesiones'] = count($datosEjeccionFaseii);
-                    $data['fase_2']['total_participaciones'] = $totalparticipantes2;
                     $data['fase_2']['totalapps'] = $totalapps2;
                 }
                 /**Fin fase 2 */
@@ -421,15 +414,11 @@ class ResumenOperativoFasesDocentesController extends Controller
                 if(count($datosEjeccionFaseiii) > 0){
                     foreach ($datosEjeccionFaseiii as $datos1 => $valor){
                         @$totalapps3 += $valor['numero_apps'];
-                        @$totalparticipantes3  += 0;//$valor['estudiantes_participantes'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
 
                         $data['fase_3']['sesiones'][$datos1][0] = $valor['num_sesion'];
                         $data['fase_3']['sesiones'][$datos1][1] = $valor['fecha_sesion'];
-                        $data['fase_3']['sesiones'][$datos1][2] = 0;//$valor['estudiantes_participantes'];
                         $data['fase_3']['sesiones'][$datos1][3] = $valor['duracion_sesion'];
-
-                        $promedioParticipantes3 += 0;//$valor['estudiantes_participantes'];
                     }
                     $promedioParticipantes3 =  $promedioParticipantes3 / count($datosEjeccionFaseiii);
                     /**rellena la cantidad de sesiones vacias */
@@ -437,7 +426,6 @@ class ResumenOperativoFasesDocentesController extends Controller
                     //array_push($data, count($datosEjeccionFaseiii), $totalparticipantes3, $totalapps3);
 
                     $data['fase_3']['total_sesiones'] = count($datosEjeccionFaseiii);
-                    $data['fase_3']['total_participaciones'] = $totalparticipantes3;
                     $data['fase_3']['totalapps'] = $totalapps3;
                 }
                 /**Fin datos fase 3 */
