@@ -66,6 +66,9 @@ class ResumenOperativoFasesDocentesController extends Controller
      */
     public function actionIndex()
     {
+		
+		$anio = Yii::$app->request->get('anio');
+		$esDocente = Yii::$app->request->get('esDocente');
 
         $connection = Yii::$app->getDb();
         $command = $connection->createCommand('SELECT
@@ -519,7 +522,9 @@ class ResumenOperativoFasesDocentesController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'data' => $totalDatos,
-            'mayorSesion' => $mayorSesion
+            'mayorSesion' => $mayorSesion,
+			'anio' => $anio,
+			'esDocente' => $esDocente,
         ]);
     }
 
@@ -552,7 +557,8 @@ class ResumenOperativoFasesDocentesController extends Controller
 	    $datos = [];
 		foreach ($array as $ar)
 		{
-			$datos[] = $ar[$nombrePos];
+			if( isset($ar[$nombrePos]) )
+				$datos[] = $ar[$nombrePos];
 		}
 		return  implode(",",$datos);
 	}

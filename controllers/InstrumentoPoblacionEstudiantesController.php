@@ -73,11 +73,15 @@ class InstrumentoPoblacionEstudiantesController extends Controller
 		$sede 		 = Yii::$app->request->post('sede');
 		$institucion = Yii::$app->request->post('institucion');
 		
-		$sede 		 = Sedes::findOne( $sede );
 		$institucion = Instituciones::findOne( $institucion );
 		
+		if( is_numeric( $sede ) )
+			$sede 		 = Sedes::findOne( $sede );
+		else
+			$sede = null;
+		
 		return $this->renderPartial( 'sede', [
-			'sede' 		=> $sede,
+			'sede' 			=> $sede,
 			'institucion' 	=> $institucion,
         ]);
 	}
@@ -105,14 +109,15 @@ class InstrumentoPoblacionEstudiantesController extends Controller
 					->innerJoin( 'estudiantes e', 'e.id_perfiles_x_personas=pp.id' )
 					->innerJoin( 'paralelos p', 'p.id=e.id_paralelos' )
 					->innerJoin( 'sedes_niveles sn', 'sn.id=p.id_sedes_niveles' )
-					->where( 'sn.id_sedes='.$sede )
-					->andWhere( 'pp.estado=1' )
+					->where( 'pp.estado=1' )
 					->andWhere( 'e.estado=1' )
 					->andWhere( 'p.estado=1' )
-					->andWhere( 'personas.estado=1' )
-					->all();
+					->andWhere( 'personas.estado=1' );
 		
-		return Json::encode( $data );
+		if( is_numeric( $sede ) )
+			$data->andWhere( 'sn.id_sedes='.$sede );
+		
+		return Json::encode( $data->all() );
 	}
 	
 	function actionViewFases()
@@ -142,38 +147,42 @@ class InstrumentoPoblacionEstudiantesController extends Controller
 		
 		if( !empty($estudiante) && is_numeric($estudiante) )
 		{
-			$dataPersonas 		= Personas::find()
+			$data 		= Personas::find()
 										->select( "( nombres || ' ' || apellidos ) as nombres, personas.id, personas.identificacion, personas.id_tipos_identificaciones" )
 										->innerJoin( 'perfiles_x_personas pp', 'pp.id_personas=personas.id' )
 										->innerJoin( 'estudiantes e', 'e.id_perfiles_x_personas=pp.id' )
 										->innerJoin( 'paralelos p', 'p.id=e.id_paralelos' )
 										->innerJoin( 'sedes_niveles sn', 'sn.id=p.id_sedes_niveles' )
-										->where( 'sn.id_sedes='.$sede )
-										->andWhere( 'pp.estado=1' )
+										->where( 'pp.estado=1' )
+										// ->andWhere( 'sn.id_sedes='.$sede )
 										->andWhere( 'e.estado=1' )
 										->andWhere( 'p.estado=1' )
 										->andWhere( 'personas.estado=1' )
-										->andWhere( 'personas.id='.$estudiante )
-										->all();
+										->andWhere( 'personas.id='.$estudiante );
+										// ->all();
 			
 		}
 		else
 		{	
-			$dataPersonas 		= Personas::find()
+			$data 		= Personas::find()
 										->select( "( nombres || ' ' || apellidos ) as nombres, personas.id, personas.identificacion, personas.id_tipos_identificaciones" )
 										->innerJoin( 'perfiles_x_personas pp', 'pp.id_personas=personas.id' )
 										->innerJoin( 'estudiantes e', 'e.id_perfiles_x_personas=pp.id' )
 										->innerJoin( 'paralelos p', 'p.id=e.id_paralelos' )
 										->innerJoin( 'sedes_niveles sn', 'sn.id=p.id_sedes_niveles' )
-										->where( 'sn.id_sedes='.$sede )
-										->andWhere( 'pp.estado=1' )
+										->where( 'pp.estado=1' )
+										
 										->andWhere( 'e.estado=1' )
 										->andWhere( 'p.estado=1' )
-										->andWhere( 'personas.estado=1' )
-										->all();
+										->andWhere( 'personas.estado=1' );
+										// ->all();
 			
 		}
 		
+		if( is_numeric( $sede ) )
+			$data->andWhere( 'sn.id_sedes='.$sede );
+		
+		$dataPersonas = $data->all();
 		
 		foreach( $dataPersonas as $key => $estudiante )
 		{

@@ -194,6 +194,8 @@ class IeoController extends Controller
      */
     public function actionCreate($idTipoInforme)
     {
+		
+		
         /**
          * Se realiza registro del modelo base IEO
          * Obtenemos el id de iserción para usarlo como llave foranea en los demas modelos 
@@ -217,7 +219,6 @@ class IeoController extends Controller
             if($ieo_model->save())
 			{
                 $id_ieo = $ieo_model->id;
-
                 /**Carga de archivos multiples */
                 // if($arrayDatosRequerimientos = Yii::$app->request->post('RequerimientoExtraIeo'))
 				// {
@@ -392,6 +393,8 @@ class IeoController extends Controller
                     
                     }
                 }
+				
+			
                  /**Carga de archivos multiples */
                 if($arrayDatosEvidencias = Yii::$app->request->post('Evidencias'))
 				{
@@ -554,95 +557,140 @@ class IeoController extends Controller
                 }
 
 			//si el tipo de informe es 14 se hace un insert diferente
-			if($idTipoInforme == 14 )
-			{
-				$arrayDatos = Yii::$app->request->post('TiposCantidadPoblacion');
+				if($idTipoInforme == 14 )
+				{
+					$arrayDatos = Yii::$app->request->post('TiposCantidadPoblacion');
+				
+					foreach($arrayDatos as $datos => $valores)
+					{
+						$arrayDatos[$datos]['actividad_id']=$datos;
+						$arrayDatos[$datos]['ieo_id']=$id_ieo;
+						unset($arrayDatos[$datos]['total']);
+					}
 			
-				foreach($arrayDatos as $datos => $valores)
-				{
-					$arrayDatos[$datos]['actividad_id']=$datos;
-					$arrayDatos[$datos]['ieo_id']=$id_ieo;
-					unset($arrayDatos[$datos]['total']);
+					
+					//se agrega el id del informe despues de haber sido creado 
+										
+					$columnName=['fecha_creacion', 'tipo_actividad', 'docentes', 'familia','directivos','actividad_id','ieo_id'];
+					// inserta todos los datos que trae el array 
+					
+					$insertCount = Yii::$app->db->createCommand()
+						   ->batchInsert(
+								 'ec.tipos_cantidad_poblacion', $columnName, $arrayDatos
+							 )->execute();
+							 
+					// insert de los grados -> ecEstudiantesIeo
+					
+					$arrayDatos = Yii::$app->request->post('EstudiantesIeo');
+					//se agrega el id del informe despues de haber sido creado 
+					foreach($arrayDatos as $datos => $valores)
+					{
+						$arrayDatos[$datos]['actividad_id']=$datos;
+						$arrayDatos[$datos]['ieo_id']=$id_ieo;
+						unset($arrayDatos[$datos]['total']);
+					}
+					
+					$columnName=['grado_9','grado_10','grado_11','id_actividad','id_ieo'];
+					// inserta todos los datos que trae el array
+					
+					
+					$insertCount = Yii::$app->db->createCommand()
+						   ->batchInsert(
+								 'ec.estudiantes_ieo', $columnName, $arrayDatos
+							 )->execute();
+					
 				}
-		
-				
-				//se agrega el id del informe despues de haber sido creado 
-									
-				$columnName=['fecha_creacion', 'tipo_actividad', 'docentes', 'familia','directivos','actividad_id','ieo_id'];
-				// inserta todos los datos que trae el array 
-				
-				$insertCount = Yii::$app->db->createCommand()
-					   ->batchInsert(
-							 'ec.tipos_cantidad_poblacion', $columnName, $arrayDatos
-						 )->execute();
-						 
-				// insert de los grados -> ecEstudiantesIeo
-				
-				$arrayDatos = Yii::$app->request->post('EstudiantesIeo');
-				//se agrega el id del informe despues de haber sido creado 
-				foreach($arrayDatos as $datos => $valores)
+				elseif($idTipoInforme == 2 )
 				{
-					$arrayDatos[$datos]['actividad_id']=$datos;
-					$arrayDatos[$datos]['ieo_id']=$id_ieo;
-					unset($arrayDatos[$datos]['total']);
-				}
 				
-				$columnName=['grado_9','grado_10','grado_11','id_actividad','id_ieo'];
-				// inserta todos los datos que trae el array
-				
-				
-				$insertCount = Yii::$app->db->createCommand()
-					   ->batchInsert(
-							 'ec.estudiantes_ieo', $columnName, $arrayDatos
-						 )->execute();
-				
-			}
-			else
-			{
-			
-				$arrayDatos = Yii::$app->request->post('TiposCantidadPoblacion');
-				
-				foreach($arrayDatos as $datos => $valores)
-				{
-					$arrayDatos[$datos]['actividad_id']=$datos;
-					$arrayDatos[$datos]['ieo_id']=$id_ieo;
-					unset($arrayDatos[$datos]['total']);
-				}
-				
-				//se agrega el id del informe despues de haber sido creado 
-				
-							
-				$columnName=['fecha_creacion', 'tipo_actividad', 'tiempo_libre', 'edu_derechos', 'sexualidad', 'ciudadania', 'medio_ambiente', 'familia','directivos','actividad_id','ieo_id'];
-				// inserta todos los datos que trae el array 
-				
-				$insertCount = Yii::$app->db->createCommand()
-					   ->batchInsert(
-							 'ec.tipos_cantidad_poblacion', $columnName, $arrayDatos
-						 )->execute();
-						 
-						 
-						 
-				//insert de los grados -> ecEstudiantesIeo
-				
-				$arrayDatos = Yii::$app->request->post('EstudiantesIeo');
-				//se agrega el id del informe despues de haber sido creado 
-				foreach($arrayDatos as $datos => $valores)
-				{
-					$arrayDatos[$datos]['actividad_id']=$datos;
-					$arrayDatos[$datos]['ieo_id']=$id_ieo;
-					unset($arrayDatos[$datos]['total']);
-				}
+					$arrayDatos = Yii::$app->request->post('TiposCantidadPoblacion');
+					
+					foreach($arrayDatos as $datos => $valores)
+					{
+						$arrayDatos[$datos]['actividad_id']=$datos;
+						$arrayDatos[$datos]['ieo_id']=$id_ieo;
+						unset($arrayDatos[$datos]['total']);
+					}
+					
+					//se agrega el id del informe despues de haber sido creado 
+					
+								
+					$columnName=['fecha_creacion', 'tipo_actividad', 'tiempo_libre', 'edu_derechos', 'sexualidad', 'ciudadania', 'medio_ambiente', 'familia','directivos','actividad_id','ieo_id'];
+					// inserta todos los datos que trae el array 
+					
+					$insertCount = Yii::$app->db->createCommand()
+						   ->batchInsert(
+								 'ec.tipos_cantidad_poblacion', $columnName, $arrayDatos
+							 )->execute();
+							 
+							 
+							 
+					//insert de los grados -> ecEstudiantesIeo
+					
+					$arrayDatos = Yii::$app->request->post('EstudiantesIeo');
+					//se agrega el id del informe despues de haber sido creado 
+					foreach($arrayDatos as $datos => $valores)
+					{
+						$arrayDatos[$datos]['actividad_id']=$datos;
+						$arrayDatos[$datos]['ieo_id']=$id_ieo;
+						unset($arrayDatos[$datos]['total']);
+					}
 
-				$columnName=['grado_0', 'grado_1', 'grado_2', 'grado_3', 'grado_4', 'grado_5', 'grado_6', 'grado_7','grado_8','grado_9','grado_10','grado_11','id_actividad','id_ieo'];
-				// inserta todos los datos que trae el array
-				
-				
-				$insertCount = Yii::$app->db->createCommand()
-					   ->batchInsert(
-							 'ec.estudiantes_ieo', $columnName, $arrayDatos
-						 )->execute();
+					$columnName=['grado_0', 'grado_1', 'grado_2', 'grado_3', 'grado_4', 'grado_5', 'grado_6', 'grado_7','grado_8','grado_9','grado_10','grado_11','id_actividad','id_ieo'];
+					// inserta todos los datos que trae el array
+					
+					
+					$insertCount = Yii::$app->db->createCommand()
+						   ->batchInsert(
+								 'ec.estudiantes_ieo', $columnName, $arrayDatos
+							 )->execute();
 				} 
+				elseif($idTipoInforme == 26 )
+				{
+					$arrayDatos = Yii::$app->request->post('TiposCantidadPoblacion');
+				
+					foreach($arrayDatos as $datos => $valores)
+					{
+						$arrayDatos[$datos]['actividad_id']=$datos;
+						$arrayDatos[$datos]['ieo_id']=$id_ieo;
+						unset($arrayDatos[$datos]['total']);
+					}
+			
+					
+					//se agrega el id del informe despues de haber sido creado 
+										
+					$columnName=['fecha_creacion', 'tipo_actividad', 'docentes', 'psicoorientador','familia','directivos','actividad_id','ieo_id'];
+					// inserta todos los datos que trae el array 
+					
+					$insertCount = Yii::$app->db->createCommand()
+						   ->batchInsert(
+								 'ec.tipos_cantidad_poblacion', $columnName, $arrayDatos
+							 )->execute();
+							 
+					
+					//insert de los grados en la tabla ecEstudiantesIeo
+					
+					$arrayDatos = Yii::$app->request->post('EstudiantesIeo');
+					//se agrega el id del informe despues de haber sido creado 
+					foreach($arrayDatos as $datos => $valores)
+					{
+						$arrayDatos[$datos]['actividad_id']=$datos;
+						$arrayDatos[$datos]['ieo_id']=$id_ieo;
+						unset($arrayDatos[$datos]['total']);
+					}
+
+					$columnName=['grado_0', 'grado_1', 'grado_2', 'grado_3', 'grado_4', 'grado_5', 'grado_6', 'grado_7','grado_8','grado_9','grado_10','grado_11','id_actividad','id_ieo'];
+					// inserta todos los datos que trae el array
+					
+					
+					$insertCount = Yii::$app->db->createCommand()
+						   ->batchInsert(
+								 'ec.estudiantes_ieo', $columnName, $arrayDatos
+							 )->execute();
+						
+				}
 			}
+		
 			return $this->redirect(['index', 'guardado' => 1, 'idTipoInforme' => $idTipoInforme ]);
         }
 		
@@ -658,7 +706,8 @@ class IeoController extends Controller
         return $this->renderAjax('create', [
             'model' => $ieo_model,
             'zonasEducativas' => $zonasEducativas,
-            'comunas' => $comunas
+            'comunas' => $comunas,
+			'personaACargo' => $this->obtenerNombresXPerfilesInstitucion()
         ]);
     }
 
@@ -707,9 +756,7 @@ class IeoController extends Controller
 		$documentosRe = new DocumentosReconocimiento();
 		$documentosRe = $documentosRe->find()->where("ieo_id =  $id")->all();
 		$documentosRe = ArrayHelper::map($documentosRe,'id','horario_trabajo');
-		
-        // if ($model->load(Yii::$app->request->post()) && $model->save()) 
-        if ($model->load(Yii::$app->request->post())) 
+        if ($model->load(Yii::$app->request->post()) && $model->save()) 
 		{
 			
 			$connection = Yii::$app->getDb();		
@@ -727,6 +774,7 @@ class IeoController extends Controller
 				$fecha_creacion =  isset($poblacion['fecha_creacion']) ? $poblacion['fecha_creacion']: 'null' ;
 				$tipo_actividad =  isset($poblacion['tipo_actividad']) ? $poblacion['tipo_actividad']: 'null' ;
 				$docentes 		=  isset($poblacion['docentes']) ? $poblacion['docentes']: 'null' ;
+				$psicoorientador =  isset($poblacion['psicoorientador']) ? $poblacion['psicoorientador']: 'null' ;
 				
 				
 				$command = $connection->createCommand(
@@ -743,7 +791,8 @@ class IeoController extends Controller
 						directivos		= $directivos, 
 						fecha_creacion	= '$fecha_creacion',
 						tipo_actividad	= $tipo_actividad,
-						docentes		= $docentes
+						docentes		= $docentes,
+						psicoorientador	= $psicoorientador
 						
 					WHERE 
 						ieo_id = $id
@@ -808,15 +857,16 @@ class IeoController extends Controller
                 if($arrayDatosDocumentos = Yii::$app->request->post('DocumentosReconocimiento'))
 				{
 						
-					$modelDocumentos = [];
+					// $modelDocumentos = [];
 					// se deben crear modelos igual al valor maximo del indice que tenga  Yii::$app->request->post('DocumentosReconocimiento') en esta caso es 2
-                    for( $i = 0; $i <= 1 ; $i++ )
-					{
-                        $modelDocumentos[] = new DocumentosReconocimiento();
-                    } 
-					
+                    // for( $i = 0; $i <= 1 ; $i++ )
+					// {
+                        $modelDocumentos[1] = new DocumentosReconocimiento();
+                    // } 
+				
                     if (DocumentosReconocimiento::loadMultiple($modelDocumentos, Yii::$app->request->post())) 
 					{
+							
                         $idInstitucion 	= $_SESSION['instituciones'][0];
                         $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
 
@@ -840,6 +890,7 @@ class IeoController extends Controller
                         
                         foreach( $modelDocumentos as $key => $model1) 
                         {
+							
                             //recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
                             //para posteriormente guardar en la base de datos
                             foreach($propiedades as $propiedad)
@@ -847,9 +898,10 @@ class IeoController extends Controller
 								
                                 $arrayRutasFisicas = array();
                                 // se guarda el archivo en file
-                              
                                 // se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
                                 $files = UploadedFile::getInstances( $model1, "[$key]$propiedad" );
+								// die;
+								
                                 if( $files )
                                 {
                                     //se suben todos los archivos uno por uno
@@ -869,15 +921,18 @@ class IeoController extends Controller
 										$extensionArchivo = strtolower($extensionArchivo);
 										
 										//se pasan las rutas que estan en la db en el campo $$propiedad para saber en que parte esta el archivo y sobreescribirlo
-										$arrayRuta = explode(",",$$propiedad);	
+										$arrayRuta = explode(",",$$propiedad);
+										
+										echo "aca no if 1";
 										//saber si el nombre y la extencion del archivo ya existe en la base de datos / saber si ya existe el archivo se y se sobreescribe sin cambios en la db
-										if (strpos ($$propiedad,$nombre_base) > 0 and strpos($$propiedad,$extensionArchivo ) > 0 )
+										if (substr ($$propiedad,strpos ($$propiedad,$nombre_base),strlen ($nombre_base)) == $nombre_base & substr ($$propiedad,strpos ($$propiedad,$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )
 										{
+											echo "acaif 1";
 											//si archivo ya existe se sobreescribe sobreescribiendo la ruta de guardado
 											// Construyo la ruta completa del archivo a guardar
 											foreach ($arrayRuta as $ar)
 											{
-												if (strpos ($ar,$nombre_base) > 0 and strpos($ar,$extensionArchivo) > 0 )
+												if (substr ($ar,strpos ($ar,$nombre_base),strlen ($nombre_base)) == $nombre_base & substr ($ar,strpos ($ar,$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )
 												{
 													$rutaFisicaDirectoriaUploads  = $ar;
 												}
@@ -909,7 +964,6 @@ class IeoController extends Controller
                     
                     }
                 }
-			
 				
 			   /**Carga de archivos multiples evidencias -> actividades */ 
                 if($arrayDatosEvidencias = Yii::$app->request->post('Evidencias'))
@@ -922,9 +976,7 @@ class IeoController extends Controller
 					}
                        
                     if (Evidencias::loadMultiple($modelEvidencias, Yii::$app->request->post() )) 
-					{
-                        
-						
+					{	
 						$connection = Yii::$app->getDb();
 						$command = $connection->createCommand("
 							SELECT 
@@ -942,8 +994,6 @@ class IeoController extends Controller
 						");
 						$resul = $command->queryAll();
 						
-						
-						
                         $idInstitucion 	= $_SESSION['instituciones'][0];
                         $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
 						
@@ -956,19 +1006,16 @@ class IeoController extends Controller
 							$fotografias_ruta[]				= $r['fotografias_ruta'];
 						}
 						
-						
                         $propiedades = array( "producto_ruta", "resultados_actividad_ruta", "acta_ruta", "listado_ruta", "fotografias_ruta");
                         $llave =0;
                         foreach( $modelEvidencias as $key => $model1) 
                         {
-							
                             //recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
                             //para posteriormente guardar en la base de datos
                             foreach($propiedades as $propiedad)
                             {
                                 $arrayRutasFisicas = array();
                                 // se guarda el archivo en file
-                                
                                 // se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
                                 $files = UploadedFile::getInstances( $model1, "[$key]$propiedad" );
                                 if( $files )
@@ -1033,20 +1080,13 @@ class IeoController extends Controller
                 }
 			
 			
-
 				 /**Carga de archivos multiples */
                 if($arrayDatosProducto = Yii::$app->request->post('Producto'))
 				{ 
 			
-					// $modelProductos = [];
 					$cantProductos  = count($arrayDatosProducto);
 				   
-                    // for( $i = 0; $i < $cantProductos; $i++ )
-					// {
-                        $modelProductos[] = new Producto();
-                    // }
-						
-						
+                    $modelProductos[] = new Producto();
 						
                     if (Producto::loadMultiple( $modelProductos, Yii::$app->request->post())) 
 					{
@@ -1106,14 +1146,12 @@ class IeoController extends Controller
 										if (substr ($$propiedad,strpos ($$propiedad,$nombre_base),strlen ($nombre_base)) == $nombre_base & substr ($$propiedad,strpos ($$propiedad,$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )
 										{
 											//si archivo ya existe se sobreescribe sobreescribiendo la ruta de guardado
-											// Construyo la ruta completa del archivo a guardar	
-											// echo 
+											// Construyo la ruta completa del archivo a guardar	 
 											foreach ($arrayRuta as $ar)
 											{
 												if (substr ($ar,strpos ($ar,$nombre_base),strlen ($nombre_base)) == $nombre_base & substr ($ar,strpos ($ar,$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )
 												{
 													$rutaFisicaDirectoriaUploads  = $ar;
-													echo "entro if2";
 												}
 											}
 										}	
@@ -1144,15 +1182,13 @@ class IeoController extends Controller
                     }
 
                 }
-				die();  
+
 				
 			return $this->redirect(['index', 'idTipoInforme' => $model->id_tipo_informe]);
 		}
 		
 		
             
-    
-
 		//se trae la informacion correspondiente y se agrupa en el array datos
 		$cantidadPoblacion = new TiposCantidadPoblacion();
 		$cantidadPoblacion = $cantidadPoblacion->find()->andWhere("ieo_id=$id")->all();
@@ -1172,6 +1208,7 @@ class IeoController extends Controller
             $dato[$index]['fecha_creacion']= $element['fecha_creacion'];
             $dato[$index]['tipo_actividad']= $element['tipo_actividad'];
             $dato[$index]['docentes']= $element['docentes'];
+            $dato[$index]['psicoorientador']= $element['psicoorientador'];
            
             return $dato;
         });
@@ -1180,7 +1217,6 @@ class IeoController extends Controller
         foreach	($resultCantidadPoblacion as $r => $valor)
         {
             foreach	($valor as $ids => $valores)
-                
                 $datos['cantidadPoblacion'][$ids] = $valores;
         }
 
@@ -1216,6 +1252,9 @@ class IeoController extends Controller
                 
                 $datos['estudiantesIeo'][$ids] = $valores;
         }
+		
+		
+
 		//llener el campo horario_trabajo de la tabla ec.documentos_reconocimiento
 		$datos['DocumentosReconocimiento'] = $documentosRe[key($documentosRe)];
 
@@ -1225,14 +1264,50 @@ class IeoController extends Controller
 		$comunas  = ComunasCorregimientos::find()->where( 'estado=1' )->all();
         $comunas	 = ArrayHelper::map( $comunas, 'id', 'descripcion' );
 
-
+		
+		
+		
         return $this->renderAjax('update', [
             'model' => $model,
             'zonasEducativas' => $zonasEducativas,
             'datos'=> $datos,
             'comunas'=> $comunas,
+			'personaACargo' => $this->obtenerNombresXPerfilesInstitucion()
         ]);
     }
+	
+	public function obtenerNombresXPerfilesInstitucion()
+	{
+		$idInstitucion 	= $_SESSION['instituciones'][0];
+		/**
+		* Llenar nombre de los cooordinadores-eje
+		*/
+		//variable con la conexion a la base de datos 
+		$connection = Yii::$app->getDb();
+		$command = $connection->createCommand("
+			SELECT 
+				ppi.id,
+				concat(pe.nombres,' ',pe.apellidos) as nombres
+			FROM 
+				perfiles_x_personas as pp, 
+				personas as pe,
+				perfiles_x_personas_institucion ppi
+			WHERE 
+				pp.id_personas = pe.id
+			AND 
+				ppi.id_perfiles_x_persona = pp.id
+			AND 
+				ppi.id_institucion = $idInstitucion
+		");
+		$result = $command->queryAll();
+		$nombresPerfil = array();
+		foreach ($result as $r)
+		{
+			$nombresPerfil[$r['id']]= $r['nombres'];
+		}
+		
+		return $nombresPerfil;
+	}
 
     /**
      * Deletes an existing Ieo model.

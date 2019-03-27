@@ -597,7 +597,7 @@ class SemillerosTicDiarioDeCampoEstudiantesController extends Controller
 			//Busco diario de campo según los datos suministrados
 			$diarioCampo 	= SemillerosTicDiarioDeCampoEstudiantes::findOne($id);
 			$diarioCampo->isNewRecord =true;
-			var_dump( $diarioCampo->isNewRecord );
+			// var_dump( $diarioCampo->isNewRecord );
 			
 			$idFase = $diarioCampo->id_fase;
 			
