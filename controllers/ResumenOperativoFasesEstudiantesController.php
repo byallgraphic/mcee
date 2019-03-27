@@ -87,8 +87,6 @@ class ResumenOperativoFasesEstudiantesController extends Controller
 			fa.descripcion,sdi.profecional_a, sdi.id
         ORDER BY i.id,s.id");
         $datos_ieo_profesional = $command->queryAll();
-
-        //echo "<pre>"; print_r($datos_ieo_profesional); echo "</pre>";
         $data = [];
         foreach ($datos_ieo_profesional as $key =>  $dip)
         {
@@ -204,6 +202,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 $command = $connection->createCommand("
                     SELECT 
                     DISTINCT(dts.id_sesion),
+                            dts.id_sesion as num_sesion,
                             dts.fecha_sesion,
                             efe.apps_creadas,
                             efe.participacion_sesiones,
@@ -213,8 +212,8 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                     join semilleros_tic.datos_ieo_profesional_estudiantes dpro on efe.id_datos_ieo_profesional_estudiantes = dpro.id
                     WHERE dpro.id_sede =  $idSede 
                     ");
-                $datosEjeccionFasei = $command->queryAll();
                 $promedioParticipantes1 = 0;
+                $datosEjeccionFasei = $command->queryAll();
 
                 if ($maxSesionFaseI < count($datosEjeccionFasei)){
                     $maxSesionFaseI = count($datosEjeccionFasei);
@@ -227,7 +226,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         //array_push($data, "", $valor['fecha_sesion'], $valor['participacion_sesiones'], $valor['duracion_sesion']);
                         $promedioParticipantes1 += $valor['participacion_sesiones'];
 
-                        $data['fase_1']['sesiones'][$datos1][0] = $datos1;
+                        $data['fase_1']['sesiones'][$datos1][0] = $valor['num_sesion'];
                         $data['fase_1']['sesiones'][$datos1][1] = $valor['fecha_sesion'];
                         $data['fase_1']['sesiones'][$datos1][2] = $valor['participacion_sesiones'];
                         $data['fase_1']['sesiones'][$datos1][3] = $valor['duracion_sesion'];
@@ -305,6 +304,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 $command = $connection->createCommand("
                     SELECT 
                     DISTINCT(dts.id_sesion),
+                            dts.id_sesion as num_sesion,
                             dts.fecha_sesion,
                             efe.apps_desarrolladas,
                             efe.estudiantes_participantes,
@@ -315,6 +315,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                     WHERE dpro.id_sede =  $idSede 
                         ");
                 $datosEjeccionFaseii = $command->queryAll();
+
                 $promedioParticipantes2 = 0;
                 if ($maxSesionFaseII < count($datosEjeccionFaseii)){
                     $maxSesionFaseII = count($datosEjeccionFaseii);
@@ -326,10 +327,10 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         //array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
                         $promedioParticipantes2 += $valor['estudiantes_participantes'];
 
-                        $data['fase_2']['sesiones'][$datos1][0] = $datos1;
-                        $data['fase_2']['sesiones'][$datos1][1] = $valor['fecha_sesion'];
-                        $data['fase_2']['sesiones'][$datos1][2] = $valor['estudiantes_participantes'];
-                        $data['fase_2']['sesiones'][$datos1][3] = $valor['duracion_sesion'];
+                        $data['fase_2']['sesiones'][$valor['num_sesion']][0] = $valor['num_sesion'];
+                        $data['fase_2']['sesiones'][$valor['num_sesion']][1] = $valor['fecha_sesion'];
+                        $data['fase_2']['sesiones'][$valor['num_sesion']][2] = $valor['estudiantes_participantes'];
+                        $data['fase_2']['sesiones'][$valor['num_sesion']][3] = $valor['duracion_sesion'];
                     }
                     $promedioParticipantes2 = ($promedioParticipantes2 / count($datosEjeccionFaseii));
                     /**rellena la cantidad de sesiones vacias */
@@ -404,6 +405,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 $command = $connection->createCommand("
                     SELECT 
                     DISTINCT(dts.id_sesion),
+                        dts.id_sesion as num_sesion,
                         dts.fecha_sesion,
                         efe.numero_apps,
                         efe.estudiantes_participantes,
@@ -424,7 +426,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                         @$totalparticipantes3  += $valor['estudiantes_participantes'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
 
-                        $data['fase_3']['sesiones'][$datos1][0] = $datos1;
+                        $data['fase_3']['sesiones'][$datos1][0] = $valor['num_sesion'];
                         $data['fase_3']['sesiones'][$datos1][1] = $valor['fecha_sesion'];
                         $data['fase_3']['sesiones'][$datos1][2] = $valor['estudiantes_participantes'];
                         $data['fase_3']['sesiones'][$datos1][3] = $valor['duracion_sesion'];
@@ -469,9 +471,6 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 $mayorSesion['maxSesionFaseIII'] = $maxSesionFaseIII;
 
                 $lastSesion = 0;
-                if (isset($data['fase_1']['sesiones'])){
-                    $lastSesion = array_shift($data['fase_1']['sesiones']);
-                }
 
                 $data['datos_ieo']['fecha_inicio_semillero'] = $lastSesion[1];
 
@@ -479,7 +478,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 $data['total']['promedio'] = ($promedioParticipantes1 + $promedioParticipantes2 + $promedioParticipantes3) / 3 ;
                 $data['total']['suma_fases'] = (count($datosEjeccionFaseiii) + count($datosEjeccionFaseii) + count($datosEjeccionFasei));
 
-                $totalDatos[$key] = $data;
+                array_push($totalDatos, $data);
 
                 $contador++;
             }
@@ -505,6 +504,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 $totalDatos[$key]['fase_2']['sesiones'][$i] = [];
                 array_push($totalDatos[$key]['fase_2']['sesiones'][$i], $i,"---","---","---");
             }
+
             for ($i = count($dato['fase_3']['sesiones']); $i < $maxSesionFaseIII; $i++) {
                 $totalDatos[$key]['fase_3']['sesiones'][$i] = [];
                 array_push($totalDatos[$key]['fase_3']['sesiones'][$i], $i,"---","---","---");

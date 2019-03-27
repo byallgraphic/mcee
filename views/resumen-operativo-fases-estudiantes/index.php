@@ -102,9 +102,9 @@ $this->registerJsFile(
             <th class="tg-c3ow" colspan="4" rowspan="2">Datos IEO</th>
             <th class="tg-c3ow" rowspan="3">Profesional A.	</th>
             <th class="tg-c3ow" rowspan="3">Fecha de inicio del Semillero</th>
-            <th class="tg-c3ow" colspan="<?= 6 + ($mayorSesion['maxSesionFaseI']*4) ?>">fase I</th>
-            <th class="tg-uys7" colspan="<?= 6 + ($mayorSesion['maxSesionFaseII']*4) ?>">fase 2</th>
-            <th class="tg-c3ow" colspan="<?= 6 + ($mayorSesion['maxSesionFaseIII']*4) ?>">Fase 3</th>
+            <th class="tg-c3ow" colspan="<?= 6 + ($mayorSesion['maxSesionFaseI']*4) ?>">Fase I Creación y prueba</th>
+            <th class="tg-uys7" colspan="<?= 6 + ($mayorSesion['maxSesionFaseII']*4) ?>">Fase II Desarrollo e implementación</th>
+            <th class="tg-c3ow" colspan="<?= 6 + ($mayorSesion['maxSesionFaseIII']*4) ?>">Fase III  (Uso - Aplicación)</th>
             <th class="tg-c3ow" rowspan="3">TOTAL PARTICIPANTES FASES I A III (PROMEDIO)</th>
             <th class="tg-c3ow" rowspan="3">TOTAL NUMERO DE SESIONES FASES I A III</th>
         </tr>
@@ -112,8 +112,10 @@ $this->registerJsFile(
             <td class="tg-c3ow" rowspan="2">Frecuencia sesiones mensual</td>
             <td class="tg-c3ow" rowspan="2">Duración promedio sesiones (horas reloj)</td>
             <td class="tg-c3ow" rowspan="2">Curso de los Participantes</td>
-            <?php for ($i=0;$i<$mayorSesion['maxSesionFaseI'];$i++) { ?>
-                <td class="tg-0pky" colspan="4">Sesión</td>
+            <?php if (isset($data[0]['fase_1']["sesiones"])){ ?>
+                <?php foreach ($data[0]['fase_1']["sesiones"] as $keyFI => $sesion) { ?>
+                    <td class="tg-0pky" colspan="4">Sesión <?= $sesion[0] ?></td>
+                <?php } ?>
             <?php } ?>
             <td class="tg-c3ow" rowspan="2">Total Sesiones</td>
             <td class="tg-c3ow" rowspan="2">Número de participantes por curso en IEO</td>
@@ -121,8 +123,10 @@ $this->registerJsFile(
             <td class="tg-uys7" rowspan="2">Frecuencia sesiones mensual</td>
             <td class="tg-uys7" rowspan="2">Duración por cada sesión (horas reloj)</td>
             <td class="tg-uys7" rowspan="2">Curso de los Participantes</td>
-            <?php for ($i=0;$i<$mayorSesion['maxSesionFaseII'];$i++) { ?>
-                <td class="tg-0pky" colspan="4">Sesión</td>
+            <?php if (isset($data[0]['fase_2']["sesiones"])){ ?>
+                <?php foreach ($data[0]['fase_2']["sesiones"] as $keyFI => $sesion) { ?>
+                    <td class="tg-0pky" colspan="4">Sesión <?= $sesion[0] ?></td>
+                <?php } ?>
             <?php } ?>
             <td class="tg-uys7" rowspan="2">Total Sesiones</td>
             <td class="tg-uys7" rowspan="2">Número de participantes por curso en IEO</td>
@@ -130,8 +134,10 @@ $this->registerJsFile(
             <td class="tg-c3ow" rowspan="2">Frecuencia sesiones mensual</td>
             <td class="tg-c3ow" rowspan="2">Duración por cada sesión (horas reloj)</td>
             <td class="tg-c3ow" rowspan="2">Curso de los Participantes</td>
-            <?php for ($i=0;$i<$mayorSesion['maxSesionFaseIII'];$i++) { ?>
-                <td class="tg-0pky" colspan="4">Sesión</td>
+            <?php if (isset($data[0]['fase_3']["sesiones"])){ ?>
+                <?php foreach ($data[0]['fase_3']["sesiones"] as $keyFI => $sesion) { ?>
+                    <td class="tg-0pky" colspan="4">Sesión <?= $sesion[0] ?></td>
+                <?php } ?>
             <?php } ?>
             <td class="tg-c3ow" rowspan="2">Total Sesiones</td>
             <td class="tg-c3ow" rowspan="2">Número de participantes por curso en IEO</td>
@@ -166,7 +172,7 @@ $this->registerJsFile(
                 <td class="tg-0pky"><?= isset($value['fase_1']['cursos'] ) ? $value['fase_1']['cursos'] : '---'; ?></td>
                 <?php if (isset($value['fase_1']["sesiones"])){ ?>
                     <?php foreach ($value['fase_1']["sesiones"] as $keyFI => $sesion) { ?>
-                        <td class="tg-0pky"><?= $sesion[0] + 1 ?></td>
+                        <td class="tg-0pky"><?= $sesion[0] ?></td>
                         <td class="tg-0pky"><?= $sesion[1] ?></td>
                         <td class="tg-0pky"><?= $sesion[2] ?></td>
                         <td class="tg-0pky"><?= $sesion[3] ?></td>
@@ -179,9 +185,9 @@ $this->registerJsFile(
                 <td class="tg-0pky"><?= isset($value['fase_2']['frecuencia_sesion'] ) ? $value['fase_2']['frecuencia_sesion'] : '---'; ?></td>
                 <td class="tg-0pky"><?= isset($value['fase_2']['duracion_promedio'] ) ? $value['fase_2']['duracion_promedio'] : '---'; ?></td>
                 <td class="tg-0pky"><?= isset($value['fase_2']['cursos'] ) ? $value['fase_2']['cursos'] : '---'; ?></td>
-                <?php if (isset($value['fase_2']["sesiones"])){ ?>
+                <?php if (isset($value['fase_2']["sesiones"])){?>
                     <?php foreach ($value['fase_2']["sesiones"] as $keyFI => $sesion) { ?>
-                        <td class="tg-0pky"><?= $sesion[0] + 1 ?></td>
+                        <td class="tg-0pky"><?= $sesion[0] ?></td>
                         <td class="tg-0pky"><?= $sesion[1] ?></td>
                         <td class="tg-0pky"><?= $sesion[2] ?></td>
                         <td class="tg-0pky"><?= $sesion[3] ?></td>
@@ -197,7 +203,7 @@ $this->registerJsFile(
                 <td class="tg-0pky"><?= isset($value['fase_3']['cursos'] ) ? $value['fase_3']['cursos'] : '---'; ?></td>
                 <?php if (isset($value['fase_3']["sesiones"])){ ?>
                     <?php foreach ($value['fase_3']["sesiones"] as $keyFI => $sesion) { ?>
-                        <td class="tg-0pky"><?= $sesion[0] + 1 ?></td>
+                        <td class="tg-0pky"><?= $sesion[0] ?></td>
                         <td class="tg-0pky"><?= $sesion[1] ?></td>
                         <td class="tg-0pky"><?= $sesion[2] ?></td>
                         <td class="tg-0pky"><?= $sesion[3] ?></td>

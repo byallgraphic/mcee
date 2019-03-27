@@ -197,6 +197,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                 $command = $connection->createCommand("
                     SELECT 
                     DISTINCT(dts.id_sesion),
+                            dts.id_sesion as num_sesion,
                             dts.fecha_sesion,
                             efe.numero_apps,
                             efe.paricipacion_sesiones,
@@ -214,20 +215,17 @@ class ResumenOperativoFasesDocentesController extends Controller
                     $maxSesionFaseI = count($datosEjeccionFasei);
                 }
 
-                $newKeyFI = 1;
                 if(count($datosEjeccionFasei) > 0){
                     foreach ($datosEjeccionFasei as $datos1 => $valor){
-
-                        @$totalapps1 += $valor['numero_apps'];
-                        @$totalparticipantes1  += $valor['paricipacion_sesiones'];
+                        @$totalapps1 += $valor['apps_creadas'];
+                        @$totalparticipantes1  += $valor['participacion_sesiones'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['participacion_sesiones'], $valor['duracion_sesion']);
-                        $promedioParticipantes1 += $valor['paricipacion_sesiones'];
+                        $promedioParticipantes1 += 0;//$valor['participacion_sesiones'];
 
-                        $data['fase_1']['sesiones'][$newKeyFI][0] = $newKeyFI;
-                        $data['fase_1']['sesiones'][$newKeyFI][1] = $valor['fecha_sesion'];
-                        $data['fase_1']['sesiones'][$newKeyFI][2] = $valor['paricipacion_sesiones'];
-                        $data['fase_1']['sesiones'][$newKeyFI][3] = $valor['duracion_sesion'];
-                        $newKeyFI++;
+                        $data['fase_1']['sesiones'][$datos1][0] = $valor['num_sesion'];
+                        $data['fase_1']['sesiones'][$datos1][1] = $valor['fecha_sesion'];
+                        $data['fase_1']['sesiones'][$datos1][2] = 0;//$valor['participacion_sesiones'];
+                        $data['fase_1']['sesiones'][$datos1][3] = $valor['duracion_sesion'];
                     }
 
                     $promedioParticipantes1 =  $promedioParticipantes1 / count($datosEjeccionFasei);
@@ -302,6 +300,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                 $command = $connection->createCommand("
                     SELECT 
                     DISTINCT(dts.id_sesion),
+                            dts.id_sesion as num_sesion,
                             dts.fecha_sesion,
                             efe.numero_apps_desarrolladas,
                             dts.duracion_sesion
@@ -322,13 +321,12 @@ class ResumenOperativoFasesDocentesController extends Controller
                         @$totalapps2 += $valor['apps_desarrolladas'];
                         @$totalparticipantes2  += 0;//$valor['estudiantes_participantes'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
-                        $promedioParticipantes2 += 0;//$valor['estudiantes_participantes'];
+                        $promedioParticipantes2 += $valor['estudiantes_participantes'];
 
-                        $data['fase_2']['sesiones'][$newKeyFII][0] = $datos1;
-                        $data['fase_2']['sesiones'][$newKeyFII][1] = $valor['fecha_sesion'];
-                        $data['fase_2']['sesiones'][$newKeyFII][2] = 0;//$valor['estudiantes_participantes'];
-                        $data['fase_2']['sesiones'][$newKeyFII][3] = $valor['duracion_sesion'];
-                        $newKeyFII++;
+                        $data['fase_2']['sesiones'][$valor['num_sesion']][0] = $valor['num_sesion'];
+                        $data['fase_2']['sesiones'][$valor['num_sesion']][1] = $valor['fecha_sesion'];
+                        $data['fase_2']['sesiones'][$valor['num_sesion']][2] = $valor['estudiantes_participantes'];
+                        $data['fase_2']['sesiones'][$valor['num_sesion']][3] = $valor['duracion_sesion'];
                     }
                     $promedioParticipantes2 = ($promedioParticipantes2 / count($datosEjeccionFaseii));
                     /**rellena la cantidad de sesiones vacias */
@@ -403,6 +401,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                 $command = $connection->createCommand("
                     SELECT 
                     DISTINCT(dts.id_sesion),
+                        dts.id_sesion as num_sesion,
                         dts.fecha_sesion,
                         efe.numero_apps_usadas,
                         dts.duracion_sesion
@@ -422,7 +421,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                         @$totalparticipantes3  += 0;//$valor['estudiantes_participantes'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
 
-                        $data['fase_3']['sesiones'][$datos1][0] = $datos1;
+                        $data['fase_3']['sesiones'][$datos1][0] = $valor['num_sesion'];
                         $data['fase_3']['sesiones'][$datos1][1] = $valor['fecha_sesion'];
                         $data['fase_3']['sesiones'][$datos1][2] = 0;//$valor['estudiantes_participantes'];
                         $data['fase_3']['sesiones'][$datos1][3] = $valor['duracion_sesion'];

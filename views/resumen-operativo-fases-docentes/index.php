@@ -128,9 +128,9 @@ section.content {
         <th class="tg-c3ow" colspan="4" rowspan="2">Datos IEO</th>
         <th class="tg-c3ow" rowspan="3">Profesional A.	</th>
         <th class="tg-c3ow" rowspan="3">Fecha de inicio del Semillero</th>
-        <th class="tg-c3ow" colspan="<?= 6 + ($mayorSesion['maxSesionFaseI']*4) ?>">fase I</th>
-        <th class="tg-uys7" colspan="<?= 6 + ($mayorSesion['maxSesionFaseII']*4) ?>">fase 2</th>
-        <th class="tg-c3ow" colspan="<?= 6 + ($mayorSesion['maxSesionFaseIII']*4) ?>">Fase 3</th>
+        <th class="tg-c3ow" colspan="<?= 6 + ($mayorSesion['maxSesionFaseI']*4) ?>">Fase I Creación y prueba</th>
+        <th class="tg-uys7" colspan="<?= 6 + ($mayorSesion['maxSesionFaseII']*4) ?>">Fase II Desarrollo e implementación</th>
+        <th class="tg-c3ow" colspan="<?= 6 + ($mayorSesion['maxSesionFaseIII']*4) ?>">Fase III  (Uso - Aplicación)</th>
         <th class="tg-c3ow" rowspan="3">TOTAL PARTICIPANTES FASES I A III (PROMEDIO)</th>
         <th class="tg-c3ow" rowspan="3">TOTAL NUMERO DE SESIONES FASES I A III</th>
     </tr>
