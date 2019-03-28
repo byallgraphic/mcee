@@ -132,7 +132,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     FROM semilleros_tic.datos_sesiones as dts
                     join semilleros_tic.ejecucion_fase as efe on efe.id_datos_sesiones = dts.id
                     join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
-                    WHERE dpro.id_sede =  $idSede 
+                    WHERE dpro.id_sede =  $idSede  AND dpro.anio = $anio 
                 ");
                 $fechas = $command->queryAll();
 
@@ -153,7 +153,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     SELECT 
                     frecuencias_sesiones, asignatura
                     FROM semilleros_tic.acuerdos_institucionales
-                    WHERE id_semilleros_datos_ieo = $idSemilleros1 and id_fase = 1
+                    WHERE id_semilleros_datos_ieo = $idSemilleros1 and id_fase = 1 AND dpro.anio = $anio 
                 ");
 
                 $datoAcuerdosInstitucionales = $command->queryAll();
@@ -181,7 +181,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     FROM semilleros_tic.datos_sesiones as dts
                     join semilleros_tic.ejecucion_fase as efe on efe.id_datos_sesiones = dts.id
                     join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
-                    WHERE dpro.id_sede =  $idSede 
+                    WHERE dpro.id_sede =  $idSede  AND dpro.anio = $anio 
                 ");
                 $datoSemillerosTicEjecucionFase1 = $command->queryAll();
                 $segundos = 0;
@@ -208,7 +208,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     FROM semilleros_tic.datos_sesiones as dts
                     join semilleros_tic.ejecucion_fase as efe on efe.id_datos_sesiones = dts.id
                     join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
-                    WHERE dpro.id_sede =  $idSede 
+                    WHERE dpro.id_sede =  $idSede  AND dpro.anio = $anio 
                     ");
                 $datosEjeccionFasei = $command->queryAll();
 
@@ -246,7 +246,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                         SELECT 
                         frecuencias_sesiones, asignatura
                         FROM semilleros_tic.acuerdos_institucionales
-                        WHERE id_semilleros_datos_ieo = $idSemilleros2 and id_fase = 2
+                        WHERE id_semilleros_datos_ieo = $idSemilleros2 and id_fase = 2 AND dpro.anio = $anio 
                     ");
                 $datoAcuerdosInstitucionales2 = $command->queryAll();
                 $frecuenciaSesion2 = $this->arrayArrayComas($datoAcuerdosInstitucionales2,'frecuencias_sesiones') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales2,'frecuencias_sesiones') : "0" ;
@@ -274,7 +274,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     FROM semilleros_tic.datos_sesiones as dts
                     join semilleros_tic.ejecucion_fase_ii as efe on efe.id_datos_sesiones = dts.id
                     join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
-                    WHERE dpro.id_sede =  $idSede 
+                    WHERE dpro.id_sede =  $idSede  AND dpro.anio = $anio 
                     ");
 
                 $datoSemillerosTicEjecucionFase2 = $command->queryAll();
@@ -307,7 +307,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     FROM semilleros_tic.datos_sesiones as dts
                     join semilleros_tic.ejecucion_fase_ii as efe on efe.id_datos_sesiones = dts.id
                     join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
-                    WHERE dpro.id_sede =  $idSede 
+                    WHERE dpro.id_sede =  $idSede  AND dpro.anio = $anio 
                         ");
                 $datosEjeccionFaseii = $command->queryAll();
                 $promedioParticipantes2 = 0;
@@ -344,7 +344,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                         SELECT 
                         frecuencias_sesiones, asignatura
                         FROM semilleros_tic.acuerdos_institucionales
-                        WHERE id_semilleros_datos_ieo = $idSemilleros3 and id_fase = 3
+                        WHERE id_semilleros_datos_ieo = $idSemilleros3 and id_fase = 3 AND dpro.anio = $anio 
                     ");
                 $datoAcuerdosInstitucionales3 = $command->queryAll();
                 $frecuenciaSesion3 = $this->arrayArrayComas($datoAcuerdosInstitucionales3,'frecuencias_sesiones') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales3,'frecuencias_sesiones') : "0" ;
@@ -372,7 +372,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     FROM semilleros_tic.datos_sesiones as dts
                     join semilleros_tic.ejecucion_fase_iii as efe on efe.id_datos_sesion = dts.id
                     join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
-                    WHERE dpro.id_sede =  $idSede 
+                    WHERE dpro.id_sede =  $idSede  AND dpro.anio = $anio 
                     ");
                 $datoSemillerosTicEjecucionFase3 = $command->queryAll();
                 $segundos3 = 0;
@@ -404,7 +404,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     FROM semilleros_tic.datos_sesiones as dts
                     join semilleros_tic.ejecucion_fase_iii as efe on efe.id_datos_sesion = dts.id
                     join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
-                    WHERE dpro.id_sede =  $idSede 
+                    WHERE dpro.id_sede =  $idSede  AND dpro.anio = $anio 
                     ");
                 $datosEjeccionFaseiii = $command->queryAll();
                 $promedioParticipantes3 = 0;
@@ -434,21 +434,27 @@ class ResumenOperativoFasesDocentesController extends Controller
 
                 //array_push($totalDatos, $data);
 
-                if (isset($data['fase_1']['sesiones'][$datos1])){
-                    if ($maxSesionFaseI < $data['fase_1']['sesiones'][$datos1][0]){
-                        $maxSesionFaseI = $data['fase_1']['sesiones'][$datos1][0];
+                if (isset($data['fase_1']['sesiones'])){
+                    if (isset($data['fase_1']['sesiones'][$datos1])) {
+                        if ($maxSesionFaseI < $data['fase_1']['sesiones'][$datos1][0]) {
+                            $maxSesionFaseI = $data['fase_1']['sesiones'][$datos1][0];
+                        }
                     }
                 }
 
-                if (isset($data['fase_2']['sesiones'][$datos1])){
-                    if ($maxSesionFaseII < $data['fase_2']['sesiones'][$datos1][0]){
-                        $maxSesionFaseII = $data['fase_2']['sesiones'][$datos1][0];
+                if (isset($data['fase_2']['sesiones'])){
+                    if (isset($data['fase_2']['sesiones'][$datos1])) {
+                        if ($maxSesionFaseII < $data['fase_2']['sesiones'][$datos1][0]) {
+                            $maxSesionFaseII = $data['fase_2']['sesiones'][$datos1][0];
+                        }
                     }
                 }
 
-                if (isset($data['fase_3']['sesiones'][$datos1])) {
-                    if ($maxSesionFaseIII < $data['fase_3']['sesiones'][$datos1][0]) {
-                        $maxSesionFaseIII = $data['fase_3']['sesiones'][$datos1][0];
+                if (isset($data['fase_3']['sesiones'])) {
+                    if (isset($data['fase_3']['sesiones'][$datos1])) {
+                        if ($maxSesionFaseIII < $data['fase_3']['sesiones'][$datos1][0]) {
+                            $maxSesionFaseIII = $data['fase_3']['sesiones'][$datos1][0];
+                        }
                     }
                 }
 
