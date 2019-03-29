@@ -104,6 +104,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
         $maxSesionFaseII = 0;
         $maxSesionFaseIII = 0;
         $mayorSesion = [];
+        $lastSesion = 0;
         foreach ($data as $key => $dip)
         {
             if(!empty($dip)){
@@ -153,10 +154,8 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                     WHERE id_semilleros_datos_estudiantes = $idSemilleros1 and id_fase = 1  AND anio = $anio
                 ");
 
-                $datoAcuerdosInstitucionales = $command->getRawSql();
+                $datoAcuerdosInstitucionales = $command->queryAll();
 
-                var_dump($datoAcuerdosInstitucionales);
-                die();
                 $frecuenciaSesion1 = $this->arrayArrayComas($datoAcuerdosInstitucionales,'frecuencia_sesiones') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales,'frecuencia_sesiones') : "0" ;
                 $cursoSesion1 = $this->arrayArrayComas($datoAcuerdosInstitucionales,'curso') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales,'curso') : "0" ;
 
@@ -227,6 +226,13 @@ class ResumenOperativoFasesEstudiantesController extends Controller
 
                 if(count($datosEjeccionFasei) > 0){
                     foreach ($datosEjeccionFasei as $datos1 => $valor){
+                        $fecha_actual = strtotime(date($lastSesion,time()));
+                        $fecha_entrada = strtotime($valor['fecha_sesion']);
+
+                        if($fecha_actual < $fecha_entrada){
+                            $lastSesion = $fecha_entrada;
+                        }
+
                         @$totalapps1 += $valor['apps_creadas'];
                         @$totalparticipantes1  += $valor['participacion_sesiones'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['participacion_sesiones'], $valor['duracion_sesion']);
@@ -328,6 +334,13 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 }
                 if(count($datosEjeccionFaseii) > 0){
                     foreach ($datosEjeccionFaseii as $datos1 => $valor){
+                        $fecha_actual = strtotime(date($lastSesion,time()));
+                        $fecha_entrada = strtotime($valor['fecha_sesion']);
+
+                        if($fecha_actual < $fecha_entrada){
+                            $lastSesion = $fecha_entrada;
+                        }
+
                         @$totalapps2 += $valor['apps_desarrolladas'];
                         @$totalparticipantes2  += $valor['estudiantes_participantes'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
@@ -428,6 +441,13 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 }
                 if(count($datosEjeccionFaseiii) > 0){
                     foreach ($datosEjeccionFaseiii as $datos1 => $valor){
+                        $fecha_actual = strtotime(date($lastSesion,time()));
+                        $fecha_entrada = strtotime($valor['fecha_sesion']);
+
+                        if($fecha_actual < $fecha_entrada){
+                            $lastSesion = $fecha_entrada;
+                        }
+
                         @$totalapps3 += $valor['numero_apps'];
                         @$totalparticipantes3  += $valor['estudiantes_participantes'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
@@ -482,9 +502,7 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 $mayorSesion['maxSesionFaseII'] = $maxSesionFaseII;
                 $mayorSesion['maxSesionFaseIII'] = $maxSesionFaseIII;
 
-                $lastSesion = 0;
-
-                $data['datos_ieo']['fecha_inicio_semillero'] = $lastSesion[1];
+                $data['datos_ieo']['fecha_inicio_semillero'] = date("Y-m-d", $lastSesion);
 
 
                 $data['total']['promedio'] = ($promedioParticipantes1 + $promedioParticipantes2 + $promedioParticipantes3) / 3 ;

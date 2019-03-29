@@ -107,6 +107,8 @@ class ResumenOperativoFasesDocentesController extends Controller
         $mayorSesion['maxSesionFaseI']  = 0;
         $mayorSesion['maxSesionFaseII']  = 0;
         $mayorSesion['maxSesionFaseIII'] = 0;
+        $lastSesion = 0;
+
         foreach ($dataFirst as $key => $dip)
         {
             if(!empty($dip)){
@@ -132,7 +134,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     FROM semilleros_tic.datos_sesiones as dts
                     join semilleros_tic.ejecucion_fase as efe on efe.id_datos_sesiones = dts.id
                     join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
-                    WHERE dpro.id_sede =  $idSede  AND dpro.anio = $anio 
+                    WHERE dpro.id_sede =  $idSede AND anio = $anio
                 ");
                 $fechas = $command->queryAll();
 
@@ -153,10 +155,11 @@ class ResumenOperativoFasesDocentesController extends Controller
                     SELECT 
                     frecuencias_sesiones, asignatura
                     FROM semilleros_tic.acuerdos_institucionales
-                    WHERE id_semilleros_datos_ieo = $idSemilleros1 and id_fase = 1 AND dpro.anio = $anio 
+                    WHERE id_semilleros_datos_ieo = $idSemilleros1 and id_fase = 1 AND anio = $anio
                 ");
 
                 $datoAcuerdosInstitucionales = $command->queryAll();
+
                 $frecuenciaSesion1 = $this->arrayArrayComas($datoAcuerdosInstitucionales,'frecuencias_sesiones') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales,'frecuencias_sesiones') : "0" ;
                 $cursoSesion1 = $this->arrayArrayComas($datoAcuerdosInstitucionales,'curso') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales,'curso') : "0" ;
 
@@ -181,7 +184,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     FROM semilleros_tic.datos_sesiones as dts
                     join semilleros_tic.ejecucion_fase as efe on efe.id_datos_sesiones = dts.id
                     join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
-                    WHERE dpro.id_sede =  $idSede  AND dpro.anio = $anio 
+                    WHERE dpro.id_sede =  $idSede  AND anio = $anio 
                 ");
                 $datoSemillerosTicEjecucionFase1 = $command->queryAll();
                 $segundos = 0;
@@ -208,7 +211,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     FROM semilleros_tic.datos_sesiones as dts
                     join semilleros_tic.ejecucion_fase as efe on efe.id_datos_sesiones = dts.id
                     join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
-                    WHERE dpro.id_sede =  $idSede  AND dpro.anio = $anio 
+                    WHERE dpro.id_sede =  $idSede  AND anio = $anio 
                     ");
                 $datosEjeccionFasei = $command->queryAll();
 
@@ -220,6 +223,14 @@ class ResumenOperativoFasesDocentesController extends Controller
 
                 if(count($datosEjeccionFasei) > 0){
                     foreach ($datosEjeccionFasei as $datos1 => $valor){
+
+                        $fecha_actual = strtotime(date($lastSesion,time()));
+                        $fecha_entrada = strtotime($valor['fecha_sesion']);
+
+                        if($fecha_actual < $fecha_entrada){
+                            $lastSesion = $fecha_entrada;
+                        }
+
                         @$totalapps1 += $valor['apps_creadas'];
                         @$totalparticipantes1  += $valor['participacion_sesiones'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['participacion_sesiones'], $valor['duracion_sesion']);
@@ -246,7 +257,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                         SELECT 
                         frecuencias_sesiones, asignatura
                         FROM semilleros_tic.acuerdos_institucionales
-                        WHERE id_semilleros_datos_ieo = $idSemilleros2 and id_fase = 2 AND dpro.anio = $anio 
+                        WHERE id_semilleros_datos_ieo = $idSemilleros2 and id_fase = 2 AND anio = $anio 
                     ");
                 $datoAcuerdosInstitucionales2 = $command->queryAll();
                 $frecuenciaSesion2 = $this->arrayArrayComas($datoAcuerdosInstitucionales2,'frecuencias_sesiones') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales2,'frecuencias_sesiones') : "0" ;
@@ -274,7 +285,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     FROM semilleros_tic.datos_sesiones as dts
                     join semilleros_tic.ejecucion_fase_ii as efe on efe.id_datos_sesiones = dts.id
                     join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
-                    WHERE dpro.id_sede =  $idSede  AND dpro.anio = $anio 
+                    WHERE dpro.id_sede =  $idSede  AND anio = $anio 
                     ");
 
                 $datoSemillerosTicEjecucionFase2 = $command->queryAll();
@@ -307,7 +318,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     FROM semilleros_tic.datos_sesiones as dts
                     join semilleros_tic.ejecucion_fase_ii as efe on efe.id_datos_sesiones = dts.id
                     join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
-                    WHERE dpro.id_sede =  $idSede  AND dpro.anio = $anio 
+                    WHERE dpro.id_sede =  $idSede  AND anio = $anio 
                         ");
                 $datosEjeccionFaseii = $command->queryAll();
                 $promedioParticipantes2 = 0;
@@ -318,6 +329,14 @@ class ResumenOperativoFasesDocentesController extends Controller
                 $newKeyFII = 1;
                 if(count($datosEjeccionFaseii) > 0){
                     foreach ($datosEjeccionFaseii as $datos1 => $valor){
+
+                        $fecha_actual = strtotime(date($lastSesion,time()));
+                        $fecha_entrada = strtotime($valor['fecha_sesion']);
+
+                        if($fecha_actual < $fecha_entrada){
+                            $lastSesion = $fecha_entrada;
+                        }
+
                         @$totalapps2 += $valor['apps_desarrolladas'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
                         $promedioParticipantes2 += $valor['estudiantes_participantes'];
@@ -344,7 +363,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                         SELECT 
                         frecuencias_sesiones, asignatura
                         FROM semilleros_tic.acuerdos_institucionales
-                        WHERE id_semilleros_datos_ieo = $idSemilleros3 and id_fase = 3 AND dpro.anio = $anio 
+                        WHERE id_semilleros_datos_ieo = $idSemilleros3 and id_fase = 3 AND anio = $anio 
                     ");
                 $datoAcuerdosInstitucionales3 = $command->queryAll();
                 $frecuenciaSesion3 = $this->arrayArrayComas($datoAcuerdosInstitucionales3,'frecuencias_sesiones') != "" ? $this->arrayArrayComas($datoAcuerdosInstitucionales3,'frecuencias_sesiones') : "0" ;
@@ -372,7 +391,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     FROM semilleros_tic.datos_sesiones as dts
                     join semilleros_tic.ejecucion_fase_iii as efe on efe.id_datos_sesion = dts.id
                     join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
-                    WHERE dpro.id_sede =  $idSede  AND dpro.anio = $anio 
+                    WHERE dpro.id_sede =  $idSede  AND anio = $anio 
                     ");
                 $datoSemillerosTicEjecucionFase3 = $command->queryAll();
                 $segundos3 = 0;
@@ -404,7 +423,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     FROM semilleros_tic.datos_sesiones as dts
                     join semilleros_tic.ejecucion_fase_iii as efe on efe.id_datos_sesion = dts.id
                     join semilleros_tic.datos_ieo_profesional dpro on efe.id_datos_ieo_profesional = dpro.id
-                    WHERE dpro.id_sede =  $idSede  AND dpro.anio = $anio 
+                    WHERE dpro.id_sede =  $idSede  AND anio = $anio 
                     ");
                 $datosEjeccionFaseiii = $command->queryAll();
                 $promedioParticipantes3 = 0;
@@ -462,12 +481,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                 $mayorSesion['maxSesionFaseII'] = $maxSesionFaseII;
                 $mayorSesion['maxSesionFaseIII'] = $maxSesionFaseIII;
 
-                $lastSesion = 0;
-                if (isset($data['fase_1']['sesiones'])){
-                    $lastSesion = array_shift($data['fase_1']['sesiones']);
-                }
-
-                $data['datos_ieo']['fecha_inicio_semillero'] = $lastSesion[1];
+                $data['datos_ieo']['fecha_inicio_semillero'] = date("Y-m-d", $lastSesion);
 
 
                 $data['total']['promedio'] = ($promedioParticipantes1 + $promedioParticipantes2 + $promedioParticipantes3) / 3 ;
