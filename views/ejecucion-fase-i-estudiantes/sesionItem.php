@@ -63,7 +63,7 @@ $index = 0;
 		<div class='row text-center title'>
 			
 			<div class='col-sm-1'>
-				<span total class='form-control' style='background-color:#ccc;'>Participación Sesiones (1 a 12)</span>
+				<span total class='form-control' style='background-color:#ccc;'>Participación Sesiones</span>
 			</div>
 			
 			<div class='col-sm-1'>
@@ -114,9 +114,9 @@ $index = 0;
 										[ 
 											'class' 				=> 'form-control', 
 											'maxlength' 			=> true, 
-											'data-type' 			=> 'select',
-											'data-typevalidation' 	=> 'select',
-											'data-source' 			=> '[ 1, 2, 3,4, 5,6, 7, 8,9,10,11,12]',
+											'data-type' 			=> 'number',
+											'data-typevalidation' 	=> 'number',
+											// 'data-source' 			=> '[ 1, 2, 3,4, 5,6, 7, 8,9,10,11,12]',
 										])
 									->label( null, [ 'style' => 'display:none' ]) ?>
 				</div>

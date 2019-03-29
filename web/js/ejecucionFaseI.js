@@ -14,10 +14,10 @@ $( document ).ready(function(){
 	
 	//Copio los titulos y los dejo como arrary para que se más fácil usarlos en los popups
 	var arrayTitles = [
-		"Nombre del docente",
+		// "Nombre del docente",
 		"Nombre de las asignaturas que enseña",
-		"Especialidad de la Media Técnica o Técnica",
-		"Participación Sesiones(1 a 12)",
+		// "Especialidad de la Media Técnica o Técnica",
+		"Participación Sesiones",
 		"Número de Apps 0.0 creadas",
 		"Nombre de las aplicaciones creadas",
 		"Número de sesiones empleadas para la creación de cada aplicación",

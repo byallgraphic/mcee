@@ -105,7 +105,7 @@ use nex\chosen\Chosen;
 			</div>
 			
 			<div class='col-sm-1'>
-				<span total class='form-control' style='background-color:#ccc;'>Participación Sesiones(1 a 12)</span>
+				<span total class='form-control' style='background-color:#ccc;'>Participación Sesiones</span>
 			</div>
 			
 			<div class='col-sm-1'>
