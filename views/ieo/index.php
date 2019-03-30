@@ -45,11 +45,36 @@ if( isset($guardado) && $guardado == 1 ){
 		<?=  Html::button('Agregar',['value'=>Url::to(['create','idTipoInforme'	=> $idTipoInforme]),'class'=>'btn btn-success','id'=>'modalButton']) ?>
 		
 		
-		<?= Html::a('Volver', 
-									[
-										'ec-competencias-basicas-proyectos/index',
-									], 
-									['class' => 'btn btn-info']) ?>
+			<?php
+		$connection = Yii::$app->getDb();
+		$command = $connection->createCommand(
+		"
+			select p.descripcion,p.id
+			from ec.tipo_informe as ti, ec.componentes as c, ec.proyectos as p
+			where ti.id = $idTipoInforme
+			and ti.id_componente = c.id
+			and c.descripcion = p.descripcion
+			
+		");
+		$ecProyectos = $command->queryAll();
+		
+		
+		$arrayVolver = array(
+		'Articulación Familiar' =>'ec-competencias-basicas-proyectos-articulacion/index',
+		'Proyecto de Servicio Social Estudiantil' =>'ec-competencias-basicas-proyectos-obligatorio/index',
+		'Proyectos Pedagógicos Transversales' =>'ec-competencias-basicas-proyectos/index',
+		'Proyecto Fortalecimiento de Competencias Básicas desde la Transversalidad' =>'ec-competencias-basicas-transversalidad/index',
+		);
+
+
+		
+		echo Html::a('Volver', 
+						[
+							$arrayVolver[$ecProyectos[0]['descripcion']],
+						], 
+						['class' => 'btn btn-info']
+					)
+		?>
 				
 
 

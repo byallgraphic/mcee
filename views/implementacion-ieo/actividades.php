@@ -4,7 +4,13 @@
    use yii\helpers\Html;
    use dosamigos\datepicker\DatePicker;
 
-   if($numActividad != 17){
+   
+   echo  $form->field($estudiantesGrado, "[$numActividad]id_actividad")->hiddenInput(['value'=> $numActividad])->label(false);
+   echo  $form->field($evidencias, "[$numActividad]id_actividad")->hiddenInput(['value'=> $numActividad])->label(false); 
+	
+	
+   if($numActividad != 17)
+   {
 ?>
 
         <h2 style='background-color: #ccc;padding:5px;'>Tipo y cantidad de población</h2>
@@ -22,7 +28,6 @@
         ]);  ?>
 
         <?= $form->field($tiposCantidadPoblacion, "[$numActividad]id_actividad")->hiddenInput(['value'=> $numActividad])->label(false); ?>
-        <?= $form->field($tiposCantidadPoblacion, "[$numActividad]tipo_actividad")->hiddenInput(['value'=> 1])->label(false); ?>
         <h3 style='background-color: #ccc;padding:5px;'>Docentes</h3>
         
         <div class=row style='text-align:center;'>
@@ -53,28 +58,28 @@
         </div>
         <div class=row>
             <div class="col-sm-2" style='padding:0px;'>
-                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]tiempo_libre", [ 'type' => 'number', 'class' => "form-control docentes-$numActividad-cantidad", 'value' => isset($datos[$numActividad]['tiempo_libre']) ? $datos[$numActividad]['tiempo_libre'] : ''] ) ?>
+                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]tiempo_libre", [ 'type' => 'number', 'class' => "form-control docentes-$numActividad-cantidad", 'value' => isset($datos[$numActividad]['tiempo_libre']) ? $datos[$numActividad]['tiempo_libre'] : '0'] ) ?>
             </div>
             <div class="col-sm-2" style='padding:0px;'>
-                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]edu_derechos", [ 'type' => 'number', 'class' => "form-control docentes-$numActividad-cantidad", 'value' => isset($datos[$numActividad]['edu_derechos']) ? $datos[$numActividad]['edu_derechos'] : ''] ) ?>
+                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]edu_derechos", [ 'type' => 'number', 'class' => "form-control docentes-$numActividad-cantidad", 'value' => isset($datos[$numActividad]['edu_derechos']) ? $datos[$numActividad]['edu_derechos'] : '0'] ) ?>
             </div>
             <div class="col-sm-1" style='padding:0px;'>
-                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]sexualidad", [ 'type' => 'number', 'class' => "form-control docentes-$numActividad-cantidad", 'value' => isset($datos[$numActividad]['sexualidad']) ? $datos[$numActividad]['sexualidad'] : ''] ) ?>
+                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]sexualidad", [ 'type' => 'number', 'class' => "form-control docentes-$numActividad-cantidad", 'value' => isset($datos[$numActividad]['sexualidad']) ? $datos[$numActividad]['sexualidad'] : '0'] ) ?>
             </div>
             <div class="col-sm-1" style='padding:0px;'>
-                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]ciudadania", [ 'type' => 'number', 'class' => "form-control docentes-$numActividad-cantidad", 'value' => isset($datos[$numActividad]['ciudadania']) ? $datos[$numActividad]['ciudadania'] : ''] ) ?>
+                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]ciudadania", [ 'type' => 'number', 'class' => "form-control docentes-$numActividad-cantidad", 'value' => isset($datos[$numActividad]['ciudadania']) ? $datos[$numActividad]['ciudadania'] : '0'] ) ?>
             </div>
             <div class="col-sm-2" style='padding:0px;'>
-                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]medio_ambiente", [ 'type' => 'number', 'class' => "form-control docentes-$numActividad-cantidad", 'value' => isset($datos[$numActividad]['medio_ambiente']) ? $datos[$numActividad]['medio_ambiente'] : ''] ) ?>
+                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]medio_ambiente", [ 'type' => 'number', 'class' => "form-control docentes-$numActividad-cantidad", 'value' => isset($datos[$numActividad]['medio_ambiente']) ? $datos[$numActividad]['medio_ambiente'] : '0'] ) ?>
             </div>
             <div class="col-sm-1" style='padding:0px;'>
-                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]familia", [ 'type' => 'number', 'class' => "form-control docentes-$numActividad-cantidad", 'value' => isset($datos[$numActividad]['familia']) ? $datos[$numActividad]['familia'] : ''] ) ?>
+                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]familia", [ 'type' => 'number', 'class' => "form-control docentes-$numActividad-cantidad", 'value' => isset($datos[$numActividad]['familia']) ? $datos[$numActividad]['familia'] : '0'] ) ?>
             </div>
             <div class="col-sm-2" style='padding:0px;'>
-                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]directivos", [ 'type' => 'number', 'class' => "form-control docentes-$numActividad-cantidad", 'value' => isset($datos[$numActividad]['directivos']) ? $datos[$numActividad]['directivos'] : ''] ) ?>
+                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]directivos", [ 'type' => 'number', 'class' => "form-control docentes-$numActividad-cantidad", 'value' => isset($datos[$numActividad]['directivos']) ? $datos[$numActividad]['directivos'] : '0'] ) ?>
             </div>
             <div class="col-sm-1" style='padding:0px;'>
-                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]total", [ 'readOnly' => true, 'class' => "form-control", 'value' => isset($datos[$numActividad]['total']) ? $datos[$numActividad]['total'] : ''] ) ?>
+                <?=  Html::activeTextInput($tiposCantidadPoblacion, "[$numActividad]total", [ 'readOnly' => true, 'class' => "form-control", 'value' => isset($datos[$numActividad]['total']) ? $datos[$numActividad]['total'] : '0'] ) ?>
             </div>
         </div>
         
@@ -120,40 +125,40 @@
 
         <div class=row>
             <div class="col-sm-1" style='padding:0px;'>
-            <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_0", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_0']) ? $datos[$numActividad]['grado_0'] : ''] ) ?>
+            <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_0", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_0']) ? $datos[$numActividad]['grado_0'] : '0'] ) ?>
             </div>
             <div class="col-sm-1" style='padding:0px;'>
-                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_1", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_1']) ? $datos[$numActividad]['grado_1'] : ''] ) ?>
+                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_1", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_1']) ? $datos[$numActividad]['grado_1'] : '0'] ) ?>
             </div>
             <div class="col-sm-1" style='padding:0px;'>
-                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_2", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_2']) ? $datos[$numActividad]['grado_2'] : ''] ) ?>
+                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_2", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_2']) ? $datos[$numActividad]['grado_2'] : '0'] ) ?>
             </div>
             <div class="col-sm-1" style='padding:0px;'>
-                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_3", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_3']) ? $datos[$numActividad]['grado_3'] : ''] ) ?>
+                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_3", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_3']) ? $datos[$numActividad]['grado_3'] : '0'] ) ?>
             </div>
             <div class="col-sm-1" style='padding:0px;'>
-                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_4", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_4']) ? $datos[$numActividad]['grado_4'] : ''] ) ?>
+                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_4", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_4']) ? $datos[$numActividad]['grado_4'] : '0'] ) ?>
             </div>
             <div class="col-sm-1" style='padding:0px;'>
-                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_5", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_5']) ? $datos[$numActividad]['grado_5'] : ''] ) ?>
+                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_5", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_5']) ? $datos[$numActividad]['grado_5'] : '0'] ) ?>
             </div>
             <div class="col-sm-1" style='padding:0px;'>
-                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_6", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_6']) ? $datos[$numActividad]['grado_6'] : ''] ) ?>
+                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_6", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_6']) ? $datos[$numActividad]['grado_6'] : '0'] ) ?>
             </div>
             <div class="col-sm-1" style='padding:0px;'>
-                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_7", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_7']) ? $datos[$numActividad]['grado_7'] : ''] ) ?>
+                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_7", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_7']) ? $datos[$numActividad]['grado_7'] : '0'] ) ?>
             </div>
             <div class="col-sm-1" style='padding:0px;'>
-                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_8", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_8']) ? $datos[$numActividad]['grado_8'] : ''] ) ?>
+                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_8", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_8']) ? $datos[$numActividad]['grado_8'] : '0'] ) ?>
             </div>
             <div class="col-sm-1" style='padding:0px;'>
-                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_9", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_9']) ? $datos[$numActividad]['grado_9'] : ''] ) ?>
+                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_9", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_9']) ? $datos[$numActividad]['grado_9'] : '0'] ) ?>
             </div>
             <div class="col-sm-1" style='padding:0px;'>
-                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_10", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_10']) ? $datos[$numActividad]['grado_10'] : ''] ) ?>
+                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_10", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_10']) ? $datos[$numActividad]['grado_10'] : '0'] ) ?>
             </div>
             <div class="col-sm-1" style='padding:0px;'>
-                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_11", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_11']) ? $datos[$numActividad]['grado_11'] : ''] ) ?>
+                <?=  Html::activeTextInput($estudiantesGrado, "[$numActividad]grado_11", [ 'type' => 'number','class' => 'form-control', 'value' => isset($datos[$numActividad]['grado_11']) ? $datos[$numActividad]['grado_11'] : '0'] ) ?>
             </div>
             <?= $form->field($estudiantesGrado, "[$numActividad]total")->textInput(['readOnly' => true, 'value' => isset($datos[$numActividad]['total']) ? $datos[$numActividad]['total'] : '' ]) ?>
         </div>

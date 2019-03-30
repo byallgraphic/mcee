@@ -8,18 +8,22 @@ use dosamigos\datepicker\DatePicker;
 /* @var $form yii\widgets\ActiveForm */
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 // $this->registerJsFile(Yii::$app->request->baseUrl.'/js/implementacionIeo.js',['depends' => [\yii\web\JqueryAsset::className()]]);
+
 ?>
 
 <div class="implementacion-ieo-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
+	    <?= $form->field($model, 'institucion_id')->dropDownList( $institucion) ?>
+        <?= $form->field($model, 'sede_id')->dropDownList( $sede) ?>
+        <?= $form->field($model, 'sede_id')->dropDownList( $sede) ?>
         <?= $form->field($model, 'zona_educativa')->textInput() ?>
         <?= $form->field($model, 'comuna')->textInput() ?>
         <?= $form->field($model, 'barrio')->textInput() ?>
         <?= $form->field($model, 'profesional_cargo')->textInput() ?>
         <?= $form->field($model, 'horario_trabajo')->textInput() ?>
-
+		<?= $form->field($model, 'id_tipo_informe')->hiddenInput(['value'=> $idTipoInforme])->label(false); ?>
 
         <div class="panel-group">
             <div class="panel panel-default">

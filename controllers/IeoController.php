@@ -856,13 +856,8 @@ class IeoController extends Controller
 				/**Carga de archivos multiples */
                 if($arrayDatosDocumentos = Yii::$app->request->post('DocumentosReconocimiento'))
 				{
-						
-					// $modelDocumentos = [];
-					// se deben crear modelos igual al valor maximo del indice que tenga  Yii::$app->request->post('DocumentosReconocimiento') en esta caso es 2
-                    // for( $i = 0; $i <= 1 ; $i++ )
-					// {
-                        $modelDocumentos[1] = new DocumentosReconocimiento();
-                    // } 
+					
+                        $modelDocumentos[1] = new DocumentosReconocimiento(); 
 				
                     if (DocumentosReconocimiento::loadMultiple($modelDocumentos, Yii::$app->request->post())) 
 					{

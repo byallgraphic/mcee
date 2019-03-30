@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/documentos.js',['depends' => [\yii\web\JqueryAsset::className()]]);
-
+$idTipoInforme = $_GET['idTipoInforme'];
 if( isset($guardado) && $guardado == 1 ){
 	echo Html::hiddenInput( 'guardadoFormulario', '1' );
 }
@@ -46,8 +46,39 @@ if( isset($guardado) && $guardado == 1 ){
    
 
     <p>
-        <?=  Html::button('Agregar',['value'=>Url::to(['create']),'class'=>'btn btn-success','id'=>'modalButton']) ?>
+         <?=  Html::button('Agregar',['value'=>Url::to(['create','idTipoInforme'=> $idTipoInforme]),'class'=>'btn btn-success','id'=>'modalButton']) ?>
 		
+		
+			<?php
+		$connection = Yii::$app->getDb();
+		$command = $connection->createCommand(
+		"
+			select p.descripcion,p.id
+			from ec.tipo_informe as ti, ec.componentes as c, ec.proyectos as p
+			where ti.id = $idTipoInforme
+			and ti.id_componente = c.id
+			and c.descripcion = p.descripcion
+			
+		");
+		$ecProyectos = $command->queryAll();
+		
+		
+		$arrayVolver = array(
+		'Articulación Familiar' =>'ec-competencias-basicas-proyectos-articulacion/index',
+		'Proyecto de Servicio Social Estudiantil' =>'ec-competencias-basicas-proyectos-obligatorio/index',
+		'Proyectos Pedagógicos Transversales' =>'ec-competencias-basicas-proyectos/index',
+		'Proyecto Fortalecimiento de Competencias Básicas desde la Transversalidad' =>'ec-competencias-basicas-transversalidad/index',
+		);
+
+
+		
+		echo Html::a('Volver', 
+						[
+							$arrayVolver[$ecProyectos[0]['descripcion']],
+						], 
+						['class' => 'btn btn-info']
+					)
+		?>
     </p>
 
     <?= DataTables::widget([

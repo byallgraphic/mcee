@@ -18,6 +18,11 @@ $this->params['breadcrumbs'][] = "Actualizar";
         'model' => $model,
         'zonasEducativas' => $zonasEducativas,
         'datos'=> $datos,
+		'sede' => $sede,
+		'institucion'=> $institucion,
+		'comunas' => $comunas, 
+		'nombres' => $nombres, 
+		
     ]) ?>
 
 </div>

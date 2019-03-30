@@ -27,6 +27,8 @@ use app\models\PerfilesXPersonas;
 use app\models\Personas;
 use app\models\ComunasCorregimientos;
 use app\models\BarriosVeredas;
+use app\models\Sedes;
+use yii\base\Model;
 
 
 use yii\helpers\ArrayHelper;
@@ -86,7 +88,8 @@ class ImplementacionIeoController extends Controller
         
     }
 
-    function actionViewFases($model, $form, $datos){
+    function actionViewFases($model, $form, $datos)
+	{
        
         
         $actividades = [ 
@@ -116,15 +119,15 @@ class ImplementacionIeoController extends Controller
         
         $colors = ["#cce5ff", "#d4edda", "#f8d7da", "#fff3cd", "#d1ecf1", "#d6d8d9", "#cce5ff", "#d6d8d9", "#d4edda", "#f8d7da", "#fff3cd", "#d1ecf1", "#d6d8d9", "#cce5ff", "#f8d7da", "#fff3cd", "#d1ecf1", "#d6d8d9", "#cce5ff"];
 
-        foreach ($actividades as $actividad => $a)
+        foreach ($actividades as $numActividad => $titulo)
 		{
                 
                 $contenedores[] = [
-                    'label' 	=>  $a,
+                    'label' 	=>  $titulo,
                     'content' 	=> $this->renderPartial( 'actividades', 
                                         [  
                                             'form' => $form,
-                                            'numActividad' => $actividad,
+                                            'numActividad' => $numActividad,
                                             'model' =>$model,
                                             'tiposCantidadPoblacion' =>  $tiposCantidadPoblacion,
                                             'estudiantesGrado' => $estudiantesGrado,
@@ -133,7 +136,7 @@ class ImplementacionIeoController extends Controller
                                             'datos' => $datos
                                         ] 
                                         ),
-                    'headerOptions' => ['class' => 'tab1', 'style' => "background-color: $colors[$actividad];"],
+                    'headerOptions' => ['class' => 'tab1', 'style' => "background-color: $colors[$numActividad];"],
                 ];
         }
 
@@ -179,421 +182,251 @@ class ImplementacionIeoController extends Controller
     {
         $ieo_model = new ImplementacionIeo();
         $idInstitucion = $_SESSION['instituciones'][0];
-        $institucion = Instituciones::findOne( $idInstitucion );
-        $ieo_id = 0;
-        $status = false;
        
-        if ($ieo_model->load(Yii::$app->request->post())) {
-
-            $ieo_model->institucion_id = $idInstitucion;
-            $ieo_model->estado = 1;
-            $ieo_model->sede_id = 2;
-            $ieo_model->id_tipo_informe = $_SESSION["tipo_informe"];
-                       
-            if($ieo_model->save()){
+       
+        if ($ieo_model->load(Yii::$app->request->post())) 
+		{
+			$ieo_model->estado =1;
+			echo "<pre>"; print_r(Yii::$app->request->post()); echo "</pre>"; 
+			die;
+            if($ieo_model->save())
+			{
                 $ieo_id = $ieo_model->id;
-                //$ieo_id = 1;
 
-                /*if(Yii::$app->request->post('EvidenciasImpIeo')){
+                if($arrayDatosEvidencias = Yii::$app->request->post('EvidenciasImpIeo'))
+				{
+					$modelEvidencias = [];
 
-                    $dataEvidencias = Yii::$app->request->post('EvidenciasImpIeo');
-                    $countEvidencias = count( $dataEvidencias );
-                    $modelEvidencias = [];
+					foreach ($arrayDatosEvidencias as $key => $valor)	
+						$modelEvidencias[$key] = new EvidenciasImpIeo();
 
-                    for( $i = 0; $i < $countEvidencias; $i++ ){
-                        $modelEvidencias[] = new EvidenciasImpIeo();
-                    }
+					
+					if (EvidenciasImpIeo::loadMultiple($modelEvidencias, Yii::$app->request->post() )) 
+					{
+						
+						$idInstitucion 	= $_SESSION['instituciones'][0];
+						$institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
 
-                    if (EvidenciasImpIeo::loadMultiple($modelEvidencias, Yii::$app->request->post() )) {
-                        foreach($modelEvidencias as $key => $model3) {
-                            $saveAvemceFormula = "";
-                            $saveAvanceRutaGestion = "";
-                            
-                            $producto_acuerdo = UploadedFile::getInstance( $model3, "[$key]producto_acuerdo" );
-                            $resultado_actividad = UploadedFile::getInstance( $model3, "[$key]resultado_actividad" );
-                            $acta = UploadedFile::getInstance( $model3, "[$key]acta" );
-                            $listado = UploadedFile::getInstance( $model3, "[$key]listado" );
-                            $fotografias = UploadedFile::getInstance( $model3, "[$key]fotografias" );
-
-                            $avance_formula = UploadedFile::getInstance( $model3, "[$key]avance_formula" );
-                            $avance_ruta_gestion = UploadedFile::getInstance( $model3, "[$key]avance_ruta_gestion" );
-                            
-                            if( $producto_acuerdo && $resultado_actividad && $acta && $listado && $fotografias){
-                                                       
-                                $modelEvidencias [] = new EvidenciasImpIeo();
-                                //Se crea carpeta para almecenar los documentos de Socializacion
-                                $carpetaEvidencias = "../documentos/documentosIeo/actividades/evidenciasImlementacionIeo/".$institucion->codigo_dane;
-                                if (!file_exists($carpetaEvidencias)) {
-                                    mkdir($carpetaEvidencias, 0777, true);
-                                }
-
-                                $base = "../documentos/documentosIeo/actividades/evidenciasImlementacionIeo/".$institucion->codigo_dane."/";
-                          
-                                $rutaFisicaDirectoriaUploadProducto = $base.$producto_acuerdo->baseName;
-                                $rutaFisicaDirectoriaUploadProducto .= date( "_Y_m_d_His" ) . '.' . $producto_acuerdo->extension;
-                                $saveProducto = $producto_acuerdo->saveAs( $rutaFisicaDirectoriaUploadProducto );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-                                
-                                $rutaFisicaDirectoriaUploadResultadoActividad = $base.$resultado_actividad->baseName;
-                                $rutaFisicaDirectoriaUploadResultadoActividad .= date( "_Y_m_d_His" ) . '.' . $resultado_actividad->extension;
-                                $saveResultadoActividad = $resultado_actividad->saveAs( $rutaFisicaDirectoriaUploadResultadoActividad );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-                                
-                                $rutaFisicaDirectoriaUploadActa = $base.$acta->baseName;
-                                $rutaFisicaDirectoriaUploadActa .= date( "_Y_m_d_His" ) . '.' . $acta->extension;
-                                $saveActa = $acta->saveAs( $rutaFisicaDirectoriaUploadActa );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-                                
-                                $rutaFisicaDirectoriaUploadListado = $base.$listado->baseName;
-                                $rutaFisicaDirectoriaUploadListado .= date( "_Y_m_d_His" ) . '.' . $listado->extension;
-                                $saveListado = $listado->saveAs( $rutaFisicaDirectoriaUploadListado );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-
-                                $rutaFisicaDirectoriaUploadFotografia = $base.$fotografias->baseName;
-                                $rutaFisicaDirectoriaUploadFotografia .= date( "_Y_m_d_His" ) . '.' . $fotografias->extension;
-                                $saveFotografia = $fotografias->saveAs( $rutaFisicaDirectoriaUploadFotografia );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-                                
-                                if($avance_formula && $avance_ruta_gestion){
-                                    $rutaFisicaDirectoriaUploadAvemceFormula = $base.$avance_formula->baseName;
-                                    $rutaFisicaDirectoriaUploadAvemceFormula .= date( "_Y_m_d_His" ) . '.' . $avance_formula->extension;
-                                    $saveAvemceFormula = $avance_formula->saveAs( $rutaFisicaDirectoriaUploadAvemceFormula );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-    
-                                    $rutaFisicaDirectoriaUploadAvanceRutaGestion = $base.$avance_ruta_gestion->baseName;
-                                    $rutaFisicaDirectoriaUploadAvanceRutaGestion .= date( "_Y_m_d_His" ) . '.' . $avance_ruta_gestion->extension;
-                                    $saveAvanceRutaGestion = $avance_ruta_gestion->saveAs( $rutaFisicaDirectoriaUploadAvanceRutaGestion );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-                                }
-
-
-                                if( $saveProducto && $saveResultadoActividad && $saveActa && $saveListado && $saveFotografia){ 
-                                    //Le asigno la ruta al arhvio
-                                    $modelEvidencias[$key]->implementacion_ieo_id = $ieo_id;
-                                    $modelEvidencias[$key]->producto_acuerdo = $rutaFisicaDirectoriaUploadProducto;
-                                    $modelEvidencias[$key]->resultado_actividad = $rutaFisicaDirectoriaUploadResultadoActividad;
-                                    $modelEvidencias[$key]->acta = $rutaFisicaDirectoriaUploadActa;
-                                    $modelEvidencias[$key]->listado = $rutaFisicaDirectoriaUploadListado;
-                                    $modelEvidencias[$key]->fotografias = $rutaFisicaDirectoriaUploadFotografia;
-                                    
-                                    if($saveAvemceFormula && $saveAvanceRutaGestion){
-                                        $modelEvidencias[$key]->avance_formula = $rutaFisicaDirectoriaUploadAvemceFormula;
-                                        $modelEvidencias[$key]->avance_ruta_gestion = $rutaFisicaDirectoriaUploadAvanceRutaGestion;                           
-                                    }
-                                    
-                                    $modelEvidencias[$key]->save();
-        
-    
-                                }else{
-                                    echo $file->error;
-                                    exit("finnn....");
-                                }
-
-                            }
-                        }
-                    }
-
-                }*/
-
-                if($arrayDatosEvidencias = Yii::$app->request->post('EvidenciasImpIeo')){
-
-                        $modelEvidencias = [];
-
-                        for( $i = 0; $i < 8; $i++ ){
-                            $modelEvidencias[] = new EvidenciasImpIeo();
-                        } 
-
-                        if (EvidenciasImpIeo::loadMultiple($modelEvidencias, Yii::$app->request->post() )) {
-                            
-                            $idInstitucion 	= $_SESSION['instituciones'][0];
-                            $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
-
-                            $carpeta = "../documentos/documentosIeo/actividades/evidenciasImlementacionIeo/".$institucion;
-                            if (!file_exists($carpeta)) 
-                            {
-                                mkdir($carpeta, 0777, true);
-                            }
-                            
-                            $propiedades = array( "producto_acuerdo", "resultado_actividad", "acta", "listado", "fotografias", "avance_formula", "avance_ruta_gestion");
-                        
-                            foreach( $modelEvidencias as $key => $model) 
-                            {
-                                $key +=1;
-                                
-                                //recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
-                                //para posteriormente guardar en la base de datos
-                                foreach($propiedades as $propiedad)
-                                {
-                                    $arrayRutasFisicas = array();
-                                    // se guarda el archivo en file
-                                    
-                                    // se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
-                                    $files = UploadedFile::getInstances( $model, "[$key]$propiedad" );
-                                    
-                                    if( $files )
-                                    {
-                                        //se suben todos los archivos uno por uno
-                                        foreach($files as $file)
-                                        {
-                                            //se usan microsegundos para evitar un nombre de archivo repetido
-                                            $t = microtime(true);
-                                            $micro = sprintf("%06d",($t - floor($t)) * 1000000);
-                                            $d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
-                                            
-                                            // Construyo la ruta completa del archivo a guardar
-                                            $rutaFisicaDirectoriaUploads  = "../documentos/documentosIeo/actividades/evidenciasImlementacionIeo/".$institucion."/".$file->baseName . $d->format("Y_m_d_H_i_s.u") . '.' . $file->extension;
-                                            $save = $file->saveAs( $rutaFisicaDirectoriaUploads );
-                                            //rutas de todos los archivos
-                                            $arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
-                                        }
-                                        
-                                    
-                                        // asignacion de la ruta al campo de la db
-                                        $model->$propiedad = implode(",", $arrayRutasFisicas);
-                                        
-                                        // $model->$propiedad =  $var;
-                                        $arrayRutasFisicas = null;
-                                    }
-                                    else
-                                    {
-                                        echo "No hay archivo cargado";
-                                    }
-                            }
-                            $model->implementacion_ieo_id = $ieo_id;
-                                                
-
-                            foreach( $modelEvidencias as $key => $model) 
-                            {
-                                if($model->producto_acuerdo){
-
-                                    $model->save();
-                                }								
-                            }
-                        
-                        }
-
-                    }
-
-                }
-
-
-
-                /*if(Yii::$app->request->post('ProductoImplementacionIeo')){
-                    
-                    $dataProductos = Yii::$app->request->post('ProductoImplementacionIeo');
-                    $countProductos = count( $dataProductos );
-                    $modelProductos = [];
-
-
-                    for( $i = 0; $i < $countProductos+1; $i++ ){
-                        $modelProductos[] = new ProductoImplementacionIeo();
-                    }
-
-                                        
-
-                    if (ProductoImplementacionIeo::loadMultiple($modelProductos, Yii::$app->request->post() )) {
-                        
-                        foreach($modelProductos as $key => $model3) {
-
-                            
-                            $producto_informe_acompañamiento = UploadedFile::getInstance( $model3, "[$key]informe_acompanamiento" );
-                            $producto_trazabilidad = UploadedFile::getInstance( $model3, "[$key]trazabilidad_plan_accion" );
-                            $producto_formnulacion_sistemactizacion = UploadedFile::getInstance( $model3, "[$key]formulacion" );
-                            $producto_ruta_gestion = UploadedFile::getInstance( $model3, "[$key]ruta_gestion" );
-                            $producto_presentacion_resultados = UploadedFile::getInstance( $model3, "[$key]resultados_procesos" );
-                            
-
-
-                            if($producto_informe_acompañamiento && $producto_trazabilidad && $producto_formnulacion_sistemactizacion && $producto_ruta_gestion && $producto_presentacion_resultados){
-
-                                
-
-                                $modelProductos [] = new ProductoImplementacionIeo();
-                            
-                                $carpetaEvidencias = "../documentos/documentosIeo/actividades/productosImlementacionIeo/".$institucion->codigo_dane;
-                                if (!file_exists($carpetaEvidencias)) {
-                                    mkdir($carpetaEvidencias, 0777, true);
-                                }    
-
-                                $base = "../documentos/documentosIeo/actividades/productosImlementacionIeo/".$institucion->codigo_dane."/";
-
-                                $rutaFisicaDirectoriaUploadProductoAcompañamiento = $base.$producto_informe_acompañamiento->baseName;
-                                $rutaFisicaDirectoriaUploadProductoAcompañamiento .= date( "_Y_m_d_His" ) . '.' . $producto_informe_acompañamiento->extension;
-                                $saveProductoAcompañamiento = $producto_informe_acompañamiento->saveAs( $rutaFisicaDirectoriaUploadProductoAcompañamiento );
-
-                                $rutaFisicaDirectoriaUploadProductoTrazabilidad = $base.$producto_trazabilidad->baseName;
-                                $rutaFisicaDirectoriaUploadProductoTrazabilidad .= date( "_Y_m_d_His" ) . '.' . $producto_trazabilidad->extension;
-                                $saveProductoTrazabilidad = $producto_trazabilidad->saveAs( $rutaFisicaDirectoriaUploadProductoTrazabilidad );
-
-                                $rutaFisicaDirectoriaUploadProductoformulacionSistematizacion = $base.$producto_formnulacion_sistemactizacion->baseName;
-                                $rutaFisicaDirectoriaUploadProductoformulacionSistematizacion .= date( "_Y_m_d_His" ) . '.' . $producto_formnulacion_sistemactizacion->extension;
-                                $saveProductoFormulacionSistematizacion = $producto_formnulacion_sistemactizacion->saveAs( $rutaFisicaDirectoriaUploadProductoformulacionSistematizacion );
-
-                                $rutaFisicaDirectoriaUploadProductoRutaGestion = $base.$producto_ruta_gestion->baseName;
-                                $rutaFisicaDirectoriaUploadProductoRutaGestion .= date( "_Y_m_d_His" ) . '.' . $producto_ruta_gestion->extension;
-                                $saveProductoRutaGestion = $producto_ruta_gestion->saveAs( $rutaFisicaDirectoriaUploadProductoRutaGestion );
-
-                                $rutaFisicaDirectoriaUploadProductoPresentacionResultado = $base.$producto_presentacion_resultados->baseName;
-                                $rutaFisicaDirectoriaUploadProductoPresentacionResultado .= date( "_Y_m_d_His" ) . '.' . $producto_presentacion_resultados->extension;
-                                $saveProductoPresentacionResultado = $producto_presentacion_resultados->saveAs( $rutaFisicaDirectoriaUploadProductoPresentacionResultado );
-
-                                if( $saveProductoAcompañamiento && $saveProductoTrazabilidad && $saveProductoFormulacionSistematizacion && $saveProductoRutaGestion && $saveProductoPresentacionResultado){
-
-                                    $modelProductos[$key]->implementacion_ieo_id = $ieo_id;
-                                    $modelProductos[$key]->informe_acompanamiento = $rutaFisicaDirectoriaUploadProductoAcompañamiento;
-                                    $modelProductos[$key]->trazabilidad_plan_accion = $rutaFisicaDirectoriaUploadProductoTrazabilidad;
-                                    $modelProductos[$key]->formulacion = $rutaFisicaDirectoriaUploadProductoformulacionSistematizacion;
-                                    $modelProductos[$key]->ruta_gestion = $rutaFisicaDirectoriaUploadProductoRutaGestion;
-                                    $modelProductos[$key]->resultados_procesos = $rutaFisicaDirectoriaUploadProductoPresentacionResultado;
-                                    $modelProductos[$key]->estado = 1;
-                                    $modelProductos[$key]->save();
-
-                                }else{
-                                    echo $file->error;
-                                    exit("finnn....");
-                                }
-
-                            }
-                        }
-                        
-                    }
-
-
-                }*/
-
-                if($arrayDatosProductos = Yii::$app->request->post('ProductoImplementacionIeo')){
-                    
-                    $modelProductos = [];
-
-                    for( $i = 0; $i < count(Yii::$app->request->post()); $i++ ){
-                        $modelProductos[] = new ProductoImplementacionIeo();
-                    }
-
-                    
-                    if (ProductoImplementacionIeo::loadMultiple($modelProductos, Yii::$app->request->post() )) {
-                       
-                        $idInstitucion 	= $_SESSION['instituciones'][0];
-                        $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
-
-                        $carpeta = "../documentos/documentosIeo/actividades/productosImlementacionIeo/".$institucion;
+						$carpeta = "../documentos/documentosIeo/actividades/evidenciasImlementacionIeo/".$institucion;
 						if (!file_exists($carpeta)) 
 						{
 							mkdir($carpeta, 0777, true);
-                        }
-
-                        $propiedades = array( "informe_acompanamiento", "trazabilidad_plan_accion", "formulacion", "ruta_gestion", "resultados_procesos");
-                        
-                        foreach( $modelProductos as $key => $model) 
-                        {
-                            $key +=1;
-                            
-                            //recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
-                            //para posteriormente guardar en la base de datos
-                            foreach($propiedades as $propiedad)
-                            {
-                                $arrayRutasFisicas = array();
-                                // se guarda el archivo en file
-                                
-                                // se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
-                                $files = UploadedFile::getInstances( $model, "[$key]$propiedad" );
-                                
-                                if( $files )
-                                {
-                                    //se suben todos los archivos uno por uno
-                                    foreach($files as $file)
-                                    {
-                                        //se usan microsegundos para evitar un nombre de archivo repetido
-                                        $t = microtime(true);
-                                        $micro = sprintf("%06d",($t - floor($t)) * 1000000);
-                                        $d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
-                                        
-                                        // Construyo la ruta completa del archivo a guardar
-                                        $rutaFisicaDirectoriaUploads  = "../documentos/documentosIeo/actividades/productosImlementacionIeo/".$institucion."/".$file->baseName . $d->format("Y_m_d_H_i_s.u") . '.' . $file->extension;
-                                        $save = $file->saveAs( $rutaFisicaDirectoriaUploads );
-                                        //rutas de todos los archivos
-                                        $arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
-                                    }
-                                    
-                                
-                                    // asignacion de la ruta al campo de la db
-                                    $model->$propiedad = implode(",", $arrayRutasFisicas);
-                                    
-                                    // $model->$propiedad =  $var;
-                                    $arrayRutasFisicas = null;
-                                }
-                                else
-                                {
-                                    echo "No hay archivo cargado";
-                                }
-                        }
-                        $model->implementacion_ieo_id = $ieo_id;
-                        $model->estado = 1;
-
-                        foreach( $modelProductos as $key => $model) 
-                        {
-                            if($model->informe_acompanamiento){
-
-                                $model->save();
-                            }								
-                        }
-                    }
-                }
-            }
-
-
-
-                if (Yii::$app->request->post('CantidadPoblacionImpIeo')){
-                    $data = Yii::$app->request->post('CantidadPoblacionImpIeo');
-                    $count 	= count( $data );
-                    $modelCantidadPoblacion = [];
-        
-                    for( $i = 0; $i < $count; $i++ ){
-                        $modelCantidadPoblacion[] = new CantidadPoblacionImpIeo();
-                    }
-        
-                    if (CantidadPoblacionImpIeo::loadMultiple($modelCantidadPoblacion, Yii::$app->request->post() )) {
-                        foreach( $modelCantidadPoblacion as $key => $model) {
-                           
-                            if($model->tiempo_libre){
-                                $model->implementacion_ieo_id = $ieo_id;                                                  
-                                
-                                if($model->save() && Yii::$app->request->post('EstudiantesImpIeo')){
-                                    $status = true;
-                                    $dataEstudiantes = Yii::$app->request->post('EstudiantesImpIeo');
-                                    
-                                    $countEstudiantes 	= count( $dataEstudiantes );
-                                    $modelEstudiantesIeo = [];
-                                    
-                                    for( $i = 0; $i < $countEstudiantes; $i++ ){
-                                        $modelEstudiantesIeo[] = new EstudiantesImpIeo();
-                                    }
-
-
-                                    if (EstudiantesImpIeo::loadMultiple($modelEstudiantesIeo, Yii::$app->request->post() )) {
-                                        foreach( $modelEstudiantesIeo as $key1 => $modelEstudiantes) {
-                                                
-                                            if($modelEstudiantes->grado_0){
-                                                    
-                                                    $modelEstudiantes->cantidad_poblacion_imp_ieo_id = $model->id;
-                                                    
-                                                    if(!$modelEstudiantes->save()){
-                                                        $status = false;
-                                                    }
-                                                    
-                                                    //break;
-                                                }
-                                                
-                                            }
-                                    }
-                                }
+						}
+						
+						$propiedades = array( "producto_acuerdo", "resultado_actividad", "acta", "listado", "fotografias", "avance_formula", "avance_ruta_gestion");
+						$propiedadUso = array();
+						foreach( $modelEvidencias as $key => $model) 
+						{
+							// $key +=1;
+							
+							//recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
+							//para posteriormente guardar en la base de datos
+							foreach($propiedades as $llave => $propiedad)
+							{
+								
+								$arrayRutasFisicas = array();
+								// se guarda el archivo en file
+								
+								// se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
+								$files = UploadedFile::getInstances( $model, "[$key]$propiedad" );
+								
+								//si no se agrega ninguna archivo al campo se pone como NULL 
+								if(count($files) == 0)
+								{
+									$model->$propiedad = NULL;
+								}
+										
+								if( $files )
+								{
+									//se suben todos los archivos uno por uno
+									foreach($files as $file)
+									{
+										//se usan microsegundos para evitar un nombre de archivo repetido
+										$t = microtime(true);
+										$micro = sprintf("%06d",($t - floor($t)) * 1000000);
+										$d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
+										
+										// Construyo la ruta completa del archivo a guardar
+										$rutaFisicaDirectoriaUploads  = "../documentos/documentosIeo/actividades/evidenciasImlementacionIeo/".$institucion."/".$file->baseName . $d->format("Y_m_d_H_i_s.u") . '.' . $file->extension;
+										$save = $file->saveAs( $rutaFisicaDirectoriaUploads );
+									
+										//rutas de todos los archivos
+										$arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
+										//array con las propiedades que tienen archivos para subir
+										$propiedadUso[$llave] =  $propiedad;
+									}
+									
+									// asignacion de la ruta al campo de la db
+									$model->$propiedad = implode(",", $arrayRutasFisicas);
+									
+									
+									// $model->$propiedad =  $var;
+									$arrayRutasFisicas = null;
+								}
+								else
+								{
+									// echo "No hay archivo cargado";
+								}
                             }
+							
+										
+                            $model->implementacion_ieo_id = $ieo_id;
+                            $model->id_actividad = $key;
+							
+							$model->save();
+							
+                        
                         }
+
                     }
-                    
+
                 }
+				
+				
+					if($arrayDatosProductos = Yii::$app->request->post('ProductoImplementacionIeo'))
+					{
+						
+						$modelProductos = [];
+
+						// for( $i = 0; $i < count(Yii::$app->request->post()); $i++ ){
+							$modelProductos[1] = new ProductoImplementacionIeo();
+						// }
+
+					   
+						if (ProductoImplementacionIeo::loadMultiple($modelProductos, Yii::$app->request->post() ) ) 
+						{
+						   
+							$idInstitucion 	= $_SESSION['instituciones'][0];
+							$institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
+
+							$carpeta = "../documentos/documentosIeo/actividades/productosImlementacionIeo/".$institucion;
+							if (!file_exists($carpeta)) 
+							{
+								mkdir($carpeta, 0777, true);
+							}
+
+							$propiedades = array( "informe_acompanamiento", "trazabilidad_plan_accion", "formulacion", "ruta_gestion", "resultados_procesos");
+							
+							foreach( $modelProductos as $key => $model) 
+							{
+								
+								//recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
+								//para posteriormente guardar en la base de datos
+								foreach($propiedades as $propiedad)
+								{
+									$arrayRutasFisicas = array();
+									// se guarda el archivo en file
+									
+									// se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
+									$files = UploadedFile::getInstances( $model, "[$key]$propiedad" );
+									
+									if( $files )
+									{
+										//se suben todos los archivos uno por uno
+										foreach($files as $file)
+										{
+											//se usan microsegundos para evitar un nombre de archivo repetido
+											$t = microtime(true);
+											$micro = sprintf("%06d",($t - floor($t)) * 1000000);
+											$d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
+											
+											// Construyo la ruta completa del archivo a guardar
+											$rutaFisicaDirectoriaUploads  = "../documentos/documentosIeo/actividades/productosImlementacionIeo/".$institucion."/".$file->baseName . $d->format("Y_m_d_H_i_s.u") . '.' . $file->extension;
+											$save = $file->saveAs( $rutaFisicaDirectoriaUploads );
+											//rutas de todos los archivos
+											$arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
+										}
+										
+									
+										// asignacion de la ruta al campo de la db
+										$model->$propiedad = implode(",", $arrayRutasFisicas);
+										
+										// $model->$propiedad =  $var;
+										$arrayRutasFisicas = null;
+									}
+									else
+									{
+										echo "No hay archivo cargado";
+									}
+							}
+							$model->implementacion_ieo_id = $ieo_id;
+							$model->estado = 1;
+
+							foreach( $modelProductos as $key => $model) 
+							{
+								if($model->informe_acompanamiento){
+
+									$model->save();
+								}								
+							}
+						}
+					}
+				}
+
+				if (Yii::$app->request->post('CantidadPoblacionImpIeo'))
+				{
+					$data = Yii::$app->request->post('CantidadPoblacionImpIeo');
+					$count 	= count( $data );
+					$modelCantidadPoblacion = [];
+		
+				
+						foreach($data as $key => $valor  )
+							$modelCantidadPoblacion[$key] = new CantidadPoblacionImpIeo();
+					
+		
+					if (CantidadPoblacionImpIeo::loadMultiple($modelCantidadPoblacion, Yii::$app->request->post() )) 
+					{
+						foreach( $modelCantidadPoblacion as $key => $model) 
+						{
+							$model->implementacion_ieo_id = $ieo_id;                                                  
+							$model->save(false);
+						}
+					}
+					
+				}
+				
+				if(Yii::$app->request->post('EstudiantesImpIeo'))
+				{
+					
+					$dataEstudiantes = Yii::$app->request->post('EstudiantesImpIeo');
+					
+					$countEstudiantes 	= count( $dataEstudiantes );
+					$modelEstudiantesIeo = [];
+					
+					for( $i = 1; $i <= $countEstudiantes-1; $i++ )
+					{
+						$modelEstudiantesIeo[$i] = new EstudiantesImpIeo();
+					}
+					if (EstudiantesImpIeo::loadMultiple($modelEstudiantesIeo, Yii::$app->request->post() )) 
+					{
+					
+						foreach( $modelEstudiantesIeo as $key1 => $modelEstudiantes) 
+						{
+							
+							$modelEstudiantes->id_implementacion_ieo = $ieo_id;
+							$modelEstudiantes->id_actividad = $key1;
+							$modelEstudiantes->save(false);
+								
+						}
+					}
+				}
+				// die;
+				
+				
+				
+				
                 return $this->redirect(['index', 'guardado' => true ]);
-            }
-            
-            
+			
+			}//fin update post
         }
+            
+            
+        
 
         $idPerfilesXpersonas	= PerfilesXPersonasInstitucion::find()->where( "id_institucion = $idInstitucion" )->all();
 		$perfiles_x_persona 	= PerfilesXPersonas::findOne($idPerfilesXpersonas)->id_personas;		
         $nombres1 				= Personas::find($perfiles_x_persona)->all();
-        $nombres	 = ArrayHelper::map( $nombres1, 'id', 'nombres');
+        $nombres				 = ArrayHelper::map( $nombres1, 'id', 'nombres');
      
 
         $comunas  = ComunasCorregimientos::find()->where( 'estado=1' )->all();
@@ -603,7 +436,9 @@ class ImplementacionIeoController extends Controller
             'model' => $ieo_model,
             'zonasEducativas' => $this->obtenerZonaEducativa(),
             "nombres" => $nombres,
-            'comunas' => $comunas
+            'comunas' => $comunas,
+			'institucion'=>$this->obtenerInstitucion(),
+			'sede'=>$this->obtenerSede(),
             
         ]);
     }
@@ -626,8 +461,9 @@ class ImplementacionIeoController extends Controller
                 echo "<option value='".$barrio->id."'>".$barrio->descripcion."</option>";
             }
         }
-        else{
-            echo "<option>-</option>";
+        else
+		{
+            // echo "<option>-</option>";
         }
         
         //echo "<option>-</option>";
@@ -645,19 +481,231 @@ class ImplementacionIeoController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) 
+		{
+			$connection = Yii::$app->getDb();
+			if ($cantidadPoblacion = Yii::$app->request->post('CantidadPoblacionImpIeo') )
+			{
+					
+				foreach($cantidadPoblacion as $idActividad => $valores)
+				{
+					
+					//se envia null cuando el campo no esta en la base de datos
+					$tiempo_libre	=  isset($valores['tiempo_libre']) ? $valores['tiempo_libre']: 'null' ;
+					$edu_derechos 	=  isset($valores['edu_derechos']) ? $valores['edu_derechos']: 'null' ;
+					$sexualidad 	=  isset($valores['sexualidad']) ? $valores['sexualidad']: 'null' ;
+					$ciudadania 	=  isset($valores['ciudadania']) ? $valores['ciudadania']: 'null' ;
+					$medio_ambiente	=  isset($valores['medio_ambiente']) ? $valores['medio_ambiente']: 'null' ;
+					$familia 		=  isset($valores['familia']) ? $valores['familia']: 'null' ;
+					$directivos 	=  isset($valores['directivos']) ? $valores['directivos']: 'null' ;
+					$fecha_creacion =  isset($valores['fecha_creacion']) ? $valores['fecha_creacion']: 'null' ;
+					$tipo_actividad =  isset($valores['tipo_actividad']) ? $valores['tipo_actividad']: 'null' ;
+					
+					$command = $connection->createCommand
+					(" 
+						UPDATE 
+							ec.cantidad_poblacion_imp_ieo
+						SET 
+						
+							tiempo_libre	='". $valores['tiempo_libre']."',
+							edu_derechos	='". $valores['edu_derechos']."',
+							sexualidad		='". $valores['sexualidad']."',
+							ciudadania		='". $valores['ciudadania']."',
+							medio_ambiente	='". $valores['medio_ambiente']."',
+							familia			='". $valores['familia']."',
+							directivos		='". $valores['directivos']."',
+							fecha_creacion	='". $valores['fecha_creacion']."',
+							tipo_actividad	= $tipo_actividad
+						WHERE 
+							implementacion_ieo_id = $id
+						AND
+							id_actividad = $idActividad
+							
+					");
+					$result = $command->queryAll();
+				}
+				
+			}
+			
+			if ($estudiantes = Yii::$app->request->post('EstudiantesImpIeo') )
+			{
+					
+				array_pop($estudiantes);
+				foreach($estudiantes as $idActividad => $value)
+				{
+					//se envia null cuando el campo no esta en la base de datos
+					$grado_0	=  isset($value['grado_0']) ? $value['grado_0']: 'null' ;
+					$grado_1 	=  isset($value['grado_1']) ? $value['grado_1']: 'null' ;
+					$grado_2 	=  isset($value['grado_2']) ? $value['grado_2']: 'null' ;
+					$grado_3 	=  isset($value['grado_3']) ? $value['grado_3']: 'null' ;
+					$grado_4	=  isset($value['grado_4']) ? $value['grado_4']: 'null' ;
+					$grado_5 	=  isset($value['grado_4']) ? $value['grado_4']: 'null' ;
+					$grado_6 	=  isset($value['grado_4']) ? $value['grado_4']: 'null' ;
+					$grado_7 	=  isset($value['grado_4']) ? $value['grado_4']: 'null' ;
+					$grado_8 	=  isset($value['grado_4']) ? $value['grado_4']: 'null' ;
+					$grado_9 	=  isset($value['grado_4']) ? $value['grado_4']: 'null' ;
+					$grado_10 	=  isset($value['grado_4']) ? $value['grado_4']: 'null' ;
+					$grado_11 	=  isset($value['grado_4']) ? $value['grado_4']: 'null' ;
+					
+						
+					$command = $connection->createCommand
+					(" 
+						UPDATE 
+							ec.estudiantes_imp_ieo
+						SET 
+							grado_0 =	$grado_0,
+							grado_1 =	$grado_1,
+							grado_2 =	$grado_2,
+							grado_3 =	$grado_3,
+							grado_4 =	$grado_4,
+							grado_5 =	$grado_5,
+							grado_6 =	$grado_6,
+							grado_7 =	$grado_7,
+							grado_8 =	$grado_8,
+							grado_9 =	$grado_9,
+							grado_10 =	$grado_10,
+							grado_11 =	$grado_11
+							
+						WHERE 
+							id_implementacion_ieo = $id
+						AND
+							id_actividad = $idActividad
+							
+					");
+					$result = $command->queryAll();
+				}
+			}
+			
+			
+			/**Carga de archivos multiples evidencias -> actividades */ 
+                if($arrayDatosEvidencias = Yii::$app->request->post('EvidenciasImpIeo'))
+				{
+					
+                    $modelEvidencias = [];
+					
+					foreach ($arrayDatosEvidencias as $llave => $valor)
+					{
+						 $modelEvidencias[$llave] = new EvidenciasImpIeo();
+					}
+                       
+                    if (EvidenciasImpIeo::loadMultiple($modelEvidencias, Yii::$app->request->post() )) 
+					{	
+						$connection = Yii::$app->getDb();
+						$command = $connection->createCommand("
+							SELECT   
+								producto_acuerdo, 
+								resultado_actividad,
+								acta, 
+								listado,
+								fotografias, 
+								avance_formula,
+								avance_ruta_gestion
+							FROM 
+								ec.evidencias_imp_ieo
+							WHERE 
+								implementacion_ieo_id = $id
+							ORDER BY id
+						");
+						$resul = $command->queryAll();
+						
+                        $idInstitucion 	= $_SESSION['instituciones'][0];
+                        $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
+						
+						foreach  ($resul as $r )
+						{
+							$producto_acuerdo[]				= $r['producto_acuerdo'];
+							$resultado_actividad[] 			= $r['resultado_actividad'];
+							$acta[] 						= $r['acta'];
+							$listado[]						= $r['listado'];
+							$fotografias[]					= $r['fotografias'];
+							$avance_formula[]				= $r['avance_formula'];
+							$avance_ruta_gestion[]			= $r['avance_ruta_gestion'];
+						}
+						
+                        $propiedades = array( "producto_acuerdo", "resultado_actividad", "acta", "listado", "fotografias","avance_formula","avance_ruta_gestion");
+                        $llave =0;
+                        foreach( $modelEvidencias as $key => $model1) 
+                        {
+                            //recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
+                            //para posteriormente guardar en la base de datos
+                            foreach($propiedades as $propiedad)
+                            {
+                                $arrayRutasFisicas = array();
+                                // se guarda el archivo en file
+                                // se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
+                                $files = UploadedFile::getInstances( $model1, "[$key]$propiedad" );
+                                if( $files )
+                                {
+                                    //se suben todos los archivos uno por uno
+                                    foreach($files as $file)
+                                    {
+                                        //se usan microsegundos para evitar un nombre de archivo repetido
+										// Construyo la ruta completa del archivo a guardar
+                                        $rutaFisicaDirectoriaUploads  = "../documentos/documentosIeo/actividades/evidenciasImlementacionIeo/".$institucion."/".$file->baseName . $this->microSegundos() . '.' . $file->extension;
+										
+										//saber si el archivo ya existe
+										$nombreArchivo = $file->name;
+										$extensionArchivo =  pathinfo($nombreArchivo, PATHINFO_EXTENSION );
+										$nombre_base = basename($nombreArchivo, '.'.$extensionArchivo);
+										
+										//la extencion debe estar en minuisculas para la combrobacion
+										$extensionArchivo = strtolower($extensionArchivo);
+										
+										//se pasan las rutas que estan en la db en el campo $$propiedad[$llave] para saber en que parte esta el archivo y sobreescribirlo
+										$arrayRuta = explode(",",$$propiedad[$llave]);	
+										//saber si el nombre y la extencion del archivo ya existe en la base de datos / saber si ya existe el archivo se y se sobreescribe sin cambios en la db
+										if (substr ($$propiedad[$llave],strpos ($$propiedad[$llave],$nombre_base),strlen ($nombre_base)) == $nombre_base & substr ($$propiedad[$llave],strpos ($$propiedad[$llave],$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )
+										{
+											//si archivo ya existe se sobreescribe sobreescribiendo la ruta de guardado
+											// Construyo la ruta completa del archivo a guardar
+											foreach ($arrayRuta as $ar)
+											{
+												// if (strpos ($ar,$nombre_base) > 0 and strpos($ar,$extensionArchivo) > 0 )
+												if (substr ($ar,strpos ($$propiedad[$llave],$nombre_base),strlen ($nombre_base)) == $nombre_base & substr ($ar,strpos ($$propiedad[$llave],$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )
+												{
+													$rutaFisicaDirectoriaUploads  = $ar;
+												}
+											}
+										}
+										//guardar el archivo fisicamente en el servidor
+                                        $save = $file->saveAs( $rutaFisicaDirectoriaUploads );
+                                        //rutas de todos los archivos
+                                        $arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
+                                    }
+                                    
+									// $arrayRutasFisicas[]= $$propiedad[$llave];
+									$command = $connection->createCommand("
+									UPDATE ec.evidencias_imp_ieo
+									set $propiedad = '". implode(",", $arrayRutasFisicas)."'
+									WHERE 
+										implementacion_ieo_id = $id
+									AND
+										id_actividad = $key
+									");
+									$resul = $command->queryAll();
+									$arrayRutasFisicas = null;
+                                }
+                                else
+                                {
+                                    // echo "No hay archivo cargado";
+                                }
+                            }
+							$llave++;
+                        }
+                    }
+                }
+			
+			
+			
+			return $this->redirect(['index','idTipoInforme' => $model->id_tipo_informe]);
         }
+		
+		$idInstitucion 	= $_SESSION['instituciones'][0];
+		$cantidaPoblacion = new CantidadPoblacionImpIeo();
+		$cantidaPoblacion = $cantidaPoblacion->find()->orderby("id")->andWhere("implementacion_ieo_id = $id")->all();
 
-        $command = Yii::$app->db->createCommand("SELECT canp.id_actividad, canp.tiempo_libre, canp.edu_derechos, canp.sexualidad, canp.ciudadania, canp.medio_ambiente, canp.familia, canp.directivos, canp.fecha_creacion, canp.tipo_actividad,
-                                                        est.grado_0, est.grado_1, est.grado_2, est.grado_3, est.grado_4, est.grado_5, est.grado_6, est.grado_7, est.grado_8, est.grado_9, est.grado_10, est.grado_11
-                                                FROM ec.cantidad_poblacion_imp_ieo AS canp
-                                                INNER JOIN ec.estudiantes_imp_ieo AS est ON canp.id = est.cantidad_poblacion_imp_ieo_id
-                                                WHERE canp.implementacion_ieo_id = $id");
-
-        $result= $command->queryAll();                                       
-
-        $result = ArrayHelper::getColumn($result, function ($element) 
+		
+		$result = ArrayHelper::getColumn($cantidaPoblacion, function ($element) 
         {
             $dato[$element['id_actividad']]['tiempo_libre']= $element['tiempo_libre'];
             $dato[$element['id_actividad']]['tipo_actividad']= $element['tipo_actividad'];
@@ -667,6 +715,23 @@ class ImplementacionIeoController extends Controller
             $dato[$element['id_actividad']]['medio_ambiente']= $element['medio_ambiente'];
             $dato[$element['id_actividad']]['directivos']= $element['directivos'];
             $dato[$element['id_actividad']]['familia']= $element['familia'];
+
+            return $dato;
+        });
+		
+		
+        foreach	($result as $r => $valor)
+        {
+            foreach	($valor as $ids => $valores)
+                
+                $datos[$ids] = $valores;
+        }
+		 
+		$estudiantesImp = new EstudiantesImpIeo();
+		$estudiantesImp = $estudiantesImp->find()->orderby("id")->andWhere("id_implementacion_ieo = $id")->all();
+        $result1 = ArrayHelper::getColumn($estudiantesImp, function ($element) 
+        {
+            
             $dato[$element['id_actividad']]['grado_0']= $element['grado_0'];
             $dato[$element['id_actividad']]['grado_1']= $element['grado_1'];
             $dato[$element['id_actividad']]['grado_2']= $element['grado_2'];
@@ -683,20 +748,75 @@ class ImplementacionIeoController extends Controller
             return $dato;
         });
 
-        foreach	($result as $r => $valor)
+		
+	
+        foreach	($result1 as $r => $valor)
         {
             foreach	($valor as $ids => $valores)
-                
-                $datos[$ids] = $valores;
+			{
+				$datos1[$ids] = $valores;
+				
+			}
         }
-
+		
+		foreach($datos1 as $key => $value)
+		{
+			$merge[$key] = @array_merge($datos[$key],$datos1[$key]);
+		}
+		
+	
+		$comunas  = ComunasCorregimientos::find()->where( 'estado=1' )->all();
+        $comunas	 = ArrayHelper::map( $comunas, 'id', 'descripcion' );
+		
+		$idPerfilesXpersonas	= PerfilesXPersonasInstitucion::find()->where( "id_institucion = $idInstitucion" )->all();
+		$perfiles_x_persona 	= PerfilesXPersonas::findOne($idPerfilesXpersonas)->id_personas;		
+        $nombres1 				= Personas::find($perfiles_x_persona)->all();
+        $nombres				 = ArrayHelper::map( $nombres1, 'id', 'nombres');
+		
+		
         return $this->renderAjax('update', [
             'model' => $model,
             'zonasEducativas' =>  $this->obtenerZonaEducativa(),
-            'datos'=> $datos,
+            'datos'=> $merge,
+			'institucion'=>$this->obtenerInstitucion(),
+			'sede'=>$this->obtenerSede(),
+			'comunas' => $comunas,
+			'nombres' => $nombres,
+			
         ]);
     }
 
+	
+	public function microSegundos()
+	{
+	
+		$t = microtime(true);
+		$micro = sprintf("%06d",($t - floor($t)) * 1000000);
+		$d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
+		
+		return $d->format("Y_m_d_H_i_s.u");
+	}
+	
+	public function obtenerInstitucion()
+	{
+		$idInstitucion = $_SESSION['instituciones'][0];
+		$instituciones = new Instituciones();
+		$instituciones = $instituciones->find()->where("id = $idInstitucion")->all();
+		$instituciones = ArrayHelper::map($instituciones,'id','descripcion');
+		
+		return $instituciones;
+	}
+	
+	public function obtenerSede()
+	{
+		$idSedes 		= $_SESSION['sede'][0];
+		$sedes = new Sedes();
+		$sedes = $sedes->find()->where("id =  $idSedes")->all();
+		$sedes = ArrayHelper::map($sedes,'id','descripcion');
+		
+		return $sedes;
+	}
+	
     /**
      * Deletes an existing ImplementacionIeo model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

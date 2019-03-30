@@ -38,7 +38,7 @@ class ImplementacionIeo extends \yii\db\ActiveRecord
             [['institucion_id', 'sede_id', 'zona_educativa', 'estado', 'id_tipo_informe'], 'default', 'value' => null],
             [['institucion_id', 'sede_id', 'zona_educativa', 'estado', 'id_tipo_informe'], 'integer'],
             [['comuna', 'barrio', 'profesional_cargo', 'horario_trabajo'], 'string'],
-            [['comuna', 'barrio', 'profesional_cargo', 'horario_trabajo', 'zona_educativa'], 'required'],
+            [['comuna', 'profesional_cargo', 'horario_trabajo', 'zona_educativa'], 'required'],
             [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Estados::className(), 'targetAttribute' => ['estado' => 'id']],
             [['institucion_id'], 'exist', 'skipOnError' => true, 'targetClass' => Instituciones::className(), 'targetAttribute' => ['institucion_id' => 'id']],
             [['sede_id'], 'exist', 'skipOnError' => true, 'targetClass' => Sedes::className(), 'targetAttribute' => ['sede_id' => 'id']],

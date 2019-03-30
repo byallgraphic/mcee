@@ -9,12 +9,15 @@ use dosamigos\datepicker\DatePicker;
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/imp-ieo.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 // $this->registerJsFile(Yii::$app->request->baseUrl.'/js/imp-ieo-doncentes.js',['depends' => [\yii\web\JqueryAsset::className()]]);
+$idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $model->id_tipo_informe;
 ?>
 
 <div class="implementacion-ieo-form">
 
     <?php $form = ActiveForm::begin(); ?>
        
+        <?= $form->field($model, 'institucion_id')->dropDownList( $institucion) ?>
+        <?= $form->field($model, 'sede_id')->dropDownList( $sede) ?>
         <?= $form->field($model, 'zona_educativa')->dropDownList( $zonasEducativas) ?>
         <?= $form->field($model, 'comuna')->dropDownList( $comunas, [ 'prompt' => 'Seleccione...',  
         'onchange'=>'
@@ -24,6 +27,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/imp-ieo.js',['depends' =>
         <?= $form->field($model, 'barrio')->dropDownList( [], [ 'prompt' => 'Seleccione...',  ] ) ?>                 
         <?= $form->field($model, 'profesional_cargo')->dropDownList( $nombres, [ 'prompt' => 'Seleccione...' ] ) ?>
         <?= $form->field($model, 'horario_trabajo')->textArea() ?>
+				<?= $form->field($model, 'id_tipo_informe')->hiddenInput(['value'=> $idTipoInforme])->label(false) ?>
 
         <?= $this->context->actionViewFases($model, $form, isset($datos) ? $datos : 0);   ?>
     
