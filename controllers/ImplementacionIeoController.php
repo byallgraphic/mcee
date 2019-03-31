@@ -637,7 +637,7 @@ class ImplementacionIeoController extends Controller
                                 if( $files )
                                 {
 									$arrayRuta = explode(",",$$propiedad[$llave]);
-									$arrayRutasFisicas = $arrayRuta;
+									
                                     //se suben todos los archivos uno por uno
                                     foreach($files as $file)
                                     {
@@ -654,37 +654,34 @@ class ImplementacionIeoController extends Controller
 										$extensionArchivo = strtolower($extensionArchivo);
 										
 										//se pasan las rutas que estan en la db en el campo $$propiedad[$llave] para saber en que parte esta el archivo y sobreescribirlo
-										
-										$bandera = false;
 										//saber si el nombre y la extencion del archivo ya existe en la base de datos / saber si ya existe el archivo se y se sobreescribe sin cambios en la db
 										if (substr ($$propiedad[$llave],strpos ($$propiedad[$llave],$nombre_base),strlen ($nombre_base)) == $nombre_base & substr ($$propiedad[$llave],strpos ($$propiedad[$llave],$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )
 										{
+											echo 1;
 											//si archivo ya existe se sobreescribe sobreescribiendo la ruta de guardado
 											// Construyo la ruta completa del archivo a guardar
 											foreach ($arrayRuta as $ar)
 											{
-												// if (strpos ($ar,$nombre_base) > 0 and strpos($ar,$extensionArchivo) > 0 )
-												if (substr ($ar,strpos ($$propiedad[$llave],$nombre_base),strlen ($nombre_base))  == $nombre_base & substr ($ar,strpos ($$propiedad[$llave],$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )												
+												if (substr ($ar,strpos ($ar,$nombre_base),strlen ($nombre_base)) == $nombre_base & substr ($ar,strpos ($ar,$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )												
 												{
 													$rutaFisicaDirectoriaUploads  = $ar;
-													$bandera = true;
+													// $arrayRutasFisicas[] = $ar;
 												}
+
 											}
+										}
+										else // si no cumple el if debe ser un archivo nuevo
+										{
+											$arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
 										}
 										//guardar el archivo fisicamente en el servidor
                                         $save = $file->saveAs( $rutaFisicaDirectoriaUploads );
                                         //rutas de todos los archivos
-                                        if(!$bandera)
-										{
-											$arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
-										}
-										
                                     }
-                                    
-									// $arrayRutasFisicas[]= $$propiedad[$llave];
+									$arrayRutasFisicas[]= $$propiedad[$llave];
 									$command = $connection->createCommand("
 									UPDATE ec.evidencias_imp_ieo
-									set $propiedad = '". implode(",", $arrayRutasFisicas)."'
+									set $propiedad = '".implode(",", $arrayRutasFisicas)."'
 									WHERE 
 										implementacion_ieo_id = $id
 									AND
@@ -692,15 +689,6 @@ class ImplementacionIeoController extends Controller
 									");
 									$resul = $command->queryAll();
 									$arrayRutasFisicas = null;
-									
-									
-									
-									// UPDATE ec.evidencias_imp_ieo
-									// set $propiedad = '". implode(",", $arrayRutasFisicas).",".$$propiedad[$key]."'
-									// WHERE 
-										// implementacion_ieo_id = $id
-									// AND
-										// id_actividad = $key
 									
                                 }
                                 else
@@ -714,7 +702,7 @@ class ImplementacionIeoController extends Controller
                 }
 			
 			
-			
+			die;
 			return $this->redirect(['index','idTipoInforme' => $model->id_tipo_informe]);
         }
 		
