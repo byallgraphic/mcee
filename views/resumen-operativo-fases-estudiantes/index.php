@@ -114,10 +114,8 @@ $this->registerJsFile(
             <td class="tg-c3ow" rowspan="2">Frecuencia sesiones mensual</td>
             <td class="tg-c3ow" rowspan="2">Duración promedio sesiones (horas reloj)</td>
             <td class="tg-c3ow" rowspan="2">Curso de los Participantes</td>
-            <?php if (isset($data[0]['fase_1']["sesiones"])){ ?>
-                <?php foreach ($data[0]['fase_1']["sesiones"] as $keyFI => $sesion) { ?>
-                    <td class="tg-0pky" colspan="4">Sesión <?= $sesion[0] ?></td>
-                <?php } ?>
+            <?php for ($i=0;$i<$mayorSesion['maxSesionFaseI'];$i++) { ?>
+                <td class="tg-0pky" colspan="4">Sesión <?= $i+1 ?></td>
             <?php } ?>
             <td class="tg-c3ow" rowspan="2">Total Sesiones</td>
             <td class="tg-c3ow" rowspan="2">Número de participantes por curso en IEO</td>
@@ -125,10 +123,8 @@ $this->registerJsFile(
             <td class="tg-uys7" rowspan="2">Frecuencia sesiones mensual</td>
             <td class="tg-uys7" rowspan="2">Duración por cada sesión (horas reloj)</td>
             <td class="tg-uys7" rowspan="2">Curso de los Participantes</td>
-            <?php if (isset($data[0]['fase_2']["sesiones"])){ ?>
-                <?php foreach ($data[0]['fase_2']["sesiones"] as $keyFI => $sesion) { ?>
-                    <td class="tg-0pky" colspan="4">Sesión <?= $sesion[0] ?></td>
-                <?php } ?>
+            <?php for ($i=0;$i<$mayorSesion['maxSesionFaseII'];$i++) { ?>
+                <td class="tg-0pky" colspan="4">Sesión <?= $i+1 ?></td>
             <?php } ?>
             <td class="tg-uys7" rowspan="2">Total Sesiones</td>
             <td class="tg-uys7" rowspan="2">Número de participantes por curso en IEO</td>
@@ -136,10 +132,8 @@ $this->registerJsFile(
             <td class="tg-c3ow" rowspan="2">Frecuencia sesiones mensual</td>
             <td class="tg-c3ow" rowspan="2">Duración por cada sesión (horas reloj)</td>
             <td class="tg-c3ow" rowspan="2">Curso de los Participantes</td>
-            <?php if (isset($data[0]['fase_3']["sesiones"])){ ?>
-                <?php foreach ($data[0]['fase_3']["sesiones"] as $keyFI => $sesion) { ?>
-                    <td class="tg-0pky" colspan="4">Sesión <?= $sesion[0] ?></td>
-                <?php } ?>
+            <?php for ($i=0;$i<$mayorSesion['maxSesionFaseIII'];$i++) { ?>
+                <td class="tg-0pky" colspan="4">Sesión <?= $i+1 ?></td>
             <?php } ?>
             <td class="tg-c3ow" rowspan="2">Total Sesiones</td>
             <td class="tg-c3ow" rowspan="2">Número de participantes por curso en IEO</td>

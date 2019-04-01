@@ -474,30 +474,6 @@ class ResumenOperativoFasesEstudiantesController extends Controller
 
                 //array_push($totalDatos, $data);
 
-                if (isset($data['fase_1']['sesiones'])){
-                    if (isset($data['fase_1']['sesiones'][$datos1])) {
-                        if ($maxSesionFaseI < $data['fase_1']['sesiones'][$datos1][0]) {
-                            $maxSesionFaseI = $data['fase_1']['sesiones'][$datos1][0];
-                        }
-                    }
-                }
-
-                if (isset($data['fase_2']['sesiones'])){
-                    if (isset($data['fase_2']['sesiones'][$datos1])) {
-                        if ($maxSesionFaseII < $data['fase_2']['sesiones'][$datos1][0]) {
-                            $maxSesionFaseII = $data['fase_2']['sesiones'][$datos1][0];
-                        }
-                    }
-                }
-
-                if (isset($data['fase_3']['sesiones'])) {
-                    if (isset($data['fase_3']['sesiones'][$datos1])) {
-                        if ($maxSesionFaseIII < $data['fase_3']['sesiones'][$datos1][0]) {
-                            $maxSesionFaseIII = $data['fase_3']['sesiones'][$datos1][0];
-                        }
-                    }
-                }
-
                 $mayorSesion['maxSesionFaseI'] = $maxSesionFaseI;
                 $mayorSesion['maxSesionFaseII'] = $maxSesionFaseII;
                 $mayorSesion['maxSesionFaseIII'] = $maxSesionFaseIII;
@@ -528,16 +504,16 @@ class ResumenOperativoFasesEstudiantesController extends Controller
 
             for ($i = count($dato['fase_1']['sesiones']); $i < $maxSesionFaseI; $i++) {
                 $totalDatos[$key]['fase_1']['sesiones'][$i] = [];
-                array_push($totalDatos[$key]['fase_1']['sesiones'][$i], $i,"---","---","---");
+                array_push($totalDatos[$key]['fase_1']['sesiones'][$i], $i+1,"---","---","---");
             }
             for ($i = count($dato['fase_2']['sesiones']); $i < $maxSesionFaseII; $i++) {
                 $totalDatos[$key]['fase_2']['sesiones'][$i] = [];
-                array_push($totalDatos[$key]['fase_2']['sesiones'][$i], $i,"---","---","---");
+                array_push($totalDatos[$key]['fase_2']['sesiones'][$i], $i+1,"---","---","---");
             }
 
             for ($i = count($dato['fase_3']['sesiones']); $i < $maxSesionFaseIII; $i++) {
                 $totalDatos[$key]['fase_3']['sesiones'][$i] = [];
-                array_push($totalDatos[$key]['fase_3']['sesiones'][$i], $i,"---","---","---");
+                array_push($totalDatos[$key]['fase_3']['sesiones'][$i], $i+1,"---","---","---");
             }
         }
 
