@@ -918,11 +918,9 @@ class IeoController extends Controller
 										//se pasan las rutas que estan en la db en el campo $$propiedad para saber en que parte esta el archivo y sobreescribirlo
 										$arrayRuta = explode(",",$$propiedad);
 										
-										echo "aca no if 1";
 										//saber si el nombre y la extencion del archivo ya existe en la base de datos / saber si ya existe el archivo se y se sobreescribe sin cambios en la db
 										if (substr ($$propiedad,strpos ($$propiedad,$nombre_base),strlen ($nombre_base)) == $nombre_base & substr ($$propiedad,strpos ($$propiedad,$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )
 										{
-											echo "acaif 1";
 											//si archivo ya existe se sobreescribe sobreescribiendo la ruta de guardado
 											// Construyo la ruta completa del archivo a guardar
 											foreach ($arrayRuta as $ar)
@@ -934,7 +932,6 @@ class IeoController extends Controller
 											}
 										}
 										
-									
 										//guardar el archivo fisicamente en el servidor
                                         $save = $file->saveAs( $rutaFisicaDirectoriaUploads );
                                         //rutas de todos los archivos
@@ -1046,13 +1043,16 @@ class IeoController extends Controller
 												}
 											}
 										}
+										else // si no cumple el if debe ser un archivo nuevo
+										{
+											$arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
+										}
 										//guardar el archivo fisicamente en el servidor
                                         $save = $file->saveAs( $rutaFisicaDirectoriaUploads );
                                         //rutas de todos los archivos
-                                        $arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
+                                        
                                     }
-                                    
-                                    
+									$arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
 									$command = $connection->createCommand("
 									UPDATE ec.evidencias
 									set $propiedad = '". implode(",", $arrayRutasFisicas)."'
