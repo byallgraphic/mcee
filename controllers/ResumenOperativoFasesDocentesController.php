@@ -120,12 +120,19 @@ class ResumenOperativoFasesDocentesController extends Controller
                 $idSede = $dip['id_sede'];
 
                 //nombres de los profesional a
-                $idProfesionalA = $dip['profecional_a'];
+                $id_docentes = $connection->createCommand
+                ("SELECT docente FROM semilleros_tic.datos_sesiones as dts join semilleros_tic.ejecucion_fase as efe 
+                      on efe.id_datos_sesiones = dts.id join semilleros_tic.datos_ieo_profesional dpro 
+                      on efe.id_datos_ieo_profesional = dpro.id WHERE dpro.id_sede = $idSede AND anio = $anio LIMIT 1 ");
+
+                $id_docentes = $id_docentes->queryAll();
+                $id_docentes = $id_docentes[0]["docente"];
+
                 $command = $connection->createCommand
                 ("
                     SELECT concat(p.nombres,' ',p.apellidos) as nombre		
                     FROM public.personas as p
-                    WHERE id in($idProfesionalA)
+                    WHERE id in($id_docentes)
                 ");
                 $datoPersonalA = $command->queryAll();
                 $nomresPersonalA = $this->arrayArrayComas($datoPersonalA,'nombre');
@@ -225,16 +232,15 @@ class ResumenOperativoFasesDocentesController extends Controller
                 }
 
                 if(count($datosEjeccionFasei) > 0){
+                    $lastSesion = strtotime($datosEjeccionFasei[0]['fecha_sesion']);
                     foreach ($datosEjeccionFasei as $datos1 => $valor){
-
-                        $fecha_actual = strtotime(date($lastSesion,time()));
                         $fecha_entrada = strtotime($valor['fecha_sesion']);
 
-                        if($fecha_actual < $fecha_entrada){
+                        if($lastSesion > $fecha_entrada){
                             $lastSesion = $fecha_entrada;
                         }
 
-                        @$totalapps1 += $valor['apps_creadas'];
+                        @$totalapps1 += $valor['numero_apps'];
                         @$totalparticipantes1  += $valor['participacion_sesiones'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['participacion_sesiones'], $valor['duracion_sesion']);
 
@@ -331,17 +337,14 @@ class ResumenOperativoFasesDocentesController extends Controller
                 $newKeyFII = 1;
                 if(count($datosEjeccionFaseii) > 0){
                     foreach ($datosEjeccionFaseii as $datos1 => $valor){
-
-                        $fecha_actual = strtotime(date($lastSesion,time()));
                         $fecha_entrada = strtotime($valor['fecha_sesion']);
 
-                        if($fecha_actual < $fecha_entrada){
+                        if($lastSesion > $fecha_entrada){
                             $lastSesion = $fecha_entrada;
                         }
 
                         @$totalapps2 += $valor['apps_desarrolladas'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
-                        $promedioParticipantes2 += $valor['estudiantes_participantes'];
 
                         $data['fase_2']['sesiones'][$valor['num_sesion']][0] = $valor['num_sesion'];
                         $data['fase_2']['sesiones'][$valor['num_sesion']][1] = $valor['fecha_sesion'];
@@ -434,14 +437,20 @@ class ResumenOperativoFasesDocentesController extends Controller
                 }
                 if(count($datosEjeccionFaseiii) > 0){
                     foreach ($datosEjeccionFaseiii as $datos1 => $valor){
-                        @$totalapps3 += $valor['numero_apps'];
+                        $fecha_entrada = strtotime($valor['fecha_sesion']);
+
+                        if($lastSesion > $fecha_entrada){
+                            $lastSesion = $fecha_entrada;
+                        }
+
+                        @$totalapps3 += $valor['numero_apps_usadas'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
 
                         $data['fase_3']['sesiones'][$datos1][0] = $valor['num_sesion'];
                         $data['fase_3']['sesiones'][$datos1][1] = $valor['fecha_sesion'];
                         $data['fase_3']['sesiones'][$datos1][3] = $valor['duracion_sesion'];
                     }
-                    
+
 
                     //array_push($data, count($datosEjeccionFaseiii), $totalparticipantes3, $totalapps3);
 
