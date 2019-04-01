@@ -657,7 +657,6 @@ class ImplementacionIeoController extends Controller
 										//saber si el nombre y la extencion del archivo ya existe en la base de datos / saber si ya existe el archivo se y se sobreescribe sin cambios en la db
 										if (substr ($$propiedad[$llave],strpos ($$propiedad[$llave],$nombre_base),strlen ($nombre_base)) == $nombre_base & substr ($$propiedad[$llave],strpos ($$propiedad[$llave],$nombre_base) + strlen ($nombre_base)+ 27,strlen($extensionArchivo) )  == $extensionArchivo  )
 										{
-											echo 1;
 											//si archivo ya existe se sobreescribe sobreescribiendo la ruta de guardado
 											// Construyo la ruta completa del archivo a guardar
 											foreach ($arrayRuta as $ar)
@@ -667,7 +666,6 @@ class ImplementacionIeoController extends Controller
 													$rutaFisicaDirectoriaUploads  = $ar;
 													// $arrayRutasFisicas[] = $ar;
 												}
-
 											}
 										}
 										else // si no cumple el if debe ser un archivo nuevo
