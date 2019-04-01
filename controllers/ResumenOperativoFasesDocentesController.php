@@ -81,13 +81,16 @@ class ResumenOperativoFasesDocentesController extends Controller
             "public".instituciones."id" AS id_institucion,
             semilleros_tic.datos_ieo_profesional.id_profesional_a AS profecional_a,
             "public".sedes.codigo_dane AS codigo_dane_sede,
-            semilleros_tic.datos_ieo_profesional."id"
+            semilleros_tic.datos_ieo_profesional."id",
+            semilleros_tic.ejecucion_fase.anio AS anio
             FROM
             semilleros_tic.datos_ieo_profesional
             INNER JOIN semilleros_tic.ejecucion_fase ON semilleros_tic.ejecucion_fase.id_datos_ieo_profesional = semilleros_tic.datos_ieo_profesional."id"
             INNER JOIN "public".sedes ON semilleros_tic.datos_ieo_profesional.id_sede = "public".sedes."id"
             INNER JOIN "public".instituciones ON "public".sedes.id_instituciones = "public".instituciones."id"
-            INNER JOIN semilleros_tic.fases ON semilleros_tic.ejecucion_fase.id_fase = semilleros_tic.fases."id"');
+            INNER JOIN semilleros_tic.fases ON semilleros_tic.ejecucion_fase.id_fase = semilleros_tic.fases."id"
+            WHERE
+            semilleros_tic.ejecucion_fase.anio = '.$anio);
         $datos_ieo_profesional = $command->queryAll();
 
         //echo "<pre>"; print_r($datos_ieo_profesional); echo "</pre>";
@@ -107,11 +110,11 @@ class ResumenOperativoFasesDocentesController extends Controller
         $mayorSesion['maxSesionFaseI']  = 0;
         $mayorSesion['maxSesionFaseII']  = 0;
         $mayorSesion['maxSesionFaseIII'] = 0;
-        $lastSesion = 0;
 
         foreach ($dataFirst as $key => $dip)
         {
             if(!empty($dip)){
+                $lastSesion = 0;
                 $data= [];
                 $idInstitucion = $dip['id_institucion'];
                 $idSede = $dip['id_sede'];
@@ -452,30 +455,6 @@ class ResumenOperativoFasesDocentesController extends Controller
 
 
                 //array_push($totalDatos, $data);
-
-                if (isset($data['fase_1']['sesiones'])){
-                    if (isset($data['fase_1']['sesiones'][$datos1])) {
-                        if ($maxSesionFaseI < $data['fase_1']['sesiones'][$datos1][0]) {
-                            $maxSesionFaseI = $data['fase_1']['sesiones'][$datos1][0];
-                        }
-                    }
-                }
-
-                if (isset($data['fase_2']['sesiones'])){
-                    if (isset($data['fase_2']['sesiones'][$datos1])) {
-                        if ($maxSesionFaseII < $data['fase_2']['sesiones'][$datos1][0]) {
-                            $maxSesionFaseII = $data['fase_2']['sesiones'][$datos1][0];
-                        }
-                    }
-                }
-
-                if (isset($data['fase_3']['sesiones'])) {
-                    if (isset($data['fase_3']['sesiones'][$datos1])) {
-                        if ($maxSesionFaseIII < $data['fase_3']['sesiones'][$datos1][0]) {
-                            $maxSesionFaseIII = $data['fase_3']['sesiones'][$datos1][0];
-                        }
-                    }
-                }
 
                 $mayorSesion['maxSesionFaseI'] = $maxSesionFaseI;
                 $mayorSesion['maxSesionFaseII'] = $maxSesionFaseII;

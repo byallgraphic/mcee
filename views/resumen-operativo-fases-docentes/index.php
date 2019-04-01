@@ -140,21 +140,21 @@ section.content {
         <td class="tg-c3ow" rowspan="2">Frecuencia sesiones mensual</td>
         <td class="tg-c3ow" rowspan="2">Duración promedio sesiones (horas reloj)</td>
         <?php for ($i=0;$i<$mayorSesion['maxSesionFaseI'];$i++) { ?>
-            <td class="tg-0pky" colspan="3">Sesión</td>
+            <td class="tg-0pky" colspan="3">Sesión <?= $i+1 ?></td>
         <?php } ?>
         <td class="tg-c3ow" rowspan="2">Total Sesiones</td>
         <td class="tg-uys7" rowspan="2">Número de Apps 0.0 creadas y probadas</td>
         <td class="tg-uys7" rowspan="2">Frecuencia sesiones mensual</td>
         <td class="tg-uys7" rowspan="2">Duración por cada sesión (horas reloj)</td>
         <?php for ($i=0;$i<$mayorSesion['maxSesionFaseII'];$i++) { ?>
-            <td class="tg-0pky" colspan="3">Sesión</td>
+            <td class="tg-0pky" colspan="3">Sesión <?= $i+1 ?></td>
         <?php } ?>
         <td class="tg-uys7" rowspan="2">Total Sesiones</td>
         <td class="tg-uys7" rowspan="2">Número de Apps 0.0 desarrolladas e implementadas</td>
         <td class="tg-c3ow" rowspan="2">Frecuencia sesiones mensual</td>
         <td class="tg-c3ow" rowspan="2">Duración por cada sesión (horas reloj)</td>
         <?php for ($i=0;$i<$mayorSesion['maxSesionFaseIII'];$i++) { ?>
-            <td class="tg-0pky" colspan="3">Sesión</td>
+            <td class="tg-0pky" colspan="3">Sesión <?= $i+1 ?></td>
         <?php } ?>
         <td class="tg-c3ow" rowspan="2">Total Sesiones</td>
         <td class="tg-c3ow" rowspan="2">Número de Apps 0.0 desarrolladas e implementadas</td>
