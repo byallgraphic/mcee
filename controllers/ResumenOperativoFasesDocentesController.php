@@ -218,7 +218,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     ");
                 $datosEjeccionFasei = $command->queryAll();
 
-                $promedioParticipantes1 = 0;
+                $promedioParticipantes1 = 1;
 
                 if ($maxSesionFaseI < count($datosEjeccionFasei)){
                     $maxSesionFaseI = count($datosEjeccionFasei);
@@ -243,7 +243,6 @@ class ResumenOperativoFasesDocentesController extends Controller
                         $data['fase_1']['sesiones'][$datos1][3] = $valor['duracion_sesion'];
                     }
 
-                    $promedioParticipantes1 =  $promedioParticipantes1 / count($datosEjeccionFasei);
                     //array_push($data, count($datosEjeccionFasei), $totalparticipantes1, $totalapps1);
 
                     $data['fase_1']['total_sesiones'] = count($datosEjeccionFasei);
@@ -324,7 +323,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     WHERE dpro.id_sede =  $idSede  AND anio = $anio 
                         ");
                 $datosEjeccionFaseii = $command->queryAll();
-                $promedioParticipantes2 = 0;
+                $promedioParticipantes2 = 1;
                 if ($maxSesionFaseII < count($datosEjeccionFaseii)){
                     $maxSesionFaseII = count($datosEjeccionFaseii);
                 }
@@ -429,7 +428,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                     WHERE dpro.id_sede =  $idSede  AND anio = $anio 
                     ");
                 $datosEjeccionFaseiii = $command->queryAll();
-                $promedioParticipantes3 = 0;
+                $promedioParticipantes3 = 1;
                 if ($maxSesionFaseIII < count($datosEjeccionFaseiii)){
                     $maxSesionFaseIII = count($datosEjeccionFaseiii);
                 }
@@ -442,8 +441,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                         $data['fase_3']['sesiones'][$datos1][1] = $valor['fecha_sesion'];
                         $data['fase_3']['sesiones'][$datos1][3] = $valor['duracion_sesion'];
                     }
-                    $promedioParticipantes3 =  $promedioParticipantes3 / count($datosEjeccionFaseiii);
-                    /**rellena la cantidad de sesiones vacias */
+                    
 
                     //array_push($data, count($datosEjeccionFaseiii), $totalparticipantes3, $totalapps3);
 
@@ -463,7 +461,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                 $data['datos_ieo']['fecha_inicio_semillero'] = date("Y-m-d", $lastSesion);
 
 
-                $data['total']['promedio'] = ($promedioParticipantes1 + $promedioParticipantes2 + $promedioParticipantes3) / 3 ;
+                $data['total']['promedio'] = $promedioParticipantes1 + $promedioParticipantes2 + $promedioParticipantes3;
                 $data['total']['suma_fases'] = (count($datosEjeccionFaseiii) + count($datosEjeccionFaseii) + count($datosEjeccionFasei));
 
                 $totalDatos[$key] = $data;

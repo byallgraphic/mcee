@@ -133,7 +133,7 @@ section.content {
         <th class="tg-c3ow" colspan="<?= 4 + ($mayorSesion['maxSesionFaseI']*3) ?>">Fase I Creación y prueba</th>
         <th class="tg-uys7" colspan="<?= 4 + ($mayorSesion['maxSesionFaseII']*3) ?>">Fase II Desarrollo e implementación</th>
         <th class="tg-c3ow" colspan="<?= 4 + ($mayorSesion['maxSesionFaseIII']*3) ?>">Fase III  (Uso - Aplicación)</th>
-        <th class="tg-c3ow" rowspan="3">TOTAL PARTICIPANTES FASES I A III (PROMEDIO)</th>
+        <th class="tg-c3ow" rowspan="3">TOTAL DOCENTES PARTICIPANTES DE FASE I A III</th>
         <th class="tg-c3ow" rowspan="3">TOTAL NUMERO DE SESIONES FASES I A III</th>
     </tr>
     <tr>
