@@ -26,7 +26,7 @@ if( !$sede ){
 	return;
 }
 
-$idTipoInforme = $_GET['idTipoInforme'];
+$idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $modelDatosBasico->id_tipo_informe;
 
 $connection = Yii::$app->getDb();
 		$command = $connection->createCommand(
