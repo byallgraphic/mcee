@@ -135,6 +135,8 @@ class ResumenOperativoFasesDocentesController extends Controller
                     WHERE id in($id_docentes)
                 ");
                 $datoPersonalA = $command->queryAll();
+                $count_docentes = count($datoPersonalA);
+
                 $nomresPersonalA = $this->arrayArrayComas($datoPersonalA,'nombre');
 
                 //obtener las fecha de inicio de semillero con respecto a la sesion 1
@@ -343,7 +345,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                             $lastSesion = $fecha_entrada;
                         }
 
-                        @$totalapps2 += $valor['apps_desarrolladas'];
+                        @$totalapps2 += $valor['numero_apps_desarrolladas'];
                         //array_push($data, "", $valor['fecha_sesion'], $valor['estudiantes_participantes'], $valor['duracion_sesion']);
 
                         $data['fase_2']['sesiones'][$valor['num_sesion']][0] = $valor['num_sesion'];
@@ -351,8 +353,6 @@ class ResumenOperativoFasesDocentesController extends Controller
                         $data['fase_2']['sesiones'][$valor['num_sesion']][3] = $valor['duracion_sesion'];
                     }
                     /**rellena la cantidad de sesiones vacias */
-
-                    //array_push($data, count($datosEjeccionFaseii), $totalparticipantes2, $totalapps2);
 
                     $data['fase_2']['total_sesiones'] = count($datosEjeccionFaseii);
                     $data['fase_2']['totalapps'] = $totalapps2;
@@ -470,7 +470,7 @@ class ResumenOperativoFasesDocentesController extends Controller
                 $data['datos_ieo']['fecha_inicio_semillero'] = date("Y-m-d", $lastSesion);
 
 
-                $data['total']['promedio'] = $promedioParticipantes1 + $promedioParticipantes2 + $promedioParticipantes3;
+                $data['total']['promedio'] = $count_docentes;
                 $data['total']['suma_fases'] = (count($datosEjeccionFaseiii) + count($datosEjeccionFaseii) + count($datosEjeccionFasei));
 
                 $totalDatos[$key] = $data;
