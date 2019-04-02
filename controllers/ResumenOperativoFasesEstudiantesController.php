@@ -111,14 +111,22 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 $data= [];
                 $idInstitucion = $dip['id_institucion'];
                 $idSede = $dip['id_sede'];
+                $lastSesion = 0;
 
                 //nombres de los profesional a
-                $idProfesionalA = $dip['profecional_a'];
+                $id_docentes = $connection->createCommand
+                ("SELECT docente FROM semilleros_tic.datos_sesiones as dts join semilleros_tic.ejecucion_fase as efe 
+                      on efe.id_datos_sesiones = dts.id join semilleros_tic.datos_ieo_profesional dpro 
+                      on efe.id_datos_ieo_profesional = dpro.id WHERE dpro.id_sede = $idSede AND anio = $anio LIMIT 1 ");
+
+                $id_docentes = $id_docentes->queryAll();
+                $id_docentes = $id_docentes[0]["docente"];
+
                 $command = $connection->createCommand
                 ("
                     SELECT concat(p.nombres,' ',p.apellidos) as nombre		
                     FROM public.personas as p
-                    WHERE id in($idProfesionalA)
+                    WHERE id in($id_docentes)
                 ");
                 $datoPersonalA = $command->queryAll();
                 $nomresPersonalA = $this->arrayArrayComas($datoPersonalA,'nombre');
@@ -225,11 +233,11 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 }
 
                 if(count($datosEjeccionFasei) > 0){
+                    $lastSesion = strtotime($datosEjeccionFasei[0]['fecha_sesion']);
                     foreach ($datosEjeccionFasei as $datos1 => $valor){
-                        $fecha_actual = strtotime(date($lastSesion,time()));
                         $fecha_entrada = strtotime($valor['fecha_sesion']);
 
-                        if($fecha_actual < $fecha_entrada){
+                        if($lastSesion > $fecha_entrada){
                             $lastSesion = $fecha_entrada;
                         }
 
@@ -334,10 +342,9 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 }
                 if(count($datosEjeccionFaseii) > 0){
                     foreach ($datosEjeccionFaseii as $datos1 => $valor){
-                        $fecha_actual = strtotime(date($lastSesion,time()));
                         $fecha_entrada = strtotime($valor['fecha_sesion']);
 
-                        if($fecha_actual < $fecha_entrada){
+                        if($lastSesion > $fecha_entrada){
                             $lastSesion = $fecha_entrada;
                         }
 
@@ -441,10 +448,9 @@ class ResumenOperativoFasesEstudiantesController extends Controller
                 }
                 if(count($datosEjeccionFaseiii) > 0){
                     foreach ($datosEjeccionFaseiii as $datos1 => $valor){
-                        $fecha_actual = strtotime(date($lastSesion,time()));
                         $fecha_entrada = strtotime($valor['fecha_sesion']);
 
-                        if($fecha_actual < $fecha_entrada){
+                        if($lastSesion > $fecha_entrada){
                             $lastSesion = $fecha_entrada;
                         }
 
