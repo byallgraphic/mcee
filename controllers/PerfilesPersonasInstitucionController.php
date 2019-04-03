@@ -6,10 +6,15 @@ Desarrollador: Maria Viviana Rodas
 Descripción: controlador de perfiles persona institucion
 ---------------------------------------
 Modificaciones:
-Fecha: 02-01-2019
+Fecha: 02-04-2019
 Persona encargada: Oscar David Lopez Villa
 Cambios realizados: se muestran la sedes dependientes de la institucion seleccionada actionSedes()
 Cambios realizados: se muestran la personas dependientes del perfil seleccionado actionPersona()
+---------------------------------------
+Modificaciones:
+Fecha: 03-04-2019
+Persona encargada: Oscar David Lopez Villa
+Cambios realizados: se crean registros tantos como sedes se seleccionen
 */
 
 namespace app\controllers;
@@ -125,19 +130,15 @@ class PerfilesPersonasInstitucionController extends Controller
         $modificar= false;
 		
 		$model = new PerfilesPersonasInstitucion();
-
-        // if ($model->load(Yii::$app->request->post()) && $model->save()) 
         if ($model->load(Yii::$app->request->post()) ) 
 		{
 			$DatosPost = Yii::$app->request->post();
-			 
 			
+			//se crean registro tantos como sedes se seleccionen
 			foreach($DatosPost['PerfilesPersonasInstitucion']['id_sede'] as $idSede)
 			{
-				
 				$datos = $DatosPost;
 				$datos['PerfilesPersonasInstitucion']['id_sede'] = $idSede;
-				
 				$model = new PerfilesPersonasInstitucion();
 				$model->load($datos);
 				$model->save();
