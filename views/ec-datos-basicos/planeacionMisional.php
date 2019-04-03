@@ -43,7 +43,7 @@ $connection = Yii::$app->getDb();
 				
 				<h1 class='<?php echo $color; ?>'><?= Html::encode("Planeación misional") ?></h1>
 
-				<?= $form->field($modelPlaneacion, 'tipo_actividad')->dropDownList( [  'prompt' => 'Seleccione...', 'Mesa de trabajo', 'Acompañamiento a la práctica', 'Salidas pedagógicas', 'Evento de ciudad' ] ) ?>
+				<?= $form->field($modelPlaneacion, 'tipo_actividad')->dropDownList( [  'Mesa de trabajo', 'Acompañamiento a la práctica', 'Salidas pedagógicas', 'Evento de ciudad' ], [ 'prompt' => 'Seleccione...' ] ) ?>
 				
 				<?= $form->field($modelPlaneacion, 'fecha')->widget(
 					DatePicker::className(), [
@@ -88,19 +88,19 @@ $connection = Yii::$app->getDb();
 
 					<div class="row">
 						<div class="col-sm-3" style='padding:0px;'>
-							<?=  Html::activeTextInput($modelPlaneacion, "estudiantes", [ 'type' => 'number', 'class' => "form-control", 'value' => isset($datos['estudiantes']) ? $datos['estudiantes'] : ''] ) ?>
+							<?=  Html::activeTextInput($modelPlaneacion, "estudiantes", [ 'type' => 'number', 'class' => "form-control"] ) ?>
 						</div>
 						<div class="col-sm-3" style='padding:0px;'>
-							<?=  Html::activeTextInput($modelPlaneacion, "familias", [ 'type' => 'number', 'class' => "form-control", 'value' => isset($datos['familias']) ? $datos['familias'] : ''] ) ?>
+							<?=  Html::activeTextInput($modelPlaneacion, "familias", [ 'type' => 'number', 'class' => "form-control"] ) ?>
 						</div>
 						<div class="col-sm-2" style='padding:0px;'>
-							<?=  Html::activeTextInput($modelPlaneacion, "docentes", [ 'type' => 'number', 'class' => "form-control", 'value' => isset($datos['docentes']) ? $datos['docentes'] : ''] ) ?>
+							<?=  Html::activeTextInput($modelPlaneacion, "docentes", [ 'type' => 'number', 'class' => "form-control"] ) ?>
 						</div>
 						<div class="col-sm-2" style='padding:0px;'>
-							<?=  Html::activeTextInput($modelPlaneacion, "directivos", [ 'type' => 'number', 'class' => "form-control", 'value' => isset($datos['directivos']) ? $datos['directivos'] : ''] ) ?>
+							<?=  Html::activeTextInput($modelPlaneacion, "directivos", [ 'type' => 'number', 'class' => "form-control"] ) ?>
 						</div>
 						<div class="col-sm-2" style='padding:0px;'>
-							<?=  Html::activeTextInput($modelPlaneacion, "otros", [ 'type' => 'number', 'class' => "form-control", 'value' => isset($datos['otros']) ? $datos['otros'] : ''] ) ?>
+							<?=  Html::activeTextInput($modelPlaneacion, "otros", [ 'type' => 'number', 'class' => "form-control"] ) ?>
 						</div>
 					</div>
 				</div>
@@ -110,6 +110,33 @@ $connection = Yii::$app->getDb();
 				
 				
 				<?= $form->field($modelVerificacion, "[1]tipo_verificacion")->dropDownList( $tiposVerificacion, ['prompt' => 'Seleccione...' ] ) ?>
+				
+				<?php 
+				
+					if( count($rutasArchivos) > 0 ){
+						
+						echo "<div>";
+				
+						foreach( $rutasArchivos as $key => $archivo )
+						{
+							echo "<div style='display:flex;align-items:stretch;flex-direction: row;justify-content: center;'>";
+							
+							$content = Html::a( substr( $archivo->ruta_archivo, -20 ), $archivo->ruta_archivo ).'<br>';
+							$span = Html::tag( 'span', '', 	[ 
+																'class' 	=> 'glyphicon glyphicon-remove', 
+																'style' 	=> 'color: red;', 
+																'onClick' 	=> 'removeFile( this, '.$archivo->id.')', 
+															] );
+							
+							echo Html::tag( 'div', $content, [ 'style' => 'margin:0 10px' ] );
+							echo Html::tag( 'div', $span, [ 'style' => 'margin:0 10px' ] );
+							
+							echo "</div>";
+						}
+						
+						echo "</div>";
+					}
+				?>
 				
 				<?= $form->field($modelVerificacion, "[1]ruta_archivo[]")->fileInput(['multiple' => true,  'accept' => ".doc, .docx, .pdf, .xls" ]) ?>
 

@@ -93,6 +93,7 @@ $connection = Yii::$app->getDb();
 														'tiposVerificacion'	=> $tiposVerificacion,
 														'modelDatosBasico' => $modelDatosBasico,
 														'idTipoInforme' => $idTipoInforme,
+														'rutasArchivos' => $rutasArchivos,
 														
 												] ),
 								'contentOptions' => ['class' => 'in'],
@@ -101,15 +102,7 @@ $connection = Yii::$app->getDb();
 					] 
 				]); ?>
 	
-	<?php $this->render( 'planeacionMisional', [ 
-			'form' 				=> $form,
-			'modelPlaneacion' 	=> $modelPlaneacion,
-			'modelVerificacion' => $modelVerificacion,
-			'modelReportes' 	=> $modelReportes,
-			'tiposVerificacion'	=> $tiposVerificacion,
-			'modelDatosBasico' => $modelDatosBasico,
-			'idTipoInforme' => $idTipoInforme,
-	] ); ?>
+	
 		
     <div class="form-group" style="text-align: -webkit-center;">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
