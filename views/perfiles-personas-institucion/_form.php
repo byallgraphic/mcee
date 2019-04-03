@@ -57,6 +57,7 @@ $this->registerJs( file_get_contents( '../web/js/perfilesPersonasInstitucion.js'
 	<?= $form->field($model, 'id_sede')->widget(
     Chosen::className(), [
         'items' => [],
+		'multiple' => true,
         'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
 		'placeholder' => 'Seleccione...', // Search input will be disabled
         'clientOptions' => [

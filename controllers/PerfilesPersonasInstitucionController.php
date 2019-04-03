@@ -126,7 +126,24 @@ class PerfilesPersonasInstitucionController extends Controller
 		
 		$model = new PerfilesPersonasInstitucion();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        // if ($model->load(Yii::$app->request->post()) && $model->save()) 
+        if ($model->load(Yii::$app->request->post()) ) 
+		{
+			$DatosPost = Yii::$app->request->post();
+			 
+			
+			foreach($DatosPost['PerfilesPersonasInstitucion']['id_sede'] as $idSede)
+			{
+				
+				$datos = $DatosPost;
+				$datos['PerfilesPersonasInstitucion']['id_sede'] = $idSede;
+				
+				$model = new PerfilesPersonasInstitucion();
+				$model->load($datos);
+				$model->save();
+			}
+			
+			
             return $this->redirect(['index']);
         }
 
