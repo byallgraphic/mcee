@@ -64,30 +64,49 @@ class ResumenOperativoFasesEstudiantesController extends Controller
 
         $connection = Yii::$app->getDb();
         $command = $connection->createCommand("
-        SELECT	dip.id ,i.codigo_dane as codigo_dane_institucion, i.descripcion as institucion, s.codigo_dane as codigo_dane_sede,
-                        s.descripcion as sede, 
-                        i.id as id_institucion, 
-                        s.id as id_sede, 
-                        a.descripcion as anio, 
-                        fa.descripcion as fase,
-                        sdi.profecional_a,
-                        sdi.id as id_semilleros,
-                        dip.curso_participantes
-        FROM 	semilleros_tic.datos_ieo_profesional_estudiantes as dip,public.sedes as s,public.instituciones as i, semilleros_tic.anio as a, 
-                semilleros_tic.fases as fa,	semilleros_tic.ejecucion_fase_i_estudiantes as ef, semilleros_tic.semilleros_datos_ieo_estudiantes as sdi
-        WHERE 	dip.id_institucion = i.id
-        AND		dip.id_sede = s.id
-        AND 	dip.estado = 1
-        AND 	sdi.id_institucion =dip.id_institucion
-        AND 	sdi.id_sede = dip.id_sede 
-        GROUP BY 
-			dip.id,
-			i.codigo_dane,
-			i.descripcion, 
-			s.codigo_dane, 
-			s.descripcion,i.id,s.id, a.descripcion,
-			fa.descripcion,sdi.profecional_a, sdi.id
-        ORDER BY i.id,s.id");
+            SELECT dip.\"id\",
+                  i.codigo_dane AS codigo_dane_institucion,
+                  i.descripcion AS institucion,
+                  s.codigo_dane AS codigo_dane_sede,
+                  s.descripcion AS sede,
+                  i.\"id\" AS id_institucion,
+                  s.\"id\" AS id_sede,
+                  fa.descripcion AS fase,
+                  sdi.profecional_a,
+                  sdi.\"id\" AS id_semilleros,
+                  dip.curso_participantes,
+                  ai.anio AS anio
+            FROM
+                  semilleros_tic.datos_ieo_profesional_estudiantes AS dip ,
+                  \"public\".sedes AS s ,
+                  \"public\".instituciones AS i ,
+                  semilleros_tic.anio AS \"a\" ,
+                  semilleros_tic.fases AS fa ,
+                  semilleros_tic.ejecucion_fase_i_estudiantes AS ef ,
+                  semilleros_tic.semilleros_datos_ieo_estudiantes AS sdi,
+                  semilleros_tic.acuerdos_institucionales_estudiantes AS ai
+            WHERE
+                  dip.id_institucion = i.\"id\" AND
+                  dip.id_sede = s.\"id\" AND
+                  dip.estado = 1 AND
+                  sdi.id_institucion = dip.id_institucion AND
+                  sdi.id_sede = dip.id_sede
+            GROUP BY
+                  dip.\"id\",
+                  i.codigo_dane,
+                  i.descripcion,
+                  s.codigo_dane,
+                  s.descripcion,
+                  i.\"id\",
+                  s.\"id\",
+                  \"a\".descripcion,
+                  fa.descripcion,
+                  sdi.profecional_a,
+                  sdi.\"id\",
+                  ai.\"id\"
+            ORDER BY
+                  sdi.id_institucion ASC,
+                  sdi.id_sede ASC");
         $datos_ieo_profesional = $command->queryAll();
         $data = [];
         $anio = Yii::$app->request->get("anio");
