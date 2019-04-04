@@ -136,13 +136,19 @@ class EcDatosBasicosController extends Controller
         $modelVerificacion	= EcVerificacion::findOne(['id_planeacion' => $modelPlaneacion->id ]);
         $modelReportes		= EcReportes::findOne(['id_planeacion' => $modelPlaneacion->id ]);
 		
+		$rutasArchivos		= EcVerificacion::find()
+									->where( 'id_planeacion='.$modelPlaneacion->id )
+									->andWhere( 'estado=1' )
+									->all();
+		
         return $this->render('view', [
             'model' 			=> $modelDatosBasico,
             'modelPlaneacion' 	=> $modelPlaneacion,
             'modelVerificacion' => $modelVerificacion,
             'modelReportes' 	=> $modelReportes,
-            'guardado' 	=> $guardado,
-            'urlVolver' => $urlVolver,
+            'guardado' 			=> $guardado,
+            'urlVolver' 		=> $urlVolver,
+            'rutasArchivos' 	=> $rutasArchivos,
         ]);
     }
 
@@ -313,7 +319,7 @@ class EcDatosBasicosController extends Controller
 							}
                         }
 
-                       if ($modelReportes->load(Yii::$app->request->post())){
+						if ($modelReportes->load(Yii::$app->request->post())){
                             $modelReportes->id_planeacion = $modelPlaneacion->id;
                             $modelReportes->estado = 1;
                             $modelReportes->save();
@@ -326,7 +332,7 @@ class EcDatosBasicosController extends Controller
         }
 
 
-        $modelVerificacion	= new EcVerificacion();
+        $modelVerificacion	= new EcVerificacion( [ 'scenario' => 'nuevoRegistro' ] );
         
 		$dataTiposVerificacion = Parametro::find()
 									->where( 'id_tipo_parametro=12' )
@@ -485,6 +491,12 @@ class EcDatosBasicosController extends Controller
 							}
 						}
 					}
+					
+					if ($modelReportes->load(Yii::$app->request->post())){
+						$modelReportes->id_planeacion = $modelPlaneacion->id;
+						$modelReportes->estado = 1;
+						$modelReportes->save();
+					}  
 
 					return $this->redirect(['view', 'id' => $modelDatosBasico->id, 'guardado' => 1 , 'urlVolver' => $urlVolver ]);
 					
