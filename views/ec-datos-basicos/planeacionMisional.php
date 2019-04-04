@@ -116,6 +116,7 @@ $connection = Yii::$app->getDb();
 					if( count($rutasArchivos) > 0 ){
 						
 						echo "<div>";
+						echo "<div class='text-center'><h4>Archivos cargados previamente</h4></div>";
 				
 						foreach( $rutasArchivos as $key => $archivo )
 						{
