@@ -133,19 +133,27 @@ class PerfilesPersonasInstitucionController extends Controller
         if ($model->load(Yii::$app->request->post()) ) 
 		{
 			$DatosPost = Yii::$app->request->post();
+			@$idSedes = $DatosPost['PerfilesPersonasInstitucion']['id_sede'];
 			
-			//se crean registro tantos como sedes se seleccionen
-			foreach($DatosPost['PerfilesPersonasInstitucion']['id_sede'] as $idSede)
+			if(isset($idSedes))
 			{
-				$datos = $DatosPost;
-				$datos['PerfilesPersonasInstitucion']['id_sede'] = $idSede;
-				$model = new PerfilesPersonasInstitucion();
-				$model->load($datos);
+			//se crean registro tantos como sedes se seleccionen
+				foreach($idSedes as $idSede)
+				{
+					$datos = $DatosPost;
+					$datos['PerfilesPersonasInstitucion']['id_sede'] = $idSede;
+					$model = new PerfilesPersonasInstitucion();
+					$model->load($datos);
+					$model->save();
+				}
+			}
+			else
+			{
 				$model->save();
 			}
 			
 			
-            return $this->redirect(['index']);
+             return $this->redirect(['index','guardado' => 1]);
         }
 
         return $this->renderAjax('create', [
@@ -281,7 +289,7 @@ class PerfilesPersonasInstitucionController extends Controller
 		$model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['index','guardado' => 1]);
         }
 
         return $this->renderAjax('update', [
