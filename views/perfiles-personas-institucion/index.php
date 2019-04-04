@@ -31,6 +31,20 @@ use app\models\Sedes;
 $this->title = '';
 $nombre ="Perfiles Personas Instituciones";
 $this->params['breadcrumbs'][] = $nombre;
+
+if( @$_GET['guardado'])
+{
+	$this->registerJs( "
+	  swal({
+			text: 'Registro guardado',
+			icon: 'success',
+			button: 'Salir',
+		});" 
+	);
+}
+
+
+
 ?>
 <?php
 		Modal::Begin([

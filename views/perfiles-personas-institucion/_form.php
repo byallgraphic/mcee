@@ -29,9 +29,9 @@ use nex\chosen\Chosen;
 /* @var $this yii\web\View */
 /* @var $model app\models\PerfilesPersonasInstitucion */
 /* @var $form yii\widgets\ActiveForm */
-
 	echo "<input type='hidden' id='hidPerfilSelected' name='hidPerfilSelected' value='".$perfilesSelected[0]['id']."'>";
 	echo "<input type='hidden' id='hidPerfilesPersonasSelected' name='hidPerfilesPersonasSelected' value='".$PerfilesXPersonas[0]['id']."'>";
+	echo "<input type='hidden' id='hidSedeSelected' name='hidSedeSelected' value='".$model->id_sede."'>";
 	echo "<input type='hidden' id='hidModificar' name='hidModificar' value='".$modificar."'>";
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 
