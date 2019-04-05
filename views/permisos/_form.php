@@ -18,38 +18,11 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 
     <?= $form->field($model, 'id_perfiles')->DropDownList($perfil) ?>
 	
+	  <?= $form->field($model, 'eliminar')->checkbox($perfil) ?>
+	  <?= $form->field($model, 'editar')->checkbox($perfil) ?>
+	  <?= $form->field($model, 'listar')->checkbox($perfil) ?>
+	  <?= $form->field($model, 'agregar')->checkbox($perfil) ?>
 	
-	<div class="cantidades" style="margin-left: 20%;">
-					<div class="row" style="text-align:center; background-color:#fff;">
-							<div class="col-sm-2" style='padding:0px;'>
-							<span total class='form-control' style='background-color:#ccc;height:70px;'>Eliminar</span>
-						</div>
-						<div class="col-sm-2" style='padding:0px;'>
-							<span total class='form-control' style='background-color:#ccc;height:70px'>Editar</span>
-						</div>
-						<div class="col-sm-2" style='padding:0px;'>
-							<span total class='form-control' style='background-color:#ccc;height:70px'>Listar</span>
-						</div>
-						<div class="col-sm-2" style='padding:0px;'>
-							<span total class='form-control' style='background-color:#ccc;height:70px'>Agregar</span>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-sm-2" style='padding:0px;'>
-							<?=  Html::activeTextInput($model, "eliminar", [ 'type' => 'number', 'class' => "form-control"] ) ?>
-						</div>
-						<div class="col-sm-2" style='padding:0px;'>
-							<?=  Html::activeTextInput($model, "editar", [ 'type' => 'number', 'class' => "form-control"] ) ?>
-						</div>
-						<div class="col-sm-2" style='padding:0px;'>
-							<?=  Html::activeTextInput($model, "listar", [ 'type' => 'number', 'class' => "form-control"] ) ?>
-						</div>
-						<div class="col-sm-2" style='padding:0px;'>
-							<?=  Html::activeTextInput($model, "agregar", [ 'type' => 'number', 'class' => "form-control"] ) ?>
-						</div>
-					</div>
-				</div>
 
    <?= $form->field($model, 'estado')->hiddenInput(['value'=> 1])->label(false) ?> 
 
