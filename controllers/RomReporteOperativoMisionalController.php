@@ -39,6 +39,8 @@ use app\models\IsaActividadesRom;
 use app\models\RomReporteOperativoMisional;
 use app\models\IsaTipoCantidadPoblacionRom;
 use app\models\IsaEvidenciasRom;
+use app\models\RomActividadesRom;
+use app\models\RomTipoCantidadPoblacionRom;
 use yii\bootstrap\Collapse;
 use app\models\UploadForm;
 use yii\helpers\ArrayHelper;
@@ -101,8 +103,6 @@ class RomReporteOperativoMisionalController extends Controller
 	//funcion que se encarga de crear el formulario dinamicamente sin contar los campos de guardado que estan en la vista formulario
     function actionFormulario($model, $form, $datos = 0 )
 	{
-        
-		
 		$proyectos = new IsaRomProyectos();
 		$proyectos = $proyectos->find()->orderby("id")->all();
 		$proyectos = ArrayHelper::map($proyectos,'id','descripcion');
@@ -164,7 +164,6 @@ class RomReporteOperativoMisionalController extends Controller
     {
         $model = new RomReporteOperativoMisional();
 		
-       
 		$idInstitucion = $_SESSION['instituciones'][0];
 		
         $institucion = Instituciones::findOne($idInstitucion);
@@ -172,7 +171,6 @@ class RomReporteOperativoMisionalController extends Controller
 		{
             if($model->save())
 			{
-				
                 $rom_id = $model->id;
 				
 				if($arrayDatosActividades = Yii::$app->request->post('IsaActividadesRom'))
@@ -348,8 +346,6 @@ class RomReporteOperativoMisionalController extends Controller
 	
         if ($model->load(Yii::$app->request->post()) && $model->save()) 
 		{
-			
-
             return $this->redirect(['index']);
         }
 		
@@ -389,7 +385,7 @@ class RomReporteOperativoMisionalController extends Controller
 			return $dato;
 		});
 		
-	//se formate la informacion que deben tener los campos 
+		//se formate la informacion que deben tener los campos 
 		foreach	($result as $r => $valor)
 			foreach	($valor as $ids => $valores)
 				$datos['actividades'][$valores['id_actividad']] = $valores;
@@ -413,16 +409,12 @@ class RomReporteOperativoMisionalController extends Controller
 		});
 	
 		
-	
-	
 		//se formate la informacion que deben tener los campos 
 		foreach	($result as $r => $valor)
 			foreach	($valor as $ids => $valores)
 				$datos['tipoCantidadPoblacion'][$valores['id_actividades_rom']] = $valores;
 		
 		
-		// echo "<pre>"; print_r($datos); echo "</pre>"; 
-				// die;
         return $this->renderAjax('update', [
             'model' => $model,
 			'sedes' => $sedes,
