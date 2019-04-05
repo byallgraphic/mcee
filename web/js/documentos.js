@@ -27,8 +27,8 @@ function removeFile( cmp,  identificador ){
 						$( cmp ).parent().parent().css({ display: 'none' });
 						
 						Swal.fire(
-						  'Deleted!',
-						  'Your file has been deleted.',
+						  'Borrado!',
+						  'Tu archivo ha sido barrado con exito',
 						  'success'
 						)
 					}
