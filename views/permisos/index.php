@@ -7,13 +7,27 @@ use yii\helpers\Url;
 
 use fedemotta\datatables\DataTables;
 use yii\grid\GridView;
+use app\models\Modulos;
+use app\models\Perfiles;
+
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\GeSeguimientoOperadorBuscar */
+/* @var $searchModel app\models\PermisosBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ge Seguimiento Operadors';
+$this->title = 'Permisos';
 $this->params['breadcrumbs'][] = $this->title;
+if( @$_GET['guardado'])
+{
+	
+	$this->registerJs( "
+	  swal({
+			text: 'Registro guardado',
+			icon: 'success',
+			button: 'Salir',
+		});" 
+	);
+}
 ?> 
 
 <h1></h1>
@@ -23,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="modal-content">
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3><?= $this->title ?></h3>
+<h3>Permisos</h3>
 </div>
 <div class="modal-body">
 <div id='modalContent'></div>
@@ -32,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 </div>
 </div>
-<div class="ge-seguimiento-operador-index">
+<div class="permisos-index">
 
    
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -79,27 +93,26 @@ $this->params['breadcrumbs'][] = $this->title;
 	],
            'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'id_tipo_seguimiento',
-            'email:email',
-            'id_operador',
-            //'proyecto_reportar',
-            //'id_ie',
-            //'mes_reporte',
-            //'semana_reporte',
-            //'id_persona_responsable',
-            //'descripcion_actividad',
-            //'poblacion_beneficiaria',
-            //'quienes',
-            //'numero_participantes',
-            //'duracion_actividad',
-            //'logros_alcanzados',
-            //'dificultadades',
-            //'avances_cumplimiento_cuantitativos',
-            //'avances_cumplimiento_cualitativos',
-            //'dificultades',
-            //'propuesta_dificultades',
+			[
+				'attribute' => 'id_modulos',
+				'value'		=> function( $model )
+								{
+									$modulo = Modulos::findOne( $model->id_modulos );
+									return $modulo ? $modulo->descripcion: '';
+							   },
+			],
+			[
+				'attribute' => 'id_perfiles',
+				'value'		=> function( $model )
+								{
+									$perfil = Perfiles::findOne( $model->id_perfiles );
+									return $perfil ? $perfil->descripcion: '';
+							   },
+			],
+            'eliminar',
+            'editar',
+            'listar',
+            'agregar',
             //'estado',
 
             [
