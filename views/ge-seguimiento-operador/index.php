@@ -84,7 +84,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'id_tipo_seguimiento',
             'email:email',
             'id_operador',
-            'cual_operador',
             //'proyecto_reportar',
             //'id_ie',
             //'mes_reporte',
