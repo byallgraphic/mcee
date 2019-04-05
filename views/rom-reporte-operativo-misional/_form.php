@@ -25,9 +25,15 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 		margin: 0 5px;
 	}
 	
-   ul.tabs > li:nth-child(1){ background : #009246; }
-   ul.tabs > li:nth-child(2){ background : #F1F2F1; }
-   ul.tabs > li:nth-child(3){ background : #CE2B37; }
+	ul.tabs > li:nth-child(1){ background : #009246; }
+	ul.tabs > li:nth-child(2){ background : #F1F2F1; }
+	ul.tabs > li:nth-child(3){ background : #CE2B37; }
+   
+	.tab-selected{
+	   -webkit-box-shadow: 10px 10px 10px 0px rgba(0,0,0,1);
+		-moz-box-shadow: 10px 10px 10px 0px rgba(0,0,0,1);
+		box-shadow: 10px 10px 10px 0px rgba(0,0,0,1);
+	}
 </style>
 
 <div class="rom-reporte-operativo-misional-form">

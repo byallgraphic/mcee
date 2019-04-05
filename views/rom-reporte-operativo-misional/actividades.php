@@ -12,8 +12,15 @@ $this->registerJs("
 	$( document ).on('click', 'li', function() { 
 		var cont = $( this ).attr('href');
 		$( '[id^=content][id!='+cont.substr(1)+']', $(this).parent().parent() ).css({display:'none'}); 
-		$( $( this ).attr('href'), $(this).parent().parent() ).toggle();  
-		console.log( $( '[id^=content]', $(this).parent().parent() ) )
+		$( $( this ).attr('href'), $(this).parent().parent() )
+			.toggle();
+		
+		var conClase = $( this ).hasClass( 'tab-selected' );
+		
+		$( 'li', $( this).parent() ).removeClass( 'tab-selected' );  
+		
+		if( !conClase )
+			$( this, $( this).parent() ).addClass( 'tab-selected' );  
 	});
 ");
 
