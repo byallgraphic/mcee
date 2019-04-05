@@ -8,13 +8,16 @@ use nex\chosen\Chosen;
 /* @var $this yii\web\View */
 /* @var $model app\models\GeSeguimientoOperador */
 /* @var $form yii\widgets\ActiveForm */
+$this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js');
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
+$this->registerJsFile('@web/js/GeSeguimientos.js');
 
 if( $guardado ){
 	
 	$this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
-	
-	$this->registerJs( "
+    $this->registerJsFile(Yii::$app->request->baseUrl.'/js/GeSeguimientos.js');
+
+    $this->registerJs( "
 	  swal({
 			text: 'Registro guardado',
 			icon: 'success',
@@ -34,9 +37,11 @@ if( $guardado ){
 	
 	<h3 style='background-color:#ccc;padding:5px;'><?= "DATOS GENERALES"?></h3>
 
-    <?= $form->field($model, 'id_operador')->radioList( $nombresOperador ) ?>
+    <?= $form->field($model, 'id_operador')->radioList($nombresOperador, ['id' => 'id_operador']) ?>
 
-    <?= $form->field($model, 'cual_operador')->textInput() ?>
+    <div id="id_cual">
+        <?=  $form->field($model, 'cual_operador')->dropDownList(['semana 1','semana 2','semana 3','semana 4'], ['prompt' => 'Seleccione una semana' ]); ?>
+    </div>
 
     <?= $form->field($model, 'proyecto_reportar')->textInput() ?>
 
@@ -72,9 +77,15 @@ if( $guardado ){
 			
 	<h3 style='background-color:#ccc;padding:5px;'><?= "REPORTE DE ACTIVIDADES"?></h3>
 
-    <?= $form->field($model, 'id_objetivo')->radioList( $objetivos ) ?>
-    
-	<?= $form->field($model, 'id_actividad')->radioList( $actividades ) ?>
+    <div id="id_objetivo">
+        <?= $form->field($model, 'id_objetivo')->textInput(['disabled' => false]) ?>
+    </div>
+    <button id="btnAgregarObj" type="button" class="btn btn-primary">Agregar Objetivo</button>
+
+    <div id="id_actividad">
+        <?= $form->field($model, 'id_actividad')->textInput(['disabled' => false]) ?>
+    </div>
+    <button id="btnAgregarAct" type="button" class="btn btn-primary">Agregar Actividades</button>
     
 	<?= $form->field($model, 'descripcion_actividad')->textInput() ?>
 
@@ -82,7 +93,7 @@ if( $guardado ){
 
     <?= $form->field($model, 'quienes')->textInput() ?>
 
-    <?= $form->field($model, 'numero_participantes')->textInput() ?>
+    <?= $form->field($model, 'numero_participantes')->textInput(['type' => 'number']) ?>
 
     <?= $form->field($model, 'duracion_actividad')->textInput() ?>
 
