@@ -23,6 +23,7 @@ use yii\grid\GridView;
 use fedemotta\datatables\DataTables;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
+use app\models\Sedes;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\PerfilesPersonasInstitucionBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -30,6 +31,20 @@ use yii\helpers\Url;
 $this->title = '';
 $nombre ="Perfiles Personas Instituciones";
 $this->params['breadcrumbs'][] = $nombre;
+
+if( @$_GET['guardado'])
+{
+	$this->registerJs( "
+	  swal({
+			text: 'Registro guardado',
+			icon: 'success',
+			button: 'Salir',
+		});" 
+	);
+}
+
+
+
 ?>
 <?php
 		Modal::Begin([
@@ -149,7 +164,15 @@ $this->params['breadcrumbs'][] = $nombre;
 					return @$result[0]['descripcion'];
 				},
 				
-			], 
+			],
+			[
+			'attribute'=>'id_sede',
+			'value' => function( $model )
+				{
+					$nombreSedes = Sedes::findOne($model->id_sede);
+					return $nombreSedes ? $nombreSedes->descripcion : '';  
+				}, //para buscar por el nombre
+			],
             // 'estado',
 
            [

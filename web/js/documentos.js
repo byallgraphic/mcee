@@ -1,5 +1,44 @@
 var consecutivo = 1;
 
+function removeFile( cmp,  identificador ){
+	
+	
+	Swal.fire({
+		title: 'Está seguro de que desea borrar el archivo?',
+		text: "Una vez borrado el archivo no podrá recuperarlo",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Aceptar',
+		cancelButtonText: 'Cancelar',
+	}).then((result) => {
+		if( result.value )
+		{
+			$.post(
+				"index.php?r=ec-datos-basicos/remove-file",
+				{
+					id : identificador,
+				},
+				function( data ){
+					
+					if( data.error == 1 )
+					{
+						$( cmp ).parent().parent().css({ display: 'none' });
+						
+						Swal.fire(
+						  'Deleted!',
+						  'Your file has been deleted.',
+						  'success'
+						)
+					}
+				},
+				"json"
+			);
+		}
+	});
+}
+
 function agregarCampos(){
 	
 	$.post( 

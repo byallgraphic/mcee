@@ -117,7 +117,30 @@ $this->params['breadcrumbs'][] = $this->title;
 							},
 						],*/
 					],
-				]) ?>
+				]); ?>
+				
+				<?php 
+					if( count($rutasArchivos) > 0 ){
+						
+						echo "<div>";
+						echo "<div class='text-center'><h4>Archivos cargados previamente</h4></div>";
+				
+						foreach( $rutasArchivos as $key => $archivo )
+						{
+							echo "<div style='display:flex;align-items:stretch;flex-direction: row;justify-content: center;'>";
+							
+							$content = Html::a( substr( $archivo->ruta_archivo, -20 ), $archivo->ruta_archivo ).'<br>';
+							
+							echo Html::tag( 'div', $content, [ 'style' => 'margin:0 10px' ] );
+							
+							echo "</div>";
+						}
+						
+						echo "</div>";
+					}
+				?>
+			
+				
 			
 			</div>
 			

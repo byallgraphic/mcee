@@ -1,6 +1,10 @@
 <?php
 /**********
 Modificación: 
+Fecha: 02-04-2019
+Desarrollador: Edwin Molina G
+Descripción: - Se permite guardar más de un archivo en la edición y eliminarlo
+---------------------------------------
 Fecha: 16-01-2019
 Desarrollador: Edwin Molina G
 Descripción: - Se modfica la vista
@@ -48,6 +52,8 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 
+use yii\helpers\Json;
+
 /**
  * EcDatosBasicosController implements the CRUD actions for EcDatosBasicos model.
  */
@@ -67,6 +73,18 @@ class EcDatosBasicosController extends Controller
             ],
         ];
     }
+	
+	public function actionRemoveFile()
+	{	
+		$model	= EcVerificacion::findOne( Yii::$app->request->post()['id'] );
+		$model->estado = 2;
+		
+		$model->save(false);
+		
+		$data = [ 'error' => 1 ];
+		
+		echo  Json::encode( $data );
+	}
 
     /**
      * Lists all EcDatosBasicos models.
@@ -118,13 +136,19 @@ class EcDatosBasicosController extends Controller
         $modelVerificacion	= EcVerificacion::findOne(['id_planeacion' => $modelPlaneacion->id ]);
         $modelReportes		= EcReportes::findOne(['id_planeacion' => $modelPlaneacion->id ]);
 		
+		$rutasArchivos		= EcVerificacion::find()
+									->where( 'id_planeacion='.$modelPlaneacion->id )
+									->andWhere( 'estado=1' )
+									->all();
+		
         return $this->render('view', [
             'model' 			=> $modelDatosBasico,
             'modelPlaneacion' 	=> $modelPlaneacion,
             'modelVerificacion' => $modelVerificacion,
             'modelReportes' 	=> $modelReportes,
-            'guardado' 	=> $guardado,
-            'urlVolver' => $urlVolver,
+            'guardado' 			=> $guardado,
+            'urlVolver' 		=> $urlVolver,
+            'rutasArchivos' 	=> $rutasArchivos,
         ]);
     }
 
@@ -208,12 +232,12 @@ class EcDatosBasicosController extends Controller
 
                             $modelVerificacion = [];
 
-                            for( $i = 0; $i < sizeof(Yii::$app->request->post()); $i++ ){
+                            for( $i = 0; $i < sizeof(Yii::$app->request->post()); $i++ ){ echo $i."<br>"; 
                                 $modelVerificacion[] = new EcVerificacion();
                             }
 
-                            if (EcVerificacion::loadMultiple($modelVerificacion, Yii::$app->request->post() )) {
-                                
+                            if( EcVerificacion::loadMultiple($modelVerificacion, Yii::$app->request->post() ) )
+							{
                                 $idInstitucion 	= $_SESSION['instituciones'][0];
                                 $institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
 
@@ -225,69 +249,77 @@ class EcDatosBasicosController extends Controller
                                 
                                 $propiedades = array("ruta_archivo");
 
-                                    foreach( $modelVerificacion as $key => $model) 
-                                    {
-                                        $key +=1;
-                                    
-                                        //recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
-                                        //para posteriormente guardar en la base de datos
-                                        foreach($propiedades as $propiedad)
-                                        {
-                                            $arrayRutasFisicas = array();
-                                            // se guarda el archivo en file
-                                            
-                                            // se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
-                                            $files = UploadedFile::getInstances( $model, "[$key]$propiedad" );
-                                            
-                                            if( $files )
-                                            {
-                                                
-                                                //se suben todos los archivos uno por uno
-                                                foreach($files as $file)
-                                                {
-                                                    //se usan microsegundos para evitar un nombre de archivo repetido
-                                                    $t = microtime(true);
-                                                    $micro = sprintf("%06d",($t - floor($t)) * 1000000);
-                                                    $d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
-                                                    
-                                                    // Construyo la ruta completa del archivo a guardar
-                                                    $rutaFisicaDirectoriaUploads  = "../documentos/documentosPlaneacionReporteActividad/".$institucion."/".$file->baseName . $d->format("Y_m_d_H_i_s.u") . '.' . $file->extension;
-                                                    $save = $file->saveAs( $rutaFisicaDirectoriaUploads );
-                                                    //rutas de todos los archivos
-                                                    $arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
-                                                }
-                                                
-                                            
-                                                // asignacion de la ruta al campo de la db
-                                                $model->$propiedad = implode(",", $arrayRutasFisicas);
-                                                //var_dump($model->$propiedad);
-                                                //die();
-                                                // $model->$propiedad =  $var;
-                                                $arrayRutasFisicas = null;
-                                            }
-                                            else
-                                            {
-                                                echo "No hay archivo cargado";
-                                            }
-                                    }
-                                    
-                                    $model->id_planeacion = $modelPlaneacion->id;
-                                    $model->estado = 1;
-                                    $model->tipo_verificacion = isset($arrayVerificacion[$key]['tipo_verificacion']) ? $arrayVerificacion[$key]['tipo_verificacion'] : 0 ;
+								foreach( $modelVerificacion as $key => $model ) 
+								{
+									$key +=1;
+								
+									//recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
+									//para posteriormente guardar en la base de datos
+									foreach($propiedades as $propiedad)
+									{
+										$arrayRutasFisicas = array();
+										// se guarda el archivo en file
+										
+										// se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
+										$files = UploadedFile::getInstances( $model, "[$key]$propiedad" );
+										
+										if( $files )
+										{
+											//se suben todos los archivos uno por uno
+											foreach( $files as $file )
+											{
+												//se usan microsegundos para evitar un nombre de archivo repetido
+												$t = microtime(true);
+												$micro = sprintf("%06d",($t - floor($t)) * 1000000);
+												$d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
+												
+												// Construyo la ruta completa del archivo a guardar
+												$rutaFisicaDirectoriaUploads  = "../documentos/documentosPlaneacionReporteActividad/".$institucion."/".$file->baseName . $d->format("Y_m_d_H_i_s.u") . '.' . $file->extension;
+												$save = $file->saveAs( $rutaFisicaDirectoriaUploads );
+												//rutas de todos los archivos
+												$arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
+												
+												$modelVer = new EcVerificacion();
+												
+												$modelVer->id_planeacion = $modelPlaneacion->id;
+												$modelVer->estado = 1;
+												$modelVer->tipo_verificacion = isset($arrayVerificacion[$key]['tipo_verificacion']) ? $arrayVerificacion[$key]['tipo_verificacion'] : 0 ;
+												$modelVer->ruta_archivo = $rutaFisicaDirectoriaUploads;
+												$modelVer->save();
 
-                                    foreach( $modelVerificacion as $key => $model) 
-                                    {
-                                        if($model->ruta_archivo){
-                                           $model->save();
-                                        }								
-                                    }
-                                    
-                                }
+											}
+										
+											// asignacion de la ruta al campo de la db
+											$model->$propiedad = implode(",", $arrayRutasFisicas);
+											//var_dump($model->$propiedad);
+											//die();
+											// $model->$propiedad =  $var;
+											$arrayRutasFisicas = null;
+										}
+										else
+										{
+											echo "No hay archivo cargado";
+										}
+									}
+									
+									// $model->id_planeacion = $modelPlaneacion->id;
+									// $model->estado = 1;
+									// $model->tipo_verificacion = isset($arrayVerificacion[$key]['tipo_verificacion']) ? $arrayVerificacion[$key]['tipo_verificacion'] : 0 ;
 
-                            }
+									// foreach( $modelVerificacion as $key => $model) 
+									// {
+										// if($model->ruta_archivo)
+										// {
+										   // $model->save();
+										// }								
+									// }
+									
+								}
+
+							}
                         }
 
-                       if ($modelReportes->load(Yii::$app->request->post())){
+						if ($modelReportes->load(Yii::$app->request->post())){
                             $modelReportes->id_planeacion = $modelPlaneacion->id;
                             $modelReportes->estado = 1;
                             $modelReportes->save();
@@ -300,7 +332,7 @@ class EcDatosBasicosController extends Controller
         }
 
 
-        $modelVerificacion	= new EcVerificacion();
+        $modelVerificacion	= new EcVerificacion( [ 'scenario' => 'nuevoRegistro' ] );
         
 		$dataTiposVerificacion = Parametro::find()
 									->where( 'id_tipo_parametro=12' )
@@ -355,6 +387,11 @@ class EcDatosBasicosController extends Controller
         $modelPlaneacion	= EcPlaneacion::findOne(['id_datos_basicos' => $id ]);
         $modelVerificacion	= EcVerificacion::findOne(['id_planeacion' => $modelPlaneacion->id ]);
         $modelReportes		= EcReportes::findOne(['id_planeacion' => $modelPlaneacion->id ]);
+        
+		$rutasArchivos		= EcVerificacion::find()
+									->where( 'id_planeacion='.$modelPlaneacion->id )
+									->andWhere( 'estado=1' )
+									->all();
 		
 		switch( $modelDatosBasico->id_tipo_informe ){
 			
@@ -377,39 +414,131 @@ class EcDatosBasicosController extends Controller
 			if($modelPlaneacion->load(Yii::$app->request->post()) && $modelPlaneacion->save())
 			{
 				if($modelVerificacion->load(Yii::$app->request->post()) /*&& $modelVerificacion->save()*/ )
-				{	
-					$ruta_archivo = UploadedFile::getInstance( $modelVerificacion, "ruta_archivo" );
-            
-					if($ruta_archivo)
-					{
-						$institucion = Instituciones::findOne($_SESSION['instituciones'][0]);
-						$carpetaVerificacion = "../documentos/documentosPlaneacionReporteActividad/".$institucion->codigo_dane;
-						if (!file_exists($carpetaVerificacion)) {
-							mkdir($carpetaVerificacion, 0777, true);
+				{
+					if($arrayVerificacion = Yii::$app->request->post('EcVerificacion')){
+
+						$modelVerificacion = [];
+
+						for( $i = 0; $i < sizeof(Yii::$app->request->post()); $i++ ){ echo $i."<br>"; 
+							$modelVerificacion[] = new EcVerificacion();
 						}
-	
-						$rutaFisicaDirectoriaUploadVerificacion  = "../documentos/documentosPlaneacionReporteActividad/".$institucion->codigo_dane."/";
-						$rutaFisicaDirectoriaUploadVerificacion .= $ruta_archivo->baseName;
-						$rutaFisicaDirectoriaUploadVerificacion .= date( "_Y_m_d_His" ) . '.' . $ruta_archivo->extension;
-						$saveVerificacion = $ruta_archivo->saveAs( $rutaFisicaDirectoriaUploadVerificacion );
-	
-						if($saveVerificacion){
-							// $modelVerificacion->id_planeacion = $modelPlaneacion->id;
-							// $modelVerificacion->estado = 1;            
-							$modelVerificacion->ruta_archivo = $rutaFisicaDirectoriaUploadVerificacion;
-							
-							if( $modelVerificacion->save() )
+
+						if( EcVerificacion::loadMultiple($modelVerificacion, Yii::$app->request->post() ) )
+						{
+							$idInstitucion 	= $_SESSION['instituciones'][0];
+							$institucion = Instituciones::findOne( $idInstitucion )->codigo_dane;
+
+							$carpeta = "../documentos/documentosPlaneacionReporteActividad/".$institucion;
+							if (!file_exists($carpeta)) 
 							{
-								if($modelReportes->load(Yii::$app->request->post()) && $modelReportes->save())
+								mkdir($carpeta, 0777, true);
+							}
+							
+							$propiedades = array("ruta_archivo");
+
+							foreach( $modelVerificacion as $key => $model ) 
+							{
+								$key +=1;
+							
+								//recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
+								//para posteriormente guardar en la base de datos
+								foreach($propiedades as $propiedad)
 								{
-									return $this->redirect(['view', 'id' => $modelDatosBasico->id, 'guardado' => 1 , 'urlVolver' => $urlVolver ]);
+									$arrayRutasFisicas = array();
+									// se guarda el archivo en file
+									
+									// se obtiene la informacion del(los) archivo(s) nombre, tipo, etc.
+									$files = UploadedFile::getInstances( $model, "[$key]$propiedad" );
+									
+									if( $files )
+									{
+										//se suben todos los archivos uno por uno
+										foreach( $files as $file )
+										{
+											//se usan microsegundos para evitar un nombre de archivo repetido
+											$t = microtime(true);
+											$micro = sprintf("%06d",($t - floor($t)) * 1000000);
+											$d = new \DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
+											
+											// Construyo la ruta completa del archivo a guardar
+											$rutaFisicaDirectoriaUploads  = "../documentos/documentosPlaneacionReporteActividad/".$institucion."/".$file->baseName . $d->format("Y_m_d_H_i_s.u") . '.' . $file->extension;
+											$save = $file->saveAs( $rutaFisicaDirectoriaUploads );
+											//rutas de todos los archivos
+											$arrayRutasFisicas[] = $rutaFisicaDirectoriaUploads;
+											
+											$modelVer = new EcVerificacion();
+											
+											$modelVer->id_planeacion = $modelPlaneacion->id;
+											$modelVer->estado = 1;
+											$modelVer->tipo_verificacion = isset($arrayVerificacion[$key]['tipo_verificacion']) ? $arrayVerificacion[$key]['tipo_verificacion'] : 0 ;
+											$modelVer->ruta_archivo = $rutaFisicaDirectoriaUploads;
+											$modelVer->save();
+
+										}
+									
+										// asignacion de la ruta al campo de la db
+										$model->$propiedad = implode(",", $arrayRutasFisicas);
+										//var_dump($model->$propiedad);
+										//die();
+										// $model->$propiedad =  $var;
+										$arrayRutasFisicas = null;
+									}
+									else
+									{
+										echo "No hay archivo cargado";
+									}
 								}
 							}
 						}
 					}
+					
+					if ($modelReportes->load(Yii::$app->request->post())){
+						$modelReportes->id_planeacion = $modelPlaneacion->id;
+						$modelReportes->estado = 1;
+						$modelReportes->save();
+					}  
+
+					return $this->redirect(['view', 'id' => $modelDatosBasico->id, 'guardado' => 1 , 'urlVolver' => $urlVolver ]);
+					
+					
+					
+					
+					
+					
+					// $ruta_archivo = UploadedFile::getInstance( $modelVerificacion, "ruta_archivo" );
+            
+					// if($ruta_archivo)
+					// {
+						// $institucion = Instituciones::findOne($_SESSION['instituciones'][0]);
+						// $carpetaVerificacion = "../documentos/documentosPlaneacionReporteActividad/".$institucion->codigo_dane;
+						// if (!file_exists($carpetaVerificacion)) {
+							// mkdir($carpetaVerificacion, 0777, true);
+						// }
+	
+						// $rutaFisicaDirectoriaUploadVerificacion  = "../documentos/documentosPlaneacionReporteActividad/".$institucion->codigo_dane."/";
+						// $rutaFisicaDirectoriaUploadVerificacion .= $ruta_archivo->baseName;
+						// $rutaFisicaDirectoriaUploadVerificacion .= date( "_Y_m_d_His" ) . '.' . $ruta_archivo->extension;
+						// $saveVerificacion = $ruta_archivo->saveAs( $rutaFisicaDirectoriaUploadVerificacion );
+	
+						// if($saveVerificacion){
+							// // $modelVerificacion->id_planeacion = $modelPlaneacion->id;
+							// // $modelVerificacion->estado = 1;            
+							// $modelVerificacion->ruta_archivo = $rutaFisicaDirectoriaUploadVerificacion;
+							
+							// if( $modelVerificacion->save() )
+							// {
+								// if($modelReportes->load(Yii::$app->request->post()) && $modelReportes->save())
+								// {
+									// return $this->redirect(['view', 'id' => $modelDatosBasico->id, 'guardado' => 1 , 'urlVolver' => $urlVolver ]);
+								// }
+							// }
+						// }
+					// }
 				}
 			}
         }
+		
+		$modelVerificacion	= EcVerificacion::findOne(['id_planeacion' => $modelPlaneacion->id ]);
 		
 		$dataTiposVerificacion = Parametro::find()
 									->where( 'id_tipo_parametro=12' )
@@ -442,6 +571,7 @@ class EcDatosBasicosController extends Controller
             'sede'				=> $sede,
             'institucion'		=> $institucion,
             'urlVolver'			=> $urlVolver,
+            'rutasArchivos'		=> $rutasArchivos,
         ]);
     }
 

@@ -13,6 +13,7 @@ else
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use app\models\Estados;
+use app\models\Sedes;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\PerfilesPersonasInstitucion */
@@ -86,7 +87,15 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 					return $result[0]['descripcion'];
 				},
 				
-			], 
+			],
+			[
+			'attribute'=>'id_sede',
+			'value' => function( $model )
+				{
+					$nombreSedes = Sedes::findOne($model->id_sede);
+					return $nombreSedes ? $nombreSedes->descripcion : '';  
+				}, //para buscar por el nombre
+			],
 			'observaciones',
             [
 				'attribute' => 'estado',

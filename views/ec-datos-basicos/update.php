@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = "Actualizar";
             'sede'				=> $sede,
             'institucion'		=> $institucion,
             'urlVolver'			=> $urlVolver,
+            'rutasArchivos'		=> $rutasArchivos,
     ]) ?>
 
 </div>

@@ -65,7 +65,7 @@ class EcPlaneacion extends \yii\db\ActiveRecord
             'objetivo' => 'Objetivo',
             'responsable' => 'Responsable',
             'rol' => 'Rol',
-            'descripcion_actividad' => 'Descripcion actividad',
+            'descripcion_actividad' => 'Descripcipón actividad',
             'estado' => 'Estado',
             'estudiantes' => 'Estudiantes',
             'familias' => 'Familias',

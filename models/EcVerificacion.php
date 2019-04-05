@@ -29,7 +29,8 @@ class EcVerificacion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_planeacion', 'tipo_verificacion', 'estado','ruta_archivo'], 'required'],
+            [['id_planeacion', 'tipo_verificacion', 'estado'], 'required'],
+            [['ruta_archivo'], 'required', 'on' => ['nuevoRegistro'] ],
             [['id_planeacion', 'tipo_verificacion', 'estado'], 'default', 'value' => null],
             [['id_planeacion', 'tipo_verificacion', 'estado'], 'integer'],
             [['ruta_archivo'], 'string'],

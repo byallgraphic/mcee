@@ -56,6 +56,7 @@ $connection = Yii::$app->getDb();
 		'profesional'		=> $profesional,
 		'sede'				=> $sede,
 		'institucion'		=> $institucion,
+		'rutasArchivos'		=> [],
     ]) ?>
 
 </div>

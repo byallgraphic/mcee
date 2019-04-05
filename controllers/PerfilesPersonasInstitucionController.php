@@ -5,6 +5,16 @@ Fecha: 25-04-2018
 Desarrollador: Maria Viviana Rodas
 Descripción: controlador de perfiles persona institucion
 ---------------------------------------
+Modificaciones:
+Fecha: 02-04-2019
+Persona encargada: Oscar David Lopez Villa
+Cambios realizados: se muestran la sedes dependientes de la institucion seleccionada actionSedes()
+Cambios realizados: se muestran la personas dependientes del perfil seleccionado actionPersona()
+---------------------------------------
+Modificaciones:
+Fecha: 03-04-2019
+Persona encargada: Oscar David Lopez Villa
+Cambios realizados: se crean registros tantos como sedes se seleccionen
 */
 
 namespace app\controllers;
@@ -32,6 +42,7 @@ use app\models\Estados;
 use app\models\Perfiles;
 use app\models\PerfilesXPersonas;
 use app\models\Instituciones;
+use app\models\Sedes;
 use yii\helpers\Json;
 
 /**
@@ -119,9 +130,30 @@ class PerfilesPersonasInstitucionController extends Controller
         $modificar= false;
 		
 		$model = new PerfilesPersonasInstitucion();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) ) 
+		{
+			$DatosPost = Yii::$app->request->post();
+			@$idSedes = $DatosPost['PerfilesPersonasInstitucion']['id_sede'];
+			
+			if(isset($idSedes))
+			{
+			//se crean registro tantos como sedes se seleccionen
+				foreach($idSedes as $idSede)
+				{
+					$datos = $DatosPost;
+					$datos['PerfilesPersonasInstitucion']['id_sede'] = $idSede;
+					$model = new PerfilesPersonasInstitucion();
+					$model->load($datos);
+					$model->save();
+				}
+			}
+			else
+			{
+				$model->save();
+			}
+			
+			
+             return $this->redirect(['index','guardado' => 1]);
         }
 
         return $this->renderAjax('create', [
@@ -136,6 +168,59 @@ class PerfilesPersonasInstitucionController extends Controller
         ]);
     }
 
+	//sedes dependientes de la institucion seleccionada
+	public function actionSedes($idInstitucion)
+	{
+		
+		$sedesDatos = new Sedes();
+		$sedesDatos = $sedesDatos->find()->where("id_instituciones=$idInstitucion")->all();
+		$sedesDatos = ArrayHelper::map($sedesDatos,'id','descripcion');
+		
+		$sedes[] = "<option value=''>Seleccione...</option>";
+		
+		foreach ($sedesDatos as $key => $value)
+			$sedes[] = "<option value='$key'>$value</option>";
+		
+		echo json_encode( $sedes);
+	}
+	
+	 /****
+		obtener el nombre de la persona de acuerdo el id del perfil
+	****/
+	public function actionPersona($idPerfil)
+	{
+		$idInstitucion 	= $_SESSION['instituciones'][0];
+		/**
+		* Llenar nombre de los cooordinadores-eje
+		*/
+		//variable con la conexion a la base de datos 
+		$connection = Yii::$app->getDb();
+		$command = $connection->createCommand("
+			SELECT pp.id, concat(pe.nombres,' ',pe.apellidos) as nombres
+			FROM perfiles_x_personas as pp, 
+			personas as pe,
+			perfiles_x_personas_institucion ppi
+			WHERE pp.id_personas = pe.id
+			AND pp.id_perfiles = $idPerfil
+			AND ppi.id_perfiles_x_persona = pp.id
+			AND pe.estado = 1
+			
+		");
+		$result = $command->queryAll();
+		
+		$persona[] = "<option value=''>Seleccione...</option>";
+		
+		foreach ($result as $value)
+		{
+			$id = $value['id'];
+			$nombre = $value['nombres'];
+			$persona[] = "<option value='$id'>$nombre</option>";
+		}
+		
+		echo json_encode( $persona);
+	}
+		
+	
     /**
      * Updates an existing PerfilesPersonasInstitucion model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -204,7 +289,7 @@ class PerfilesPersonasInstitucionController extends Controller
 		$model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['index','guardado' => 1]);
         }
 
         return $this->renderAjax('update', [
