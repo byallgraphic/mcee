@@ -76,12 +76,19 @@ class RomReporteOperativoMisionalController extends Controller
      */
     public function actionIndex()
     {
+		$id_sede 		= $_SESSION['sede'][0];
+		$id_institucion	= $_SESSION['instituciones'][0];
+		
+		$institucion = Instituciones::findOne($id_institucion);
+		$sede 		 = Sedes::findOne($id_sede);
+		
         $dataProvider = new ActiveDataProvider([
             'query' => RomReporteOperativoMisional::find()->where(['estado' => 1]),
         ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'sede' 			=> $sede,
         ]);
     }
 
@@ -162,6 +169,9 @@ class RomReporteOperativoMisionalController extends Controller
      */
     public function actionCreate()
     {
+		$id_sede 		= $_SESSION['sede'][0];
+		$id_institucion	= $_SESSION['instituciones'][0];
+		
         $model = new RomReporteOperativoMisional();
 		
 		$idInstitucion = $_SESSION['instituciones'][0];
@@ -305,7 +315,7 @@ class RomReporteOperativoMisionalController extends Controller
 			}
 			
 		}	
-			$Sedes  = Sedes::find()->where( "id_instituciones = $idInstitucion" )->all();
+			$Sedes  = Sedes::find()->where( "id_instituciones = $idInstitucion" )->andWhere('id='.$id_sede)->all();
 			$sedes	= ArrayHelper::map( $Sedes, 'id', 'descripcion' );
 
 			return $this->renderAjax('create', [

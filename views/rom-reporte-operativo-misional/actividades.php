@@ -8,21 +8,7 @@ use yii\bootstrap\Collapse;
 use yii\helpers\Html;
 // $model = new IsaRomActividades();
 
-$this->registerJs("
-	$( document ).on('click', 'li', function() { 
-		var cont = $( this ).attr('href');
-		$( '[id^=content][id!='+cont.substr(1)+']', $(this).parent().parent() ).css({display:'none'}); 
-		$( $( this ).attr('href'), $(this).parent().parent() )
-			.toggle();
-		
-		var conClase = $( this ).hasClass( 'tab-selected' );
-		
-		$( 'li', $( this).parent() ).removeClass( 'tab-selected' );  
-		
-		if( !conClase )
-			$( this, $( this).parent() ).addClass( 'tab-selected' );  
-	});
-");
+
 
 $actividades= IsaRomActividades::find()->where( "estado=1 and id_rom_procesos=$idProceso" )->all();
 $actividades = ArrayHelper::map($actividades,'id','descripcion');

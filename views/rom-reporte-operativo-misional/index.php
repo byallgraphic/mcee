@@ -18,9 +18,31 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/documentos.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 
+$this->registerJs("
+	$( document ).on('click', 'li', function() { 
+		var cont = $( this ).attr('href');
+		$( '[id^=content][id!='+cont.substr(1)+']', $(this).parent().parent() ).css({display:'none'}); 
+		$( $( this ).attr('href'), $(this).parent().parent() )
+			.toggle();
+		
+		var conClase = $( this ).hasClass( 'tab-selected' );
+		
+		$( 'li', $( this).parent() ).removeClass( 'tab-selected' );  
+		
+		if( !conClase )
+			$( this, $( this).parent() ).addClass( 'tab-selected' );  
+	});
+");
+
 if( isset($guardado) && $guardado == 1 ){
 	echo Html::hiddenInput( 'guardadoFormulario', '1' );
 }
+
+if( !$sede ){
+	$this->registerJs( "$( cambiarSede ).click()" );
+	return;
+}
+
 ?>
 
 <h1></h1>
