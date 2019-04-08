@@ -11,7 +11,7 @@ Cambios realizados: validacion para cuando no tenga sede seleccionada
 
 $( document ).ready(function() {
     $("#id_cual").hide();
-
+    $("#id_quienes").hide();
 
     $('#id_operador input').on('change', function() {
         if ($(this).val() === '144'){
@@ -21,17 +21,18 @@ $( document ).ready(function() {
         }
     });
 
+    $('#id_poblacion').on('change', function() {
+        if ($(this).val() === '3'){
+            $("#id_quienes").show();
+        }else{
+            $("#id_quienes").hide();
+        }
+    });
+
     $( "#btnAgregarObj" ).click(function(){
-        var id_objetivo = $("#id_objetivo");
+        var id_objetivo = $(".objetivo");
 
         id_objetivo.after(id_objetivo.clone());
         id_objetivo.prop('disabled', true);
-    });
-
-    $( "#btnAgregarAct" ).click(function(){
-        var id_actividad = $("#id_actividad");
-
-        id_actividad.after(id_actividad.clone());
-        id_actividad.prop('disabled', true);
     });
 });
