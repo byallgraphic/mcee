@@ -8,7 +8,8 @@ use nex\chosen\Chosen;
 /* @var $this yii\web\View */
 /* @var $model app\models\GeSeguimientoOperador */
 /* @var $form yii\widgets\ActiveForm */
-$this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js');
+$this->registerCssFile('@web/css/GeSeguimientos.css');
+$this->registerJsFile('@web/js/jquery-3.3.1.min.js');
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 $this->registerJsFile('@web/js/GeSeguimientos.js');
 
@@ -40,7 +41,7 @@ if( $guardado ){
     <?= $form->field($model, 'id_operador')->radioList($nombresOperador, ['id' => 'id_operador']) ?>
 
     <div id="id_cual">
-        <?=  $form->field($model, 'cual_operador')->dropDownList(['semana 1','semana 2','semana 3','semana 4'], ['prompt' => 'Seleccione una semana' ]); ?>
+        <?=  $form->field($model, 'cual_operador')->textInput(); ?>
     </div>
 
     <?= $form->field($model, 'proyecto_reportar')->textInput() ?>
@@ -60,7 +61,7 @@ if( $guardado ){
 					]
 			]) ?>
 
-    <?= $form->field($model, 'semana_reporte')->textInput() ?>
+    <?=  $form->field($model, 'semana_reporte')->dropDownList(['semana 1','semana 2','semana 3','semana 4'], ['prompt' => 'Seleccione una semana' ]); ?>
 
     <?= $form->field($model, 'id_persona_responsable')->widget(
 				Chosen::className(), [
@@ -74,39 +75,7 @@ if( $guardado ){
 						'no_results_text'			=> 'Sin resultados para ',
 					]
 			]) ?>
-			
-	<h3 style='background-color:#ccc;padding:5px;'><?= "REPORTE DE ACTIVIDADES"?></h3>
 
-    <div id="id_objetivo">
-        <?= $form->field($model, 'id_objetivo')->textInput(['disabled' => false]) ?>
-    </div>
-    <button id="btnAgregarObj" type="button" class="btn btn-primary">Agregar Objetivo</button>
-
-    <div id="id_actividad">
-        <?= $form->field($model, 'id_actividad')->textInput(['disabled' => false]) ?>
-    </div>
-    <button id="btnAgregarAct" type="button" class="btn btn-primary">Agregar Actividades</button>
-    
-	<?= $form->field($model, 'descripcion_actividad')->textInput() ?>
-
-    <?= $form->field($model, 'poblacion_beneficiaria')->textInput() ?>
-
-    <?= $form->field($model, 'quienes')->textInput() ?>
-
-    <?= $form->field($model, 'numero_participantes')->textInput(['type' => 'number']) ?>
-
-    <?= $form->field($model, 'duracion_actividad')->textInput() ?>
-
-    <?= $form->field($model, 'logros_alcanzados')->textarea() ?>
-
-    <?= $form->field($model, 'dificultadades')->textarea() ?>
-	
-	<h3 style='background-color:#ccc;padding:5px;'><?= "Evidencias de soporte"?></h3>
-	
-	<p>Listado de participantes, registro visual, informe de actividades o acta</p>
-	
-	<?= $form->field($model, 'documentFile')->fileInput(['multiple' => true]) ?>
-	
 	<h3 style='background-color:#ccc;padding:5px;'><?= "Avances del proyecto"?></h3>
 	
     <?= $form->field($model, 'id_indicador')->radioList( $indicadores ) ?>
@@ -120,6 +89,34 @@ if( $guardado ){
     <?= $form->field($model, 'propuesta_dificultades')->textarea() ?>
 
     <?php /*$form->field($model, 'estado')->textInput() */ ?>
+
+    <h3 style='background-color:#ccc;padding:5px;'><?= "REPORTE DE ACTIVIDADES"?></h3>
+
+    <div class="objetivo">
+        <div id="id_objetivo" class="id_objetivo">
+            <?= $form->field($model, 'id_objetivo')->textInput(['disabled' => false]) ?>
+            <?= $form->field($model, 'id_actividad')->textInput(['disabled' => false]) ?>
+            <?= $form->field($model, 'descripcion_actividad')->textInput() ?>
+            <?= $form->field($model, 'poblacion_beneficiaria')->dropDownList(['docentes', 'estudiantes', 'directivos', 'otros'], ['prompt' => 'Seleccione una opcion', 'id' => 'id_poblacion']); ?>
+            <div id="id_quienes">
+                <?=  $form->field($model, 'quienes')->textInput(); ?>
+            </div>
+            <?= $form->field($model, 'numero_participantes')->textInput(['type' => 'number']) ?>
+            <?= $form->field($model, 'duracion_actividad')->textInput() ?>
+            <?= $form->field($model, 'logros_alcanzados')->textarea() ?>
+            <?= $form->field($model, 'dificultadades')->textarea() ?>
+        </div>
+
+        <div class="evidencia_actividades">
+            <h3 style='background-color:#ccc;padding:5px;'><?= "Evidencias de soporte"?></h3>
+            <p>Listado de participantes, registro visual, informe de actividades o acta</p>
+            <?= $form->field($model, 'documentFile')->fileInput(['multiple' => true, 'id' => "file-upload"]) ?>
+        </div>
+    </div>
+
+    <button id="btnAgregarObj" type="button" class="btn btn-primary">Agregar Actividades</button>
+    <br>
+    <br>
 
     <div class="form-group">
 	
