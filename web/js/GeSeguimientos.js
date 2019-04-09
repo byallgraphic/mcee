@@ -67,7 +67,7 @@ $( document ).ready(function() {
             id_ie: $('#geseguimientooperador-id_ie').val(),
             mes_reporte: $('#geseguimientooperador_mes_reporte_chosen').find('.chosen-results').find('.result-selected').data("option-array-index"),
             semana_reportada: $('#geseguimientooperador-semana_reporte').val(),
-            id_persona_responsable: $('#geseguimientooperador_id_persona_responsable_chosen').find('.chosen-results').find('.result-selected').data("option-array-index"),
+            id_persona_responsable: $('#geseguimientooperador-id_persona_responsable').val(),
             id_indicador: $('input:checked', '#geseguimientooperador-id_indicador').val(),
             avances_cumplimiento_cuantitativos: $('#geseguimientooperador-avances_cumplimiento_cuantitativos').val(),
             avances_cumplimiento_cualitativos: $('#geseguimientooperador-avances_cumplimiento_cualitativos').val(),

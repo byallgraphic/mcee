@@ -32,7 +32,7 @@ if( $guardado ){
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => ['store']]); ?>
 
-    <input id="id_tipo_seguimiento" value="<?= Yii::$app->request->get('idTipoSeguimiento') ?>">
+    <input type="hidden" id="id_tipo_seguimiento" value="<?= Yii::$app->request->get('idTipoSeguimiento') ?>">
 
     <?= $form->field($model, 'email')->textInput() ?>
 
@@ -63,26 +63,9 @@ if( $guardado ){
 
     <?=  $form->field($model, 'semana_reporte')->dropDownList(['semana 1','semana 2','semana 3','semana 4'], ['prompt' => 'Seleccione una semana' ]); ?>
 
-    <?= $form->field($model, 'id_persona_responsable')->widget(
-				Chosen::className(), [
-					'items' => $personas,
-					'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
-					'multiple' => false,
-					'placeholder' => 'Seleccione...',
-					'clientOptions' => [
-						'search_contains' => true,
-						'single_backstroke_delete' => false,
-						'no_results_text'			=> 'Sin resultados para ',
-					]
-			]) ?>
 
-    <?= Chosen::widget([
-        'name' => 'ChosenTest',
-        'value' => 3,
-        'items' => [1 => 'First item', 2 => 'Second item', 3 => 'Third item'],
+    <?=  $form->field($model, 'id_persona_responsable')->dropDownList($personas, ['prompt' => 'Seleccione una semana' ]); ?>
 
-        'placeholder' => 'Select',
-    ]);?>
 	<h3 style='background-color:#ccc;padding:5px;'><?= "Avances del proyecto"?></h3>
 
     <?= $form->field($model, 'id_indicador')->radioList( $indicadores ) ?>
