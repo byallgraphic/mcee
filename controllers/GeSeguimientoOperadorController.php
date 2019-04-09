@@ -87,54 +87,15 @@ class GeSeguimientoOperadorController extends Controller
      */
     public function actionCreate()
     {
-		$id_sede 		= $_SESSION['sede'][0];
 		$id_institucion	= $_SESSION['instituciones'][0];
-		
 		$guardado = false;
-		
-		$tipo_seguimiento = Yii::$app->request->get( 'idTipoSeguimiento' );
-		
         $model = new GeSeguimientoOperador();
-
-        if( $model->load(Yii::$app->request->post()) ){
-			
-			$model->id_tipo_seguimiento = $tipo_seguimiento;
-			$model->estado 				= 1;		//Siempre 1(activo)
-			
-			$model->documentFile = UploadedFile::getInstance( $model, 'documentFile' );
-			
-			if( $model->documentFile ) {
-				
-				//Si no existe la carpeta se crea
-				$carpeta = "../documentos/seguimientoOperador/";
-				if (!file_exists($carpeta)) {
-					mkdir($carpeta, 0777, true);
-				}
-				
-				//Construyo la ruta completa del archivo a guardar
-				$rutaFisicaDirectoriaUploads  = "../documentos/seguimientoOperador/";
-				$rutaFisicaDirectoriaUploads .= $model->documentFile->baseName;
-				$rutaFisicaDirectoriaUploads .= date( "_Y_m_d_His" ) . '.' . $model->documentFile->extension;
-				
-				$save = $model->documentFile->saveAs( $rutaFisicaDirectoriaUploads );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-				
-				$model->ruta_archivo = $rutaFisicaDirectoriaUploads;
-				
-				if( $model->save() ){
-					$guardado = true;
-					
-					// return $this->redirect(['index']);
-				}
-			}
-        }
-
 		$dataNombresOperador = Parametro::find()
 									->where( 'estado=1' )
 									->andWhere( 'id_tipo_parametro=37' )
 									->all();
 		
 		$nombresOperador = ArrayHelper::map( $dataNombresOperador, 'id', 'descripcion' );
-		
 		$mesReporte = [
 						1  => 'Enero',
 						2  => 'Febrero',
@@ -149,7 +110,6 @@ class GeSeguimientoOperadorController extends Controller
 						11 => 'Noviembre',
 						12 => 'Diciembre',
 					];
-					
 		$dataPersonas 		= Personas::find()
 								->select( "( nombres || ' ' || apellidos ) as nombres, personas.id" )
 								->innerJoin( 'perfiles_x_personas pp', 'pp.id_personas=personas.id' )
@@ -158,27 +118,19 @@ class GeSeguimientoOperadorController extends Controller
 								->where( 'personas.estado=1' )
 								->andWhere( 'id_institucion='.$id_institucion )
 								->all();
-		
 		$personas			= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
-		
 		$institucion 		= Instituciones::findOne( $id_institucion );
-		
 		$dataIndicadores	= GeIndicadores::find()
 								->where( 'estado=1' )
 								->all();
-		
 		$indicadores		= ArrayHelper::map( $dataIndicadores, 'id', 'descripcion' );
-		
 		$dataObjetivos	= GeObjetivos::find()
 								->where( 'estado=1' )
 								->all();
-		
 		$objetivos		= ArrayHelper::map( $dataObjetivos, 'id', 'descripcion' );
-		
 		$dataActividades	= GeActividades::find()
 								->where( 'estado=1' )
 								->all();
-		
 		$actividades		= ArrayHelper::map( $dataActividades, 'id', 'descripcion' );
 		
         return $this->render('create', [
@@ -192,6 +144,44 @@ class GeSeguimientoOperadorController extends Controller
             'actividades' 		=> $actividades,
             'guardado' 			=> $guardado,
         ]);
+    }
+
+    public function actionStore(){
+        $gs = new GeSeguimientoOperador();
+
+        $GeSeguimientoOperador = Yii::$app->request->post();
+
+        foreach ($GeSeguimientoOperador['reporte_actividades'] as $RepAct){
+            $gs->id_tipo_seguimiento = $GeSeguimientoOperador['id_tipo_seguimiento'];
+            $gs->email = $GeSeguimientoOperador['email'];
+            $gs->id_operador = $GeSeguimientoOperador['id_operador'];
+            $gs->cual_operador = isset($GeSeguimientoOperador['cual_operador']) ? $GeSeguimientoOperador['cual_operador'] : '';
+            $gs->proyecto_reportar = $GeSeguimientoOperador['proyecto_reportar'];
+            $gs->id_ie = $GeSeguimientoOperador['id_ie'];
+            $gs->mes_reporte = $GeSeguimientoOperador['mes_reporte'];
+            $gs->semana_reporte = $GeSeguimientoOperador['semana_reportada'];
+            $gs->id_persona_responsable = $GeSeguimientoOperador['id_persona_responsable'];
+            $gs->avances_cumplimiento_cuantitativos = $GeSeguimientoOperador['avances_cumplimiento_cuantitativos'];
+            $gs->avances_cumplimiento_cualitativos = $GeSeguimientoOperador['avances_cumplimiento_cualitativos'];
+            $gs->dificultades = $GeSeguimientoOperador['dificultades'];
+            $gs->propuesta_dificultades = $GeSeguimientoOperador['propuesta_dificultades'];
+            $gs->id_indicador =  $GeSeguimientoOperador['id_indicador'];
+            $gs->estado = 1;
+
+            $gs->id_objetivo = $RepAct['id_objetivo'];
+            $gs->id_actividad = $RepAct['id_actividad'];
+            $gs->descripcion_actividad = $RepAct['descripcion_actividad'];
+            $gs->numero_participantes = $RepAct['numero_participantes'];
+            $gs->duracion_actividad = $RepAct['duracion_actividad'];
+            $gs->logros_alcanzados = $RepAct['logros_alcanzados'];
+            $gs->dificultadades = $RepAct['dificultadades'];
+
+            $gs->save();
+            
+            Yii::$app->session->setFlash('ok');
+            return $this->redirect(['create']);
+        }
+
     }
 
     /**

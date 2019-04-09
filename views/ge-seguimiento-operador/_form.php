@@ -30,12 +30,12 @@ if( $guardado ){
 
 <div class="ge-seguimiento-operador-form">
 
-    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => ['store']]); ?>
 
-    <?php /* $form->field($model, 'id_tipo_seguimiento')->textInput() */ ?>
+    <input id="id_tipo_seguimiento" value="<?= Yii::$app->request->get('idTipoSeguimiento') ?>">
 
     <?= $form->field($model, 'email')->textInput() ?>
-	
+
 	<h3 style='background-color:#ccc;padding:5px;'><?= "DATOS GENERALES"?></h3>
 
     <?= $form->field($model, 'id_operador')->radioList($nombresOperador, ['id' => 'id_operador']) ?>
@@ -76,8 +76,15 @@ if( $guardado ){
 					]
 			]) ?>
 
+    <?= Chosen::widget([
+        'name' => 'ChosenTest',
+        'value' => 3,
+        'items' => [1 => 'First item', 2 => 'Second item', 3 => 'Third item'],
+
+        'placeholder' => 'Select',
+    ]);?>
 	<h3 style='background-color:#ccc;padding:5px;'><?= "Avances del proyecto"?></h3>
-	
+
     <?= $form->field($model, 'id_indicador')->radioList( $indicadores ) ?>
 
     <?= $form->field($model, 'avances_cumplimiento_cuantitativos')->textarea() ?>
@@ -92,19 +99,19 @@ if( $guardado ){
 
     <h3 style='background-color:#ccc;padding:5px;'><?= "REPORTE DE ACTIVIDADES"?></h3>
 
-    <div class="objetivo">
-        <div id="id_objetivo" class="id_objetivo">
-            <?= $form->field($model, 'id_objetivo')->textInput(['disabled' => false]) ?>
-            <?= $form->field($model, 'id_actividad')->textInput(['disabled' => false]) ?>
-            <?= $form->field($model, 'descripcion_actividad')->textInput() ?>
-            <?= $form->field($model, 'poblacion_beneficiaria')->dropDownList(['docentes', 'estudiantes', 'directivos', 'otros'], ['prompt' => 'Seleccione una opcion', 'id' => 'id_poblacion']); ?>
+    <div class="objetivo" id="objetivo-0">
+        <div id="" class="id_objetivo">
+            <?= $form->field($model, 'id_objetivo')->textInput(['disabled' => false, 'id' => 'id_objetivo']) ?>
+            <?= $form->field($model, 'id_actividad')->textInput(['disabled' => false, 'id' => 'id_actividad']) ?>
+            <?= $form->field($model, 'descripcion_actividad')->textInput(['id' => 'descripcion_actividad']) ?>
+            <?= $form->field($model, 'poblacion_beneficiaria')->dropDownList(['docentes', 'estudiantes', 'directivos', 'otros'], ['prompt' => 'Seleccione una opcion', 'id' => 'poblacion_beneficiaria']); ?>
             <div id="id_quienes">
-                <?=  $form->field($model, 'quienes')->textInput(); ?>
+                <?=  $form->field($model, 'quienes')->textInput(['id' => 'quienes']); ?>
             </div>
-            <?= $form->field($model, 'numero_participantes')->textInput(['type' => 'number']) ?>
-            <?= $form->field($model, 'duracion_actividad')->textInput() ?>
-            <?= $form->field($model, 'logros_alcanzados')->textarea() ?>
-            <?= $form->field($model, 'dificultadades')->textarea() ?>
+            <?= $form->field($model, 'numero_participantes')->textInput(['type' => 'number', 'id' => 'numero_participantes']) ?>
+            <?= $form->field($model, 'duracion_actividad')->textInput(['id' => 'duracion_actividad']) ?>
+            <?= $form->field($model, 'logros_alcanzados')->textarea(['id' => 'logros_alcanzados']) ?>
+            <?= $form->field($model, 'dificultadades')->textarea(['id' => 'dificultadades']) ?>
         </div>
 
         <div class="evidencia_actividades">
@@ -114,16 +121,15 @@ if( $guardado ){
         </div>
     </div>
 
-    <button id="btnAgregarObj" type="button" class="btn btn-primary">Agregar Actividades</button>
+    <button id="btnAgregarObj" type="button" class="btn btn-primary" value="0">Agregar Actividades</button>
     <br>
     <br>
-
     <div class="form-group">
-	
+
         <?php if ( !$guardado ) : ?>
-		
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
-        
+
+        <?= Html::button('Guardar', ['class' => 'btn btn-success',  'id' => 'save_form']) ?>
+
 		<?php endif ?>
     </div>
 
