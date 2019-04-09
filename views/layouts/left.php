@@ -161,6 +161,7 @@
 													['label' => 'Infraestructra', 'icon' => 'circle-o', 'url' => '#'],
 													['label' => 'Estrategia Adecuación', 'icon' => 'circle-o', 'url' => '#'],
 													['label' => 'Seguimiento', 'icon' => 'circle-o', 'url' => ['estrategia-embellecimiento-espacios/index']],
+													['label' => 'Permisos módulos', 'icon' => 'circle-o', 'url' => ['permisos/index']],
 												],
 											],
 											['label' => 'Gestión Comunitaria',

@@ -48,7 +48,7 @@ class IsaEvidenciasRom extends \yii\db\ActiveRecord
             [['id_rom_actividad', 'cantidad', 'estado', 'id_reporte_operativo_misional'], 'integer'],
             [['actas','reportes', 'listados', 'plan_trabajo', 'formato_seguimiento', 'formato_evaluacion', 'fotografias', 'vidoes', 'otros_productos', 'archivos_enviados_entregados'], 'string'],
             [['fecha_entrega_envio'], 'safe'],
-			[['archivo'], 'file', 'maxSize' => 0, 'maxFiles' => 0 ],
+			[['archivo'], 'file', 'maxSize' => null, 'maxFiles' => null ],
             [['id_reporte_operativo_misional'], 'exist', 'skipOnError' => true, 'targetClass' => IsaReporteOperativoMisional::className(), 'targetAttribute' => ['id_reporte_operativo_misional' => 'id']],
             [['id_rom_actividad'], 'exist', 'skipOnError' => true, 'targetClass' => IsaRomActividades::className(), 'targetAttribute' => ['id_rom_actividad' => 'id']],
             [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Estados::className(), 'targetAttribute' => ['estado' => 'id']],
