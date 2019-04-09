@@ -19,6 +19,7 @@ use app\models\IsaIniciacionSencibilizacionArtistica;
 use app\models\Sedes;
 use app\models\Instituciones;
 use app\models\IsaProyectosGenerales;
+use app\models\IsaEquiposCampo;
 
 use yii\helpers\ArrayHelper;
 use app\models\IsaActividadesIsa;
@@ -83,12 +84,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		
 		$items = [];
 		
-		// $arraySiNo = 
-		// [
-			// 1 => "Si",
-			// 2 => "No"		
-		// ];
-
+		
 		foreach( $proyectos as $idProyecto => $titulo )
 		{
 			
@@ -102,6 +98,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 																'idProyecto' => $idProyecto,
 																'actividades_isa' => $actividades_isa,
 																'arraySiNo' => $this->arraySiNo,
+																'equiposCampo' => $this->obtenerEquiposCampo(),
 																
 															] 
 												),
@@ -223,12 +220,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) 
 		{
 			
-			// echo "<pre>"; print_r(Yii::$app->request->post()); echo "</pre>"; 
-			// die;
-			
-			
 			$connection = Yii::$app->getDb();
-			
 			
 			foreach (Yii::$app->request->post('IsaActividadesIsa') as $key => $actividades)
 			{
@@ -309,6 +301,14 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		$sedes = ArrayHelper::map($sedes,'id','descripcion');
 		
 		return $sedes;
+	}
+	
+	public function obtenerEquiposCampo()
+	{
+		$equiposCampo = new IsaEquiposCampo();
+		$equiposCampo = $equiposCampo->find()->orderby("id")->all();
+		$equiposCampo = ArrayHelper::map($equiposCampo,'id','descripcion');
+		return $equiposCampo;
 	}
 	
 	

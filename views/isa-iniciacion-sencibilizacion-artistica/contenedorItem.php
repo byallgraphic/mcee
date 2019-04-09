@@ -5,10 +5,13 @@
 /* @var $form yii\widgets\ActiveForm */
 
 use yii\helpers\Html;
+use yii\web\helpers\CHtml;
 use yii\bootstrap\ActiveForm;
 use dosamigos\datepicker\DatePicker;
 use app\models\IsaActividadesIsa;
 use yii\helpers\ArrayHelper;
+use nex\chosen\Chosen; 
+use yii\helpers\Url;
 
 //saber que se esta editando
 if( strpos($_GET['r'], 'update') > -1)
@@ -46,7 +49,43 @@ if( strpos($_GET['r'], 'update') > -1)
         ],
     ]);  ?> 
    <h3 style='background-color: #ccc;padding:5px;'>Equipo o equipos de intervención encargado(s) </h3>
-   <?= $form->field($actividades_isa, "[$idProceso]num_equipo_campo")->textInput() ?>
+   
+		
+		<?= $form->field($actividades_isa, "[$idProceso]num_equipo_campo")->widget(
+		Chosen::className(), [
+			'items' => $equiposCampo,
+			'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
+            'multiple' => false,
+			'placeholder' => 'Seleccione...',
+            'clientOptions' => [
+                'search_contains' => true,
+                'single_backstroke_delete' => false,
+            ],
+	]); ?>
+		
+	Agregar Equipo <a href='javascript:void(0);' name ='agregarCampo' id = 'agregarCampo' title='Agregar grupo'><img src='../web/images/agregar.png' height='30' width='30' /></a>
+		
+		  <p>
+        <?=  Html::button('Agregar',['value'=> "/mcee/web/index.php?r=isa-equipos-campo%2Fcreate" ,'class'=>'btn btn-success','id'=>'modalEquipo']) ?>
+		
+    </p>
+	
+	
+	<div id="modalCampo" class="fade modal" role="dialog" tabindex="-1">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modalCampo" aria-hidden="true">&times;</button>
+					<h3>Agregar Equipo Campo</h3>
+				</div>
+				<div class="modal-body">
+					<div id='modalContenido'></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
    <?= $form->field($actividades_isa, "[$idProceso]perfiles")->textInput() ?>
 
    <?= $form->field($actividades_isa, "[$idProceso]docente_orientador")->textInput() ?>

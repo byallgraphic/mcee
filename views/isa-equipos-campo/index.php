@@ -3,25 +3,18 @@
 use yii\helpers\Html;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
-use app\models\Instituciones;
-use app\models\Sedes;
+
 
 use fedemotta\datatables\DataTables;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
+/* @var $searchModel app\models\IsaEquiposCampoBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Iniciación Sensibilización Artistica';
+$this->title = 'Isa Equipos Campos';
 $this->params['breadcrumbs'][] = $this->title;
-
-$this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
-$this->registerJsFile(Yii::$app->request->baseUrl.'/js/documentos.js',['depends' => [\yii\web\JqueryAsset::className()]]);
-
-if( isset($guardado) && $guardado == 1 ){
-	echo Html::hiddenInput( 'guardadoFormulario', '1' );
-}
-?>
+?> 
 
 <h1></h1>
 	
@@ -30,7 +23,7 @@ if( isset($guardado) && $guardado == 1 ){
 <div class="modal-content">
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-<h3>Iniciación Sensibilización Artistica</h3>
+<h3>NombreCrud</h3>
 </div>
 <div class="modal-body">
 <div id='modalContent'></div>
@@ -39,9 +32,10 @@ if( isset($guardado) && $guardado == 1 ){
 </div>
 </div>
 </div>
-<div class="isa-iniciacion-sencibilizacion-artistica-index">
+<div class="isa-equipos-campo-index">
 
    
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?=  Html::button('Agregar',['value'=>Url::to(['create']),'class'=>'btn btn-success','id'=>'modalButton']) ?>
@@ -83,42 +77,13 @@ if( isset($guardado) && $guardado == 1 ){
 				],
 			],
 	],
-        'columns' => [
+           'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-           [
-			'attribute'=>'id_institucion',
-			'value' => function( $model )
-				{
-					$nombreInstituciones = Instituciones::findOne($model->id_institucion);
-					return $nombreInstituciones ? $nombreInstituciones->descripcion : '';  
-				}, //para buscar por el nombre
-			],
-            [
-			'attribute'=>'id_sede',
-			'value' => function( $model )
-				{
-					$nombreSedes = Sedes::findOne($model->id_sede);
-					return $nombreSedes ? $nombreSedes->descripcion : '';  
-				}, //para buscar por el nombre
-			],
-			[
-			'attribute'=>'caracterizacion_si_no',
-			'value' => function( $model )
-				{
-					$arraySiNo = 
-					[
-						0 => "",
-						1 => "Si",
-						2 => "No",
-					];
-					
-					return $arraySiNo[$model->caracterizacion_si_no];  
-				}, //para buscar por el nombre
-			],
-            'caracterizacion_nombre',
-            //'caracterizacion_fecha',
-            //'caracterizacion_justificacion',
-            //'estado',
+
+            'id',
+            'nombre',
+            'descripcion',
+            'cantidad',
 
             [
 			'class' => 'yii\grid\ActionColumn',

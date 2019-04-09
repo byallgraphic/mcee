@@ -9,7 +9,7 @@ use dosamigos\datepicker\DatePicker;
 /* @var $model app\models\IsaIniciacionSencibilizacionArtistica */
 /* @var $form yii\widgets\ActiveForm */
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
-
+$this->registerJs( file_get_contents( '../web/js/sensibilizacion.js' ) );
 
 ?>
 
@@ -35,9 +35,6 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
                 'format'    => 'yyyy-mm-dd',
             ],
     ]);  ?>
-
-	
-	
     <?= $form->field($model, 'caracterizacion_justificacion')->textInput() ?>
 	<?= $form->field($model, 'estado')->hiddenInput(['value'=> 1])->label(false) ?> 
 

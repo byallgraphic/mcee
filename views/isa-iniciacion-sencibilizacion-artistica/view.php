@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\Instituciones;
+use app\models\Sedes;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\IsaIniciacionSencibilizacionArtistica */
@@ -29,14 +31,39 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'id_institucion',
-            'id_sede',
-            'caracterizacion_si_no',
+           [
+			'attribute'=>'id_institucion',
+			'value' => function( $model )
+				{
+					$nombreInstituciones = Instituciones::findOne($model->id_institucion);
+					return $nombreInstituciones ? $nombreInstituciones->descripcion : '';  
+				}, //para buscar por el nombre
+			],
+            [
+			'attribute'=>'id_sede',
+			'value' => function( $model )
+				{
+					$nombreSedes = Sedes::findOne($model->id_sede);
+					return $nombreSedes ? $nombreSedes->descripcion : '';  
+				}, //para buscar por el nombre
+			],
+			[
+			'attribute'=>'caracterizacion_si_no',
+			'value' => function( $model )
+				{
+					$arraySiNo = 
+					[
+						0 => "",
+						1 => "Si",
+						2 => "No",
+					];
+					
+					return $arraySiNo[$model->caracterizacion_si_no];  
+				}, //para buscar por el nombre
+			],
             'caracterizacion_nombre',
             'caracterizacion_fecha',
             'caracterizacion_justificacion',
-            'estado',
         ],
     ]) ?>
 
