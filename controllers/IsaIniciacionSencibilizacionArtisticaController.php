@@ -33,6 +33,12 @@ use yii\bootstrap\Collapse;
  */
 class IsaIniciacionSencibilizacionArtisticaController extends Controller
 {
+	
+	public $arraySiNo = 
+		[
+			1 => "Si",
+			2 => "No"		
+		];
     /**
      * @inheritdoc
      */
@@ -52,15 +58,14 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
      * Lists all IsaIniciacionSencibilizacionArtistica models.
      * @return mixed
      */
-    public function actionIndex($guardado = 0)
+    public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => IsaIniciacionSencibilizacionArtistica::find(),
+            'query' => IsaIniciacionSencibilizacionArtistica::find()->andWhere("estado =1")->orderby("id"),
         ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'guardado' => $guardado,
         ]);
     }
 
@@ -77,6 +82,12 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		
 		
 		$items = [];
+		
+		// $arraySiNo = 
+		// [
+			// 1 => "Si",
+			// 2 => "No"		
+		// ];
 
 		foreach( $proyectos as $idProyecto => $titulo )
 		{
@@ -89,7 +100,8 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 																'form' => $form,
 																"model" => $model,
 																'idProyecto' => $idProyecto,
-																'actividades_isa' => $actividades_isa
+																'actividades_isa' => $actividades_isa,
+																'arraySiNo' => $this->arraySiNo,
 																
 															] 
 												),
@@ -97,9 +109,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 						];
 						
 		}
-
-	
-
 		echo Collapse::widget([
 			'items' => $items,
 		]);
@@ -142,67 +151,60 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 				{
 					$arrayDatos[$datos]['id_iniciacion_sencibilizacion_artistica']=$isa_id;
 				}
-			
-				// echo "<pre>"; print_r( $arrayDatos ); echo "</pre>"; 
-				// die;
-			
 				
-				// $columnNameArray = 
-				// [
-				// 'fecha_prevista_desde',
-				// 'fecha_prevista_hasta',
-				// 'num_equipo_campo',
-				// 'perfiles',
-				// 'docente_orientador',
-				// 'fases',
-				// 'num_encuentro',
-				// 'nombre_actividad',
-				// 'actividad_desarrollar',
-				// 'lugares_recorrer',
-				// 'tematicas_abordadas',
-				// 'objetivos_especificos',
-				// 'tiempo_previsto',
-				// 'productos',
-				// 'cotenido_si_no',
-				// 'contenido_nombre',
-				// 'contenido_fecha',
-				// 'cotenido_vigencia',
-				// 'contenido_justificacion',
-				// 'arcticulacion',
-				// 'cantidad_participantes',
-				// 'requerimientos_tecnicos',
-				// 'requerimientos_logisticos',
-				// 'destinatarios',
-				// 'fecha_entega_envio',
-				// 'observaciones_generales',
-				// 'nombre_diligencia',
-				// 'rol',
-				// 'fecha',
-				// 'id_procesos_generales',
-				// 'id_iniciacion_sencibilizacion_artistica'
-				// ];
-				// $insertCount = Yii::$app->db->createCommand()
-                   // ->batchInsert(
-                         // 'isa.actividades_isa', $columnNameArray, $arrayDatos
-                     // )
-					 // ->execute();
-
-                
+				$columnNameArray = 
+				[
+				'fecha_prevista_desde',
+				'fecha_prevista_hasta',
+				'num_equipo_campo',
+				'perfiles',
+				'docente_orientador',
+				'fases',
+				'num_encuentro',
+				'nombre_actividad',
+				'actividad_desarrollar',
+				'lugares_recorrer',
+				'tematicas_abordadas',
+				'objetivos_especificos',
+				'tiempo_previsto',
+				'productos',
+				'contenido_vigencia',
+				'contenido_si_no',
+				'contenido_nombre',
+				'contenido_fecha',
+				'contenido_justificacion',
+				'articulacion',
+				'cantidad_participantes',
+				'requerimientos_tecnicos',
+				'requerimientos_logisticos',
+				'destinatarios',
+				'fecha_entrega_envio',
+				'observaciones_generales',
+				'nombre_diligencia',
+				'rol',
+				'fecha',
+				'id_procesos_generales',
+				'id_iniciacion_sencibilizacion_artistica'
+				];
+				$insertCount = Yii::$app->db->createCommand()
+                   ->batchInsert(
+                         'isa.actividades_isa', $columnNameArray, $arrayDatos
+                     )
+					 ->execute();
             }
            
             return $this->redirect(['index', 'guardado' => 1]);
         }
 		
-		$idInstitucion = $_SESSION['instituciones'][0];
-		$institucion = Instituciones::findOne($idInstitucion);
-        $Sedes  = Sedes::find()->where( "id_instituciones = $idInstitucion" )->all();
-        $sedes	= ArrayHelper::map( $Sedes, 'id', 'descripcion' );
-
+		
+		
        
+	   
         return $this->renderAjax('create', [
             'model' => $model,
-            'sedes' => $sedes,
-            'institucion' => $institucion->descripcion,
+			'sede' => $this->obtenerSede(),
+			'institucion'=> $this->obtenerInstitucion(),
+			'arraySiNo' => $this->arraySiNo,
         ]);
     }
 
@@ -217,15 +219,99 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+		
+        if ($model->load(Yii::$app->request->post()) && $model->save()) 
+		{
+			
+			// echo "<pre>"; print_r(Yii::$app->request->post()); echo "</pre>"; 
+			// die;
+			
+			
+			$connection = Yii::$app->getDb();
+			
+			
+			foreach (Yii::$app->request->post('IsaActividadesIsa') as $key => $actividades)
+			{
+				
+				
+				$command = $connection->createCommand("
+				UPDATE 
+					isa.actividades_isa
+				SET 
+					fecha_prevista_desde		='".$actividades['fecha_prevista_desde']."', 
+					fecha_prevista_hasta		='".$actividades['fecha_prevista_hasta']."', 
+					num_equipo_campo			='".$actividades['num_equipo_campo']."', 
+					perfiles					='".$actividades['perfiles']."', 
+					docente_orientador			='".$actividades['docente_orientador']."',
+					fases						='".$actividades['fases']."', 
+					num_encuentro				='".$actividades['num_encuentro']."', 
+					nombre_actividad			='".$actividades['nombre_actividad']."', 
+					actividad_desarrollar		='".$actividades['actividad_desarrollar']."', 
+					lugares_recorrer			='".$actividades['lugares_recorrer']."', 
+					tematicas_abordadas			='".$actividades['tematicas_abordadas']."',
+					objetivos_especificos		='".$actividades['objetivos_especificos']."',
+					tiempo_previsto				='".$actividades['tiempo_previsto']."', 
+					productos					='".$actividades['productos']."', 
+					contenido_si_no				='".$actividades['contenido_si_no']."', 
+					contenido_nombre			='".$actividades['contenido_nombre']."', 
+					contenido_fecha				='".$actividades['contenido_fecha']."', 
+					contenido_vigencia			='".$actividades['contenido_vigencia']."',
+					contenido_justificacion		='".$actividades['contenido_justificacion']."', 
+					articulacion				='".$actividades['articulacion']."', 
+					cantidad_participantes		='".$actividades['cantidad_participantes']."', 
+					requerimientos_tecnicos		='".$actividades['requerimientos_tecnicos']."',
+					requerimientos_logisticos	='".$actividades['requerimientos_logisticos']."', 
+					destinatarios				='".$actividades['destinatarios']."',
+					fecha_entrega_envio			='".$actividades['fecha_entrega_envio']."', 
+					observaciones_generales		='".$actividades['observaciones_generales']."',
+					nombre_diligencia			='".$actividades['nombre_diligencia']."',
+					rol							='".$actividades['rol']."', 
+					fecha						='".$actividades['fecha']."'
+				WHERE 
+					id_iniciacion_sencibilizacion_artistica= $id 
+				AND 
+					id_procesos_generales=$key
+				;
+			");
+			$result = $command->queryAll();
+			
+			}
             return $this->redirect(['index']);
         }
-
+		
+		
         return $this->renderAjax('update', [
             'model' => $model,
+			'sede' => $this->obtenerSede(),
+			'institucion'=> $this->obtenerInstitucion(),
+			'arraySiNo' => $this->arraySiNo,
+			
         ]);
     }
 
+	
+	
+	public function obtenerInstitucion()
+	{
+		$idInstitucion = $_SESSION['instituciones'][0];
+		$instituciones = new Instituciones();
+		$instituciones = $instituciones->find()->where("id = $idInstitucion")->all();
+		$instituciones = ArrayHelper::map($instituciones,'id','descripcion');
+		
+		return $instituciones;
+	}
+	
+	public function obtenerSede()
+	{
+		$idSedes 		= $_SESSION['sede'][0];
+		$sedes = new Sedes();
+		$sedes = $sedes->find()->where("id =  $idSedes")->all();
+		$sedes = ArrayHelper::map($sedes,'id','descripcion');
+		
+		return $sedes;
+	}
+	
+	
     /**
      * Deletes an existing IsaIniciacionSencibilizacionArtistica model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -235,7 +321,9 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+		$model = $this->findModel($id);
+		$model->estado = 2;
+		$model->update(false);
 
         return $this->redirect(['index']);
     }
