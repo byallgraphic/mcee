@@ -76,9 +76,12 @@ class IsaEquiposCampoController extends Controller
     public function actionCreate()
     {
         $model = new IsaEquiposCampo();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+		
+		//solo guarda sin redireccion
+        if ($model->load(Yii::$app->request->post()) && $model->save()) 
+		{
+			
+            // return $this->redirect(['index']);
         }
 
         return $this->renderAjax('create', [

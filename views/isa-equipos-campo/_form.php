@@ -7,6 +7,9 @@ use yii\widgets\ActiveForm;
 /* @var $model app\models\IsaEquiposCampo */
 /* @var $form yii\widgets\ActiveForm */
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
+$this->registerJs( file_get_contents( '../web/js/equipo_campo.js' ) );
+
+
 ?>
 
 <div class="isa-equipos-campo-form">
@@ -19,8 +22,14 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 
     <?= $form->field($model, 'cantidad')->textInput() ?>
 
+	<input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" id ="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
     <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+		
+        <button type="button" class='btn btn-success' name ='BtnGuardar' id='BtnGuardar'>Guardar</button>
+        
+		<button type="button" class='btn btn-info' id='BtnCerrar'>Cerrar</button>
+	
+		<?php Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

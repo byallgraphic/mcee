@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\IsaEquiposCampo */
 
-$this->title = 'Agregar Isa Equipos Campo';
-$this->params['breadcrumbs'][] = ['label' => 'Isa Equipos Campos', 'url' => ['index']];
+$this->title = 'Agregar Equipos Campo';
+$this->params['breadcrumbs'][] = ['label' => 'Equipos Campos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = "Agregar";
 ?>
 <div class="isa-equipos-campo-create">

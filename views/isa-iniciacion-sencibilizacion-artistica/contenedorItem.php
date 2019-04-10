@@ -63,10 +63,10 @@ if( strpos($_GET['r'], 'update') > -1)
             ],
 	]); ?>
 		
-	Agregar Equipo <a href='javascript:void(0);' name ='agregarCampo' id = 'agregarCampo' title='Agregar grupo'><img src='../web/images/agregar.png' height='30' width='30' /></a>
+	
 		
 		  <p>
-        <?=  Html::button('Agregar',['value'=> "/mcee/web/index.php?r=isa-equipos-campo%2Fcreate" ,'class'=>'btn btn-success','id'=>'modalEquipo']) ?>
+        <?=  Html::button('Agregar Equipo Campo',['value'=> "/mcee/web/index.php?r=isa-equipos-campo%2Fcreate" ,'class'=>'btn btn-success','id'=>'modalEquipo']) ?>
 		
     </p>
 	
@@ -75,7 +75,6 @@ if( strpos($_GET['r'], 'update') > -1)
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modalCampo" aria-hidden="true">&times;</button>
 					<h3>Agregar Equipo Campo</h3>
 				</div>
 				<div class="modal-body">

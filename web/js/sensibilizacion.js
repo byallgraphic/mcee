@@ -4,5 +4,6 @@ $("#modalEquipo").click(function()
 	$("#modalCampo").modal('show')
 	.find("#modalContenido")
 	.load($(this).attr('value'));
-	return false;
+	
 });
+
