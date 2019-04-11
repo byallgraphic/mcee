@@ -13,7 +13,7 @@ $this->registerJsFile('@web/js/jquery-3.3.1.min.js');
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 $this->registerJsFile('@web/js/GeSeguimientos.js');
 
-if( $guardado ){
+if(Yii::$app->request->get('guardado')){
 	
 	$this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
     $this->registerJsFile(Yii::$app->request->baseUrl.'/js/GeSeguimientos.js');
@@ -107,12 +107,7 @@ if( $guardado ){
     <br>
     <br>
     <div class="form-group">
-
-        <?php if ( !$guardado ) : ?>
-
         <?= Html::button('Guardar', ['class' => 'btn btn-success',  'id' => 'save_form']) ?>
-
-		<?php endif ?>
     </div>
 
     <?php ActiveForm::end(); ?>
