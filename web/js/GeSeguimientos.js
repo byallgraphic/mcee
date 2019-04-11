@@ -10,6 +10,9 @@ Cambios realizados: validacion para cuando no tenga sede seleccionada
 **********/
 
 $( document ).ready(function() {
+    $('#modal-form').modal('show');
+
+
     $("#id_cual").hide();
     $("#id_quienes").hide();
 
@@ -48,8 +51,8 @@ $( document ).ready(function() {
         var reporte_actividades = [];
         $('.objetivo').each(function( index ) {
             reporte_actividades[index] = {
-                id_objetivo: $('#objetivo-'+index+' #id_objetivo').val(),
-                id_actividad: $('#objetivo-'+index+' #id_actividad').val(),
+                objetivo: $('#objetivo-'+index+' #id_objetivo').val(),
+                actividad: $('#objetivo-'+index+' #id_actividad').val(),
                 descripcion_actividad: $('#objetivo-'+index+' #descripcion_actividad').val(),
                 id_poblacion: $('#objetivo-'+index+' #poblacion_beneficiaria').val(),
                 numero_participantes: $('#objetivo-'+index+' #numero_participantes').val(),
@@ -68,7 +71,7 @@ $( document ).ready(function() {
             mes_reporte: $('#geseguimientooperador_mes_reporte_chosen').find('.chosen-results').find('.result-selected').data("option-array-index"),
             semana_reportada: $('#geseguimientooperador-semana_reporte').val(),
             id_persona_responsable: $('#geseguimientooperador-id_persona_responsable').val(),
-            id_indicador: $('input:checked', '#geseguimientooperador-id_indicador').val(),
+            indicador: $('#geseguimientooperador-indicador').val(),
             avances_cumplimiento_cuantitativos: $('#geseguimientooperador-avances_cumplimiento_cuantitativos').val(),
             avances_cumplimiento_cualitativos: $('#geseguimientooperador-avances_cumplimiento_cualitativos').val(),
             dificultades: $('#geseguimientooperador-dificultades').val(),

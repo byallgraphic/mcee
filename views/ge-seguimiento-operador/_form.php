@@ -27,7 +27,6 @@ if( $guardado ){
 	);
 }
 ?>
-
 <div class="ge-seguimiento-operador-form">
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => ['store']]); ?>
@@ -68,7 +67,7 @@ if( $guardado ){
 
 	<h3 style='background-color:#ccc;padding:5px;'><?= "Avances del proyecto"?></h3>
 
-    <?= $form->field($model, 'id_indicador')->radioList( $indicadores ) ?>
+    <?= $form->field($model, 'indicador')->textInput() ?>
 
     <?= $form->field($model, 'avances_cumplimiento_cuantitativos')->textarea() ?>
 
@@ -84,8 +83,8 @@ if( $guardado ){
 
     <div class="objetivo" id="objetivo-0">
         <div id="" class="id_objetivo">
-            <?= $form->field($model, 'id_objetivo')->textInput(['disabled' => false, 'id' => 'id_objetivo']) ?>
-            <?= $form->field($model, 'id_actividad')->textInput(['disabled' => false, 'id' => 'id_actividad']) ?>
+            <?= $form->field($model, 'objetivo')->textInput(['disabled' => false, 'id' => 'id_objetivo']) ?>
+            <?= $form->field($model, 'actividad')->textInput(['disabled' => false, 'id' => 'id_actividad']) ?>
             <?= $form->field($model, 'descripcion_actividad')->textInput(['id' => 'descripcion_actividad']) ?>
             <?= $form->field($model, 'poblacion_beneficiaria')->dropDownList(['docentes', 'estudiantes', 'directivos', 'otros'], ['prompt' => 'Seleccione una opcion', 'id' => 'poblacion_beneficiaria']); ?>
             <div id="id_quienes">

@@ -1,11 +1,11 @@
-.ge-seguimiento-operador-create{
+/*.ge-seguimiento-operador-create{
     display: grid;
     margin: 0px 15%;
     padding: 0 2%;
     color: black;
     border: 2px solid #46a3dc;
     box-shadow: 0 0 15px 3px rgb(70, 163, 220);
-}
+}*/
 .id_objetivo{
     display: grid;
     grid-template-areas: "a b c";

@@ -149,7 +149,6 @@ class GeSeguimientoOperadorController extends Controller
     public function actionStore(){
 
         $GeSeguimientoOperador = Yii::$app->request->post();
-
         foreach ($GeSeguimientoOperador['reporte_actividades'] as $RepAct){
             $gs = new GeSeguimientoOperador();
             $gs->id_tipo_seguimiento = $GeSeguimientoOperador['id_tipo_seguimiento'];
@@ -165,11 +164,11 @@ class GeSeguimientoOperadorController extends Controller
             $gs->avances_cumplimiento_cualitativos = $GeSeguimientoOperador['avances_cumplimiento_cualitativos'];
             $gs->dificultades = $GeSeguimientoOperador['dificultades'];
             $gs->propuesta_dificultades = $GeSeguimientoOperador['propuesta_dificultades'];
-            $gs->id_indicador =  $GeSeguimientoOperador['id_indicador'];
+            $gs->indicador =  $GeSeguimientoOperador['indicador'];
             $gs->estado = 1;
 
-            $gs->id_objetivo = $RepAct['id_objetivo'];
-            $gs->id_actividad = $RepAct['id_actividad'];
+            $gs->objetivo = $RepAct['objetivo'];
+            $gs->actividad = $RepAct['actividad'];
             $gs->descripcion_actividad = $RepAct['descripcion_actividad'];
             $gs->numero_participantes = $RepAct['numero_participantes'];
             $gs->duracion_actividad = $RepAct['duracion_actividad'];
@@ -182,7 +181,6 @@ class GeSeguimientoOperadorController extends Controller
 
         Yii::$app->session->setFlash('ok');
         return $this->redirect(['create', 'idTipoSeguimiento' => $gs->id_tipo_seguimiento]);
-
     }
 
     /**

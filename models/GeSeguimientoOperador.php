@@ -29,6 +29,9 @@ use Yii;
  * @property string $propuesta_dificultades
  * @property string $estado
  * @property string $id_operador
+ * @property string $indicador
+ * @property string $objetivo
+ * @property string $actividad
  */
 class GeSeguimientoOperador extends \yii\db\ActiveRecord
 {
@@ -48,7 +51,7 @@ class GeSeguimientoOperador extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            // [['id_tipo_seguimiento', 'id_ie', 'id_persona_responsable', 'estado', 'id_operador','id_indicador'], 'required'],
+            // [['id_tipo_seguimiento', 'id_ie', 'id_persona_responsable', 'estado', 'id_operador','indicador'], 'required'],
             [[
 				'id_tipo_seguimiento',
 				'email',
@@ -69,20 +72,20 @@ class GeSeguimientoOperador extends \yii\db\ActiveRecord
 				'dificultades',
 				'propuesta_dificultades',
 				'estado',
-				'id_indicador',
-				'id_objetivo',
-				'id_actividad',
+				'indicador',
+				'objetivo',
+				'actividad',
 				'documentFile',
 			], 'required' ],
             [['id_tipo_seguimiento', 'id_ie', 'id_persona_responsable', 'numero_participantes', 'estado', 'id_operador'], 'default', 'value' => null],
-            [['id_tipo_seguimiento', 'id_ie', 'id_persona_responsable', 'numero_participantes', 'estado', 'id_operador','id_indicador','id_objetivo','id_actividad'], 'integer'],
+            [['id_tipo_seguimiento', 'id_ie', 'id_persona_responsable', 'numero_participantes', 'estado', 'id_operador'], 'integer'],
             [['email', 'cual_operador', 'proyecto_reportar', 'mes_reporte', 'semana_reporte', 'descripcion_actividad', 'poblacion_beneficiaria', 'quienes', 'duracion_actividad', 'logros_alcanzados', 'dificultadades', 'avances_cumplimiento_cuantitativos', 'avances_cumplimiento_cualitativos', 'dificultades', 'propuesta_dificultades'], 'string'],
             [['id_tipo_seguimiento'], 'exist', 'skipOnError' => true, 'targetClass' => GeTipoSeguimiento::className(), 'targetAttribute' => ['id_tipo_seguimiento' => 'id']],
             [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Estados::className(), 'targetAttribute' => ['estado' => 'id']],
             [['id_ie'], 'exist', 'skipOnError' => true, 'targetClass' => Instituciones::className(), 'targetAttribute' => ['id_ie' => 'id']],
             [['id_operador'], 'exist', 'skipOnError' => true, 'targetClass' => Parametro::className(), 'targetAttribute' => ['id_operador' => 'id']],
             [['id_persona_responsable'], 'exist', 'skipOnError' => true, 'targetClass' => Personas::className(), 'targetAttribute' => ['id_persona_responsable' => 'id']],
-            [['id_indicador'], 'exist', 'skipOnError' => true, 'targetClass' => GeIndicadores::className(), 'targetAttribute' => ['id_indicador' => 'id']],
+            [['indicador'], 'exist', 'skipOnError' => true, 'targetClass' => GeIndicadores::className(), 'targetAttribute' => ['indicador' => 'id']],
             [['email'], 'email' ],
         ];
     }
@@ -115,9 +118,9 @@ class GeSeguimientoOperador extends \yii\db\ActiveRecord
             'dificultades' 						=> '10. Mencione las dificultades para el cumplimiento de los indicadores si las hay',
             'propuesta_dificultades' 			=> '11. Qué propuesta(s) plantea para superar esas dificultades presentadas',
             'estado' 							=> 'Estado',
-            'id_indicador'						=> '7. A qué indicador del proyecto le apuntó la actividad?',
-            'id_objetivo'						=> 'Objetivo al que reporta',
-            'id_actividad'						=> 'Actividad que reporta',
+            'indicador'						=> '7. A qué indicador del proyecto le apuntó la actividad?',
+            'objetivo'						=> 'Objetivo al que reporta',
+            'actividad'						=> 'Actividad que reporta',
             'ruta_archivo'						=> 'Ruta del archivo',
             'documentFile'						=> 'Agregar Archivo',
         ];
