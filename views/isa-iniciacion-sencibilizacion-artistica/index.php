@@ -24,7 +24,7 @@ if( isset($guardado) && $guardado == 1 ){
 ?>
 
 <h1></h1>
-	
+
 <div id="modal" class="fade modal" role="dialog" tabindex="-1">
 <div class="modal-dialog modal-lg">
 <div class="modal-content">
@@ -39,6 +39,7 @@ if( isset($guardado) && $guardado == 1 ){
 </div>
 </div>
 </div>
+
 <div class="isa-iniciacion-sencibilizacion-artistica-index">
 
    

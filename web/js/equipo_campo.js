@@ -49,7 +49,8 @@ $('#BtnCerrar').click(function()
 	$('#modalCampo').modal('hide');
 	$('body').removeClass('modal-open');
 	$('.modal-backdrop').remove();
-	$('.modal-open').css( "overflow: scroll");
+	$('body').css( "overflow: auto;");	
+	
 });
 	
 

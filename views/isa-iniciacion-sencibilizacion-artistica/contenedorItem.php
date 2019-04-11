@@ -25,6 +25,12 @@ if( strpos($_GET['r'], 'update') > -1)
 }
 ?>
 
+<style>
+.modal {
+  overflow-y:auto;
+}
+</style>
+
 
     <h3 style='background-color: #ccc;padding:5px;'>Fecha prevista para realizar la actividad</h3>
     <?= $form->field($actividades_isa, "[$idProceso]fecha_prevista_desde")->widget(
