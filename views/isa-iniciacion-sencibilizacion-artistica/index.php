@@ -24,7 +24,7 @@ if( isset($guardado) && $guardado == 1 ){
 ?>
 
 <h1></h1>
-	
+
 <div id="modal" class="fade modal" role="dialog" tabindex="-1">
 <div class="modal-dialog modal-lg">
 <div class="modal-content">
@@ -39,6 +39,7 @@ if( isset($guardado) && $guardado == 1 ){
 </div>
 </div>
 </div>
+
 <div class="isa-iniciacion-sencibilizacion-artistica-index">
 
    
@@ -101,7 +102,20 @@ if( isset($guardado) && $guardado == 1 ){
 					return $nombreSedes ? $nombreSedes->descripcion : '';  
 				}, //para buscar por el nombre
 			],
-            'caracterizacion_si_no',
+			[
+			'attribute'=>'caracterizacion_si_no',
+			'value' => function( $model )
+				{
+					$arraySiNo = 
+					[
+						0 => "",
+						1 => "Si",
+						2 => "No",
+					];
+					
+					return $arraySiNo[$model->caracterizacion_si_no];  
+				}, //para buscar por el nombre
+			],
             'caracterizacion_nombre',
             //'caracterizacion_fecha',
             //'caracterizacion_justificacion',

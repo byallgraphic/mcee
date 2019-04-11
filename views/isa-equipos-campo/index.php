@@ -7,27 +7,13 @@ use yii\helpers\Url;
 
 use fedemotta\datatables\DataTables;
 use yii\grid\GridView;
-use app\models\Modulos;
-use app\models\Perfiles;
-
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\PermisosBuscar */
+/* @var $searchModel app\models\IsaEquiposCampoBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Permisos';
+$this->title = 'Isa Equipos Campos';
 $this->params['breadcrumbs'][] = $this->title;
-if( @$_GET['guardado'])
-{
-	
-	$this->registerJs( "
-	  swal({
-			text: 'Registro guardado',
-			icon: 'success',
-			button: 'Salir',
-		});" 
-	);
-}
 ?> 
 
 <h1></h1>
@@ -37,7 +23,7 @@ if( @$_GET['guardado'])
 <div class="modal-content">
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-<h3>Permisos</h3>
+<h3>Equipo Campo</h3>
 </div>
 <div class="modal-body">
 <div id='modalContent'></div>
@@ -46,7 +32,7 @@ if( @$_GET['guardado'])
 </div>
 </div>
 </div>
-<div class="permisos-index">
+<div class="isa-equipos-campo-index">
 
    
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -93,91 +79,9 @@ if( @$_GET['guardado'])
 	],
            'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-			[
-				'attribute' => 'id_modulos',
-				'value'		=> function( $model )
-								{
-									$modulo = Modulos::findOne( $model->id_modulos );
-									return $modulo ? $modulo->descripcion: '';
-							   },
-			],
-			[
-				'attribute' => 'id_perfiles',
-				'value'		=> function( $model )
-								{
-									$perfil = Perfiles::findOne( $model->id_perfiles );
-									return $perfil ? $perfil->descripcion: '';
-							   },
-			],
-			[
-			'attribute'=>'eliminar',
-			'value' => function( $model )
-				{
-					
-					if($model->eliminar == true)
-					{
-						$resul = "Si";
-					}
-					else
-					{
-						$resul = "No";
-					}
-					
-					return $resul;  
-				}, //para buscar por el nombre
-			],
-			[
-			'attribute'=>'editar',
-			'value' => function( $model )
-				{
-					
-					if($model->editar == true)
-					{
-						$resul = "Si";
-					}
-					else
-					{
-						$resul = "No";
-					}
-					
-					return $resul;  
-				}, //para buscar por el nombre
-			],
-			[
-			'attribute'=>'listar',
-			'value' => function( $model )
-				{
-					
-					if($model->listar == true)
-					{
-						$resul = "Si";
-					}
-					else
-					{
-						$resul = "No";
-					}
-					
-					return $resul;  
-				}, //para buscar por el nombre
-			],
-			[
-			'attribute'=>'agregar',
-			'value' => function( $model )
-				{
-					
-					if($model->eliminar == true)
-					{
-						$resul = "Si";
-					}
-					else
-					{
-						$resul = "No";
-					}
-					
-					return $resul;  
-				}, //para buscar por el nombre
-			],
-            //'estado',
+            'nombre',
+            'descripcion',
+            'cantidad',
 
             [
 			'class' => 'yii\grid\ActionColumn',

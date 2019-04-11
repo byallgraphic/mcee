@@ -47,10 +47,74 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 									return $perfil ? $perfil->descripcion: '';
 							   },
 			],
-            'eliminar',
-            'editar',
-            'listar',
-            'agregar',
+            [
+			'attribute'=>'eliminar',
+			'value' => function( $model )
+				{
+					
+					if($model->eliminar == true)
+					{
+						$resul = "Si";
+					}
+					else
+					{
+						$resul = "No";
+					}
+					
+					return $resul;  
+				}, //para buscar por el nombre
+			],
+			[
+			'attribute'=>'editar',
+			'value' => function( $model )
+				{
+					
+					if($model->editar == true)
+					{
+						$resul = "Si";
+					}
+					else
+					{
+						$resul = "No";
+					}
+					
+					return $resul;  
+				}, //para buscar por el nombre
+			],
+			[
+			'attribute'=>'listar',
+			'value' => function( $model )
+				{
+					
+					if($model->listar == true)
+					{
+						$resul = "Si";
+					}
+					else
+					{
+						$resul = "No";
+					}
+					
+					return $resul;  
+				}, //para buscar por el nombre
+			],
+			[
+			'attribute'=>'agregar',
+			'value' => function( $model )
+				{
+					
+					if($model->eliminar == true)
+					{
+						$resul = "Si";
+					}
+					else
+					{
+						$resul = "No";
+					}
+					
+					return $resul;  
+				}, //para buscar por el nombre
+			],
         ],
     ]) ?>
 
