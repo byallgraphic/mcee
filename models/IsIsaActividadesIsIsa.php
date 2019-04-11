@@ -59,7 +59,7 @@ class IsIsaActividadesIsIsa extends \yii\db\ActiveRecord
             'docente' => 'Docente',
             'equipos' => 'Equipos',
             'logros' => 'Logros',
-            'variaciones_devilidades' => 'Variaciones Devilidades',
+            'variaciones_devilidades' => 'Variaciones Debilidades',
             'variaciones_fortalezas' => 'Variaciones Fortalezas',
             'retos' => 'Retos',
             'articulacion' => 'Articulación',
