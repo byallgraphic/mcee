@@ -35,9 +35,26 @@ $( "#BtnGuardar" ).click(function()
 		data: parametros,
 		success: function() 
 		{
+			//se quita todo del modal de equipos
 			$('#modalCampo').modal('hide');
 			$('body').removeClass('modal-open');
 			$('.modal-backdrop').remove();
+			
+			equipos = $('#isaactividadesisa-1-num_equipo_campo');
+			$.get(
+					"index.php?r=isa-equipos-campo/docentes-por-institucion",
+				{
+					institucion:	institucion.val(),
+				},
+				function( data )
+				{
+					equipos.html('');
+					equipos.val('');
+					equipos.trigger("chosen:updated");
+					
+				},
+			);
+			
 		}
 	})
 });

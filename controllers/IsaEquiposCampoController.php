@@ -123,6 +123,17 @@ class IsaEquiposCampoController extends Controller
         return $this->redirect(['index']);
     }
 
+	
+	public function actionEquipos()
+	{
+		$equipos = new IsaEquiposCampo();
+		$equipos = $equipos->find()->orderby("id")->all();
+		$equipos = ArrayHelper::map($equipos,'id','descripcion');
+		
+		
+		return $equipos;
+		
+	}
     /**
      * Finds the IsaEquiposCampo model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
