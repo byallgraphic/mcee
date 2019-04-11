@@ -77,9 +77,9 @@ if( strpos($_GET['r'], 'update') > -1)
     </p>
 	
 	
-	<div id="modalCampo" class="fade modal" role="dialog" tabindex="-1">
+	<div id="modalCampo" class="fade modal" role="dialog" tabindex="-1" >
 		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
+			<div class="modal-content" style="margin-top:138%; margin-left:0%">
 				<div class="modal-header">
 					<h3>Agregar Equipo Campo</h3>
 				</div>
