@@ -12,8 +12,8 @@ use app\models\IsaTipoCantidadPoblacionRom;
 
 // echo "<pre>"; print_r($datos); echo "</pre>"; 
 // die;
-$actividades_rom = new IsaActividadesRom();
-$evidencias_rom = new IsaEvidenciasRom();
+$actividades_rom 	= new IsaActividadesRom();
+$evidencias_rom 	= new IsaEvidenciasRom();
 $tipo_poblacion_rom = new IsaTipoCantidadPoblacionRom();
  
 ?>
@@ -36,12 +36,12 @@ $tipo_poblacion_rom = new IsaTipoCantidadPoblacionRom();
 	
 	
 	<?= $form->field($evidencias_rom, "[$idActividad]fecha_entrega_envio")->widget(
-	DatePicker::className(), [
-		// modify template for custom rendering
-		'template' => '{addon}{input}',
-		'language' => 'es',
-		'clientOptions' => [
-			'autoclose' => true,
-			'format'    => 'yyyy-mm-dd',
-	],
+		DatePicker::className(), [
+			// modify template for custom rendering
+			'template' => '{addon}{input}',
+			'language' => 'es',
+			'clientOptions' => [
+				'autoclose' => true,
+				'format'    => 'yyyy-mm-dd',
+		],
 	]);  ?>

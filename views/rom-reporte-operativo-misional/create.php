@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = "Agregar";
         'model' => $model,
         'sedes' => $sedes,
         'institucion' => $institucion,
-		'datos' => 0,
+		'datos' => $datos,
     ]) ?>
 
 </div>

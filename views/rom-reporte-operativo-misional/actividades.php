@@ -4,56 +4,45 @@
 use app\models\IsaRomActividades;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\Collapse;
+use yii\bootstrap\Tabs;
 
 use yii\helpers\Html;
-// $model = new IsaRomActividades();
 
-
-
-$actividades= IsaRomActividades::find()->where( "estado=1 and id_rom_procesos=$idProceso" )->all();
-$actividades = ArrayHelper::map($actividades,'id','descripcion');
+$colors = ["#cce5ff", "#d4edda", "#f8d7da", "#fff3cd", "#d1ecf1", "#d6d8d9", "#cce5ff"];
        
-	foreach( $actividades as $idActividad => $v )
-	{
-		$labels[] = $v;
-		$items[] = 	[
-						'label' 		=>  $v,
-						'content' 		=>  $this->render( 'formulario', 
-														[ 
-															'idActividad' => $idActividad,
-															'form' => $form,
-															'idProyecto' => $idProyecto,
-															'datos'=>$datos,
-															'estados'=>$estados,
-														] 
-											),
-						'contentOptions'=> []
-					];	
-		
-		
-	}
+foreach( $actividades as $idActividad => $v )
+{
+	$labels[] = $v['descripcion'];
+	$items[] = 	[
+					'label' 		=>  $v['descripcion'],
+					'content' 		=>  $this->render( 'formulario', 
+													[ 
+														'idActividad' 	=> $v['id'],
+														'form' 			=> $form,
+														'idProyecto'	=> $idProyecto,
+														// 'datos'			=> $datos,
+														'estados'		=> $estados,
+													] 
+										),
+					'headerOptions' => ['class' => 'tab1', 'style' => "background-color: $colors[$idActividad];"],
+					'contentOptions'=> []
+				];	
 	
-	// foreach( $labels as $key => $item ){
-		
-		echo Html::ul( $labels, ['item' => function($item, $index) {
-						return Html::tag(
-							'li',
-							$item,
-							['class' => 'post' , 'href' => '#content-'.$index, 'name' => 'actividad-'.$index ]
-						);
-					},
-					'class' => 'tabs',
-					] 
-				);
-	// }
 	
-	foreach( $items as $key => $item ){
-		
-		echo Html::tag( 'div', $item['content'], [ 'style' => 'display:none', 'id' => 'content-'.$key ] );
-	}
-				
+}
 
+echo Tabs::widget([
+    'items' => $items,
+]);
 
-// echo Collapse::widget([
-    // 'items' => $items, 
-// ]);
+// $this->registerJs("$('.tab1').removeClass('active');");
+
+$this->registerCss(".nav-tabs > li {
+						
+						width: 400px;
+						height: 80px;
+					}
+					
+					.row {
+						margin-left: 2px;
+					}");

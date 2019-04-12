@@ -16,6 +16,8 @@ Cambios realizados: Se reestructura completamente la funcion actionCreate,
 **********/
 
 
+
+
 namespace app\controllers;
 
 if(@$_SESSION['sesion']=="si")
@@ -41,6 +43,8 @@ use app\models\IsaTipoCantidadPoblacionRom;
 use app\models\IsaEvidenciasRom;
 use app\models\RomActividadesRom;
 use app\models\RomTipoCantidadPoblacionRom;
+use app\models\IsaRomProcesos;
+use app\models\IsaRomActividades;
 use yii\bootstrap\Collapse;
 use app\models\UploadForm;
 use yii\helpers\ArrayHelper;
@@ -109,33 +113,28 @@ class RomReporteOperativoMisionalController extends Controller
 		
 	//funcion que se encarga de crear el formulario dinamicamente sin contar los campos de guardado que estan en la vista formulario
     function actionFormulario($model, $form, $datos = 0 )
-	{
-		$proyectos = new IsaRomProyectos();
-		$proyectos = $proyectos->find()->orderby("id")->all();
-		$proyectos = ArrayHelper::map($proyectos,'id','descripcion');
-		
+	{	
 		$estados= $this->obtenerParametros(45);
 		// $ecProyectos = EcProyectos::find()->where( 'estado=1' )->orderby('id ASC')->all();
 		
 		
 		//acordeon de los proyecto 
-		foreach ($proyectos as $idProyecto => $v)
+		foreach ($datos as $idProyecto => $v)
 		{
 			
 			 $contenedores[] = 	
 				[
-					'label' 		=>  $v,
+					'label' 		=>  $v['descripcion'],
 					'content' 		=>  $this->renderPartial( 'procesos', 
 													[  
-                                                        'idProyecto' => $idProyecto,
-														'form' => $form,
-														//'modelProyectos' =>  $modelProyectos,
-														'datos'=>$datos,
-														'estados'=>$estados,
+                                                        'idProyecto'=> $v['id'],
+														'form' 		=> $form,
+														'procesos'	=>$v['procesos'],
+														'estados'	=>$estados,
 													] 
 										),
 					'contentOptions'=> ['class' => 'in'],
-					'options' => ['class' => ' panel-primary']
+					'options' 		=> ['class' => 'panel-primary']
 					
 				];
 				
@@ -144,8 +143,45 @@ class RomReporteOperativoMisionalController extends Controller
 		
 		 echo Collapse::widget([
 			'items' => $contenedores,
-			
 		]);
+		
+		
+		// $proyectos = new IsaRomProyectos();
+		// $proyectos = $proyectos->find()->orderby("id")->all();
+		// $proyectos = ArrayHelper::map($proyectos,'id','descripcion');
+		
+		// $estados= $this->obtenerParametros(45);
+		// // $ecProyectos = EcProyectos::find()->where( 'estado=1' )->orderby('id ASC')->all();
+		
+		
+		// //acordeon de los proyecto 
+		// foreach ($proyectos as $idProyecto => $v)
+		// {
+			
+			 // $contenedores[] = 	
+				// [
+					// 'label' 		=>  $v,
+					// 'content' 		=>  $this->renderPartial( 'procesos', 
+													// [  
+                                                        // 'idProyecto' => $idProyecto,
+														// 'form' => $form,
+														// //'modelProyectos' =>  $modelProyectos,
+														// 'datos'=>$datos,
+														// 'estados'=>$estados,
+													// ] 
+										// ),
+					// 'contentOptions'=> ['class' => 'in'],
+					// 'options' => ['class' => ' panel-primary']
+					
+				// ];
+				
+	
+		// }
+		
+		 // echo Collapse::widget([
+			// 'items' => $contenedores,
+			
+		// ]);
 		
 	}
 
@@ -246,9 +282,9 @@ class RomReporteOperativoMisionalController extends Controller
 						$propiedades = array( "actas", "reportes", "listados", "plan_trabajo", "formato_seguimiento", "formato_evaluacion", "fotografias", "vidoes", "otros_productos");
 						
 						//recorre el array $modeloEvidencias con cada modelo creado dinamicamente
-						foreach( $modeloEvidencias as $key => $model) 
+						foreach( $modeloEvidencias as $key => &$model) 
 						{
-							$key +=1;
+							$key+=1;
 							
 							//recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
 							//para posteriormente guardar en la base de datos
@@ -286,26 +322,29 @@ class RomReporteOperativoMisionalController extends Controller
 								{
 									echo "No hay archivo cargado";
 								}
-								
 							}
 							
 							//se deben asignar los valores ya que se crean los modelos dinamicamente, yii no los agrega
 							//los datos que vienen por post
 							$model->cantidad  						= $arrayDatosEvidencias[$key]['cantidad'];
 							$model->archivos_enviados_entregados 	= $arrayDatosEvidencias[$key]['archivos_enviados_entregados'];
-							$model->fecha_entrega_envio				= $arrayDatosEvidencias[$key]['fecha_entrega_envio'];
+							$model->fecha_entrega_envio			= $arrayDatosEvidencias[$key]['fecha_entrega_envio'];
 							$model->id_rom_actividad				= $arrayDatosEvidencias[$key]['id_rom_actividad'];
 							$model->id_reporte_operativo_misional 	= $rom_id;
 							//Siempre activo
 							$model->estado = 1;
 							
 							
-							//Guarda la informacion que tiene $model en la base de datos
-							foreach( $modeloEvidencias as $key => $model) 
-							{
-								$model->save();
-							}
 						}
+						
+						unset( $model );
+						
+						//Guarda la informacion que tiene $model en la base de datos
+						foreach( $modeloEvidencias as $key => $model) 
+						{
+							$model->save();
+						}
+						
 						return $this->redirect(['index', 'guardado' => true ]);
 							
 					} 
@@ -315,16 +354,102 @@ class RomReporteOperativoMisionalController extends Controller
 			}
 			
 		}	
-			$Sedes  = Sedes::find()->where( "id_instituciones = $idInstitucion" )->andWhere('id='.$id_sede)->all();
-			$sedes	= ArrayHelper::map( $Sedes, 'id', 'descripcion' );
-
-			return $this->renderAjax('create', [
-				'model' => $model,
-				'sedes' => $sedes,
-				'institucion'=> $this->obtenerInstitucion(),
-				
-			]);
+			
+		$Sedes  = Sedes::find()->where( "id_instituciones = $idInstitucion" )->andWhere('id='.$id_sede)->all();
+		$sedes	= ArrayHelper::map( $Sedes, 'id', 'descripcion' );
 		
+		
+		
+		/**
+		 * Un proyecto tiene uno o más procesos
+		 * Un procesos tiene una o más actividades
+		 * Por actividad es una evidencia y la evidencia es la vista formulario
+		 */
+		 
+		/**
+		
+			datos[] =>	[
+								id del proyecto
+								descripcion del proyecto
+								procesos[] 	= 	[
+													id
+													descripcion
+													actividades[] =	[
+																		id
+																		descripcion
+																		evidencia
+																	]
+												]
+							]
+			
+		 */
+		
+		$proyectos = new IsaRomProyectos();
+		$proyectos = $proyectos->find()->orderby("id")->all();
+		$proyectos = ArrayHelper::map($proyectos,'id','descripcion');
+		
+		$estados= $this->obtenerParametros(45);
+		
+		$datos = [];
+		
+		foreach( $proyectos as $idProyecto => $descripcionProyecto )
+		{
+			$proy = [
+						'id' 			=> $idProyecto,
+						'descripcion' 	=> $descripcionProyecto,
+						'procesos'		=> [],
+					];
+			
+			$dataProcesos = IsaRomProcesos::find()
+								->where( "estado=1 and id_rom_proyectos=$idProyecto" )
+								->all();
+								
+			$procesos = ArrayHelper::map($dataProcesos,'id','descripcion');
+			
+			foreach( $procesos as $idProceso => $descripcionProceso )
+			{
+				$procs = 	[
+								'id' 			=> $idProceso,
+								'descripcion' 	=> $descripcionProceso,
+								'actividades'	=> [],
+							];
+							
+				$actividades = IsaRomActividades::find()->where( "estado=1 and id_rom_procesos=$idProceso" )->all();
+				$actividades = ArrayHelper::map($actividades,'id','descripcion');
+				
+					   
+				foreach( $actividades as $idActividad => $descripcionActividad )
+				{
+					//Array de actividades
+					$act =  [
+								'id' 			=> $idActividad,
+								'descripcion' 	=> $descripcionActividad,
+								'evidencia'		=> new IsaEvidenciasRom(),
+							];
+					
+					//Adiciono la actividad al proceso
+					$procs[ 'actividades' ][] = $act;
+				}
+				
+				$proy['procesos'][] = $procs;
+			}
+			
+			$datos[] = $proy;
+		}
+	
+		// echo "<pre>"; var_dump( $datos ); echo "</pre>"; //exit('dddd');
+		
+		/***/
+		
+		
+		
+
+		return $this->renderAjax( 'create', [
+			'model' 		=> $model,
+			'sedes'			=> $sedes,
+			'institucion'	=> $this->obtenerInstitucion(),
+			'datos'			=> $datos,
+		]);
 	}
 
 	
@@ -426,10 +551,10 @@ class RomReporteOperativoMisionalController extends Controller
 		
 		
         return $this->renderAjax('update', [
-            'model' => $model,
-			'sedes' => $sedes,
-			'institucion'=> $this->obtenerInstitucion(),
-			'datos' => $datos,
+            'model' 		=> $model,
+			'sedes' 		=> $sedes,
+			'institucion'	=> $this->obtenerInstitucion(),
+			'datos' 		=> $datos,
         ]);
     }
 

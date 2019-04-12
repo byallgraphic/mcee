@@ -31,12 +31,26 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 	ul.tabs > li:nth-child(3){ background : #F9EBEA; }
 	ul.tabs > li:nth-child(4){ background : #FDF2E9; }
 	ul.tabs > li:nth-child(5){ background : #F2F3F4; }
+	
+	ul.tabs > li > a:hover{
+		color: #444;
+		background: #f7f7f7;
+	}
+	
+	ul.tabs > li > a:focus{
+		color: #555;
+		cursor: default;
+		background-color: #fff;
+		border: 1px solid #ddd;
+			border-bottom-color: rgb(221, 221, 221);
+		border-bottom-color: transparent;
+	}
    
-	.tab-selected{
+	/*.tab-selected{
 	   -webkit-box-shadow: 10px 10px 10px 0px rgba(0,0,0,1);
 		-moz-box-shadow: 10px 10px 10px 0px rgba(0,0,0,1);
 		box-shadow: 10px 10px 10px 0px rgba(0,0,0,1);
-	}
+	}*/
 </style>
 
 <div class="rom-reporte-operativo-misional-form">
