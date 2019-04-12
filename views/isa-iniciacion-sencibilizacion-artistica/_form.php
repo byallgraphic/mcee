@@ -73,10 +73,15 @@ $this->registerJs( file_get_contents( '../web/js/sensibilizacion.js' ) );
     <?php ActiveForm::end(); ?>
 
 	
-	<?=$this->registerCss(".nav-tabs > li 
+	<?=$this->registerCss("
+					.nav-tabs > li 
 					{
-						
 						width: 50%;
+						
+					}
+					a[href='#w3-tab0']
+					{
+						height: 82px;
 					}
 					"); ?>
 </div>
