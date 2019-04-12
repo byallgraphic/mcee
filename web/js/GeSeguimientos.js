@@ -10,8 +10,7 @@ Cambios realizados: validacion para cuando no tenga sede seleccionada
 **********/
 
 $( document ).ready(function() {
-    $('#modal-form').modal('show');
-
+    //$('#modal-form').modal('show');
 
     $("#id_cual").hide();
     $("#id_quienes").hide();
@@ -63,7 +62,7 @@ $( document ).ready(function() {
         });
 
         var data = {
-            id_tipo_seguimiento: $('#id_tipo_seguimiento').val(),
+            id_tipo_seguimiento: $(location).attr('href').split("&")[1].split("=")[1],
             email: $('#geseguimientooperador-email').val(),
             id_operador: $('input:checked', '#id_operador').val(),
             proyecto_reportar: $('#geseguimientooperador-proyecto_reportar').val(),
@@ -78,6 +77,13 @@ $( document ).ready(function() {
             propuesta_dificultades: $('#geseguimientooperador-propuesta_dificultades').val(),
             reporte_actividades: reporte_actividades
         };
-        $.post( "index.php?r=ge-seguimiento-operador%2Fstore", data );
+        $.ajax({
+            type:"POST", // la variable type guarda el tipo de la peticion GET,POST,..
+            url:"index.php?r=ge-seguimiento-operador%2Fstore", //url guarda la ruta hacia donde se hace la peticion
+            data:data, // data recive un objeto con la informacion que se enviara al servidor
+            success:function(datos){ //success es una funcion que se utiliza si el servidor retorna informacion
+                relo
+            }
+        })
     })
 });

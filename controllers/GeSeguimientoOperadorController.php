@@ -180,7 +180,7 @@ class GeSeguimientoOperadorController extends Controller
         }
 
         Yii::$app->session->setFlash('ok');
-        return $this->redirect(['create', 'idTipoSeguimiento' => $gs->id_tipo_seguimiento, 'guardado' => 1]);
+        return 'ok';
     }
 
     /**
