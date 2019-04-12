@@ -11,6 +11,7 @@ Cambios realizados: se guarda el formulario mediante ajax para evitar redireccio
 ----------------------------------------
 **********/
 
+//guarda la informacion cuando se de click en el boton
 $( "#BtnGuardar" ).click(function() 
 {
 	_csrf = $("#_csrf").val();
@@ -40,24 +41,28 @@ $( "#BtnGuardar" ).click(function()
 			$('body').removeClass('modal-open');
 			$('.modal-backdrop').remove();
 			
-			equipos = $('#isaactividadesisa-1-num_equipo_campo');
-			$.get(
-					"index.php?r=isa-equipos-campo/docentes-por-institucion",
-				{
-					institucion:	institucion.val(),
-				},
-				function( data )
-				{
+			//se llena nuevamente el chosen con la informacion
+			
+			$.get("index.php?r=isa-equipos-campo/equipos",
+			function( data )
+			{
+				
+				var i;
+				for (i = 1; i <= 4; i++) 
+				{ 
+					equipos = $('#isaactividadesisa-'+i+'-num_equipo_campo');
 					equipos.html('');
-					equipos.val('');
 					equipos.trigger("chosen:updated");
-					
-				},
-			);
+					equipos.append(data);
+					equipos.trigger("chosen:updated");
+				}
+				
+			});
 			
 		}
 	})
 });
+
 
 
 //cierra el modal en caso de no ser necesario
@@ -66,7 +71,7 @@ $('#BtnCerrar').click(function()
 	$('#modalCampo').modal('hide');
 	$('body').removeClass('modal-open');
 	$('.modal-backdrop').remove();
-	$('body').css( "overflow: auto;");	
+	$('body').css( "overflow: auto;");
 	
 });
 	

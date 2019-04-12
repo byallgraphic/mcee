@@ -19,6 +19,8 @@ use app\models\IsaEquiposCampoBuscar;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use	yii\helpers\Json;
+use yii\helpers\ArrayHelper;
 
 /**
  * IsaEquiposCampoController implements the CRUD actions for IsaEquiposCampo model.
@@ -108,6 +110,24 @@ class IsaEquiposCampoController extends Controller
             'model' => $model,
         ]);
     }
+	
+	
+	public function actionEquipos()
+	{
+		
+		$equiposCampo = new IsaEquiposCampo();
+		$equiposCampo = $equiposCampo->find()->orderby("id")->all();
+		$equiposCampo = ArrayHelper::map($equiposCampo,'id','nombre');
+		
+		$data[]="<option value=''>Seleccione..</option>";
+		foreach ($equiposCampo as $key => $value) {
+			$id 		 = $key;
+			$nombre = $value;
+			$data[]="<option value=$id>$nombre</option>";
+		}
+		
+		echo Json::encode($data);
+	}
 
     /**
      * Deletes an existing IsaEquiposCampo model.
@@ -123,18 +143,7 @@ class IsaEquiposCampoController extends Controller
         return $this->redirect(['index']);
     }
 
-	
-	public function actionEquipos()
-	{
-		$equipos = new IsaEquiposCampo();
-		$equipos = $equipos->find()->orderby("id")->all();
-		$equipos = ArrayHelper::map($equipos,'id','descripcion');
-		
-		
-		return $equipos;
-		
-	}
-    /**
+	 /**
      * Finds the IsaEquiposCampo model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id

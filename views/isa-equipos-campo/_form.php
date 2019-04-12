@@ -20,7 +20,7 @@ $this->registerJs( file_get_contents( '../web/js/equipo_campo.js' ) );
 
     <?= $form->field($model, 'descripcion')->textInput() ?>
 
-    <?= $form->field($model, 'cantidad')->textInput() ?>
+    <?= $form->field($model, 'cantidad')->textInput([ 'type' => 'number']) ?>
 
 	<input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" id ="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
     <div class="form-group">

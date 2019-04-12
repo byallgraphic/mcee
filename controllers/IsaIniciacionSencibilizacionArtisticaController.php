@@ -29,6 +29,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\bootstrap\Collapse;
 
+
 /**
  * IsaIniciacionSencibilizacionArtisticaController implements the CRUD actions for IsaIniciacionSencibilizacionArtistica model.
  */
@@ -307,7 +308,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 	{
 		$equiposCampo = new IsaEquiposCampo();
 		$equiposCampo = $equiposCampo->find()->orderby("id")->all();
-		$equiposCampo = ArrayHelper::map($equiposCampo,'id','descripcion');
+		$equiposCampo = ArrayHelper::map($equiposCampo,'id','nombre');
 		return $equiposCampo;
 	}
 	
