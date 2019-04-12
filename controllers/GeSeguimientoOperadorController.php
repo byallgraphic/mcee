@@ -133,7 +133,7 @@ class GeSeguimientoOperadorController extends Controller
 								->all();
 		$actividades		= ArrayHelper::map( $dataActividades, 'id', 'descripcion' );
 		
-        return $this->render('create', [
+        return $this->renderAjax('create', [
             'model' 			=> $model,
             'nombresOperador' 	=> $nombresOperador,
             'mesReporte' 		=> $mesReporte,
