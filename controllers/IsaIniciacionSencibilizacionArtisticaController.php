@@ -28,6 +28,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\bootstrap\Collapse;
+use yii\bootstrap\Tabs;
 
 
 /**
@@ -85,11 +86,11 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		
 		$items = [];
 		
-		
+		$arrayColores = array('#F2F3F4','#EBDEF0','#F9EBEA','#FDF2E9','#F6DDCC','LIGHTCYAN');	
+		$contador = 0;
 		foreach( $proyectos as $idProyecto => $titulo )
 		{
 			
-
 			$items[] = 	[
 							'label' 		=>  $titulo,
 							'content' 		=>  $this->renderAjax( 'faseItem', 
@@ -103,13 +104,21 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 																
 															] 
 												),
-							'contentOptions'=> []
+							'contentOptions'=> [],
+							'headerOptions' => ['style' => "background-color: $arrayColores[$contador]"],
 						];
 						
+			$contador++;
+						
 		}
-		echo Collapse::widget([
+		echo tabs::widget([
 			'items' => $items,
 		]);
+		
+		
+		// echo Collapse::widget([
+			// 'items' => $items,
+		// ]);
 		
 	}
 

@@ -83,13 +83,6 @@ if( strpos($_GET['r'], 'update') > -1)
 		
 		</div>
 	</div>
-		
-		
-		
-	
-		
-		  
-	
 	
 	<div id="modalCampo" class="fade modal" role="dialog" tabindex="-1" >
 		<div class="modal-dialog modal-md">
@@ -104,10 +97,6 @@ if( strpos($_GET['r'], 'update') > -1)
 		</div>
 	</div>
 	
-	
-   
-
-   
    <div class="row">
 	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]perfiles")->textInput() ?></div>
 	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]docente_orientador")->textInput() ?></div>
