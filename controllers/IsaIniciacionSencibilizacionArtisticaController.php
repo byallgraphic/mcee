@@ -149,12 +149,12 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 			//guardar en la tabla isa.actividades_isa
 			for( $i = 1; $i <= 4; $i++ )
 			{
-				$actividadesModel[] = new IsaActividadesIsa();
+				$actividadesModel[$i] = new IsaActividadesIsa();
 			}
 
 			if (IsaActividadesIsa::loadMultiple($actividadesModel, Yii::$app->request->post())) 
 			{
-				foreach ($actividadesModel as $actividad) 
+				foreach ($actividadesModel as $key => $actividad) 
 				{
 					$actividad->id_iniciacion_sencibilizacion_artistica = $model->id;
 					$actividad->save(false);
