@@ -160,9 +160,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 					$actividad->save(false);
 				}
 			}
-		
-			die;
-           
             return $this->redirect(['index', 'guardado' => 1]);
         }
 		
