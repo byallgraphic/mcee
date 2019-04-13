@@ -232,7 +232,8 @@ class EcDatosBasicosController extends Controller
 
                             $modelVerificacion = [];
 
-                            for( $i = 0; $i < sizeof(Yii::$app->request->post()); $i++ ){ echo $i."<br>"; 
+                            for( $i = 0; $i < sizeof(Yii::$app->request->post()); $i++ )
+							{
                                 $modelVerificacion[] = new EcVerificacion();
                             }
 

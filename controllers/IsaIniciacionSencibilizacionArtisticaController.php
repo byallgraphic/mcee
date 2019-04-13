@@ -144,69 +144,29 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
     {
         $model = new IsaIniciacionSencibilizacionArtistica();
 
-        if ($model->load(Yii::$app->request->post())) 
+        if ($model->load(Yii::$app->request->post()) && $model->save() ) 
 		{
-				
-            if($model->save())
+			//guardar en la tabla isa.actividades_isa
+			for( $i = 1; $i <= 4; $i++ )
 			{
-                $isa_id = $model->id;
-				$data = Yii::$app->request->post('IsaActividadesIsa');
-					
-				$arrayDatos = $data;
-				
-				foreach($data as $datos => $valores)
+				$actividadesModel[] = new IsaActividadesIsa();
+			}
+
+			if (IsaActividadesIsa::loadMultiple($actividadesModel, Yii::$app->request->post())) 
+			{
+				foreach ($actividadesModel as $actividad) 
 				{
-					$arrayDatos[$datos]['id_iniciacion_sencibilizacion_artistica']=$isa_id;
+					$actividad->id_iniciacion_sencibilizacion_artistica = $model->id;
+					$actividad->save(false);
 				}
-				
-				$columnNameArray = 
-				[
-				'fecha_prevista_desde',
-				'fecha_prevista_hasta',
-				'num_equipo_campo',
-				'perfiles',
-				'docente_orientador',
-				'fases',
-				'num_encuentro',
-				'nombre_actividad',
-				'actividad_desarrollar',
-				'lugares_recorrer',
-				'tematicas_abordadas',
-				'objetivos_especificos',
-				'tiempo_previsto',
-				'productos',
-				'contenido_vigencia',
-				'contenido_si_no',
-				'contenido_nombre',
-				'contenido_fecha',
-				'contenido_justificacion',
-				'articulacion',
-				'cantidad_participantes',
-				'requerimientos_tecnicos',
-				'requerimientos_logisticos',
-				'destinatarios',
-				'fecha_entrega_envio',
-				'observaciones_generales',
-				'nombre_diligencia',
-				'rol',
-				'fecha',
-				'id_procesos_generales',
-				'id_iniciacion_sencibilizacion_artistica'
-				];
-				$insertCount = Yii::$app->db->createCommand()
-                   ->batchInsert(
-                         'isa.actividades_isa', $columnNameArray, $arrayDatos
-                     )
-					 ->execute();
-            }
+			}
+		
+			die;
            
             return $this->redirect(['index', 'guardado' => 1]);
         }
 		
 		
-		
-       
-	   
         return $this->renderAjax('create', [
             'model' => $model,
 			'sede' => $this->obtenerSede(),
@@ -229,6 +189,8 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		
         if ($model->load(Yii::$app->request->post()) && $model->save()) 
 		{
+			
+			
 			
 			$connection = Yii::$app->getDb();
 			
