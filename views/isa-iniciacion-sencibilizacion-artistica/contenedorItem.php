@@ -105,7 +105,23 @@ if( strpos($_GET['r'], 'update') > -1)
 	
    <div class="row">
 	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]perfiles")->textInput() ?></div>
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]docente_orientador")->textInput() ?></div>
+	  <div class="col-md-6"><?php $form->field($actividades_isa, "[$idProceso]docente_orientador")->dropDownList($docenteOrientador) ?>
+	  
+	  <?= $form->field($actividades_isa, "[$idProceso]docente_orientador")->widget(
+						Chosen::className(), [
+							'items' => $docenteOrientador,
+							'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
+							'multiple' => true,
+							'clientOptions' => [
+								'search_contains' => true,
+								'single_backstroke_delete' => false,
+							],
+                            'placeholder' => 'Seleccione..',
+					])?></div>
+	  
+	  
+	  
+	  
 	</div>
 
 	<div class="row">
