@@ -37,11 +37,12 @@ yii.confirm = function (message, ok, cancel) {
 //Click del boton agregar y cargar contenido del formulario agregar en el modal
 $("#modalButton").click(function()
 {
-	$("#modal").modal('show')
-	.find("#modalContent")
-	.load($(this).attr('value'));
-	
+    $("#modal").modal('show')
+        .find("#modalContent")
+        .load($(this).attr('value'));
+
 });
+
 //Click del boton detalle y editar y cargar contenido del formulario agregar en el modal
 $("[name='detalle'],[name='actualizar']").click(function(e)
 {

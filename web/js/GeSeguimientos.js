@@ -12,78 +12,15 @@ Cambios realizados: validacion para cuando no tenga sede seleccionada
 $( document ).ready(function() {
     //$('#modal-form').modal('show');
 
-    $("#id_cual").hide();
-    $("#id_quienes").hide();
 
-    $('#id_operador input').on('change', function() {
-        if ($(this).val() === '144'){
-            $("#id_cual").show();
-        }else{
-            $("#id_cual").hide();
-        }
+    //Click del boton agregar y cargar contenido del formulario agregar en el modal
+    var btnModal = $('#modalButton-ge');
+    btnModal.click(function()
+    {
+        $("#modal-ge").modal('show')
+            .find("#modalContent")
+            .load($(this).attr('value'));
+
+        btnModal.val(btnModal.val().replace('id=1', 'id=2'))
     });
-
-    $('#id_poblacion').on('change', function() {
-        if ($(this).val() === '3'){
-            $("#id_quienes").show();
-        }else{
-            $("#id_quienes").hide();
-        }
-    });
-
-    var btnObj = $( "#btnAgregarObj" );
-    btnObj.click(function(){
-        var id_objetivo = $("#objetivo-0");
-        var valueBtn = parseInt(btnObj.val(), 'number') + 1;
-
-        id_objetivo.after(
-            id_objetivo
-                .clone()
-                .attr('id', 'objetivo-'+ (valueBtn))
-        );
-
-        $(this).val(valueBtn);
-        id_objetivo.prop('disabled', true);
-    });
-
-    $('#save_form').click(function () {
-        var reporte_actividades = [];
-        $('.objetivo').each(function( index ) {
-            reporte_actividades[index] = {
-                objetivo: $('#objetivo-'+index+' #id_objetivo').val(),
-                actividad: $('#objetivo-'+index+' #id_actividad').val(),
-                descripcion_actividad: $('#objetivo-'+index+' #descripcion_actividad').val(),
-                id_poblacion: $('#objetivo-'+index+' #poblacion_beneficiaria').val(),
-                numero_participantes: $('#objetivo-'+index+' #numero_participantes').val(),
-                duracion_actividad: $('#objetivo-'+index+' #duracion_actividad').val(),
-                logros_alcanzados: $('#objetivo-'+index+' #logros_alcanzados').val(),
-                dificultadades: $('#objetivo-'+index+' #dificultadades').val()
-            };
-        });
-
-        var data = {
-            id_tipo_seguimiento: $(location).attr('href').split("&")[1].split("=")[1],
-            email: $('#geseguimientooperador-email').val(),
-            id_operador: $('input:checked', '#id_operador').val(),
-            proyecto_reportar: $('#geseguimientooperador-proyecto_reportar').val(),
-            id_ie: $('#geseguimientooperador-id_ie').val(),
-            mes_reporte: $('#geseguimientooperador_mes_reporte_chosen').find('.chosen-results').find('.result-selected').data("option-array-index"),
-            semana_reportada: $('#geseguimientooperador-semana_reporte').val(),
-            id_persona_responsable: $('#geseguimientooperador-id_persona_responsable').val(),
-            indicador: $('#geseguimientooperador-indicador').val(),
-            avances_cumplimiento_cuantitativos: $('#geseguimientooperador-avances_cumplimiento_cuantitativos').val(),
-            avances_cumplimiento_cualitativos: $('#geseguimientooperador-avances_cumplimiento_cualitativos').val(),
-            dificultades: $('#geseguimientooperador-dificultades').val(),
-            propuesta_dificultades: $('#geseguimientooperador-propuesta_dificultades').val(),
-            reporte_actividades: reporte_actividades
-        };
-        $.ajax({
-            type:"POST", // la variable type guarda el tipo de la peticion GET,POST,..
-            url:"index.php?r=ge-seguimiento-operador%2Fstore", //url guarda la ruta hacia donde se hace la peticion
-            data:data, // data recive un objeto con la informacion que se enviara al servidor
-            success:function(datos){ //success es una funcion que se utiliza si el servidor retorna informacion
-                relo
-            }
-        })
-    })
 });
