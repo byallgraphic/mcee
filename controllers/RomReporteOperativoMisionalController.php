@@ -6,6 +6,11 @@ Desarrollador: Oscar David Lopez Villa
 Descripción: crud orientacion proceseso 
 ---------------------------------------
 Modificaciones:
+Fecha: 15-04-2019
+Persona encargada: Edwin Molina Grisales
+Cambios realizados: Se hacen cambios varios para permitir al usuario subir más de un archivo por opción y se filtra los datos de acuerdo a la sede e institución seleccionada y se muestra los datos a más de un columna
+----------------------------------------
+Modificaciones:
 Fecha: 25-01-2019
 Fecha: 01-02-2019
 Persona encargada: Oscar David Lopez Villa
@@ -89,6 +94,8 @@ class RomReporteOperativoMisionalController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => RomReporteOperativoMisional::find()->where(['estado' => 1]),
         ]);
+		$dataProvider->query->andWhere( 'id_institucion='.$id_institucion );
+		$dataProvider->query->andWhere( 'id_sedes='.$id_sede );
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
