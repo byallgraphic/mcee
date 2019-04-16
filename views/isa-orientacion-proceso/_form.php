@@ -14,9 +14,10 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'orientacion_proceso')->textInput() ?>
+	<?= $form->field($model, "orientacion_proceso")->textarea(['rows' => '2'])?>
 	
-	<?= $form->field($model, 'fecha_desde')->widget(
+	<div class="row">
+	  <div class="col-md-6"><?= $form->field($model, 'fecha_desde')->widget(
 			DatePicker::className(), [
 				
 			 // modify template for custom rendering
@@ -27,9 +28,8 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 				'format' 		=> 'yyyy-mm-dd'
 			],
 		]);  
-	?>
-	
-	<?= $form->field($model, 'fecha_hasta')->widget(
+	?></div>
+	  <div class="col-md-6"><?= $form->field($model, 'fecha_hasta')->widget(
 			DatePicker::className(), [
 				
 			 // modify template for custom rendering
@@ -40,11 +40,20 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 				'format' 		=> 'yyyy-mm-dd'
 			],
 		]);  
-	?>
+	?></div>
+	</div>
 	
-    <?= $form->field($model, 'id_institucion')->dropDownList($instituciones) ?>
+	
+	<div class="row">
+	  <div class="col-md-8"><?= $form->field($model, 'id_institucion')->dropDownList($instituciones) ?></div>
+	  <div class="col-md-4"></div>
+	</div>
 
-    <?= $form->field($model, 'id_sede')->dropDownList($sedes) ?>
+	<div class="row">
+	  <div class="col-md-8"><?= $form->field($model, 'id_sede')->dropDownList($sedes) ?></div>
+	  <div class="col-md-4"></div>
+	</div>
+	    
 
     <?= $form->field($model, 'estado')->hiddenInput( [ 'value' => '1' ] )->label(false ) ?>
 	
