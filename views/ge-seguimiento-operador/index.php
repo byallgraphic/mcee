@@ -14,11 +14,19 @@ use yii\grid\GridView;
 
 $this->title = 'Ge Seguimiento Operadors';
 $this->params['breadcrumbs'][] = $this->title;
+
+
+$this->registerCssFile('@web/css/GeSeguimientos.css');
+$this->registerJsFile('@web/js/jquery-3.3.1.min.js');
+$this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
+$this->registerJsFile('@web/js/GeSeguimientos.js');
+$this->registerJsFile('@web/js/GeSeguimientosForm.js');
+
 ?> 
 
 <h1></h1>
 	
-<div id="modal" class="fade modal" role="dialog" tabindex="-1">
+<div id="modal-ge" class="fade modal" role="dialog" tabindex="-1">
 <div class="modal-dialog modal-lg">
 <div class="modal-content">
 <div class="modal-header">
@@ -38,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?=  Html::button('Agregar',['value'=>Url::to(['create']),'class'=>'btn btn-success','id'=>'modalButton']) ?>
+        <?=  Html::button('Agregar',['value'=>Url::to(['create', 'id' => 1]),'class'=>'btn btn-success','id'=>'modalButton-ge']) ?>
 		
     </p>
 
