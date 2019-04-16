@@ -190,6 +190,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 			// die;
 			$actividades = IsaActividadesIsa::find()->indexBy('id')->andWhere("id_iniciacion_sencibilizacion_artistica = $id")->all();
 			
+			//id del Yii::$app->request->post() e id de actividades deben ser iguales
 			$cont = 1;
 			foreach($actividades as $actividad)
 			{
@@ -197,7 +198,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 				$cont++;
 			}
 			
-			// echo "<pre>"; print_r($actividades); echo "</pre>"; 
 			if (Model::loadMultiple($actividadIsa, Yii::$app->request->post()) && Model::validateMultiple($actividadIsa) ) 
 			{
 				foreach ($actividadIsa as $activIsa) 
@@ -207,51 +207,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 			}
 			
 			
-			// $connection = Yii::$app->getDb();	
-			// foreach (Yii::$app->request->post('IsaActividadesIsa') as $key => $actividades)
-			// {
-				// $command = $connection->createCommand("
-				// UPDATE 
-					// isa.actividades_isa
-				// SET 
-					// fecha_prevista_desde		='".$actividades['fecha_prevista_desde']."', 
-					// fecha_prevista_hasta		='".$actividades['fecha_prevista_hasta']."', 
-					// num_equipo_campo			='".$actividades['num_equipo_campo']."', 
-					// perfiles					='".$actividades['perfiles']."', 
-					// docente_orientador			='".$actividades['docente_orientador']."',
-					// fases						='".$actividades['fases']."', 
-					// num_encuentro				='".$actividades['num_encuentro']."', 
-					// nombre_actividad			='".$actividades['nombre_actividad']."', 
-					// actividad_desarrollar		='".$actividades['actividad_desarrollar']."', 
-					// lugares_recorrer			='".$actividades['lugares_recorrer']."', 
-					// tematicas_abordadas			='".$actividades['tematicas_abordadas']."',
-					// objetivos_especificos		='".$actividades['objetivos_especificos']."',
-					// tiempo_previsto				='".$actividades['tiempo_previsto']."', 
-					// productos					='".$actividades['productos']."', 
-					// contenido_si_no				='".$actividades['contenido_si_no']."', 
-					// contenido_nombre			='".$actividades['contenido_nombre']."', 
-					// contenido_fecha				='".$actividades['contenido_fecha']."', 
-					// contenido_vigencia			='".$actividades['contenido_vigencia']."',
-					// contenido_justificacion		='".$actividades['contenido_justificacion']."', 
-					// articulacion				='".$actividades['articulacion']."', 
-					// cantidad_participantes		='".$actividades['cantidad_participantes']."', 
-					// requerimientos_tecnicos		='".$actividades['requerimientos_tecnicos']."',
-					// requerimientos_logisticos	='".$actividades['requerimientos_logisticos']."', 
-					// destinatarios				='".$actividades['destinatarios']."',
-					// fecha_entrega_envio			='".$actividades['fecha_entrega_envio']."', 
-					// observaciones_generales		='".$actividades['observaciones_generales']."',
-					// nombre_diligencia			='".$actividades['nombre_diligencia']."',
-					// rol							='".$actividades['rol']."', 
-					// fecha						='".$actividades['fecha']."'
-				// WHERE 
-					// id_iniciacion_sencibilizacion_artistica= $id 
-				// AND 
-					// id_procesos_generales=$key
-				// ;
-			// ");
-			// $result = $command->queryAll();
-			
-			die;
 			return $this->redirect(['index']);
 			
 		}
