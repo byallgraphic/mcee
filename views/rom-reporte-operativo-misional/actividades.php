@@ -22,6 +22,7 @@ foreach( $actividades as $idActividad => $v )
 														'idProyecto'	=> $idProyecto,
 														// 'datos'			=> $datos,
 														'estados'		=> $estados,
+														'evidencias_rom'=> $v['evidencia'],
 													] 
 										),
 					'headerOptions' => ['class' => 'tab1', 'style' => "background-color: $colors[$idActividad];"],
