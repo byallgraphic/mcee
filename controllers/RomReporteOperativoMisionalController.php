@@ -100,6 +100,7 @@ class RomReporteOperativoMisionalController extends Controller
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'sede' 			=> $sede,
+            'guardado' 		=> Yii::$app->request->get('guardado'),
         ]);
     }
 
