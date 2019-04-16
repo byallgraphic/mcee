@@ -24,17 +24,17 @@ use Yii;
  * @property string $objetivos_especificos
  * @property string $tiempo_previsto
  * @property string $productos
- * @property string $cotenido_si_no
+ * @property string $contenido_si_no
  * @property string $contenido_nombre
  * @property string $contenido_fecha
  * @property string $cotenido_vigencia
  * @property string $contenido_justificacion
- * @property string $arcticulacion
+ * @property string $articulacion
  * @property int $cantidad_participantes
  * @property string $requerimientos_tecnicos
  * @property string $requerimientos_logisticos
  * @property string $destinatarios
- * @property string $fecha_entega_envio
+ * @property string $fecha_entrega_envio
  * @property string $observaciones_generales
  * @property string $nombre_diligencia
  * @property string $rol
@@ -57,10 +57,10 @@ class IsaActividadesIsa extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_iniciacion_sencibilizacion_artistica', 'id_procesos_generales', 'num_equipo_campo', 'num_encuentro', 'cantidad_participantes', 'estado'], 'default', 'value' => null],
-            [['id_iniciacion_sencibilizacion_artistica', 'id_procesos_generales', 'num_equipo_campo', 'num_encuentro', 'cantidad_participantes', 'estado'], 'integer'],
+            [['id_iniciacion_sencibilizacion_artistica', 'id_procesos_generales', 'num_equipo_campo', 'num_encuentro', 'cantidad_participantes', 'estado'], 'default', 'value' => ''],
+            [['id_iniciacion_sencibilizacion_artistica', 'id_procesos_generales', 'num_equipo_campo', 'num_encuentro', 'cantidad_participantes', 'estado', 'contenido_si_no'], 'integer'],
             [['fecha_prevista_desde', 'fecha_prevista_hasta', 'contenido_fecha', 'fecha'], 'safe'],
-            [['perfiles', 'docente_orientador', 'fases', 'nombre_actividad', 'actividad_desarrollar', 'lugares_recorrer', 'tematicas_abordadas', 'objetivos_especificos', 'tiempo_previsto', 'productos', 'cotenido_si_no', 'contenido_nombre', 'cotenido_vigencia', 'contenido_justificacion', 'arcticulacion', 'requerimientos_tecnicos', 'requerimientos_logisticos', 'destinatarios', 'fecha_entega_envio', 'observaciones_generales', 'nombre_diligencia', 'rol'], 'string'],
+            [['perfiles', 'docente_orientador', 'fases', 'nombre_actividad', 'actividad_desarrollar', 'lugares_recorrer', 'tematicas_abordadas', 'objetivos_especificos', 'tiempo_previsto', 'productos', 'contenido_nombre', 'contenido_vigencia', 'contenido_justificacion', 'articulacion', 'requerimientos_tecnicos', 'requerimientos_logisticos', 'destinatarios', 'fecha_entrega_envio', 'observaciones_generales', 'nombre_diligencia', 'rol'], 'string'],
             [['id_iniciacion_sencibilizacion_artistica'], 'exist', 'skipOnError' => true, 'targetClass' => IsaIniciacionSencibilizacionArtistica::className(), 'targetAttribute' => ['id_iniciacion_sencibilizacion_artistica' => 'id']],
             [['id_procesos_generales'], 'exist', 'skipOnError' => true, 'targetClass' => IsaProcesosGenerales::className(), 'targetAttribute' => ['id_procesos_generales' => 'id']],
             [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Estados::className(), 'targetAttribute' => ['estado' => 'id']],
@@ -90,17 +90,17 @@ class IsaActividadesIsa extends \yii\db\ActiveRecord
             'objetivos_especificos' => 'Objetivos Especificos',
             'tiempo_previsto' => 'Tiempo Previsto',
             'productos' => 'Productos',
-            'cotenido_si_no' => 'Cotenido Si No',
+            'contenido_si_no' => 'Contenido Si No',
             'contenido_nombre' => 'Contenido Nombre',
             'contenido_fecha' => 'Contenido Fecha',
             'cotenido_vigencia' => 'Cotenido Vigencia',
             'contenido_justificacion' => 'Contenido Justificacion',
-            'arcticulacion' => 'Arcticulacion',
+            'articulacion' => 'Articulacion',
             'cantidad_participantes' => 'Cantidad Participantes',
             'requerimientos_tecnicos' => 'Requerimientos Tecnicos',
             'requerimientos_logisticos' => 'Requerimientos Logisticos',
             'destinatarios' => 'Destinatarios',
-            'fecha_entega_envio' => 'Fecha Entega Envio',
+            'fecha_entrega_envio' => 'Fecha Entrega Envio',
             'observaciones_generales' => 'Observaciones Generales',
             'nombre_diligencia' => 'Nombre Diligencia',
             'rol' => 'Rol',

@@ -120,7 +120,8 @@ class IsaEquiposCampoController extends Controller
 		$equiposCampo = ArrayHelper::map($equiposCampo,'id','nombre');
 		
 		$data[]="<option value=''>Seleccione..</option>";
-		foreach ($equiposCampo as $key => $value) {
+		foreach ($equiposCampo as $key => $value) 
+		{
 			$id 		 = $key;
 			$nombre = $value;
 			$data[]="<option value=$id>$nombre</option>";
