@@ -180,7 +180,9 @@ if(Yii::$app->request->get('guardado')){
                 propuesta_dificultades: $('#geseguimientooperador-propuesta_dificultades').val(),
                 reporte_actividades: reporte_actividades
             };
-            $.post( "index.php?r=ge-seguimiento-operador%2Fstore", data );
+            $.post( "index.php?r=ge-seguimiento-operador%2Fstore", data, function( data ) {
+                $("#modal-ge").modal('hide');
+            });
         })
     });
 </script>

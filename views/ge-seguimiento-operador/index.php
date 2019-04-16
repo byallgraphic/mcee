@@ -88,10 +88,14 @@ $this->registerJsFile('@web/js/GeSeguimientosForm.js');
            'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'id_tipo_seguimiento',
+            //'id',
+
+           [
+               'label' => 'Tipo de seguimiento',
+               'value' => 'tipo_seguimiento.descripcion',
+           ],
             'email:email',
-            'id_operador',
+            'objetivo',
             //'proyecto_reportar',
             //'id_ie',
             //'mes_reporte',
