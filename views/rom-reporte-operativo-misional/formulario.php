@@ -13,7 +13,7 @@ use app\models\IsaTipoCantidadPoblacionRom;
 // echo "<pre>"; print_r($datos); echo "</pre>"; 
 // die;
 $actividades_rom 	= new IsaActividadesRom();
-$evidencias_rom 	= new IsaEvidenciasRom();
+// $evidencias_rom 	= new IsaEvidenciasRom();
 $tipo_poblacion_rom = new IsaTipoCantidadPoblacionRom();
  
 ?>
