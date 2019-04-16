@@ -27,6 +27,7 @@ if( strpos($_GET['r'], 'update') > -1)
 	$isa = new IsaActividadesIsa();
 	$isa = $isa->find()->where("id_procesos_generales = $idProceso and id_iniciacion_sencibilizacion_artistica=". $model->id)->all();
 	$isa = ArrayHelper::map($isa,'id','id_procesos_generales');
+	
 	//traer el modelo con los datos de cada actividad
 	$actividades_isa = IsaActividadesIsa::findOne(key($isa));
 }
@@ -41,7 +42,10 @@ if( strpos($_GET['r'], 'update') > -1)
 
     <h3 style='background-color: #ccc;padding:5px;'>Fecha prevista para realizar la actividad</h3>
 	<div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]fecha_prevista_desde")->widget(
+	  <div class="col-md-6">
+	  
+	  
+	  <?= $form->field($actividades_isa, "[$idProceso]fecha_prevista_desde")->widget(
         DatePicker::className(), [
             // modify template for custom rendering
             'template' => '{addon}{input}',
@@ -67,7 +71,9 @@ if( strpos($_GET['r'], 'update') > -1)
      
    <h3 style='background-color: #ccc;padding:5px;'>Equipo o equipos de intervención encargado(s) </h3>
    <div class="row">
-	  <div class="col-md-8"><?= $form->field($actividades_isa, "[$idProceso]num_equipo_campo")->widget(
+	  <div class="col-md-8">
+	  
+	  <?= $form->field($actividades_isa, "[$idProceso]num_equipo_campo")->widget(
 		Chosen::className(), [
 			'items' => $equiposCampo,
 			'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
