@@ -12,7 +12,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\GeSeguimientoOperadorBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ge Seguimiento Operadors';
+$this->title = 'Gestión escolar';
 $this->params['breadcrumbs'][] = $this->title;
 
 
@@ -22,8 +22,23 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 $this->registerJsFile('@web/js/GeSeguimientos.js');
 $this->registerJsFile('@web/js/GeSeguimientosForm.js');
 
-?> 
+?>
 
+
+<div id="modal-guardado" class="modal fade bd-example-modal-sm" style="display: none" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Registro guardado con exito</p>
+            </div>
+        </div>
+    </div>
+</div>
 <h1></h1>
 	
 <div id="modal-ge" class="fade modal" role="dialog" tabindex="-1">
@@ -47,7 +62,11 @@ $this->registerJsFile('@web/js/GeSeguimientosForm.js');
 
     <p>
         <?=  Html::button('Agregar',['value'=>Url::to(['create', 'id' => 1]),'class'=>'btn btn-success','id'=>'modalButton-ge']) ?>
-		
+        <?= Html::a('Volver',
+            [
+                'acompanamiento-in-situ/index',
+            ],
+            ['class' => 'btn btn-info']) ?>
     </p>
 
     <?= DataTables::widget([

@@ -111,9 +111,11 @@ if(Yii::$app->request->get('guardado')){
     <?php ActiveForm::end(); ?>
 
 </div>
+
 <script>
     $( document ).ready(function() {
         //$('#modal-form').modal('show');
+        $(".modal-guardado").modal('hide');
 
         $("#id_cual").hide();
         $("#id_quienes").hide();
@@ -182,6 +184,7 @@ if(Yii::$app->request->get('guardado')){
             };
             $.post( "index.php?r=ge-seguimiento-operador%2Fstore", data, function( data ) {
                 $("#modal-ge").modal('hide');
+                $('#modal-guardado').modal('show');
             });
         })
     });
