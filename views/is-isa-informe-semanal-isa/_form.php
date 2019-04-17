@@ -19,7 +19,7 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 	</div>
    
    <div class="row">
-	  <div class="col-md-8"><?= $form->field($model, 'id_sede')->dropDownList( $sedes, [ 'prompt' => 'Seleccione...' ] ) ?></div>
+	  <div class="col-md-8"><?= $form->field($model, 'id_sede')->dropDownList( $sedes ) ?></div>
 	  <div class="col-md-4"></div>
 	</div>
 

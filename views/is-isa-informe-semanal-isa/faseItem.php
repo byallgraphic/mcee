@@ -1,5 +1,7 @@
 <?php
 use yii\helpers\Html;
+use yii\bootstrap\Tabs;
+
 //$id_sede 		= $_SESSION['sede'][0];
 $id_sede 		= 1;
 $id_institucion	= $_SESSION['instituciones'][0];
@@ -16,6 +18,8 @@ $index = 0;
         4 =>    "Actividad No. 4: Realizar talleres de iniciación y sensibilización artística con la comunidad.",
         5 =>    "",
     ];
+	
+	$colors = ["#cce5ff", "#d4edda", "#f8d7da", "#fff3cd", "#d1ecf1", "#d6d8d9", "#cce5ff"];
     
     foreach( $actividades as $keyFase => $actividad ){ 
 
@@ -33,6 +37,7 @@ $index = 0;
                                                         'index' => $keyFase
 													] 
 										),
+					'headerOptions' => ['class' => 'tab1', 'style' => "background-color: $colors[$keyFase];"],
 					'contentOptions'=> []
 				];
             }else if($proyecto ==  2 && $keyFase > 3){
@@ -49,24 +54,36 @@ $index = 0;
                                                         'index' => $keyFase
 													] 
 										),
+					'headerOptions' => ['class' => 'tab1', 'style' => "background-color: $colors[$keyFase];"],
 					'contentOptions'=> []
 				];
             }    
         
             
 
-    $index ++;
+		$index ++;
     }
     
-    use yii\bootstrap\Collapse;
-    echo Collapse::widget([
-        'items' => $contenedores,
-    ]);
-
-?>
-
-
-
-
+    // use yii\bootstrap\Collapse;
+    // echo Collapse::widget([
+        // 'items' => $contenedores,
+    // ]);
 	
+	echo Tabs::widget([
+		'items' => $contenedores,
+	]);
 
+	// $this->registerJs("$('.tab1').removeClass('active');");
+
+	$this->registerCss(".nav-tabs > li {
+							
+							width: 400px;
+							height: 80px;
+						}
+						
+						.row {
+							margin-left: 2px;
+						}");
+					
+					
+					
