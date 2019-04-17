@@ -25,6 +25,7 @@ $procesos = ArrayHelper::map($procesos,'id','descripcion');
                                                         'idProceso' => $idProceso,
 														'arraySiNo' => $arraySiNo,
 														'equiposCampo' => $equiposCampo,
+														'docenteOrientador'=> $docenteOrientador,
 													] 
 										),
 					'contentOptions'=> []

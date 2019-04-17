@@ -32,6 +32,8 @@ use Yii;
  * @property string $indicador
  * @property string $objetivo
  * @property string $actividad
+ *
+ * @property GeTipoSeguimiento $tipo_seguimiento
  */
 class GeSeguimientoOperador extends \yii\db\ActiveRecord
 {
@@ -124,5 +126,13 @@ class GeSeguimientoOperador extends \yii\db\ActiveRecord
             'ruta_archivo'						=> 'Ruta del archivo',
             'documentFile'						=> 'Agregar Archivo',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTipo_seguimiento()
+    {
+        return $this->hasOne(GeTipoSeguimiento::className(), ['id' => 'id_tipo_seguimiento']);
     }
 }

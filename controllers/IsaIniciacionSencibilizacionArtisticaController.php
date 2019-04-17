@@ -40,8 +40,8 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 	
 	public $arraySiNo = 
 		[
-			1 => "Si",
-			2 => "No"		
+			1 => "No",
+			2 => "Si"		
 		];
     /**
      * @inheritdoc
@@ -85,6 +85,8 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		$proyectos = ArrayHelper::map($proyectos,'id','descripcion');
 		
 		
+		
+		
 		$items = [];
 		
 		$arrayColores = array('#F2F3F4','#EBDEF0','#F9EBEA','#FDF2E9','#F6DDCC','LIGHTCYAN');	
@@ -102,6 +104,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 																'actividades_isa' => $actividades_isa,
 																'arraySiNo' => $this->arraySiNo,
 																'equiposCampo' => $this->obtenerEquiposCampo(),
+																'docenteOrientador' => $this->obtenerNombresXPerfiles(),
 																
 															] 
 												),
@@ -186,8 +189,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) 
 		{
 			
-			// echo "<pre>"; print_r(Yii::$app->request->post()); echo "</pre>"; 
-			// die;
 			$actividades = IsaActividadesIsa::find()->indexBy('id')->andWhere("id_iniciacion_sencibilizacion_artistica = $id")->all();
 			
 			//id del Yii::$app->request->post() e id de actividades deben ser iguales
@@ -205,7 +206,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 					$activIsa->save(false);
 				}
 			}
-			
 			
 			return $this->redirect(['index']);
 			
@@ -251,6 +251,39 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		$equiposCampo = ArrayHelper::map($equiposCampo,'id','nombre');
 		return $equiposCampo;
 	}
+	
+	
+	/****
+		obtener el nombre de la persona de acuerdo el id del perfil y la institucion
+	****/
+	public function obtenerNombresXPerfiles()
+	{
+		$idInstitucion 	= $_SESSION['instituciones'][0];
+		/**
+		* Llenar nombre de los cooordinadores-eje
+		*/
+		//variable con la conexion a la base de datos 
+		$connection = Yii::$app->getDb();
+		$command = $connection->createCommand("
+			SELECT ppi.id, concat(pe.nombres,' ',pe.apellidos) as nombres, pe.identificacion
+			FROM perfiles_x_personas as pp, 
+			personas as pe,
+			perfiles_x_personas_institucion ppi
+			WHERE pp.id_personas = pe.id
+			AND pp.id_perfiles = 10
+			AND ppi.id_perfiles_x_persona = pp.id
+			AND ppi.id_institucion = $idInstitucion
+		");
+		$result = $command->queryAll();
+		$nombresPerfil = array();
+		foreach ($result as $r)
+		{
+			$nombresPerfil[$r['id']]= $r['nombres']. " - " . $r['identificacion'];
+		}
+		
+		return $nombresPerfil;
+	}
+	
 	
 	
     /**
