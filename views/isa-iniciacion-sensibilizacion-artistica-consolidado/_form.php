@@ -66,8 +66,9 @@ foreach( $actividades as $keySesion => $actividad )
 ?>
 
 <div class="isa-iniciacion-sensibilizacion-artistica-consolidado-form">
-
-    <?= $form->field($modelEncabezado, 'fecha')->widget(
+	
+	<div class="row">
+	  <div class="col-md-6"><?= $form->field($modelEncabezado, 'fecha')->widget(
         DatePicker::className(), [
             // modify template for custom rendering
             'template' => '{addon}{input}',
@@ -76,47 +77,47 @@ foreach( $actividades as $keySesion => $actividad )
                 'autoclose' => true,
                 'format'    => 'yyyy-mm-dd',
         ],
-    ]); ?>
-
+    ]); ?></div>
+	  <div class="col-md-6"><?= $form->field($modelEncabezado, 'periodo')->textInput([ 'type' => 'number']) ?></div>
+	</div>
+    
 	<?= Html::activeHiddenInput($modelEncabezado, 'id') ?>
 	
-    <?= $form->field($modelEncabezado, 'periodo')->textInput() ?>
+    <div class="row">
+	  <div class="col-md-8"><?= $form->field($modelEncabezado, 'id_institucion')->dropDownList( [ $institucion->id => $institucion->descripcion ] ) ?></div>
+	  <div class="col-md-4"></div>
+	</div>
 	
-    <?= $form->field($modelEncabezado, 'id_institucion')->dropDownList( [ $institucion->id => $institucion->descripcion ] ) ?>
+    <div class="row">
+	  <div class="col-md-8"><?= $form->field($modelEncabezado, 'id_sede')->dropDownList([ $sede->id => $sede->descripcion ]) ?></div>
+	  <div class="col-md-4"></div>
+	</div>
 
-    <?= $form->field($modelEncabezado, 'id_sede')->dropDownList([ $sede->id => $sede->descripcion ]) ?>
 
 	<?= Collapse::widget([
 		'items' => $items,
 		'options' => [ "id" => "collapseOne" ],
 	]); ?>
 	
-	<div class="form-group">
-	
-		<?= Html::label( "Porcentaje de Avance por Sede" ) ?>
+	<div class="row">
+	  <div class="col-md-6"><?= Html::label( "Porcentaje de Avance por Sede" ) ?>
 		
 		<?= Html::textInput( "total_porcentaje_sede", "", [ 
 					"class" 		=> "form-control", 
 					"style" 		=> "background-color:#eee",
 					"disabled" 		=> true, 
 					"id" 			=> "total_porcentaje_sede", 
-				] ) ?>
-		
-	</div>
-	
-	<div class="form-group">
-	
-		<?= Html::label( "Porcentaje de Avance por IEO" ) ?>
+				] ) ?></div>
+	  <div class="col-md-6"><?= Html::label( "Porcentaje de Avance por IEO" ) ?>
 		
 		<?= Html::textInput( "total_porcentaje_sede", "", [ 
 					"class" 		=> "form-control", 
 					"style" 		=> "background-color:#eee",
 					"disabled" 		=> true, 
 					"id" 			=> "total_porcentaje_ieo", 
-				] ) ?>
-		
+				] ) ?></div>
 	</div>
-
+	
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
