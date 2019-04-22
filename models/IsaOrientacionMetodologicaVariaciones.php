@@ -29,10 +29,10 @@ class IsaOrientacionMetodologicaVariaciones extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['descripcion', 'id_variaciones_actividades', 'estado', 'id_seguimiento_proceso'], 'required'],
+            [['descripcion', 'id_variaciones_actividades', 'estado', 'id_seguimiento_proceso','id_for_deb_ret'], 'required'],
             [['descripcion'], 'string'],
             [['id_variaciones_actividades', 'estado', 'id_seguimiento_proceso'], 'default', 'value' => null],
-            [['id_variaciones_actividades', 'estado', 'id_seguimiento_proceso'], 'integer'],
+            [['id_variaciones_actividades', 'estado', 'id_seguimiento_proceso','id_for_deb_ret'], 'integer'],
             [['id_seguimiento_proceso'], 'exist', 'skipOnError' => true, 'targetClass' => IsaSeguimientoProceso::className(), 'targetAttribute' => ['id_seguimiento_proceso' => 'id']],
             [['id_variaciones_actividades'], 'exist', 'skipOnError' => true, 'targetClass' => IsaVariacionesActividades::className(), 'targetAttribute' => ['id_variaciones_actividades' => 'id']],
         ];
@@ -49,6 +49,7 @@ class IsaOrientacionMetodologicaVariaciones extends \yii\db\ActiveRecord
             'id_variaciones_actividades' => 'Id Variaciones Actividades',
             'estado' => 'Estado',
             'id_seguimiento_proceso' => 'Id Seguimiento Proceso',
+            'id_for_deb_ret' => 'Id Seguimiento Proceso',
         ];
     }
 }

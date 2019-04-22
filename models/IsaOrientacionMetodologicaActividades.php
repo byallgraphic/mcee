@@ -31,7 +31,7 @@ class IsaOrientacionMetodologicaActividades extends \yii\db\ActiveRecord
         return [
             [['id', 'descripcion', 'id_actividades', 'estado', 'id_seguimiento_proceso'], 'required'],
             [['id', 'id_actividades', 'estado', 'id_seguimiento_proceso'], 'default', 'value' => null],
-            [['id', 'id_actividades', 'estado', 'id_seguimiento_proceso'], 'integer'],
+            [['id', 'id_actividades', 'estado', 'id_seguimiento_proceso','id_logros'], 'integer'],
             [['descripcion'], 'string'],
             [['id'], 'unique'],
             [['id_actividades'], 'exist', 'skipOnError' => true, 'targetClass' => IsaActividadesSeguimiento::className(), 'targetAttribute' => ['id_actividades' => 'id']],
@@ -50,6 +50,7 @@ class IsaOrientacionMetodologicaActividades extends \yii\db\ActiveRecord
             'id_actividades' => 'Id Actividades',
             'estado' => 'Estado',
             'id_seguimiento_proceso' => 'Id Seguimiento Proceso',
+            'id_logros' => 'Logros',
         ];
     }
 }

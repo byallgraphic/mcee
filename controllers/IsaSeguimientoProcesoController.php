@@ -1,4 +1,11 @@
 <?php
+/**
+ * Fecha:			Abril 21 de 2019
+ * Programador: 	Edwin Molina G
+ * Modificaciones:
+ * Se realizan cambios varios para permitir crear y editar registros nuevos
+ */
+
 
 namespace app\controllers;
 
@@ -196,7 +203,7 @@ class IsaSeguimientoProcesoController extends Controller
 				$arrayDatosIsaOrientacionMetodologicaActividades[$datos]['id_seguimiento_proceso']=$model->id;
 			}
 			
-			$columnNameIsaOrientacionMetodologicaActividades=['descripcion','id_actividades','estado','id_seguimiento_proceso'];
+			$columnNameIsaOrientacionMetodologicaActividades=['descripcion','id_actividades','id_logros','estado','id_seguimiento_proceso'];
 			
 			// inserta todos los datos que trae el array
 			$insertCount = Yii::$app->db->createCommand()
@@ -235,7 +242,7 @@ class IsaSeguimientoProcesoController extends Controller
 				$arrayDatosIsaOrientacionMetodologicaVariaciones[$datos]['id_seguimiento_proceso']=$model->id;
 			}
 			
-			$columnNameIsaSemanaLogrosForDebRet=['descripcion','id_variaciones_actividades','estado','id_seguimiento_proceso'];
+			$columnNameIsaSemanaLogrosForDebRet=['descripcion','id_variaciones_actividades','id_for_deb_ret','estado','id_seguimiento_proceso'];
 			
 			// inserta todos los datos que trae el array
 			$insertCount = Yii::$app->db->createCommand()
@@ -316,7 +323,7 @@ class IsaSeguimientoProcesoController extends Controller
 					semana2  ='". $val['semana2']."', 
 					semana3  ='". $val['semana3']."', 
 					semana4  ='". $val['semana4']."'
-					WHERE id_seguimiento_proceso = $id and id_for_deb_ret = $idLogros
+					WHERE id_seguimiento_proceso = $id and id_for_deb_ret = $idLogrosfdr
 				");
 				$result = $command->queryAll();
 			}
@@ -331,7 +338,7 @@ class IsaSeguimientoProcesoController extends Controller
 					UPDATE isa.orientacion_metodologica_actividades set 			
 					descripcion  ='". $val['descripcion']."'
 					
-					WHERE id_seguimiento_proceso = $id and id_actividades = $idLogros
+					WHERE id_seguimiento_proceso = $id and id_actividades = $val[id_actividades] and id_logros = $val[id_logros]
 				");
 				$result = $command->queryAll();
 			}
@@ -340,14 +347,23 @@ class IsaSeguimientoProcesoController extends Controller
 			$arrayDatosIsaOrientacionMetodologicaVariaciones = $post['IsaOrientacionMetodologicaVariaciones'];
 			foreach($arrayDatosIsaOrientacionMetodologicaVariaciones as $idActividades => $val)
 			{
+				// var_dump( $val ); echo "<br>";
+				// echo " 
+					// UPDATE isa.orientacion_metodologica_variaciones set 			
+					// descripcion  ='". $val['descripcion']."'
+					// WHERE id_seguimiento_proceso = $id and id_variaciones_actividades = $val[id_variaciones_actividades] and id_for_deb_ret = $val[id_for_deb_ret]
+				// <br><br>"; 
+				
 				$command = $connection->createCommand
 				(" 
 					UPDATE isa.orientacion_metodologica_variaciones set 			
 					descripcion  ='". $val['descripcion']."'
-					WHERE id_seguimiento_proceso = $id and id_variaciones_actividades = $idLogros
+					WHERE id_seguimiento_proceso = $id and id_variaciones_actividades = $val[id_variaciones_actividades] and id_for_deb_ret = $val[id_for_deb_ret]
 				");
 				$result = $command->queryAll();
 			}
+			
+			// exit();
 			
 				
 			$model->save();
@@ -436,9 +452,10 @@ class IsaSeguimientoProcesoController extends Controller
 		//se trae la informacionde la basse de datos tabla ec.avances
 		$resultisaOrientacionMetodologicaActividades = ArrayHelper::getColumn($isaOrientacionMetodologicaActividades, function ($element) 
 		{
-			$dato[$element['id_actividades']]['descripcion']= $element['descripcion'];
-			$dato[$element['id_actividades']]['id_actividades']= $element['id_actividades'];
-			$dato[$element['id_actividades']]['id_seguimiento_proceso']= $element['id_seguimiento_proceso'];
+			$dato[$element['id_actividades']][$element['id_logros']]['descripcion']				= $element['descripcion'];
+			$dato[$element['id_actividades']][$element['id_logros']]['id_actividades']			= $element['id_actividades'];
+			$dato[$element['id_actividades']][$element['id_logros']]['id_seguimiento_proceso']	= $element['id_seguimiento_proceso'];
+			$dato[$element['id_actividades']][$element['id_logros']]['id_seguimiento_proceso']	= $element['id_logros'];
 			return $dato;
 		});
 		
@@ -446,9 +463,11 @@ class IsaSeguimientoProcesoController extends Controller
 		//se formate la informacion que deben tener los campos tabla ec.avances
 		foreach	($resultisaOrientacionMetodologicaActividades as $r => $valor)
 		{
-			foreach	($valor as $ids => $valores)
-				
-				$datos['OrientacionMetodologicaActividades'][$ids] = $valores;
+			foreach( $valor as $ids => $valores )
+			{
+				foreach( $valores as $k => $v )
+					$datos['OrientacionMetodologicaActividades'][$ids][$k] = $v;
+			}
 		}
 		
 		
@@ -459,9 +478,10 @@ class IsaSeguimientoProcesoController extends Controller
 		//se trae la informacionde la basse de datos tabla ec.avances
 		$resultisaOrientacionMetodologicaVariaciones = ArrayHelper::getColumn($isaOrientacionMetodologicaVariaciones, function ($element) 
 		{
-			$dato[$element['id_variaciones_actividades']]['descripcion']= $element['descripcion'];
-			$dato[$element['id_variaciones_actividades']]['id_variaciones_actividades']= $element['id_variaciones_actividades'];
-			$dato[$element['id_variaciones_actividades']]['id_seguimiento_proceso']= $element['id_seguimiento_proceso'];
+			$dato[$element['id_variaciones_actividades']][$element['id_for_deb_ret']]['descripcion']				= $element['descripcion'];
+			$dato[$element['id_variaciones_actividades']][$element['id_for_deb_ret']]['id_variaciones_actividades']	= $element['id_variaciones_actividades'];
+			$dato[$element['id_variaciones_actividades']][$element['id_for_deb_ret']]['id_seguimiento_proceso']		= $element['id_seguimiento_proceso'];
+			$dato[$element['id_variaciones_actividades']][$element['id_for_deb_ret']]['id_for_deb_ret']				= $element['id_for_deb_ret'];
 			return $dato;
 		});
 		
@@ -470,8 +490,10 @@ class IsaSeguimientoProcesoController extends Controller
 		foreach	($resultisaOrientacionMetodologicaVariaciones as $r => $valor)
 		{
 			foreach	($valor as $ids => $valores)
-				
-				$datos['OrientacionMetodologicaVariaciones'][$ids] = $valores;
+			{	
+				foreach( $valores as $k => $v )
+					$datos['OrientacionMetodologicaVariaciones'][$ids][$k] = $v;
+			}
 		}
 		
 		// fin -- se llenan los datos del formulario desde la base de datos
