@@ -113,6 +113,8 @@ class IsIsaInformeSemanalIsaController extends Controller
         $model = new IsIsaInformeSemanalIsa();
         $idInstitucion = $_SESSION['instituciones'][0];
         $institucion = Instituciones::findOne($idInstitucion);
+		
+		$id_sede 		= $_SESSION['sede'][0];
 
         if ($model->load(Yii::$app->request->post())) {
             
@@ -310,7 +312,7 @@ class IsIsaInformeSemanalIsaController extends Controller
             return $this->redirect(['index', 'guardado' => 1]);
         }
 
-        $Sedes  = Sedes::find()->where( "id_instituciones = $idInstitucion" )->all();
+        $Sedes  = Sedes::find()->where( "id_instituciones = $idInstitucion" )->andWhere('id='.$id_sede)->all();
         $sedes	= ArrayHelper::map( $Sedes, 'id', 'descripcion' );
         
         return $this->renderAjax('create', [

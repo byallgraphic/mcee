@@ -55,7 +55,7 @@ use dosamigos\datepicker\DatePicker;
 ?>
 	<div class="row">
 		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"><?= $form->field($actividade_is_isa, "[$index]sesiones_realizadas")->textInput([ 'type' => 'number']) ?> </div>
-		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">&nbsp;&nbsp;&nbsp;<?= $form->field($actividade_is_isa, "[$index]porcentaje")->textInput([ 'type' => 'number']) ?></div>
+		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"><?= $form->field($actividade_is_isa, "[$index]porcentaje")->textInput([ 'type' => 'number']) ?></div>
 		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"><?= $form->field($actividade_is_isa, "[$index]sesiones_aplazadas")->textInput([ 'type' => 'number']) ?></div>
 		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"><?= $form->field($actividade_is_isa, "[$index]sesiones_canceladas")->textInput([ 'type' => 'number']) ?></div>
 	</div>
