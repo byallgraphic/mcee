@@ -7,6 +7,11 @@ Desarrollador: Oscar David Lopez Villa
 Descripción: crud y formulario de orientacion proceso
 ---------------------------------------
 Modificaciones:
+Fecha: 22-04-2019
+Persona encargada: Edwin Molina Grisales
+Cambios realizados: Se agregan tabs y se permite crear y modificar registros
+----------------------------------------
+Modificaciones:
 Fecha: 02-01-2019
 Persona encargada: Oscar David Lopez Villa
 Cambios realizados: creacion funcion actionFormulario
@@ -160,7 +165,7 @@ class IsaOrientacionProcesoController extends Controller
 			$idOrientacionProceso = $model->id;
 			foreach($arrayDatosAvances as $datos => $valores)
 			{
-				$arrayDatosAvances[$datos]['id_informe']=$idOrientacionProceso;
+				$arrayDatosAvances[$datos]['id_orientacion_proceso']=$idOrientacionProceso;
 			}
 			
 			$columnNameArrayAvances = 
@@ -173,15 +178,16 @@ class IsaOrientacionProcesoController extends Controller
 				'observaciones',
 				'alarmas',
 				'necesidades',
-				'estrategias_fortalezas',
-				'estrategias_debilidades',
 				'ajustes',
+				'estrategias_debilidades',
+				'estrategias_fortalezas',
 				'temas_abordar',
 				'como',
 				'necesidades_articulacion',
 				'indique',
 				'id_acciones',
 				'estado',
+				'id_orientacion_proceso',
 				
 			];
 			$insertCount = Yii::$app->db->createCommand()
@@ -229,9 +235,9 @@ class IsaOrientacionProcesoController extends Controller
 					alternativas				='". $valores['alternativas']."',
 					retos						='". $valores['retos']."',
 					necesidades					='". $valores['necesidades']."',
-					estrategias_fortalezas		='". $valores['estrategias_fortalezas']."',
-					estrategias_debilidades		='". $valores['estrategias_debilidades']."',
 					ajustes						='". $valores['ajustes']."',
+					estrategias_debilidades		='". $valores['estrategias_debilidades']."',
+					estrategias_fortalezas		='". $valores['estrategias_fortalezas']."',
 					temas_abordar				='". $valores['temas_abordar']."',
 					como						='". $valores['como']."',
 					necesidades_articulacion	='". $valores['necesidades_articulacion']."',
