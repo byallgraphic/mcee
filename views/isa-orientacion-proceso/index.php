@@ -12,7 +12,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\IsaOrientacionProcesoBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '4.Orientación Procesos';
+$this->title = '4. Orientación del proceso - Orientación';
 $this->params['breadcrumbs'][] = $this->title;
 
 if( isset($guardado) && $guardado == 1 ){
@@ -27,7 +27,7 @@ if( isset($guardado) && $guardado == 1 ){
 <div class="modal-content">
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-<h3>Orientación Procesos</h3>
+<h3>4. Orientación del proceso - Orientación</h3>
 </div>
 <div class="modal-body">
 <div id='modalContent'></div>
@@ -43,7 +43,7 @@ if( isset($guardado) && $guardado == 1 ){
 
     <p>
         <?=  Html::button('Agregar',['value'=>Url::to(['create']),'class'=>'btn btn-success','id'=>'modalButton']) ?>
-		<?= Html::a('Volver',['arte-cultura/index',],['class' => 'btn btn-info']) ?>
+		<?= Html::a('Volver',['sensibilizacion-artistica/index',],['class' => 'btn btn-info']) ?>
 				
     </p>
 

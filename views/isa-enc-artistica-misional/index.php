@@ -23,7 +23,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\IsaEncArtisticaMisionalBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Consolidado por mes - Misional';
+$this->title = '5.Consolidado por mes - Misional';
 $this->params['breadcrumbs'][] = $this->title;
 
 if( $guardado )
@@ -47,7 +47,7 @@ if( $guardado )
 <div class="modal-content">
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-<h3>Consolidado por mes - Misional</h3>
+<h3>5.Consolidado por mes - Misional</h3>
 </div>
 <div class="modal-body">
 <div id='modalContent'></div>

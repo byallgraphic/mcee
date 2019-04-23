@@ -64,12 +64,16 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
      */
     public function actionIndex()
     {
+		
+		$id_sede 		= $_SESSION['sede'][0];
+		$sede 		 = Sedes::findOne($id_sede);
         $dataProvider = new ActiveDataProvider([
             'query' => IsaIniciacionSencibilizacionArtistica::find()->andWhere("estado =1")->orderby("id"),
         ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+			'sede' => $sede
         ]);
     }
 
@@ -79,21 +83,16 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
         $proyectos = new IsaProyectosGenerales();
         $actividades_isa = new IsaActividadesIsa();
 		
-		
 		//tipo_proyecto diferenciador para usar la misma tabla para varios proyectos
 		$proyectos = $proyectos->find()->andWhere("tipo_proyecto = 1")->orderby("id")->all();
 		$proyectos = ArrayHelper::map($proyectos,'id','descripcion');
 		
-		
-		
-		
 		$items = [];
 		
-		$arrayColores = array('#F2F3F4','#EBDEF0','#F9EBEA','#FDF2E9','#F6DDCC','LIGHTCYAN');	
-		$contador = 0;
+		
+		
 		foreach( $proyectos as $idProyecto => $titulo )
 		{
-			
 			$items[] = 	[
 							'label' 		=>  $titulo,
 							'content' 		=>  $this->renderAjax( 'faseItem', 
@@ -109,20 +108,18 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 															] 
 												),
 							'contentOptions'=> [],
-							'headerOptions' => ['style' => "background-color: $arrayColores[$contador]"],
-						];
-						
-			$contador++;
-						
+							
+						];	
+			
 		}
-		echo tabs::widget([
-			'items' => $items,
-		]);
-		
-		
-		// echo Collapse::widget([
+		// echo tabs::widget([
 			// 'items' => $items,
 		// ]);
+		
+		
+		echo Collapse::widget([
+			'items' => $items,
+		]);
 		
 	}
 
@@ -207,7 +204,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 				}
 			}
 			
-			return $this->redirect(['index']);
+			return $this->redirect(['index','guardado' => 1]);
 			
 		}
             

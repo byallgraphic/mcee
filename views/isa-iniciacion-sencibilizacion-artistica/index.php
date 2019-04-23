@@ -18,10 +18,27 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/documentos.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 
-if( isset($guardado) && $guardado == 1 ){
-	echo Html::hiddenInput( 'guardadoFormulario', '1' );
+if( @$_GET['guardado'])
+{
+	
+	$this->registerJs( "
+	  swal({
+			text: 'Registro guardado',
+			icon: 'success',
+			button: 'Salir',
+		});" 
+	);
 }
+
+
+if( !$sede ){
+	$this->registerJs( "$( cambiarSede ).click()" );
+	return;
+}
+
 ?>
+
+
 
 <h1></h1>
 
@@ -46,6 +63,13 @@ if( isset($guardado) && $guardado == 1 ){
 
     <p>
         <?=  Html::button('Agregar',['value'=>Url::to(['create']),'class'=>'btn btn-success','id'=>'modalButton']) ?>
+		
+		<?= Html::a('Volver', 
+									[
+										'sensibilizacion-artistica/index',
+									], 
+									['class' => 'btn btn-info']) ?>
+				
 		
     </p>
 

@@ -16,7 +16,7 @@ use app\models\Estados;
 /* @var $searchModel app\models\IsaIniciacionSensibilizacionArtisticaConsolidadoBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Consolidado por mes - operativo';
+$this->title = '5. Consolidado por mes - Operativo';
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJsFile(
