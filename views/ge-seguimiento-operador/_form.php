@@ -61,7 +61,7 @@ if(Yii::$app->request->get('guardado')){
     <?=  $form->field($model, 'semana_reporte')->dropDownList(['semana 1','semana 2','semana 3','semana 4'], ['prompt' => 'Seleccione una semana' ]); ?>
 
 
-    <?=  $form->field($model, 'id_persona_responsable')->dropDownList($personas, ['prompt' => 'Seleccione una semana' ]); ?>
+    <?=  $form->field($model, 'id_persona_responsable')->dropDownList($personas, ['prompt' => 'Seleccione un profecional' ]); ?>
 
 	<h3 style='background-color:#ccc;padding:5px;'><?= "Avances del proyecto"?></h3>
 
@@ -84,7 +84,7 @@ if(Yii::$app->request->get('guardado')){
             <?= $form->field($model, 'objetivo')->textInput(['disabled' => false, 'id' => 'id_objetivo']) ?>
             <?= $form->field($model, 'actividad')->textInput(['disabled' => false, 'id' => 'id_actividad']) ?>
             <?= $form->field($model, 'descripcion_actividad')->textInput(['id' => 'descripcion_actividad']) ?>
-            <?= $form->field($model, 'poblacion_beneficiaria')->dropDownList(['docentes', 'estudiantes', 'directivos', 'otros'], ['prompt' => 'Seleccione una opcion', 'id' => 'poblacion_beneficiaria']); ?>
+            <?= $form->field($model, 'poblacion_beneficiaria')->dropDownList(['Docentes', 'Estudiantes', 'Directivos', 'Otros'], ['prompt' => 'Seleccione una opcion', 'id' => 'poblacion_beneficiaria']); ?>
             <div id="id_quienes">
                 <?=  $form->field($model, 'quienes')->textInput(['id' => 'quienes']); ?>
             </div>
@@ -145,6 +145,7 @@ if(Yii::$app->request->get('guardado')){
                 id_objetivo
                     .clone()
                     .attr('id', 'objetivo-'+ (valueBtn))
+                    .prepend( "<div onclick='$(this).parent().remove();' class='col text-right delete-area'>x</div>" )
             );
 
             $(this).val(valueBtn);

@@ -197,7 +197,7 @@
 														
 														[
 															'label' => 'Formación en liderazgo', 'icon' => 'arrow-right', 'url' => [
-																'ge-seguimiento-gestion/create',
+																'ge-seguimiento-gestion/',
 																'idTipoSeguimiento'		=> 4,
 																],
 														],  //se agrega el index

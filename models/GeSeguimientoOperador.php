@@ -109,7 +109,7 @@ class GeSeguimientoOperador extends \yii\db\ActiveRecord
             'semana_reporte' 					=> '5. Semana a reportar',
             'id_persona_responsable'			=> '6. Profesional responsable',
             'descripcion_actividad' 			=> 'Descripción de la Actividad',
-            'poblacion_beneficiaria'			=> 'Poblacion Beneficiaria',
+            'poblacion_beneficiaria'			=> 'Población Beneficiaria',
             'quienes' 							=> 'Quienes?',
             'numero_participantes' 				=> 'Número de participantes',
             'duracion_actividad' 				=> 'Duración de la actividad',
