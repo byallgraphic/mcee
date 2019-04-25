@@ -20,6 +20,7 @@ use app\models\Sedes;
 use app\models\Instituciones;
 use app\models\IsaProyectosGenerales;
 use app\models\IsaEquiposCampo;
+use app\models\IsaIntervencionIeo;
 use yii\base\Model;
 
 use yii\helpers\ArrayHelper;
@@ -82,6 +83,8 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
         
         $proyectos = new IsaProyectosGenerales();
         $actividades_isa = new IsaActividadesIsa();
+        $intervencionIEO = new IsaIntervencionIeo();
+		
 		
 		//tipo_proyecto diferenciador para usar la misma tabla para varios proyectos
 		$proyectos = $proyectos->find()->andWhere("tipo_proyecto = 1")->orderby("id")->all();
@@ -104,6 +107,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 																'arraySiNo' => $this->arraySiNo,
 																'equiposCampo' => $this->obtenerEquiposCampo(),
 																'docenteOrientador' => $this->obtenerNombresXPerfiles(),
+																'intervencionIEO' => $intervencionIEO,
 																
 															] 
 												),

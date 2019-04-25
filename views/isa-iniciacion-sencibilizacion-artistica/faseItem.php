@@ -8,12 +8,12 @@ use yii\bootstrap\Tabs;
 
 
 $procesos = new IsaProcesosGenerales();
-$procesos = $procesos->find()->AndWhere("id_proyectos_generales = ". $idProyecto)->orderby("id")->all();
+$procesos = $procesos->find()->AndWhere("id_proyectos_generales = $idProyecto and estado = 1")->orderby("id")->all();
 $procesos = ArrayHelper::map($procesos,'id','descripcion');
 ?>
 
 <?php
-	$arrayColores = array('#F2F3F4','#EBDEF0','#F9EBEA','#FDF2E9','#F6DDCC','LIGHTCYAN');	
+	$arrayColores = array('#F9EBEA','#EBDEF0','#F9EBEA','#FDF2E9','#F6DDCC','LIGHTCYAN');	
     $contenedores = [];
 	$contador = 0;
     foreach( $procesos as $idProceso => $actividad )
@@ -29,6 +29,7 @@ $procesos = ArrayHelper::map($procesos,'id','descripcion');
 														'arraySiNo' => $arraySiNo,
 														'equiposCampo' => $equiposCampo,
 														'docenteOrientador'=> $docenteOrientador,
+														'intervencionIEO' => $intervencionIEO
 													] 
 										),
 					'contentOptions'=> [],

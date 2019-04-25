@@ -18,15 +18,26 @@ use dosamigos\datepicker\DatePicker;
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 $this->registerJs( file_get_contents( '../web/js/sensibilizacion.js' ) );
 
+
+
 ?>
 
 <div class="isa-iniciacion-sencibilizacion-artistica-form">
 
     <?php $form = ActiveForm::begin(); ?>
-	<div class="row">
-	  <div class="col-md-8"><?= $form->field($model, 'id_institucion')->dropDownList($institucion) ?></div>
-	  <div class="col-md-4"></div>
+	
+	
+<div class="row">
+	<div class="col-md-8">
+		<?= $form->field($model, 'id_institucion')->dropDownList($institucion,[
+		'title'=>'This is a test tooltip',
+		'data-toggle'=>'tooltip',
+		'style'=>'text-decoration: underline; cursor:pointer;'
+		]) ?>
+		
 	</div>
+	<div class="col-md-4"></div>
+</div>
 	
 	<div class="row">
 	  <div class="col-md-8"><?= $form->field($model, 'id_sede')->dropDownList($sede) ?></div>

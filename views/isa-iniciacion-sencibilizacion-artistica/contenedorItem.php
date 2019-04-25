@@ -16,9 +16,13 @@ use yii\web\helpers\CHtml;
 use yii\bootstrap\ActiveForm;
 use dosamigos\datepicker\DatePicker;
 use app\models\IsaActividadesIsa;
+use app\models\IsaIntervencionIeo;
 use yii\helpers\ArrayHelper;
 use nex\chosen\Chosen; 
 use yii\helpers\Url;
+
+
+
 
 //saber que se esta editando
 if( strpos($_GET['r'], 'update') > -1)
@@ -31,6 +35,7 @@ if( strpos($_GET['r'], 'update') > -1)
 	//traer el modelo con los datos de cada actividad
 	$actividades_isa = IsaActividadesIsa::findOne(key($isa));
 }
+
 ?>
 
 <style>
@@ -39,7 +44,9 @@ if( strpos($_GET['r'], 'update') > -1)
 }
 </style>
 
+<script>
 
+</script>
     <h3 style='background-color: #ccc;padding:5px;'>Fecha prevista para realizar la actividad</h3>
 	<div class="row">
 	  <div class="col-md-6">
@@ -104,10 +111,10 @@ if( strpos($_GET['r'], 'update') > -1)
 	</div>
 	
    <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]perfiles")->textInput() ?></div>
-	  <div class="col-md-6"><?php $form->field($actividades_isa, "[$idProceso]docente_orientador")->dropDownList($docenteOrientador) ?>
+	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]perfiles")->textInput(['title'=>'Seleccione el perfil y cantidad por perfiles de profesionales en campo', 'data-toggle'=>'tooltip']) ?></div>
+	  <div class="col-md-6">
 	  
-	  <?= $form->field($actividades_isa, "[$idProceso]docente_orientador")->widget(
+	  <?= $form->field($intervencionIEO, "[$idProceso]docente_orientador")->widget(
 						Chosen::className(), [
 							'items' => $docenteOrientador,
 							'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
@@ -118,35 +125,31 @@ if( strpos($_GET['r'], 'update') > -1)
 							],
                             'placeholder' => 'Seleccione..',
 					])?></div>
-	  
-	  
-	  
-	  
 	</div>
 
 	<div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]fases")->textInput() ?></div>
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]num_encuentro")->textInput() ?></div>
+	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]fases")->textInput( ['title'=>'Indique la fase del Proyecto MCEE desde las Artes y las Culturas en el que se encuentra la actividad', 'data-toggle'=>'tooltip']) ?></div>
+	  
+	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]num_encuentro")->textInput([ 'type' => 'number' , 'title'=>'Indique el número del encuentro según la propuesta metodológica ', 'data-toggle'=>'tooltip']) ?></div>
 	</div>
    
 	<div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]nombre_actividad")->textInput() ?></div>
-	  <div class="col-md-6"> <?= $form->field($actividades_isa, "[$idProceso]actividad_desarrollar")->textInput() ?></div>
+	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]nombre_actividad")->textInput() ?></div>
+	  <div class="col-md-6"> <?= $form->field($intervencionIEO, "[$idProceso]actividad_desarrollar")->textArea(['title'=>'Didácticas que estructuran el encuentro', 'data-toggle'=>'tooltip']) ?></div>
 	</div>
    
    <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]lugares_recorrer")->textInput() ?></div>
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]tematicas_abordadas")->textInput() ?></div>
+	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]lugares_recorrer")->textArea() ?></div>
+	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]tematicas_abordadas")->textArea() ?></div>
 	</div>
   
 	<div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]objetivos_especificos")->textInput() ?></div>
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]tiempo_previsto")->textInput() ?></div>
+	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]objetivos_especificos")->textArea(['title'=>'Especifique cómo se espera lograr, con cada una de las actividades, sensibilizar a la comunidad sobre la importancia del arte y la cultura a través de la oferta cultural del municipio para fortalecer el vínculo comunidad-escuela mediante el mejoramiento de la oferta en artes y cultura desde las instituciones educativas oficiales para la ocupación del tiempo libre en las comunas y corregimientos de Santiago de Cali.', 'data-toggle'=>'tooltip']) ?></div>
+	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]tiempo_previsto")->textInput([ 'type' => 'number']) ?></div>
 	</div>
 	
     <div class="row">
-	  <div class="col-md-6"> <?= $form->field($actividades_isa, "[$idProceso]productos")->textInput() ?></div>
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]contenido_vigencia")->textInput() ?></div>
+	  <div class="col-md-6"> <?= $form->field($intervencionIEO, "[$idProceso]productos")->textArea(['title'=>'Describa los resultados o productos esperados.', 'data-toggle'=>'tooltip']) ?></div>
 	</div>     
    
    <h3 style='background-color: #ccc;padding:5px;'>¿El contenido de esta actividad  responde al plan de acción construido colectivamente para la institución desde la articulación de la estrategia MCEE?</h3>
@@ -156,6 +159,10 @@ if( strpos($_GET['r'], 'update') > -1)
 	  <div class="col-md-6"></div>
    </div>
   
+  
+  <div class="panel panel-default">
+	<div class="panel-body">
+	
    <div class="row">
 	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]contenido_nombre")->textInput() ?></div>
 	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]contenido_fecha")->widget(
@@ -170,20 +177,28 @@ if( strpos($_GET['r'], 'update') > -1)
     ]);  ?> </div>
    </div>
    
-   <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]contenido_justificacion")->textInput() ?></div>
-	  <div class="col-md-6"></div>
-  </div>
-   
-  <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]articulacion")->textInput() ?></div>
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]cantidad_participantes")->textInput() ?></div>
-  </div>
+
+		<div class="row">
+			<div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]contenido_justificacion")->textInput() ?></div>
+			<div class="col-md-6"></div>
+		</div>
+	</div>
+</div>   
+
+<div class="panel panel-info">
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]articulacion")->textInput(['title'=>'Si es el caso, describa cómo la actividad o actividades planeadas se articulan con las actividades de otros proyectos de la iniciativa MCEE', 'data-toggle'=>'tooltip']) ?></div>
+			<div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]cantidad_participantes")->textInput(['title'=>'Indique el número de personas que espera que participen de la actividad, considerando la convocatoria realizada por su equipo', 'data-toggle'=>'tooltip']) ?></div>
+		</div>
+	</div>
+</div>
+  
    
    <h3 style='background-color: #ccc;padding:5px;'>Recursos previstos para realizar la actividad</h3>
    <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]requerimientos_tecnicos")->textInput() ?></div>
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]requerimientos_logisticos")->textInput() ?></div>
+	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]requerimientos_tecnicos")->textInput(['title'=>'Indique los requerimientos  técnicos,  materiales y de espacio', 'data-toggle'=>'tooltip']) ?></div>
+	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]requerimientos_logisticos")->textInput(['title'=>'Indique los requerimientos  logísticos, No. de refrigerios, No. de vehículos y capacidad de transporte, etc.', 'data-toggle'=>'tooltip']) ?></div>
    </div>
    
    
@@ -203,13 +218,13 @@ if( strpos($_GET['r'], 'update') > -1)
    </div>
    
   <div class="row">
-	  <div class="col-md-6"> <?= $form->field($actividades_isa, "[$idProceso]observaciones_generales")->textInput() ?></div>
+	  <div class="col-md-6"> <?= $form->field($actividades_isa, "[$idProceso]observaciones_generales")->textArea(['title'=>'Mencione aspectos adicionales que deban considerarse en la planeación de la actividad', 'data-toggle'=>'tooltip']) ?></div>
 	  <div class="col-md-6"></div>
   </div>
   
    <h3 style='background-color: #ccc;padding:5px;'>Diligenciamiento del Plan de Actividades</h3>
    <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]nombre_diligencia")->textInput() ?></div>
+	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]nombre_diligencia")->textInput(["value" => $_SESSION['nombres']." ".$_SESSION['apellidos'],'disabled' => 'disabled']) ?></div>
 	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]rol")->textInput() ?></div>
 	</div>
    

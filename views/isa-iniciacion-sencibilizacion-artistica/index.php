@@ -12,7 +12,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Iniciación Sensibilización Artistica';
+$this->title = '1. Planeación';
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
@@ -47,7 +47,7 @@ if( !$sede ){
 <div class="modal-content">
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-<h3>Iniciación Sensibilización Artistica</h3>
+<h3><?php echo $this->title;  ?></h3>
 </div>
 <div class="modal-body">
 <div id='modalContent'></div>
