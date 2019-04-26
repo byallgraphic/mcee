@@ -12,7 +12,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\GeSeguimientoOperadorBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Gestión escolar';
+$this->title = 'Seguimiento operador';
 $this->params['breadcrumbs'][] = $this->title;
 
 
@@ -146,6 +146,11 @@ $this->registerJsFile('@web/js/GeSeguimientosForm.js');
 				'update' => function ($url, $model) {
 					return Html::a('<span name="actualizar" class="glyphicon glyphicon-pencil" value ="'.$url.'"></span>', $url, [
 								'title' => Yii::t('app', 'lead-update'),
+                                'id' => 'modal-ge',
+                                'onclick' => '
+                                        $("#modal-ge").modal(\'show\')
+                                            .find("#modalContent")
+                                            .load($(this).attr(\'value\'));'
 					]);
 				}
 

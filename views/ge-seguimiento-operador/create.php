@@ -10,8 +10,8 @@ $this->registerJsFile('@web/js/GeSeguimientos.js');
 /* @var $this yii\web\View */
 /* @var $model app\models\GeSeguimientoOperador */
 
-$this->title = 'Gestión escolar';
-$this->params['breadcrumbs'][] = ['label' => 'Gestión escolar', 'url' => ['index']];
+$this->title = 'Seguimiento operador';
+$this->params['breadcrumbs'][] = ['label' => 'Seguimiento operador', 'url' => ['index']];
 $this->params['breadcrumbs'][] = "Agregar";
 ?>
 

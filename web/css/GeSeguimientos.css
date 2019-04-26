@@ -20,6 +20,7 @@
     margin: 3% 0;
 }
 #id_operador,#geseguimientooperador-id_indicador{
+    height: 120px;
     display: grid;
     grid-template-areas: "a b";
     align-items: baseline;

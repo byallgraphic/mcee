@@ -60,6 +60,7 @@ class GeSeguimientoOperadorController extends Controller
     {
         $searchModel = new GeSeguimientoOperadorBuscar();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['id_tipo_seguimiento' => Yii::$app->request->get('idTipoSeguimiento')]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
