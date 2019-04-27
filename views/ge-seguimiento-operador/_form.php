@@ -149,6 +149,9 @@ if(Yii::$app->request->get('guardado')){
             );
 
             $(this).val(valueBtn);
+            $('#objetivo-'+ (valueBtn) + ' input').val('');
+            $('#objetivo-'+ (valueBtn) + ' textarea').val('');
+
             id_objetivo.prop('disabled', true);
         });
 

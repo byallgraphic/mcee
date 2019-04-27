@@ -91,6 +91,11 @@ class GeSeguimientoOperadorController extends Controller
 		$id_institucion	= $_SESSION['instituciones'][0];
 		$guardado = false;
         $model = new GeSeguimientoOperador();
+
+        if (Yii::$app->request->get('id')){
+            $model = GeSeguimientoOperador::findOne(Yii::$app->request->get('id'));
+        }
+
 		$dataNombresOperador = Parametro::find()
 									->where( 'estado=1' )
 									->andWhere( 'id_tipo_parametro=37' )

@@ -61,7 +61,16 @@ $this->registerJsFile('@web/js/GeSeguimientosForm.js');
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?=  Html::button('Agregar',['value'=>Url::to(['create', 'id' => 1]),'class'=>'btn btn-success','id'=>'modalButton-ge']) ?>
+        <?=  Html::button('Agregar',['value'=>Url::to(['create']),
+            'class'=>'btn btn-success',
+            'id'=>'modalButton-ge',
+            'onclick' => '
+                var modalbtn = $(\'#modalButton-ge\');
+                modalbtn.val($(\'#hidden_url\').val() + \'&id=\');'
+        ]) ?>
+        <label>
+            <input id="hidden_url" type="hidden" value="<?= Url::to(['create']) ?>">
+        </label>
         <?= Html::a('Volver',
             [
                 'acompanamiento-in-situ/index',
@@ -144,14 +153,18 @@ $this->registerJsFile('@web/js/GeSeguimientosForm.js');
 				},
 
 				'update' => function ($url, $model) {
-					return Html::a('<span name="actualizar" class="glyphicon glyphicon-pencil" value ="'.$url.'"></span>', $url, [
+					return Html::a('<span name="actualizar" id="spanmodalid'.$model->id.'" class="glyphicon glyphicon-pencil" value ="'.$model->id.'"></span>', $url, [
 								'title' => Yii::t('app', 'lead-update'),
-                                'id' => 'modal-ge',
+                                'id' => $model->id,
                                 'onclick' => '
-                                        $("#modal-ge").modal(\'show\')
-                                            .find("#modalContent")
-                                            .load($(this).attr(\'value\'));'
-					]);
+                                    var modalbtn = $(\'#modalButton-ge\');
+                                    var id = $(this).attr(\'id\')
+                                    modalbtn.val($(\'#hidden_url\').val() + \'&id=\' + id);
+                                    $("#modal-ge")
+                                        .modal(\'show\')
+                                        .find("#modalContent")
+                                        .load(modalbtn.attr(\'value\'));'
+                    ]);
 				}
 
 			  ],
@@ -161,3 +174,5 @@ $this->registerJsFile('@web/js/GeSeguimientosForm.js');
         ],
     ]); ?>
 </div>
+<script>
+</script>
