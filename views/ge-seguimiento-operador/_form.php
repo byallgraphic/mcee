@@ -176,7 +176,7 @@ if(Yii::$app->request->get('guardado')){
 
         $('#save_form').click(function(e){
             e.preventDefault();
-            var reporte_actividades = new FormData();
+            var reporte_actividades = [];
             $('.objetivo').each(function( index ) {
                 reporte_actividades[index] = {
                     objetivo: $('#objetivo-'+index+' #id_objetivo').val(),
@@ -206,19 +206,22 @@ if(Yii::$app->request->get('guardado')){
             formData.append("dificultades", $('#geseguimientooperador-dificultades').val());
             formData.append("propuesta_dificultades", $('#geseguimientooperador-propuesta_dificultades').val());
             formData.append("reporte_actividades", JSON.stringify(reporte_actividades));
-            formData.append("file", $('#file-upload').prop("files"));
+
+            var files = $('#file-upload').prop("files");
+            var files_length = files.length;
+            for (var x = 0; x < files_length; x++) {
+                formData.append("files[]", files[x]);
+            }
 
             if ($(this).val() === '1'){
                 $.ajax({
                     url: "index.php?r=ge-seguimiento-operador%2Fupdate",
-                    processData: false,
-                    contentType: false,
                     cache: false,
+                    contentType: false,
+                    processData: false,
+                    async: true,
                     data: formData,
                     type: 'POST',
-                    beforeSend: function(xhr) {
-                        xhr.setRequestHeader('Content-Type', 'multipart/form-data');
-                    },
                     success: function (res, status) {
                         if (status == 'success') {
                             $("#modal-ge").modal('hide');

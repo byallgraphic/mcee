@@ -33,7 +33,6 @@ class GeSeguimientoFile extends \yii\db\ActiveRecord
             [['id', 'id_seguimiento_gestion', 'id_seguimiento_frente', 'id_reporte_actividades'], 'default', 'value' => null],
             [['id', 'id_seguimiento_gestion', 'id_seguimiento_frente', 'id_reporte_actividades'], 'integer'],
             [['file'], 'string', 'max' => 255],
-            [['id_reporte_actividades'], 'unique'],
         ];
     }
 
