@@ -27,6 +27,8 @@ use Yii;
  * @property string $calificacion_nivel
  * @property string $descripcion_calificacion
  * @property string $estado
+ *
+ * @property GeTipoSeguimiento $tipo_seguimiento
  */
 class GeSeguimientoGestion extends \yii\db\ActiveRecord
 {
@@ -105,5 +107,13 @@ class GeSeguimientoGestion extends \yii\db\ActiveRecord
             'descripcion_calificacion' 	=> 'Amplie su respuesta',
             'estado' 					=> 'Estado',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTipo_seguimiento()
+    {
+        return $this->hasOne(GeTipoSeguimiento::className(), ['id' => 'id_tipo_seguimiento']);
     }
 }

@@ -22,6 +22,7 @@ use Yii;
  * @property string $logros
  * @property string $dificultades
  * @property string $estado
+ * @property GeTipoSeguimiento $tipo_seguimiento
  */
 class GeSeguimientoOperadorFrente extends \yii\db\ActiveRecord
 {
@@ -100,5 +101,13 @@ class GeSeguimientoOperadorFrente extends \yii\db\ActiveRecord
             'documentFile'				=> 'Agregar Archivo',
             'ruta_archivo'				=> 'Ruta del archivo',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTipo_seguimiento()
+    {
+        return $this->hasOne(GeTipoSeguimiento::className(), ['id' => 'id_tipo_seguimiento']);
     }
 }

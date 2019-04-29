@@ -19,6 +19,7 @@ use app\models\GeSeguimientoGestionBuscar;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\Sedes;
 
 use app\models\Parametro;
 use app\models\Instituciones;
@@ -53,6 +54,7 @@ class GeSeguimientoGestionController extends Controller
     {
         $searchModel = new GeSeguimientoGestionBuscar();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['id_tipo_seguimiento' => Yii::$app->request->get('idTipoSeguimiento')]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -89,7 +91,7 @@ class GeSeguimientoGestionController extends Controller
 		
         $model = new GeSeguimientoGestion();
 
-        if( $model->load(Yii::$app->request->post()) ){
+        if( $model->load(Yii::$app->request->post()) ||  Yii::$app->request->get( 'id' )){
 			
 			$model->id_tipo_seguimiento = $tipo_seguimiento;
 			$model->estado = 1;
@@ -145,6 +147,7 @@ class GeSeguimientoGestionController extends Controller
 								->all();
 		
 		$personas			= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
+        $sede = Sedes::findOne( $id_sede );
 
         return $this->render('create', [
             'model' 			=> $model,
@@ -152,6 +155,7 @@ class GeSeguimientoGestionController extends Controller
             'institucion' 		=> $institucion,
             'listBoleano' 		=> $listBoleano,
             'consideracones' 	=> $consideracones,
+            'sede'				=> $sede,
             'respuestas' 		=> $respuestas,
             'calificaciones' 	=> $calificaciones,
             'guardado' 			=> $guardado,

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 
 use nex\chosen\Chosen;
 
@@ -10,6 +11,10 @@ use nex\chosen\Chosen;
 /* @var $form yii\widgets\ActiveForm */
 
 
+if( !$sede ){
+    $this->registerJs( "$( cambiarSede ).click()" );
+    return;
+}
 
 if(Yii::$app->request->get('guardado')){
 	
@@ -26,7 +31,9 @@ if(Yii::$app->request->get('guardado')){
 }
 ?>
 <div class="ge-seguimiento-operador-form">
-
+    <label>
+        <input type="hidden" id="id" value="<?= isset($model->id) ? $model->id : ''?>">
+    </label>
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => ['store']]); ?>
 
     <input type="hidden" id="id_tipo_seguimiento" value="<?= Yii::$app->request->get('idTipoSeguimiento') ?>">
@@ -81,23 +88,23 @@ if(Yii::$app->request->get('guardado')){
 
     <div class="objetivo" id="objetivo-0">
         <div id="" class="id_objetivo">
-            <?= $form->field($model, 'objetivo')->textInput(['disabled' => false, 'id' => 'id_objetivo']) ?>
-            <?= $form->field($model, 'actividad')->textInput(['disabled' => false, 'id' => 'id_actividad']) ?>
-            <?= $form->field($model, 'descripcion_actividad')->textInput(['id' => 'descripcion_actividad']) ?>
-            <?= $form->field($model, 'poblacion_beneficiaria')->dropDownList(['Docentes', 'Estudiantes', 'Directivos', 'Otros'], ['prompt' => 'Seleccione una opcion', 'id' => 'poblacion_beneficiaria']); ?>
+            <?= $form->field($reportAct, 'objetivo')->textInput(['disabled' => false, 'id' => 'id_objetivo']) ?>
+            <?= $form->field($reportAct, 'actividad')->textInput(['disabled' => false, 'id' => 'id_actividad']) ?>
+            <?= $form->field($reportAct, 'descripcion')->textInput(['id' => 'descripcion_actividad']) ?>
+            <?= $form->field($reportAct, 'poblacion_beneficiaria')->dropDownList(['Docentes', 'Estudiantes', 'Directivos', 'Otros'], ['prompt' => 'Seleccione una opcion', 'id' => 'poblacion_beneficiaria']); ?>
             <div id="id_quienes">
-                <?=  $form->field($model, 'quienes')->textInput(['id' => 'quienes']); ?>
+                <?=  $form->field($reportAct, 'quienes')->textInput(['id' => 'quienes']); ?>
             </div>
-            <?= $form->field($model, 'numero_participantes')->textInput(['type' => 'number', 'id' => 'numero_participantes']) ?>
-            <?= $form->field($model, 'duracion_actividad')->textInput(['id' => 'duracion_actividad']) ?>
-            <?= $form->field($model, 'logros_alcanzados')->textarea(['id' => 'logros_alcanzados']) ?>
-            <?= $form->field($model, 'dificultadades')->textarea(['id' => 'dificultadades']) ?>
+            <?= $form->field($reportAct, 'num_participantes')->textInput(['type' => 'number', 'id' => 'numero_participantes']) ?>
+            <?= $form->field($reportAct, 'duracion')->textInput(['id' => 'duracion_actividad']) ?>
+            <?= $form->field($reportAct, 'logros')->textarea(['id' => 'logros_alcanzados']) ?>
+            <?= $form->field($reportAct, 'dificultades')->textarea(['id' => 'dificultadades']) ?>
         </div>
 
         <div class="evidencia_actividades">
             <h3 style='background-color:#ccc;padding:5px;'><?= "Evidencias de soporte"?></h3>
             <p>Listado de participantes, registro visual, informe de actividades o acta</p>
-            <?= $form->field($model, 'documentFile')->fileInput(['multiple' => true, 'id' => "file-upload"]) ?>
+            <?= $form->field($model, 'documentFile[]')->fileInput(['multiple' => true, 'id' => "file-upload"]) ?>
         </div>
     </div>
 
@@ -105,7 +112,19 @@ if(Yii::$app->request->get('guardado')){
     <br>
     <br>
     <div class="form-group">
-        <?= Html::button('Guardar', ['class' => 'btn btn-success',  'id' => 'save_form']) ?>
+
+        <?php
+            if (Yii::$app->request->get('id')){
+        ?>
+                <?= Html::button('Actualizar', ['class' => 'btn btn-success',  'id' => 'save_form', 'value' => 1]) ?>
+        <?php
+            }else{
+        ?>
+                <?= Html::button('Guardar', ['class' => 'btn btn-success',  'id' => 'save_form', 'value' => 0]) ?>
+        <?php
+            }
+        ?>
+
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -155,8 +174,9 @@ if(Yii::$app->request->get('guardado')){
             id_objetivo.prop('disabled', true);
         });
 
-        $('#save_form').click(function () {
-            var reporte_actividades = [];
+        $('#save_form').click(function(e){
+            e.preventDefault();
+            var reporte_actividades = new FormData();
             $('.objetivo').each(function( index ) {
                 reporte_actividades[index] = {
                     objetivo: $('#objetivo-'+index+' #id_objetivo').val(),
@@ -170,26 +190,60 @@ if(Yii::$app->request->get('guardado')){
                 };
             });
 
-            var data = {
-                id_tipo_seguimiento: $(location).attr('href').split("&")[1].split("=")[1],
-                email: $('#geseguimientooperador-email').val(),
-                id_operador: $('input:checked', '#id_operador').val(),
-                proyecto_reportar: $('#geseguimientooperador-proyecto_reportar').val(),
-                id_ie: $('#geseguimientooperador-id_ie').val(),
-                mes_reporte: $('#geseguimientooperador_mes_reporte_chosen').find('.chosen-results').find('.result-selected').data("option-array-index"),
-                semana_reportada: $('#geseguimientooperador-semana_reporte').val(),
-                id_persona_responsable: $('#geseguimientooperador-id_persona_responsable').val(),
-                indicador: $('#geseguimientooperador-indicador').val(),
-                avances_cumplimiento_cuantitativos: $('#geseguimientooperador-avances_cumplimiento_cuantitativos').val(),
-                avances_cumplimiento_cualitativos: $('#geseguimientooperador-avances_cumplimiento_cualitativos').val(),
-                dificultades: $('#geseguimientooperador-dificultades').val(),
-                propuesta_dificultades: $('#geseguimientooperador-propuesta_dificultades').val(),
-                reporte_actividades: reporte_actividades
-            };
-            $.post( "index.php?r=ge-seguimiento-operador%2Fstore", data, function( data ) {
-                $("#modal-ge").modal('hide');
-                $('#modal-guardado').modal('show');
-            });
+            var formData = new FormData();
+            formData.append("id", $('#id').val());
+            formData.append("id_tipo_seguimiento", $(location).attr('href').split("&")[1].split("=")[1]);
+            formData.append("email", $('#geseguimientooperador-email').val());
+            formData.append("id_operador", $('input:checked', '#id_operador').val());
+            formData.append("proyecto_reportar", $('#geseguimientooperador-proyecto_reportar').val());
+            formData.append("id_ie", $('#geseguimientooperador-id_ie').val());
+            formData.append("mes_reporte", $('#geseguimientooperador_mes_reporte_chosen').find('.chosen-results').find('.result-selected').data("option-array-index"));
+            formData.append("semana_reportada", $('#geseguimientooperador-semana_reporte').val());
+            formData.append("id_persona_responsable", $('#geseguimientooperador-id_persona_responsable').val());
+            formData.append("indicador", $('#geseguimientooperador-indicador').val());
+            formData.append("avances_cumplimiento_cuantitativos", $('#geseguimientooperador-avances_cumplimiento_cuantitativos').val());
+            formData.append("avances_cumplimiento_cualitativos", $('#geseguimientooperador-avances_cumplimiento_cualitativos').val());
+            formData.append("dificultades", $('#geseguimientooperador-dificultades').val());
+            formData.append("propuesta_dificultades", $('#geseguimientooperador-propuesta_dificultades').val());
+            formData.append("reporte_actividades", JSON.stringify(reporte_actividades));
+            formData.append("file", $('#file-upload').prop("files"));
+
+            if ($(this).val() === '1'){
+                $.ajax({
+                    url: "index.php?r=ge-seguimiento-operador%2Fupdate",
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    data: formData,
+                    type: 'POST',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+                    },
+                    success: function (res, status) {
+                        if (status == 'success') {
+                            $("#modal-ge").modal('hide');
+                            $('#modal-guardado').modal('show');
+                        }
+                    },
+                });
+            }else{
+                $.ajax({
+                    url: "index.php?r=ge-seguimiento-operador%2Fstore",
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    async: true,
+                    data: formData,
+                    type: 'POST',
+                    success: function (res, status) {
+                        if (status == 'success') {
+                            $("#modal-ge").modal('hide');
+                            $('#modal-guardado').modal('show');
+                        }
+                    },
+                });
+            }
+
         })
     });
 </script>

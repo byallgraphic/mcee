@@ -17,10 +17,5 @@ $( document ).ready(function() {
     var btnModal = $('#modalButton-ge');
     btnModal.click(function()
     {
-        $("#modal-ge").modal('show')
-            .find("#modalContent")
-            .load($(this).attr('value'));
-
-        btnModal.val(btnModal.val().replace('id=1', 'id=2'))
     });
 });

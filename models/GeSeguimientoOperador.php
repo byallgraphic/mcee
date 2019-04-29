@@ -25,13 +25,10 @@ use Yii;
  * @property string $dificultadades
  * @property string $avances_cumplimiento_cuantitativos
  * @property string $avances_cumplimiento_cualitativos
- * @property string $dificultades
  * @property string $propuesta_dificultades
  * @property string $estado
  * @property string $id_operador
  * @property string $indicador
- * @property string $objetivo
- * @property string $actividad
  *
  * @property GeTipoSeguimiento $tipo_seguimiento
  */
@@ -71,13 +68,9 @@ class GeSeguimientoOperador extends \yii\db\ActiveRecord
 				'dificultadades',
 				'avances_cumplimiento_cuantitativos',
 				'avances_cumplimiento_cualitativos',
-				'dificultades',
 				'propuesta_dificultades',
 				'estado',
 				'indicador',
-				'objetivo',
-				'actividad',
-				'documentFile',
 			], 'required' ],
             [['id_tipo_seguimiento', 'id_ie', 'id_persona_responsable', 'numero_participantes', 'estado', 'id_operador'], 'default', 'value' => null],
             [['id_tipo_seguimiento', 'id_ie', 'id_persona_responsable', 'numero_participantes', 'estado', 'id_operador'], 'integer'],
@@ -121,9 +114,6 @@ class GeSeguimientoOperador extends \yii\db\ActiveRecord
             'propuesta_dificultades' 			=> '11. Qué propuesta(s) plantea para superar esas dificultades presentadas',
             'estado' 							=> 'Estado',
             'indicador'						=> '7. A qué indicador del proyecto le apuntó la actividad?',
-            'objetivo'						=> 'Objetivo al que reporta',
-            'actividad'						=> 'Actividad que reporta',
-            'ruta_archivo'						=> 'Ruta del archivo',
             'documentFile'						=> 'Agregar Archivo',
         ];
     }

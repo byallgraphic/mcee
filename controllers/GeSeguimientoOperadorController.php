@@ -13,6 +13,8 @@ else
 	die;
 }
 
+use app\models\GeReporteActividades;
+use app\models\GeSeguimientoFile;
 use Yii;
 use app\models\GeSeguimientoOperador;
 use app\models\GeSeguimientoOperadorBuscar;
@@ -21,6 +23,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 
+use app\models\Sedes;
 use app\models\Parametro;
 use app\models\Personas;
 use app\models\Instituciones;
@@ -88,12 +91,15 @@ class GeSeguimientoOperadorController extends Controller
      */
     public function actionCreate()
     {
+        $id_sede 		= $_SESSION['sede'][0];
 		$id_institucion	= $_SESSION['instituciones'][0];
 		$guardado = false;
         $model = new GeSeguimientoOperador();
+        $reportAct = new GeReporteActividades();
 
         if (Yii::$app->request->get('id')){
             $model = GeSeguimientoOperador::findOne(Yii::$app->request->get('id'));
+            $reportAct = GeReporteActividades::find()->where(['id_seguimiento_operador' => Yii::$app->request->get('id')])->one();
         }
 
 		$dataNombresOperador = Parametro::find()
@@ -130,23 +136,21 @@ class GeSeguimientoOperadorController extends Controller
 								->where( 'estado=1' )
 								->all();
 		$indicadores		= ArrayHelper::map( $dataIndicadores, 'id', 'descripcion' );
-		$dataObjetivos	= GeObjetivos::find()
-								->where( 'estado=1' )
-								->all();
-		$objetivos		= ArrayHelper::map( $dataObjetivos, 'id', 'descripcion' );
 		$dataActividades	= GeActividades::find()
 								->where( 'estado=1' )
 								->all();
 		$actividades		= ArrayHelper::map( $dataActividades, 'id', 'descripcion' );
+        $sede = Sedes::findOne( $id_sede );
 		
         return $this->renderAjax('create', [
             'model' 			=> $model,
+            'reportAct'         => $reportAct,
             'nombresOperador' 	=> $nombresOperador,
             'mesReporte' 		=> $mesReporte,
             'personas' 			=> $personas,
             'institucion' 		=> $institucion,
+            'sede'				=> $sede,
             'indicadores' 		=> $indicadores,
-            'objetivos' 		=> $objetivos,
             'actividades' 		=> $actividades,
             'guardado' 			=> $guardado,
         ]);
@@ -155,8 +159,64 @@ class GeSeguimientoOperadorController extends Controller
     public function actionStore(){
 
         $GeSeguimientoOperador = Yii::$app->request->post();
+
+        $gs = new GeSeguimientoOperador();
+        $gs->id_tipo_seguimiento = $GeSeguimientoOperador['id_tipo_seguimiento'];
+        $gs->email = $GeSeguimientoOperador['email'];
+        $gs->id_operador = $GeSeguimientoOperador['id_operador'];
+        $gs->cual_operador = isset($GeSeguimientoOperador['cual_operador']) ? $GeSeguimientoOperador['cual_operador'] : '';
+        $gs->proyecto_reportar = $GeSeguimientoOperador['proyecto_reportar'];
+        $gs->id_ie = $GeSeguimientoOperador['id_ie'];
+        $gs->mes_reporte = $GeSeguimientoOperador['mes_reporte'];
+        $gs->semana_reporte = $GeSeguimientoOperador['semana_reportada'];
+        $gs->id_persona_responsable = $GeSeguimientoOperador['id_persona_responsable'];
+        $gs->avances_cumplimiento_cuantitativos = $GeSeguimientoOperador['avances_cumplimiento_cuantitativos'];
+        $gs->avances_cumplimiento_cualitativos = $GeSeguimientoOperador['avances_cumplimiento_cualitativos'];
+        $gs->propuesta_dificultades = $GeSeguimientoOperador['propuesta_dificultades'];
+        $gs->indicador =  $GeSeguimientoOperador['indicador'];
+        $gs->estado = 1;
+        $gs->save(false);
+
+        foreach (json_decode($GeSeguimientoOperador['reporte_actividades']) as $RepAct){
+            $ra = new GeReporteActividades();
+
+            $ra->id_seguimiento_operador = $gs->id;
+            $ra->objetivo = $RepAct->objetivo;
+            $ra->actividad = $RepAct->actividad;
+            $ra->descripcion = $RepAct->descripcion_actividad;
+            $ra->num_participantes = $RepAct->numero_participantes;
+            $ra->duracion = $RepAct->duracion_actividad;
+            $ra->logros = $RepAct->logros_alcanzados;
+            $ra->dificultades = $RepAct->dificultadades;
+
+            $ra->save(false);
+
+            /*foreach ($GeSeguimientoOperador['reporte_actividades']['file'] as $RepAct){
+                $fra = new GeSeguimientoFile();
+
+                $fra->id_reporte_actividades = $ra->id;
+                $fra->file = $RepAct['objetivo'];
+
+                $ra->save(false);
+            }*/
+        }
+
+        Yii::$app->session->setFlash('ok');
+        return 'ok';
+    }
+
+    /**
+     * Updates an existing GeSeguimientoOperador model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param string $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdate()
+    {
+        $GeSeguimientoOperador = Yii::$app->request->post();
         foreach ($GeSeguimientoOperador['reporte_actividades'] as $RepAct){
-            $gs = new GeSeguimientoOperador();
+            $gs = GeSeguimientoOperador::findOne(Yii::$app->request->post('id'));
             $gs->id_tipo_seguimiento = $GeSeguimientoOperador['id_tipo_seguimiento'];
             $gs->email = $GeSeguimientoOperador['email'];
             $gs->id_operador = $GeSeguimientoOperador['id_operador'];
@@ -187,26 +247,6 @@ class GeSeguimientoOperadorController extends Controller
 
         Yii::$app->session->setFlash('ok');
         return 'ok';
-    }
-
-    /**
-     * Updates an existing GeSeguimientoOperador model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        }
-
-        return $this->renderAjax('update', [
-            'model' => $model,
-        ]);
     }
 
     /**

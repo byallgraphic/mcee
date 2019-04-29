@@ -26,6 +26,7 @@ $this->params['breadcrumbs'][] = "Agregar";
         'model' 			=> $model,
         'cargos' 			=> $cargos,
         'institucion' 		=> $institucion,
+        'sede'				=> $sede,
         'listBoleano' 		=> $listBoleano,
         'consideracones' 	=> $consideracones,
         'respuestas' 		=> $respuestas,

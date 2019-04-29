@@ -80,12 +80,12 @@ $this->params['breadcrumbs'][] = $this->title;
            'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'id_tipo_seguimiento',
-            'id_ie',
-            'id_cargo',
-            'id_nombre',
-            //'fecha',
+            //'id',
+           [
+               'label' => 'Tipo de seguimiento',
+               'value' => 'tipo_seguimiento.descripcion',
+           ],
+            'fecha',
             //'id_persona_gestor',
             //'numero_visitas',
             //'socializo_plan',
@@ -106,13 +106,13 @@ $this->params['breadcrumbs'][] = $this->title;
 			'template'=>'{view}{update}{delete}',
 				'buttons' => [
 				'view' => function ($url, $model) {
-					return Html::a('<span name="detalle" class="glyphicon glyphicon-eye-open" value ="'.$url.'" ></span>', $url, [
+					return Html::a('<span name="detalle" class="glyphicon glyphicon-eye-open" value ="'.Url::to(['create']).'" ></span>', Url::to(['create']), [
 								'title' => Yii::t('app', 'lead-view'),
 					]);
 				},
 
 				'update' => function ($url, $model) {
-					return Html::a('<span name="actualizar" class="glyphicon glyphicon-pencil" value ="'.$url.'"></span>', $url, [
+					return Html::a('<span name="actualizar" class="glyphicon glyphicon-pencil" value ="'.Url::to(['create', 'id' => 1]).'"></span>', Url::to(['create', 'id' => 1]), [
 								'title' => Yii::t('app', 'lead-update'),
 					]);
 				}

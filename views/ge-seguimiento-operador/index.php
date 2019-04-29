@@ -16,6 +16,8 @@ $this->title = 'Seguimiento operador';
 $this->params['breadcrumbs'][] = $this->title;
 
 
+$this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/documentos.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->registerCssFile('@web/css/GeSeguimientos.css');
 $this->registerJsFile('@web/js/jquery-3.3.1.min.js');
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
@@ -66,7 +68,11 @@ $this->registerJsFile('@web/js/GeSeguimientosForm.js');
             'id'=>'modalButton-ge',
             'onclick' => '
                 var modalbtn = $(\'#modalButton-ge\');
-                modalbtn.val($(\'#hidden_url\').val() + \'&id=\');'
+                modalbtn.val($(\'#hidden_url\').val());
+                $("#modal-ge")
+                    .modal(\'show\')
+                    .find("#modalContent")
+                    .load(modalbtn.attr(\'value\'));'
         ]) ?>
         <label>
             <input id="hidden_url" type="hidden" value="<?= Url::to(['create']) ?>">
@@ -123,7 +129,6 @@ $this->registerJsFile('@web/js/GeSeguimientosForm.js');
                'value' => 'tipo_seguimiento.descripcion',
            ],
             'email:email',
-            'objetivo',
             //'proyecto_reportar',
             //'id_ie',
             //'mes_reporte',

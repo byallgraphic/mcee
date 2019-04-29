@@ -29,10 +29,11 @@ $this->params['breadcrumbs'][] = "Agregar";
         'mesReporte' 		=> $mesReporte,
         'personas' 			=> $personas,
         'institucion' 		=> $institucion,
+        'sede'				=> $sede,
         'indicadores' 		=> $indicadores,
-        'objetivos' 		=> $objetivos,
         'actividades' 		=> $actividades,
         'guardado' 			=> $guardado,
+        'reportAct'         => $reportAct,
     ]) ?>
 
 </div>

@@ -80,14 +80,19 @@ $this->params['breadcrumbs'][] = $this->title;
            'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'id_tipo_seguimiento',
+
+            //'id',
+
+            [
+               'label' => 'Tipo de seguimiento',
+               'value' => 'tipo_seguimiento.descripcion',
+            ],
             'email:email',
-            'id_persona_diligencia',
-            'id_gestor_a_evaluar',
-            //'mes_reporte',
-            //'fecha_corte',
-            //'cumple_cronograma:boolean',
+            //'id_persona_diligencia',
+            //'id_gestor_a_evaluar',
+            'mes_reporte',
+            'fecha_corte',
+            'cumple_cronograma:boolean',
             //'descripcion_cronograma',
             //'compromisos_establecidos',
             //'cuantas_reuniones',

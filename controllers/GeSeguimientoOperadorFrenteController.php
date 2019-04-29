@@ -20,6 +20,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use app\models\Sedes;
 use app\models\Parametro;
 use app\models\Instituciones;
 use app\models\Personas;
@@ -162,12 +163,14 @@ class GeSeguimientoOperadorFrenteController extends Controller
 									->all();
 		
 		$seleccion = ArrayHelper::map( $dataSeleccion, 'id', 'descripcion' );
+        $sede = Sedes::findOne( $id_sede );
 
         return $this->render('create', [
             'model' => $model,
             'guardado' => $guardado,
             'personas' => $personas,
             'mesReporte' => $mesReporte,
+            'sede'				=> $sede,
             'sino' => $sino,
             'seleccion' => $seleccion,
         ]);

@@ -12,6 +12,12 @@ use dosamigos\datepicker\DatePicker;
 /* @var $form yii\widgets\ActiveForm */
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 
+
+if( !$sede ){
+    $this->registerJs( "$( cambiarSede ).click()" );
+    return;
+}
+
 if( $guardado ){
 	
 	$this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
