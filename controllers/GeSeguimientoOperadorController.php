@@ -200,7 +200,7 @@ class GeSeguimientoOperadorController extends Controller
                 $no_files = count($_FILES["files"]['name']);
                 for ($i = 0; $i < $no_files; $i++) {
                     $urlBase  = "../documentos/seguimientoOperador/";
-                    $name = 'segOperador'.$gs->id.'-'.$ra->id.'.'.substr($_FILES["files"]['name'][$i], strrpos($_FILES["files"]['name'][$i], '.') + 1);
+                    $name = $_FILES["files"]['name'][$i];//'segOperador'.$gs->id.'-'.$ra->id.'.'.substr($_FILES["files"]['name'][$i], strrpos($_FILES["files"]['name'][$i], '.') + 1);
 
                     move_uploaded_file($_FILES["files"]["tmp_name"][$i], $urlBase.$name);
 

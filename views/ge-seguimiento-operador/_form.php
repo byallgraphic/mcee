@@ -46,7 +46,7 @@ if(Yii::$app->request->get('guardado')){
     <label>
         <input type="hidden" id="id" value="<?= isset($model->id) ? $model->id : ''?>">
     </label>
-    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => ['store'], 'enableAjaxValidation' => true]); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => ['store']]); ?>
 
     <input type="hidden" id="id_tipo_seguimiento" value="<?= Yii::$app->request->get('idTipoSeguimiento') ?>">
 
@@ -117,7 +117,9 @@ if(Yii::$app->request->get('guardado')){
             <h3 style='background-color:#ccc;padding:5px;'><?= "Evidencias de soporte"?></h3>
             <p>Listado de participantes, registro visual, informe de actividades o acta</p>
             <?= $form->field($model, 'documentFile[]')->fileInput(['multiple' => true, 'id' => "file-upload-0"]) ?>
-            <div id="nameElement"></div>
+            <div id="nameElement">
+
+            </div>
         </div>
     </div>
 
@@ -202,7 +204,6 @@ if(Yii::$app->request->get('guardado')){
         });
 
         $('#file-upload-0').change(function(e){
-            console.log($(this))
             var files = $(this).prop("files");
             var files_length = files.length;
             for (var x = 0; x < files_length; x++) {
@@ -309,8 +310,9 @@ if(Yii::$app->request->get('guardado')){
                 propuesta_dificultades.parent().removeClass('has-error');
 
             reporte_obj.each(function() {
-                $(this).find(':input').each(function(){
-                    if (!$(this).val()) {
+                $(this).find('input[type!="hidden"]').each(function(){
+                    if (!$(this).val() && ($(this).attr('id') !== 'quienes')) {
+                        console.log($(this));
                         $(this).parent().addClass('has-error');
                         $(this).parent().find('.help-block').html('Este campo es requerido.');
                         validacion = 0;
@@ -354,7 +356,7 @@ if(Yii::$app->request->get('guardado')){
             formData.append("propuesta_dificultades", propuesta_dificultades.val());
             formData.append("reporte_actividades", JSON.stringify(reporte_actividades));
 
-            var files = $('#file-upload').prop("files");
+            var files = $('#file-upload-0').prop("files");
             var files_length = files.length;
             for (var x = 0; x < files_length; x++) {
                 formData.append("files[]", files[x]);
