@@ -43,6 +43,7 @@ class IsaEquiposCampo extends \yii\db\ActiveRecord
             'nombre' => 'Nombre',
             'descripcion' => 'Descripción',
             'cantidad' => 'Cantidad',
+			'integrantes' => 'Integrantes'
         ];
     }
 }

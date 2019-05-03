@@ -16,6 +16,7 @@ else
 use Yii;
 use app\models\IsaEquiposCampo;
 use app\models\IsaEquiposCampoBuscar;
+use app\models\IsaIntegrantesXEquipo;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -78,18 +79,58 @@ class IsaEquiposCampoController extends Controller
     public function actionCreate()
     {
         $model = new IsaEquiposCampo();
-		
+		$modelIntegrantesEquipo = new IsaIntegrantesXEquipo();
 		//solo guarda sin redireccion
-        if ($model->load(Yii::$app->request->post()) && $model->save()) 
+		
+		if ($model->load(Yii::$app->request->post()) && $model->save()) 
 		{
-			
-            // return $this->redirect(['index']);
+			foreach (Yii::$app->request->post()['IsaEquiposCampo']['integrantes'] as $integrantes)
+			{
+				$integranteEquipo = new IsaIntegrantesXEquipo();
+				$integranteEquipo->id_equipo_campo 	= $model->id;
+				$integranteEquipo->id_perfil_persona_institucion= $integrantes;
+				$integranteEquipo->estado	= 1;
+				$integranteEquipo->save(false);
+			}
         }
-
         return $this->renderAjax('create', [
             'model' => $model,
+			'personas'=> $this->obtenerNombresXPerfiles(),
+			'modelIntegrantesEquipo'=> $modelIntegrantesEquipo,
         ]);
     }
+
+	/****
+		obtener el nombre de la persona de acuerdo el id del perfil y la institucion
+	****/
+	public function obtenerNombresXPerfiles()
+	{
+		$idInstitucion 	= $_SESSION['instituciones'][0];
+		/**
+		* Llenar nombre de los cooordinadores-eje
+		*/
+		//variable con la conexion a la base de datos 
+		$connection = Yii::$app->getDb();
+		$command = $connection->createCommand("
+			SELECT ppi.id, concat(pe.nombres,' ',pe.apellidos) as nombres
+			FROM perfiles_x_personas as pp, 
+			personas as pe,
+			perfiles_x_personas_institucion ppi
+			WHERE pp.id_personas = pe.id
+			AND pp.id_perfiles = 11
+			AND ppi.id_perfiles_x_persona = pp.id
+			AND ppi.id_institucion = $idInstitucion
+		");
+		$result = $command->queryAll();
+		$nombresPerfil = array();
+		foreach ($result as $r)
+		{
+			$nombresPerfil[$r['id']]= $r['nombres'];
+		}
+		
+		return $nombresPerfil;
+	}
+
 
     /**
      * Updates an existing IsaEquiposCampo model.
@@ -116,7 +157,7 @@ class IsaEquiposCampoController extends Controller
 	{
 		
 		$equiposCampo = new IsaEquiposCampo();
-		$equiposCampo = $equiposCampo->find()->orderby("id")->all();
+		$equiposCampo = $equiposCampo->find()->orderby("id")->andWhere("estado = 1")->all();
 		$equiposCampo = ArrayHelper::map($equiposCampo,'id','nombre');
 		
 		$data[]="<option value=''>Seleccione..</option>";

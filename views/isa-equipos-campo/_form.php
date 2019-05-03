@@ -2,13 +2,12 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use nex\chosen\Chosen;
 /* @var $this yii\web\View */
 /* @var $model app\models\IsaEquiposCampo */
 /* @var $form yii\widgets\ActiveForm */
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 $this->registerJs( file_get_contents( '../web/js/equipo_campo.js' ) );
-
 
 ?>
 
@@ -19,6 +18,19 @@ $this->registerJs( file_get_contents( '../web/js/equipo_campo.js' ) );
     <?= $form->field($model, 'nombre')->textInput() ?>
 
     <?= $form->field($model, 'descripcion')->textInput() ?>
+	
+	<?= $form->field($modelIntegrantesEquipo, "id")->widget(
+						Chosen::className(), [
+							'items' => $personas,
+							'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
+							'multiple' => true,
+							'clientOptions' => [
+								'search_contains' => true,
+								'single_backstroke_delete' => false,
+							],
+                            'placeholder' => 'Seleccione Integrantes',
+					])->label("Integrantes")?>
+					
 
     <?= $form->field($model, 'cantidad')->textInput([ 'type' => 'number']) ?>
 
