@@ -94,12 +94,14 @@ class GeSeguimientoOperadorController extends Controller
         $id_sede 		= $_SESSION['sede'][0];
 		$id_institucion	= $_SESSION['instituciones'][0];
 		$guardado = false;
+        $reportExist = false;
         $model = new GeSeguimientoOperador();
         $reportAct = new GeReporteActividades();
 
         if (Yii::$app->request->get('id')){
             $model = GeSeguimientoOperador::findOne(Yii::$app->request->get('id'));
-            $reportAct = GeReporteActividades::find()->where(['id_seguimiento_operador' => Yii::$app->request->get('id')])->one();
+            $reportAct = GeReporteActividades::find()->where(['id_seguimiento_operador' => Yii::$app->request->get('id')])->all();
+            $reportExist = true;
         }
 
 		$dataNombresOperador = Parametro::find()
@@ -153,6 +155,7 @@ class GeSeguimientoOperadorController extends Controller
             'indicadores' 		=> $indicadores,
             'actividades' 		=> $actividades,
             'guardado' 			=> $guardado,
+            'reportExist'       => $reportExist
         ]);
     }
 
@@ -176,6 +179,7 @@ class GeSeguimientoOperadorController extends Controller
         $gs->indicador =  $GeSeguimientoOperador['indicador'];
         $gs->estado = 1;
         $gs->save(false);
+
 
         foreach (json_decode($GeSeguimientoOperador['reporte_actividades']) as $RepAct){
             $ra = new GeReporteActividades();

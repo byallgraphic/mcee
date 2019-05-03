@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = "Agregar";
         'actividades' 		=> $actividades,
         'guardado' 			=> $guardado,
         'reportAct'         => $reportAct,
+        'reportExist'       => $reportExist
     ]) ?>
 
 </div>
