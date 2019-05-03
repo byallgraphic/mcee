@@ -92,8 +92,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		
 		$items = [];
 		
-		
-		
 		foreach( $proyectos as $idProyecto => $titulo )
 		{
 			$items[] = 	[
@@ -183,9 +181,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 
         $postDatos = Yii::$app->request->post();
 		
-		
-		// echo "<pre>"; print_r($postDatos); echo "</pre>"; 
-		
 		$model = new IsaIniciacionSencibilizacionArtistica();
 
 		$model->id_institucion 			= $postDatos['id_institucion'];
@@ -200,7 +195,8 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		$intervencionIEO = json_decode($postDatos['intervencion_ieo']);
 		unset($intervencionIEO[0]);
 		
-			
+		// echo "<pre>"; print_r($intervencionIEO); echo "</pre>";
+		
 		$activadesIsa = json_decode($postDatos['activadesIsa']);
 		unset($activadesIsa[0]);
 		unset($activadesIsa[3]);
@@ -231,6 +227,28 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 			$aIsa->id_procesos_generales 		= $actividadI->id_procesos_generales;
 			
 			$aIsa->save(false);
+			
+			foreach ($intervencionIEO as $iIEO)
+			{
+				$ieo = new IsaIntervencionIeo();
+				$ieo->perfiles 				= $iIEO->perfiles;
+				$ieo->docente_orientador 	= implode(",",$iIEO->docente_orientador);
+				$ieo->fases 				= $iIEO->fases;
+				$ieo->num_encuentro 		= $iIEO->num_encuentro;
+				$ieo->nombre_actividad 		= $iIEO->nombre_actividad;
+				$ieo->actividad_desarrollar = $iIEO->actividad_desarrollar;
+				$ieo->lugares_recorrer 		= $iIEO->lugares_recorrer;
+				$ieo->tematicas_abordadas 	= $iIEO->tematicas_abordadas;
+				$ieo->objetivos_especificos = $iIEO->objetivos_especificos;
+				$ieo->tiempo_previsto 		= $iIEO->tiempo_previsto;
+				$ieo->id_actividades_isa	= $aIsa->id;
+				$ieo->id_equipo_campos 		= $iIEO->id_equipos_campo;
+				$ieo->productos 			= $iIEO->productos;
+				$ieo->save(false);
+			}
+			
+			
+			
 			
 		}
 

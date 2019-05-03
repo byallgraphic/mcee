@@ -82,18 +82,17 @@ class IsaEquiposCampoController extends Controller
 		$modelIntegrantesEquipo = new IsaIntegrantesXEquipo();
 		//solo guarda sin redireccion
 		
-		// echo "<pre>"; print_r(Yii::$app->request->post()); echo "</pre>"; 
-		// die;
-		
-        if ($model->load(Yii::$app->request->post())) 
+		if ($model->load(Yii::$app->request->post()) && $model->save()) 
 		{
-			
-			// echo "<pre>"; print_r(Yii::$app->request->post()); echo "</pre>"; 
-			// die;
-			// $model->save()
-            // return $this->redirect(['index']);
+			foreach (Yii::$app->request->post()['IsaEquiposCampo']['integrantes'] as $integrantes)
+			{
+				$integranteEquipo = new IsaIntegrantesXEquipo();
+				$integranteEquipo->id_equipo_campo 	= $model->id;
+				$integranteEquipo->id_perfil_persona_institucion= $integrantes;
+				$integranteEquipo->estado	= 1;
+				$integranteEquipo->save(false);
+			}
         }
-
         return $this->renderAjax('create', [
             'model' => $model,
 			'personas'=> $this->obtenerNombresXPerfiles(),
@@ -158,7 +157,7 @@ class IsaEquiposCampoController extends Controller
 	{
 		
 		$equiposCampo = new IsaEquiposCampo();
-		$equiposCampo = $equiposCampo->find()->orderby("id")->all();
+		$equiposCampo = $equiposCampo->find()->orderby("id")->andWhere("estado = 1")->all();
 		$equiposCampo = ArrayHelper::map($equiposCampo,'id','nombre');
 		
 		$data[]="<option value=''>Seleccione..</option>";

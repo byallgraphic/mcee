@@ -127,7 +127,7 @@ $this->registerJs( file_get_contents( '../web/js/sensibilizacion.js' ) );
 								'single_backstroke_delete' => false,
 							],
                             'placeholder' => 'Seleccione..',
-					])?></div>
+					])->label("Lider técnico pedagógico")?></div>
 	</div>
 
 

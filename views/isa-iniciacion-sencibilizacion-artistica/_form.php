@@ -21,6 +21,19 @@ $this->registerJs( file_get_contents( '../web/js/contenedor.js' ) );
 
 ?>
 
+<script>
+
+//Click del boton agregar equipo campo y cargar contenido del formulario agregar en el modal
+$("#modalEquipo").click(function()
+{
+	$("#modalCampo").modal('show')
+	.find("#modalContenido")
+	.load($(this).attr('value'));
+});
+
+</script>
+
+
 <div class="isa-iniciacion-sencibilizacion-artistica-form">
 
     <?php $form = ActiveForm::begin(); ?>
@@ -75,7 +88,7 @@ $this->registerJs( file_get_contents( '../web/js/contenedor.js' ) );
   
 
     <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+        <?php  Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
 		
 		<?= Html::button('Guardar save form', ['class' => 'btn btn-success', 'id' => 'save_form', 'value' => 0]) ?>
     </div>
