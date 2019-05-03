@@ -82,14 +82,14 @@ class IsaEquiposCampoController extends Controller
 		$modelIntegrantesEquipo = new IsaIntegrantesXEquipo();
 		//solo guarda sin redireccion
 		
-		echo "<pre>"; print_r(Yii::$app->request->post()); echo "</pre>"; 
-		die;
+		// echo "<pre>"; print_r(Yii::$app->request->post()); echo "</pre>"; 
+		// die;
 		
         if ($model->load(Yii::$app->request->post())) 
 		{
 			
-			echo "<pre>"; print_r(Yii::$app->request->post()); echo "</pre>"; 
-			die;
+			// echo "<pre>"; print_r(Yii::$app->request->post()); echo "</pre>"; 
+			// die;
 			// $model->save()
             // return $this->redirect(['index']);
         }
