@@ -16,8 +16,7 @@ use dosamigos\datepicker\DatePicker;
 /* @var $model app\models\IsaIniciacionSencibilizacionArtistica */
 /* @var $form yii\widgets\ActiveForm */
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
-$this->registerJs( file_get_contents( '../web/js/sensibilizacion.js' ) );
-
+$this->registerJs( file_get_contents( '../web/js/contenedor.js' ) );
 
 
 ?>
@@ -26,14 +25,12 @@ $this->registerJs( file_get_contents( '../web/js/sensibilizacion.js' ) );
 
     <?php $form = ActiveForm::begin(); ?>
 	
-	
+	  <label>
+        <input type="hidden" id="id" value="<?= isset($model->id) ? $model->id : ''?>">
+    </label>
 <div class="row">
 	<div class="col-md-8">
-		<?= $form->field($model, 'id_institucion')->dropDownList($institucion,[
-		'title'=>'This is a test tooltip',
-		'data-toggle'=>'tooltip',
-		'style'=>'text-decoration: underline; cursor:pointer;'
-		]) ?>
+		<?= $form->field($model, 'id_institucion')->dropDownList($institucion) ?>
 		
 	</div>
 	<div class="col-md-4"></div>
@@ -79,6 +76,8 @@ $this->registerJs( file_get_contents( '../web/js/sensibilizacion.js' ) );
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+		
+		<?= Html::button('Guardar save form', ['class' => 'btn btn-success', 'id' => 'save_form', 'value' => 0]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

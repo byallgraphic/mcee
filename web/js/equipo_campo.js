@@ -18,6 +18,7 @@ $( "#BtnGuardar" ).click(function()
 	nombre = $("#isaequiposcampo-nombre").val();
 	descripcion =$("#isaequiposcampo-descripcion").val();
 	cantidad = $("#isaequiposcampo-cantidad").val();
+	integrantes = $("#isaintegrantesxequipo-id").val();
 	var parametros = 
 	{
 		_csrf,
@@ -26,6 +27,7 @@ $( "#BtnGuardar" ).click(function()
 			'nombre':nombre,
 			'descripcion':descripcion,
 			'cantidad':cantidad,
+			'integrantes':integrantes,
 		}
 	};
 	
@@ -40,13 +42,11 @@ $( "#BtnGuardar" ).click(function()
 			$('#modalCampo').modal('hide');
 			$('body').removeClass('modal-open');
 			$('.modal-backdrop').remove();
-			
 			//se llena nuevamente el chosen con la informacion
 			
 			$.get("index.php?r=isa-equipos-campo/equipos",
 			function( data )
 			{
-				
 				var i;
 				for (i = 1; i <= 4; i++) 
 				{ 
@@ -56,7 +56,6 @@ $( "#BtnGuardar" ).click(function()
 					equipos.append(data);
 					equipos.trigger("chosen:updated");
 				}
-				
 			});
 			
 		}
