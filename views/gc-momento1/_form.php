@@ -179,6 +179,13 @@ $id_momento1= 1;
                             </div>
                         </div>
                     </div>
+
+                    <div class="content-porpositos" id="contenProposito">
+                        <label class="propositos-titulo">Propósitos seleccionados para la semana 1</label>
+                        <div id="propositos" class="propositos"></div>
+                    </div>
+                    <br>
+
                     <div class="form-wizard-buttons">
                         <button type="button" class="btn btn-previous">Previous</button>
                         <?= Html::a('Finalizar',['gc-bitacora/view2','id'=>$id_momento1],['class' => 'btn btn-info', 'id'=>'finalizar_momneto1']) ?>

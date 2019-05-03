@@ -10,6 +10,18 @@ use nex\chosen\Chosen;
 /* @var $model app\models\GeSeguimientoOperador */
 /* @var $form yii\widgets\ActiveForm */
 
+if( $guardado ){
+
+    $this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
+
+    $this->registerJs( "
+	  swal({
+			text: 'Registro guardado',
+			icon: 'success',
+			button: 'Salir',
+		});"
+    );
+}
 
 if( !$sede ){
     $this->registerJs( "$( cambiarSede ).click()" );
@@ -17,7 +29,7 @@ if( !$sede ){
 }
 
 if(Yii::$app->request->get('guardado')){
-	
+
 	$this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
     $this->registerJsFile(Yii::$app->request->baseUrl.'/js/GeSeguimientos.js');
 
@@ -26,7 +38,7 @@ if(Yii::$app->request->get('guardado')){
 			text: 'Registro guardado',
 			icon: 'success',
 			button: 'Salir',
-		});" 
+		});"
 	);
 }
 ?>
@@ -38,7 +50,7 @@ if(Yii::$app->request->get('guardado')){
 
     <input type="hidden" id="id_tipo_seguimiento" value="<?= Yii::$app->request->get('idTipoSeguimiento') ?>">
 
-    <?= $form->field($model, 'email')->textInput() ?>
+    <?= $form->field($model, 'email')->textInput(['enableAjaxValidation' => true]) ?>
 
 	<h3 style='background-color:#ccc;padding:5px;'><?= "DATOS GENERALES"?></h3>
 
@@ -68,7 +80,7 @@ if(Yii::$app->request->get('guardado')){
     <?=  $form->field($model, 'semana_reporte')->dropDownList(['semana 1','semana 2','semana 3','semana 4'], ['prompt' => 'Seleccione una semana' ]); ?>
 
 
-    <?=  $form->field($model, 'id_persona_responsable')->dropDownList($personas, ['prompt' => 'Seleccione un profecional' ]); ?>
+    <?=  $form->field($model, 'id_persona_responsable')->dropDownList($personas, ['prompt' => 'Seleccione un profesional' ]); ?>
 
 	<h3 style='background-color:#ccc;padding:5px;'><?= "Avances del proyecto"?></h3>
 
@@ -104,7 +116,10 @@ if(Yii::$app->request->get('guardado')){
         <div class="evidencia_actividades">
             <h3 style='background-color:#ccc;padding:5px;'><?= "Evidencias de soporte"?></h3>
             <p>Listado de participantes, registro visual, informe de actividades o acta</p>
-            <?= $form->field($model, 'documentFile[]')->fileInput(['multiple' => true, 'id' => "file-upload"]) ?>
+            <?= $form->field($model, 'documentFile[]')->fileInput(['multiple' => true, 'id' => "file-upload-0"]) ?>
+            <div id="nameElement">
+
+            </div>
         </div>
     </div>
 
@@ -169,15 +184,149 @@ if(Yii::$app->request->get('guardado')){
 
             $(this).val(valueBtn);
             $('#objetivo-'+ (valueBtn) + ' input').val('');
+            $('#objetivo-'+ (valueBtn) + ' #file-upload-0').attr('id', 'file-upload-'+ (valueBtn));
+            $('#objetivo-'+ (valueBtn)).find('.field-file-upload-0').find('label').attr('for', 'file-upload-'+ (valueBtn));
+
+            $('#objetivo-'+ (valueBtn) + ' #nameElement').empty();
             $('#objetivo-'+ (valueBtn) + ' textarea').val('');
+
+
+            $('#objetivo-'+ (valueBtn) + ' #file-upload-'+ (valueBtn)).change(function(e){
+                var files = $(this).prop("files");
+                var files_length = files.length;
+                for (var x = 0; x < files_length; x++) {
+                    $(this).parent().parent().find('#nameElement').append('<label>'+files[x].name+'</label><br>')
+                }
+            });
+
 
             id_objetivo.prop('disabled', true);
         });
 
+        $('#file-upload-0').change(function(e){
+            var files = $(this).prop("files");
+            var files_length = files.length;
+            for (var x = 0; x < files_length; x++) {
+                $(this).parent().parent().find('#nameElement').append('<label>'+files[x].name+'</label><br>')
+            }
+        });
+
         $('#save_form').click(function(e){
             e.preventDefault();
+
+            //Variables para evaluar el ingreso de datos
+            var email = $('#geseguimientooperador-email');
+            var id_operador = $('#id_operador');
+            var proyecto_reportar = $('#geseguimientooperador-proyecto_reportar');
+            var id_ie = $('#geseguimientooperador-id_ie');
+            ////
+            var semana_reporte = $('#geseguimientooperador-semana_reporte');
+            var id_persona_responsable = $('#geseguimientooperador-id_persona_responsable');
+            var indicador = $('#geseguimientooperador-indicador');
+            var avances_cumplimiento_cuantitativos = $('#geseguimientooperador-avances_cumplimiento_cuantitativos');
+            var avances_cumplimiento_cualitativos = $('#geseguimientooperador-avances_cumplimiento_cualitativos');
+            var dificultades = $('#geseguimientooperador-dificultades');
+            var propuesta_dificultades = $('#geseguimientooperador-propuesta_dificultades');
+            var reporte_obj = $('.objetivo');
+
+            var validacion = 1;
+
+            //Validar si se ingresaron los datos
+            if (email.val() === '') {
+                email.parent().addClass('has-error');
+                email.parent().find('.help-block').html('Dirección de correo electrónico no puede estar vacío.');
+                validacion = 0;
+            } else
+                email.parent().removeClass('has-error');
+
+            if ($('input:checked', '#id_operador').val() === undefined) {
+                id_operador.parent().addClass('has-error');
+                id_operador.parent().find('.help-block').html('Debe seleccionar un nombre de operador');
+                validacion = 0;
+            } else
+                id_operador.parent().removeClass('has-error');
+
+            if (!proyecto_reportar.val()) {
+                proyecto_reportar.parent().addClass('has-error');
+                proyecto_reportar.parent().find('.help-block').html('Debe de ingresar una proyecto a reportar.');
+                validacion = 0;
+            } else
+                proyecto_reportar.parent().removeClass('has-error');
+
+            if (!id_ie.val()) {
+                id_ie.parent().addClass('has-error');
+                id_ie.parent().find('.help-block').html('Debe de ingresar una clave menor a 40 caracteres.');
+                validacion = 0;
+            } else
+                id_ie.parent().removeClass('has-error');
+
+            if (!semana_reporte.val()) {
+                semana_reporte.parent().addClass('has-error');
+                semana_reporte.parent().find('.help-block').html('Debe seleccionar una semana.');
+                validacion = 0;
+            } else
+                semana_reporte.parent().removeClass('has-error');
+
+            if (!id_persona_responsable.val()) {
+                id_persona_responsable.parent().addClass('has-error');
+                id_persona_responsable.parent().find('.help-block').html('Seleccione un responsable.');
+                validacion = 0;
+            } else
+                id_persona_responsable.parent().removeClass('has-error');
+
+            if (!indicador.val()) {
+                indicador.parent().addClass('has-error');
+                indicador.parent().find('.help-block').html('no indico a que indicador del proyecto le apuntó.');
+                validacion = 0;
+            } else
+                indicador.parent().removeClass('has-error');
+
+            if (!avances_cumplimiento_cualitativos.val()) {
+                avances_cumplimiento_cualitativos.parent().addClass('has-error');
+                avances_cumplimiento_cualitativos.parent().find('.help-block').html('indique los avances para el cumplimiento.');
+                validacion = 0;
+            } else
+                avances_cumplimiento_cualitativos.parent().removeClass('has-error');
+
+            if (!avances_cumplimiento_cuantitativos.val()) {
+                avances_cumplimiento_cuantitativos.parent().addClass('has-error');
+                avances_cumplimiento_cuantitativos.parent().find('.help-block').html('Debe describir los avances para el cumplimiento del indicador.');
+                validacion = 0;
+            } else
+                avances_cumplimiento_cuantitativos.parent().removeClass('has-error');
+
+            if (!dificultades.val()) {
+                dificultades.parent().addClass('has-error');
+                dificultades.parent().find('.help-block').html('Mencione las dificultades para el cumplimiento de los indicadores.');
+                validacion = 0;
+            } else
+                avances_cumplimiento_cuantitativos.parent().removeClass('has-error');
+
+            if (!propuesta_dificultades.val()) {
+                propuesta_dificultades.parent().addClass('has-error');
+                propuesta_dificultades.parent().find('.help-block').html('Qué propuesta(s) plantea para superar esas dificultades.');
+                validacion = 0;
+            } else
+                propuesta_dificultades.parent().removeClass('has-error');
+
+            reporte_obj.each(function() {
+                $(this).find('input[type!="hidden"]').each(function(){
+                    if (!$(this).val() && ($(this).attr('id') !== 'quienes')) {
+                        console.log($(this));
+                        $(this).parent().addClass('has-error');
+                        $(this).parent().find('.help-block').html('Este campo es requerido.');
+                        validacion = 0;
+                    } else
+                        $(this).parent().removeClass('has-error');
+                });
+            });
+
+            if (validacion === 0){
+                return false;
+            }
+
             var reporte_actividades = [];
-            $('.objetivo').each(function( index ) {
+            reporte_obj.each(function( index ) {
                 reporte_actividades[index] = {
                     objetivo: $('#objetivo-'+index+' #id_objetivo').val(),
                     actividad: $('#objetivo-'+index+' #id_actividad').val(),
@@ -193,21 +342,21 @@ if(Yii::$app->request->get('guardado')){
             var formData = new FormData();
             formData.append("id", $('#id').val());
             formData.append("id_tipo_seguimiento", $(location).attr('href').split("&")[1].split("=")[1]);
-            formData.append("email", $('#geseguimientooperador-email').val());
+            formData.append("email", email.val());
             formData.append("id_operador", $('input:checked', '#id_operador').val());
-            formData.append("proyecto_reportar", $('#geseguimientooperador-proyecto_reportar').val());
-            formData.append("id_ie", $('#geseguimientooperador-id_ie').val());
+            formData.append("proyecto_reportar", proyecto_reportar.val());
+            formData.append("id_ie", id_ie.val());
             formData.append("mes_reporte", $('#geseguimientooperador_mes_reporte_chosen').find('.chosen-results').find('.result-selected').data("option-array-index"));
-            formData.append("semana_reportada", $('#geseguimientooperador-semana_reporte').val());
-            formData.append("id_persona_responsable", $('#geseguimientooperador-id_persona_responsable').val());
-            formData.append("indicador", $('#geseguimientooperador-indicador').val());
-            formData.append("avances_cumplimiento_cuantitativos", $('#geseguimientooperador-avances_cumplimiento_cuantitativos').val());
-            formData.append("avances_cumplimiento_cualitativos", $('#geseguimientooperador-avances_cumplimiento_cualitativos').val());
-            formData.append("dificultades", $('#geseguimientooperador-dificultades').val());
-            formData.append("propuesta_dificultades", $('#geseguimientooperador-propuesta_dificultades').val());
+            formData.append("semana_reportada", semana_reporte.val());
+            formData.append("id_persona_responsable", id_persona_responsable.val());
+            formData.append("indicador", indicador.val());
+            formData.append("avances_cumplimiento_cuantitativos", avances_cumplimiento_cuantitativos.val());
+            formData.append("avances_cumplimiento_cualitativos", avances_cumplimiento_cuantitativos.val());
+            formData.append("dificultades", dificultades.val());
+            formData.append("propuesta_dificultades", propuesta_dificultades.val());
             formData.append("reporte_actividades", JSON.stringify(reporte_actividades));
 
-            var files = $('#file-upload').prop("files");
+            var files = $('#file-upload-0').prop("files");
             var files_length = files.length;
             for (var x = 0; x < files_length; x++) {
                 formData.append("files[]", files[x]);
@@ -225,7 +374,11 @@ if(Yii::$app->request->get('guardado')){
                     success: function (res, status) {
                         if (status == 'success') {
                             $("#modal-ge").modal('hide');
-                            $('#modal-guardado').modal('show');
+                            swal({
+                                text: 'Registro actualizado',
+                                icon: 'success',
+                                button: 'Salir',
+                            });
                         }
                     },
                 });
@@ -241,7 +394,11 @@ if(Yii::$app->request->get('guardado')){
                     success: function (res, status) {
                         if (status == 'success') {
                             $("#modal-ge").modal('hide');
-                            $('#modal-guardado').modal('show');
+                            swal({
+                                text: 'Registro guardado',
+                                icon: 'success',
+                                button: 'Salir',
+                            });
                         }
                     },
                 });

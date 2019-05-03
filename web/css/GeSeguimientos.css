@@ -25,7 +25,7 @@
     /*grid-template-areas: "a b";*/
     align-items: baseline;
 }
-label[for="file-upload"] {
+label[for*="file-upload"] {
     font-size: 14px;
     font-weight: 600;
     color: #fff;
@@ -38,8 +38,8 @@ label[for="file-upload"] {
     width: fit-content;
     text-align: center;
 }
-input#file-upload {
-    display: none;
+input[type=file]{
+    display: none !important;
 }
 .evidencia_actividades{
     display: block;

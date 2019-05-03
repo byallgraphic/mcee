@@ -50,9 +50,12 @@ jQuery(document).ready(function() {
         var arrayDays = {};
         var i = 0;
 
+
+
         checkProposito.each(function( index, element ) {
             if (element.checked){
                 arrayCheckPropositos[i] = element.value;
+                $('#propositos').append('<label id="'+element.value+'">'+element.parentElement.textContent+'</label><br>');
                 i++;
             }
         });
