@@ -66,7 +66,7 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 
     <div class="panel panel panel-primary" >
         
-        <?= $this->context->actionFormulario($model, $form, $datos);   ?>
+        <?= $this->context->actionFormulario($model, $form, $datos, $actividadesParticipadas );   ?>
     </div>
 
     <div class="form-group">
