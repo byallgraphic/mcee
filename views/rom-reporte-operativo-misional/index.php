@@ -32,6 +32,67 @@ $this->registerJs("
 		if( !conClase )
 			$( this, $( this).parent() ).addClass( 'tab-selected' );  
 	});
+	
+	
+	$( '#modal' )
+		.on( 'change', 'input:file', function(){ 
+			
+			var __target = this.id.split( '-' );
+			__target = __target[0] + \"-\" + __target[1];
+			
+			var can = $( '#'+__target+'-cantidad' );
+			
+			var total = 0;
+			
+			$( \"[id^=\"+__target+\"]input:file\" ).each(function(){
+				total += this.files.length;
+			});
+			
+			can.val( total );
+		});
+		
+	$( '#modal' )
+		.on( 'change', '[id$=estado_actividad]', function(){ 
+			
+			var __target = this.id.split( '-' );
+			__target = __target[1];
+			
+			var frep = $( '#isaactividadesromxintegrantegrupo'+'-'+__target+'-fecha_reprogramacion' );
+			
+			if( $(this).val() == 179 )
+			{
+				frep.attr({disabled:true})
+				frep.attr({readonly:true})
+			}
+			else
+			{
+				frep.attr({disabled:false});
+				frep.attr({readonly:false});
+			}
+		});
+		
+	$( '#modal' )
+		.on( 'change', '[id$=sesion_actividad]', function(){ 
+			
+			var __target = this.id.split( '-' );
+			__target = __target[1];
+			
+			__self = this;
+			
+			$.post( 'index.php?r=rom-reporte-operativo-misional/consultar-mision', 
+					{ 
+						rom_actividades	: __target, 
+						sesion_actividad: $( __self ).val() ,
+					}, 
+					function( data ){
+						if( data != '' ){
+							$( '#modalContent' ).html( data );
+						}
+					}
+			);
+		});
+	
+	
 ");
 
 if( isset($guardado) && $guardado == 1 ){
