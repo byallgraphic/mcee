@@ -86,7 +86,8 @@ class GeSeguimientoGestionController extends Controller
 		$id_institucion	= $_SESSION['instituciones'][0];
 		
 		$guardado = false;
-		
+
+
 		$tipo_seguimiento = Yii::$app->request->get( 'idTipoSeguimiento' );
 
 
@@ -96,9 +97,8 @@ class GeSeguimientoGestionController extends Controller
             $model = new GeSeguimientoGestion();
         }
 
-        if( $model->load(Yii::$app->request->post()) ||  Yii::$app->request->get( 'id' )){
-			
-			$model->id_tipo_seguimiento = 2;
+        if( $model->load(Yii::$app->request->post())){
+			$model->id_tipo_seguimiento = Yii::$app->request->post('idTipoSeguimiento');
 			$model->estado = 1;
 			
 			if( $model->save(false) ){
@@ -157,11 +157,12 @@ class GeSeguimientoGestionController extends Controller
         if( $model->load(Yii::$app->request->post())){
             $searchModel = new GeSeguimientoGestionBuscar();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            $dataProvider->query->andWhere(['id_tipo_seguimiento' => 4]);
+            $dataProvider->query->andWhere(['id_tipo_seguimiento' => Yii::$app->request->post('idTipoSeguimiento')]);
 
             return $this->render('index', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'guardado' 			=> $guardado,
             ]);
         }
 

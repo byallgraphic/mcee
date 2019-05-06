@@ -100,7 +100,7 @@ class GeSeguimientoOperadorFrenteController extends Controller
 
         if( $model->load(Yii::$app->request->post()) ) {
 			
-			$model->id_tipo_seguimiento = 3;
+			$model->id_tipo_seguimiento = Yii::$app->request->post('idTipoSeguimiento');
 			$model->estado = 1;
 			
 			$model->documentFile = UploadedFile::getInstance( $model, 'documentFile' );
@@ -170,13 +170,7 @@ class GeSeguimientoOperadorFrenteController extends Controller
         $sede = Sedes::findOne( $id_sede );
 
         if( $model->load(Yii::$app->request->post())){
-            $searchModel = new GeSeguimientoOperadorFrenteBuscar();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
+            return $this->redirect('index.php?r=ge-seguimiento-operador-frente&idTipoSeguimiento='.Yii::$app->request->post('idTipoSeguimiento').'&guardado=true');
         }
 
         return $this->render('create', [
