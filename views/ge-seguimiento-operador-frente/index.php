@@ -111,11 +111,11 @@ $this->params['breadcrumbs'][] = $this->title;
 					]);
 				},
 
-				'update' => function ($url, $model) {
-					return Html::a('<span name="actualizar" class="glyphicon glyphicon-pencil" value ="'.$url.'"></span>', $url, [
-								'title' => Yii::t('app', 'lead-update'),
-					]);
-				}
+                'update' => function ($url, $model) {
+                    return Html::a('<span name="actualizar" class="glyphicon glyphicon-pencil" value ="'.Url::to(['create', 'id' => $model->id]).'"></span>', Url::to(['create', 'id' => $model->id]), [
+                        'title' => Yii::t('app', 'lead-update'),
+                    ]);
+                }
 
 			  ],
 

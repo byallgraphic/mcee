@@ -90,13 +90,17 @@ class GeSeguimientoOperadorFrenteController extends Controller
 		$guardado = false;
 		
 		$tipo_seguimiento = Yii::$app->request->get( 'idTipoSeguimiento' );
-		
-		
-        $model = new GeSeguimientoOperadorFrente();
+
+
+        $model = GeSeguimientoOperadorFrente::findOne(Yii::$app->request->get( 'id' ));
+
+        if (!isset($model)){
+            $model = new GeSeguimientoOperadorFrente();
+        }
 
         if( $model->load(Yii::$app->request->post()) ) {
 			
-			$model->id_tipo_seguimiento = $tipo_seguimiento;
+			$model->id_tipo_seguimiento = 3;
 			$model->estado = 1;
 			
 			$model->documentFile = UploadedFile::getInstance( $model, 'documentFile' );
@@ -118,7 +122,7 @@ class GeSeguimientoOperadorFrenteController extends Controller
 				
 				$model->ruta_archivo = $rutaFisicaDirectoriaUploads;
 				
-				if( $model->save() )
+				if( $model->save(false) )
 				{	
 					$guardado = true;
 					// return $this->redirect(['index']);
@@ -164,6 +168,16 @@ class GeSeguimientoOperadorFrenteController extends Controller
 		
 		$seleccion = ArrayHelper::map( $dataSeleccion, 'id', 'descripcion' );
         $sede = Sedes::findOne( $id_sede );
+
+        if( $model->load(Yii::$app->request->post())){
+            $searchModel = new GeSeguimientoOperadorFrenteBuscar();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
 
         return $this->render('create', [
             'model' => $model,

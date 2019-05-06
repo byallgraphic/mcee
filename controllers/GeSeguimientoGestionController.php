@@ -88,15 +88,20 @@ class GeSeguimientoGestionController extends Controller
 		$guardado = false;
 		
 		$tipo_seguimiento = Yii::$app->request->get( 'idTipoSeguimiento' );
-		
-        $model = new GeSeguimientoGestion();
+
+
+        $model = GeSeguimientoGestion::findOne(Yii::$app->request->get( 'id' ));
+
+        if (!isset($model)){
+            $model = new GeSeguimientoGestion();
+        }
 
         if( $model->load(Yii::$app->request->post()) ||  Yii::$app->request->get( 'id' )){
 			
-			$model->id_tipo_seguimiento = $tipo_seguimiento;
+			$model->id_tipo_seguimiento = 2;
 			$model->estado = 1;
 			
-			if( $model->save() ){
+			if( $model->save(false) ){
 				$guardado = true;
 				// return $this->redirect(['index']);
 			}
@@ -148,6 +153,17 @@ class GeSeguimientoGestionController extends Controller
 		
 		$personas			= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
         $sede = Sedes::findOne( $id_sede );
+
+        if( $model->load(Yii::$app->request->post())){
+            $searchModel = new GeSeguimientoGestionBuscar();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['id_tipo_seguimiento' => 4]);
+
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
 
         return $this->render('create', [
             'model' 			=> $model,
