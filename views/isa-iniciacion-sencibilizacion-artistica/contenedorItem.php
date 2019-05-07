@@ -96,7 +96,7 @@ if( strpos($_GET['r'], 'update') > -1)
             ],
 	])->label("Equipos Campo"); ?></div>
 	  <div class="col-md-4">
-        <?=  Html::button('Agregar Equipo Campo',['value'=> "/mcee/web/index.php?r=isa-equipos-campo%2Fcreate" ,'class'=>'btn btn-success','id'=>'modalEquipo']) ?>
+        <?=  Html::button('Agregar Equipo Campo',['value'=> "index.php?r=isa-equipos-campo%2Fcreate" ,'class'=>'btn btn-success','id'=>'modalEquipo']) ?>
 		
 		</div>
 	</div>
