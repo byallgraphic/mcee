@@ -37,6 +37,7 @@ if( $guardado ){
     <?php $form = ActiveForm::begin(); ?>
 
     <?php /* $form->field($model, 'id_tipo_seguimiento')->textInput() */ ?>
+    <input name="idTipoSeguimiento" type="hidden" value="<?= $idTipoSeguimiento ?>">
 	
 	<h3 style='background-color:#ccc;padding:5px;'><?= "DATOS GENERALES"?></h3>
 

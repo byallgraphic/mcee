@@ -50,6 +50,9 @@ use app\models\RomActividadesRom;
 use app\models\RomTipoCantidadPoblacionRom;
 use app\models\IsaRomProcesos;
 use app\models\IsaRomActividades;
+use app\models\IsaActividadesIsa;
+use app\models\IsaActividadesRomXIntegranteGrupo;
+use app\models\IsaIntervencionIeo;
 use yii\bootstrap\Collapse;
 use app\models\UploadForm;
 use yii\helpers\ArrayHelper;
@@ -78,6 +81,53 @@ class RomReporteOperativoMisionalController extends Controller
             ],
         ];
     }
+	
+	public function actionConsultarMision()
+	{
+		$id_sede 		= $_SESSION['sede'][0];
+		$id_institucion	= $_SESSION['instituciones'][0];
+		
+		$val 			= '';
+		$romActividad 	= Yii::$app->request->post('rom_actividades');
+		$sesionActividad= Yii::$app->request->post('sesion_actividad');
+		
+		$modelReporteMisional = RomReporteOperativoMisional::findOne([
+											'estado' 		=> 1,
+											'id_sedes' 		=> $id_sede,
+											'id_institucion'=> $id_institucion,
+										]);
+		
+		if( $modelReporteMisional )		
+		{
+			$id_reporte = $modelReporteMisional->id;
+			
+			$model = IsaActividadesRom::findOne([
+								'estado' => 1,
+								'id_rom_actividad' 				=> $romActividad,
+								'sesion_actividad' 				=> $sesionActividad,
+								'id_reporte_operativo_misional' => $id_reporte,
+							]);
+			
+			if( $model ){
+				$val = $this->actionUpdate( $model->id_reporte_operativo_misional );
+			}
+		}
+		
+		return $val;
+	}
+	
+	public function actionConsultarIntervencionIeo( $id )
+	{
+		$val = [];
+		
+		$modelIntervencion = IsaIntervencionIeo::findOne( $id );
+		
+		foreach( $modelIntervencion as $key => $value ){
+			$val[$key] = $value;
+		}
+		
+		return $value;
+	}
 
     /**
      * Lists all RomReporteOperativoMisional models.
@@ -120,17 +170,17 @@ class RomReporteOperativoMisionalController extends Controller
 	}
 		
 	//funcion que se encarga de crear el formulario dinamicamente sin contar los campos de guardado que estan en la vista formulario
-    function actionFormulario($model, $form, $datos = 0 )
+    function actionFormulario($model, $form, $datos = 0, $actividadesParticipadas )
 	{	
 		$estados= $this->obtenerParametros(45);
 		// $ecProyectos = EcProyectos::find()->where( 'estado=1' )->orderby('id ASC')->all();
 		
+		$index = 0;
 		
 		//acordeon de los proyecto 
 		foreach ($datos as $idProyecto => $v)
 		{
-			
-			 $contenedores[] = 	
+			$contenedores[] = 	
 				[
 					'label' 		=>  $v['descripcion'],
 					'content' 		=>  $this->renderPartial( 'procesos', 
@@ -139,6 +189,9 @@ class RomReporteOperativoMisionalController extends Controller
 														'form' 		=> $form,
 														'procesos'	=>$v['procesos'],
 														'estados'	=>$estados,
+														'actividadesParticipadas'	=>$actividadesParticipadas,
+														'actividades_rom2' => $v['actividades_rom2'],
+														'idActividad' => $index++,
 													] 
 										),
 					'contentOptions'=> ['class' => 'in'],
@@ -216,6 +269,8 @@ class RomReporteOperativoMisionalController extends Controller
 		$id_sede 		= $_SESSION['sede'][0];
 		$id_institucion	= $_SESSION['instituciones'][0];
 		
+		$id_perfil_persona = $_SESSION['perfilesxpersonas'];
+		
         $model = new RomReporteOperativoMisional();
 		
 		$idInstitucion = $_SESSION['instituciones'][0];
@@ -234,30 +289,35 @@ class RomReporteOperativoMisionalController extends Controller
 					foreach($arrayDatosActividades as $datos => $valores)
 					{
 						$arrayDatosActividades[$datos]['id_reporte_operativo_misional']= $rom_id;
+						$arrayDatosActividades[$datos]['estado']= 1;
+						$arrayDatosActividades[$datos]['id_rom_actividad']= $datos;
 					}
 					
 					//guarda la informa en la tabla isa.actividades segun como vienen los datos en el post
-					$columnNameArrayActividades=['alarmas','alternativas','articulacion','debilidades','diligencia','docente_orientador','duracion_sesion','estado','evaluacion','fecha_desde','fecha_diligencia','fecha_hasta','fecha_reprogramacion','fortalezas','id_rom_actividad','justificacion_activiad_no_realizada','logros','nombre_actividad','num_equipos','observaciones_generales','perfiles','retos','rol','id_reporte_operativo_misional'];
+					$columnNameArrayActividades=['fecha_desde','fecha_hasta','sesion_actividad','estado_actividad','id_reporte_operativo_misional','estado','id_rom_actividad'];
+					// $columnNameArrayActividades=['fecha_desde','fecha_hasta','sesion_actividad','estado_actividad','id_reporte_operativo_misional','estado'];
 					// inserta todos los datos que trae el array arrayDatosActividades
 					$insertCount = Yii::$app->db->createCommand()
 					   ->batchInsert('isa.actividades_rom', $columnNameArrayActividades, $arrayDatosActividades) ->execute();
 				}
 				
-				if($arrayDatosPoblacion = Yii::$app->request->post('IsaTipoCantidadPoblacionRom'))
-				{
+				// if($arrayDatosPoblacion = Yii::$app->request->post('IsaTipoCantidadPoblacionRom'))
+				// {
 					
-					// se agrega el id del reporte despues de haber sido creado 
-					foreach($arrayDatosPoblacion as $datos => $valores)
-					{
-						$arrayDatosPoblacion[$datos]['id_reporte_operativo_misional'] = $rom_id;
-					}
+					// // se agrega el id del reporte despues de haber sido creado 
+					// foreach($arrayDatosPoblacion as $datos => $valores)
+					// {
+						// $arrayDatosPoblacion[$datos]['id_reporte_operativo_misional'] = $rom_id;
+						// $arrayDatosActividades[$datos]['estado']= 1;
+						// $arrayDatosPoblacion[$datos]['id_rom_actividades'] = $datos;
+					// }
 					
-					//guarda la informa en la tabla isa.tipo_cantidad_poblacion_rom segun como vienen los datos en el post
-					$columnNameArrayPoblacion=['vecinos','lideres_comunitarios','empresarios_comerciantes','organizaciones_locales','grupos_comunitarios','otos_actores','total_participantes','id_rom_actividades','id_reporte_operativo_misional'];
-					// inserta todos los datos que trae el array arrayDatosActividades
-					$insertCount = Yii::$app->db->createCommand()
-					   ->batchInsert('isa.tipo_cantidad_poblacion_rom', $columnNameArrayPoblacion, $arrayDatosPoblacion)->execute(); 
-				}
+					// //guarda la informa en la tabla isa.tipo_cantidad_poblacion_rom segun como vienen los datos en el post
+					// $columnNameArrayPoblacion=['vecinos','lideres_comunitarios','empresarios_comerciantes','organizaciones_locales','grupos_comunitarios','otos_actores','total_participantes','id_rom_actividades','id_reporte_operativo_misional'];
+					// // inserta todos los datos que trae el array arrayDatosActividades
+					// $insertCount = Yii::$app->db->createCommand()
+					   // ->batchInsert('isa.tipo_cantidad_poblacion_rom', $columnNameArrayPoblacion, $arrayDatosPoblacion)->execute(); 
+				// }
 				
 				//guarda todos los archivos en el servidor y la url en la base de datos
 				//valida que el post tenga IsaEvidenciasRom y lo asigan a la variable $arrayDatosEvidencias
@@ -339,6 +399,7 @@ class RomReporteOperativoMisionalController extends Controller
 							$modeloEvidencias[$key]->fecha_entrega_envio			= $arrayDatosEvidencias[$k]['fecha_entrega_envio'];
 							$modeloEvidencias[$key]->id_rom_actividad				= $arrayDatosEvidencias[$k]['id_rom_actividad'];
 							$modeloEvidencias[$key]->id_reporte_operativo_misional 	= $rom_id;
+							
 							//Siempre activo
 							$modeloEvidencias[$key]->estado = 1;
 						}
@@ -349,10 +410,82 @@ class RomReporteOperativoMisionalController extends Controller
 							$model->save(false);
 						}
 						
-						return $this->redirect(['index', 'guardado' => true ]);
+						// return $this->redirect(['index', 'guardado' => true ]);
 					}
 							 
 				}
+				
+				if($arrayDatosTipos = Yii::$app->request->post('IsaTipoCantidadPoblacionRom'))
+				{
+					//se deben crear modelos de forma dinamica para posteriormente hacer el guardado de la informacion
+					$modeloTipos 	= [];
+					$cantidad 		= count( $arrayDatosTipos );
+					foreach( $arrayDatosTipos as $k => $v )
+					{
+						$modeloTipos[$k] = new IsaTipoCantidadPoblacionRom();
+					}
+					
+					if(IsaTipoCantidadPoblacionRom::loadMultiple($modeloTipos,  Yii::$app->request->post() )) 
+					{
+						foreach( $modeloTipos as $key => $model )
+						{
+							$model->id_rom_actividades 				= $key;
+							$model->id_reporte_operativo_misional 	= $rom_id;
+							$model->total_participantes 			= "0";
+							$model->estado 							= 1;
+							$save = $model->save();
+							
+							// if( !$save ) exit( "error IsaTipoCantidadPoblacionRom 385" );
+						}
+					}
+					// else{
+						// exit( "error no carga IsaTipoCantidadPoblacionRom 385" );
+					// }
+				}
+				// else{
+					// exit( "error no array IsaTipoCantidadPoblacionRom 385" );
+				// }
+				
+				if($arrayDatosIntegrante = Yii::$app->request->post('IsaActividadesRomXIntegranteGrupo'))
+				{
+					//se deben crear modelos de forma dinamica para posteriormente hacer el guardado de la informacion
+					$modeloIntegrante 	= [];
+					$cantidad 			= count( $arrayDatosIntegrante );
+					foreach( $arrayDatosIntegrante as $k => $v )
+					{
+						$modeloIntegrante[$k] = new IsaActividadesRomXIntegranteGrupo();
+					}
+					
+					if(IsaActividadesRomXIntegranteGrupo::loadMultiple($modeloIntegrante,  Yii::$app->request->post() )) 
+					{
+						foreach( $modeloIntegrante as $key => $model )
+						{
+							$model->diligencia 						= $id_perfil_persona;
+							$model->rol 							= "$id_perfil_persona";
+							$model->id_rom_actividad 				= $key;
+							$model->id_reporte_operativo_misional 	= $rom_id;
+							$model->estado 							= 1;
+							
+							if( empty($model->fecha_reprogramacion) )
+							{
+								$model->fecha_reprogramacion = gmdate( "Y-m-d", 0 );
+							}
+							
+							$save = $model->save();
+							// echo "<pre>"; var_dump( $key ); echo "</pre>";
+							// echo "<pre>"; var_dump( $arrayDatosIntegrante ); echo "</pre>";
+							// echo "<pre>"; var_dump( $model ); echo "</pre>";
+							// if( !$save ) exit( "error IsaActividadesRomXIntegranteGrupo 414" );
+						}
+					}
+					// else{
+						// exit( "error no carga IsaActividadesRomXIntegranteGrupo 414" );
+					// }
+				}
+				// else{
+					// exit( "error no array IsaActividadesRomXIntegranteGrupo 414" );
+				// }
+				
 				return $this->redirect(['index', 'guardado' => 1 ]);
 			}
 			
@@ -400,6 +533,7 @@ class RomReporteOperativoMisionalController extends Controller
 			$proy = [
 						'id' 			=> $idProyecto,
 						'descripcion' 	=> $descripcionProyecto,
+						'actividades_rom2' 	=> new IsaActividadesRom(),
 						'procesos'		=> [],
 					];
 			
@@ -425,9 +559,12 @@ class RomReporteOperativoMisionalController extends Controller
 				{
 					//Array de actividades
 					$act =  [
-								'id' 			=> $idActividad,
-								'descripcion' 	=> $descripcionActividad,
-								'evidencia'		=> new IsaEvidenciasRom(),
+								'id' 				=> $idActividad,
+								'descripcion' 		=> $descripcionActividad,
+								'actividades_rom' 	=> new IsaActividadesRom(),
+								'evidencia'			=> new IsaEvidenciasRom(),
+								'poblacion'			=> new IsaTipoCantidadPoblacionRom(),
+								'integrante'		=> new IsaActividadesRomXIntegranteGrupo(),
 							];
 					
 					//Adiciono la actividad al proceso
@@ -435,18 +572,33 @@ class RomReporteOperativoMisionalController extends Controller
 				}
 				
 				$proy['procesos'][] = $procs;
+				
 			}
+			
 			
 			$datos[] = $proy;
 		}
 		
+		$dataActividadesParticipadas = IsaActividadesIsa::find()
+										->alias('a')
+										->innerJoin('isa.equipos_campo ec', 'ec.id=a.num_equipo_campo')
+										->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
+										->where( 'a.estado=1' )
+										->andWhere( 'ie.estado=1' )
+										->andWhere( 'ec.estado=1' )
+										->andWhere( 'ie.id_perfil_persona_institucion='.$id_perfil_persona )
+										->all();
+										
+		$actividadesParticipadas = ArrayHelper::map( $dataActividadesParticipadas,'id','descripcion' );
+		
 		/************************************************************************************************************/
 
 		return $this->renderAjax( 'create', [
-			'model' 		=> $model,
-			'sedes'			=> $sedes,
-			'institucion'	=> $this->obtenerInstitucion(),
-			'datos'			=> $datos,
+			'model' 					=> $model,
+			'sedes'						=> $sedes,
+			'institucion'				=> $this->obtenerInstitucion(),
+			'datos'						=> $datos,
+			'actividadesParticipadas'	=> $actividadesParticipadas,
 		]);
 	}
 
@@ -475,6 +627,8 @@ class RomReporteOperativoMisionalController extends Controller
 		$id_sede 		= $_SESSION['sede'][0];
 		$id_institucion	= $_SESSION['instituciones'][0];
 		
+		$id_perfil_persona = $_SESSION['perfilesxpersonas'];
+		
         $model = RomReporteOperativoMisional::findOne( $id );
 		
 		$idInstitucion = $_SESSION['instituciones'][0];
@@ -489,35 +643,63 @@ class RomReporteOperativoMisionalController extends Controller
 				
 				if($arrayDatosActividades = Yii::$app->request->post('IsaActividadesRom'))
 				{
-				
-					// se agrega el id del reporte despues de haber sido creado 
-					foreach($arrayDatosActividades as $datos => $valores)
+					//se deben crear modelos de forma dinamica para posteriormente hacer el guardado de la informacion
+					$modeloActividades 	= [];
+					$cantidad 		= count( $arrayDatosActividades );
+					foreach( $arrayDatosActividades as $k => $v )
 					{
-						$arrayDatosActividades[$datos]['id_reporte_operativo_misional']= $rom_id;
+						$modeloActividades[$k] = IsaActividadesRom::findOne([ 
+																	'estado' 						=> 1, 
+																	'id_reporte_operativo_misional' => $rom_id,
+																	'id_rom_actividad' 				=> $k,
+																]);
 					}
 					
-					//guarda la informa en la tabla isa.actividades segun como vienen los datos en el post
-					$columnNameArrayActividades=['alarmas','alternativas','articulacion','debilidades','diligencia','docente_orientador','duracion_sesion','estado','evaluacion','fecha_desde','fecha_diligencia','fecha_hasta','fecha_reprogramacion','fortalezas','id_rom_actividad','justificacion_activiad_no_realizada','logros','nombre_actividad','num_equipos','observaciones_generales','perfiles','retos','rol','id_reporte_operativo_misional'];
-					// inserta todos los datos que trae el array arrayDatosActividades
-					$insertCount = Yii::$app->db->createCommand()
-					   ->batchInsert('isa.actividades_rom', $columnNameArrayActividades, $arrayDatosActividades) ->execute();
-				}
-				
-				if($arrayDatosPoblacion = Yii::$app->request->post('IsaTipoCantidadPoblacionRom'))
-				{
-					
-					// se agrega el id del reporte despues de haber sido creado 
-					foreach($arrayDatosPoblacion as $datos => $valores)
+					if(IsaTipoCantidadPoblacionRom::loadMultiple($modeloActividades,  Yii::$app->request->post() )) 
 					{
-						$arrayDatosPoblacion[$datos]['id_reporte_operativo_misional'] = $rom_id;
+						foreach( $modeloActividades as $key => $model )
+						{
+							// $model->id_reporte_operativo_misional 	= $rom_id;
+							// $model->estado 							= 1;
+							$save = $model->save();
+							
+							if( !$save ) exit( "error IsaTipoCantidadPoblacionRom 781" );
+						}
 					}
 					
-					//guarda la informa en la tabla isa.tipo_cantidad_poblacion_rom segun como vienen los datos en el post
-					$columnNameArrayPoblacion=['vecinos','lideres_comunitarios','empresarios_comerciantes','organizaciones_locales','grupos_comunitarios','otos_actores','total_participantes','id_rom_actividades','id_reporte_operativo_misional'];
-					// inserta todos los datos que trae el array arrayDatosActividades
-					$insertCount = Yii::$app->db->createCommand()
-					   ->batchInsert('isa.tipo_cantidad_poblacion_rom', $columnNameArrayPoblacion, $arrayDatosPoblacion)->execute(); 
+					
+				
+					// // se agrega el id del reporte despues de haber sido creado 
+					// foreach($arrayDatosActividades as $datos => $valores)
+					// {
+						// $arrayDatosActividades[$datos]['id_reporte_operativo_misional']= $rom_id;
+						// $arrayDatosActividades[$datos]['estado']= 1;
+						// // $arrayDatosActividades[$datos]['id_rom_actividad']= $datos;
+					// }
+					
+					// //guarda la informa en la tabla isa.actividades segun como vienen los datos en el post
+					// // $columnNameArrayActividades=['fecha_desde','fecha_hasta','sesion_actividad','estado_actividad','id_reporte_operativo_misional','estado','id_rom_actividad'];
+					// $columnNameArrayActividades=['fecha_desde','fecha_hasta','sesion_actividad','estado_actividad','id_reporte_operativo_misional','estado'];
+					// // inserta todos los datos que trae el array arrayDatosActividades
+					// $insertCount = Yii::$app->db->createCommand()
+					   // ->batchInsert('isa.actividades_rom', $columnNameArrayActividades, $arrayDatosActividades) ->execute();
 				}
+				
+				// if($arrayDatosPoblacion = Yii::$app->request->post('IsaTipoCantidadPoblacionRom'))
+				// {
+					
+					// // se agrega el id del reporte despues de haber sido creado 
+					// foreach($arrayDatosPoblacion as $datos => $valores)
+					// {
+						// $arrayDatosPoblacion[$datos]['id_reporte_operativo_misional'] = $rom_id;
+					// }
+					
+					// //guarda la informa en la tabla isa.tipo_cantidad_poblacion_rom segun como vienen los datos en el post
+					// $columnNameArrayPoblacion=['vecinos','lideres_comunitarios','empresarios_comerciantes','organizaciones_locales','grupos_comunitarios','otos_actores','total_participantes','id_rom_actividades','id_reporte_operativo_misional'];
+					// // inserta todos los datos que trae el array arrayDatosActividades
+					// $insertCount = Yii::$app->db->createCommand()
+					   // ->batchInsert('isa.tipo_cantidad_poblacion_rom', $columnNameArrayPoblacion, $arrayDatosPoblacion)->execute(); 
+				// }
 				
 				//guarda todos los archivos en el servidor y la url en la base de datos
 				//valida que el post tenga IsaEvidenciasRom y lo asigan a la variable $arrayDatosEvidencias
@@ -644,6 +826,12 @@ class RomReporteOperativoMisionalController extends Controller
 							$modeloEvidencias[$key]->fecha_entrega_envio			= $arrayDatosEvidencias[$k]['fecha_entrega_envio'];
 							$modeloEvidencias[$key]->id_rom_actividad				= $arrayDatosEvidencias[$k]['id_rom_actividad'];
 							$modeloEvidencias[$key]->id_reporte_operativo_misional 	= $rom_id;
+							
+							if( empty($modeloEvidencias[$key]->fecha_entrega_envio) )
+							{
+								$modeloEvidencias[$key]->fecha_entrega_envio = gmdate( "Y-m-d", 0 );
+							}
+							
 							//Siempre activo
 							$modeloEvidencias[$key]->estado = 1;
 						}
@@ -654,9 +842,95 @@ class RomReporteOperativoMisionalController extends Controller
 							$m->save(false);
 						}
 						
-						return $this->redirect(['index', 'guardado' => true ]);
+						// return $this->redirect(['index', 'guardado' => true ]);
 					}		 
 				}
+				
+				if($arrayDatosTipos = Yii::$app->request->post('IsaTipoCantidadPoblacionRom'))
+				{
+					//se deben crear modelos de forma dinamica para posteriormente hacer el guardado de la informacion
+					$modeloTipos 	= [];
+					$cantidad 		= count( $arrayDatosTipos );
+					foreach( $arrayDatosTipos as $k => $v )
+					{
+						$modeloTipos[$k] = IsaTipoCantidadPoblacionRom::findOne([ 
+																	'estado' 						=> 1, 
+																	'id_rom_actividades' 			=> $k,
+																	'id_reporte_operativo_misional' => $id,
+																]);
+					}
+					
+					if(IsaTipoCantidadPoblacionRom::loadMultiple($modeloTipos,  Yii::$app->request->post() )) 
+					{
+						foreach( $modeloTipos as $key => $model )
+						{
+							$model->id_rom_actividades 				= $key;
+							$model->id_reporte_operativo_misional 	= $rom_id;
+							$model->total_participantes 			= "0";
+							$model->estado 							= 1;
+							$save = $model->save();
+							
+							if( !$save ) exit( "error IsaTipoCantidadPoblacionRom 781" );
+						}
+					}
+					else{
+						exit( "error no carga IsaTipoCantidadPoblacionRom 781" );
+					}
+				}
+				else{
+					exit( "error no array IsaTipoCantidadPoblacionRom 781" );
+				}
+				
+				if($arrayDatosIntegrante = Yii::$app->request->post('IsaActividadesRomXIntegranteGrupo'))
+				{
+					//se deben crear modelos de forma dinamica para posteriormente hacer el guardado de la informacion
+					$modeloIntegrante 	= [];
+					$cantidad 			= count( $arrayDatosIntegrante );
+					foreach( $arrayDatosIntegrante as $k => $v )
+					{
+						$modeloIntegrante[$k] = IsaActividadesRomXIntegranteGrupo::findOne([ 
+																	'estado' 						=> 1, 
+																	'diligencia' 					=> $id_perfil_persona,
+																	'id_rom_actividad' 				=> $k,
+																	'id_reporte_operativo_misional' => $id,
+																]);
+						
+						//Si no encuentra el registro signifca que debe ser nuevo ya que esta parte es individual por persona
+						if( !$modeloIntegrante[$k] ){
+							$modeloIntegrante[$k] = new IsaActividadesRomXIntegranteGrupo();
+						}
+					}
+					
+					if(IsaActividadesRomXIntegranteGrupo::loadMultiple($modeloIntegrante,  Yii::$app->request->post() )) 
+					{
+						foreach( $modeloIntegrante as $key => $model )
+						{
+							$model->diligencia 						= $id_perfil_persona;
+							$model->rol 							= "$id_perfil_persona";
+							$model->id_rom_actividad 				= $key;
+							$model->id_reporte_operativo_misional 	= $rom_id;
+							$model->estado 							= 1;
+							
+							if( empty($model->fecha_reprogramacion) )
+							{
+								$model->fecha_reprogramacion = gmdate( "Y-m-d", 0 );
+							}
+							
+							$save = $model->save();
+							// echo "<pre>"; var_dump( $key ); echo "</pre>";
+							// echo "<pre>"; var_dump( $arrayDatosIntegrante ); echo "</pre>";
+							// echo "<pre>"; var_dump( $model ); echo "</pre>";
+							if( !$save ) exit( "error IsaActividadesRomXIntegranteGrupo 830" );
+						}
+					}
+					else{
+						exit( "error no carga IsaActividadesRomXIntegranteGrupo 830" );
+					}
+				}
+				else{
+					exit( "error no array IsaActividadesRomXIntegranteGrupo 830" );
+				}
+				
 				return $this->redirect(['index', 'guardado' => 1 ]);
 			}
 		}	
@@ -710,9 +984,13 @@ class RomReporteOperativoMisionalController extends Controller
 		foreach( $proyectos as $idProyecto => $descripcionProyecto )
 		{
 			$proy = [
-						'id' 			=> $idProyecto,
-						'descripcion' 	=> $descripcionProyecto,
-						'procesos'		=> [],
+						'id' 				=> $idProyecto,
+						'descripcion' 		=> $descripcionProyecto,
+						'actividades_rom2'	=> IsaActividadesRom::findOne([ 
+																	'id_reporte_operativo_misional' => $id,
+																	'estado' 						=> 1,
+																]),
+						'procesos'			=> [],
 					];
 			
 			$dataProcesos = IsaRomProcesos::find()
@@ -749,11 +1027,32 @@ class RomReporteOperativoMisionalController extends Controller
 					   
 				foreach( $evidencias as $evidencia )
 				{
+					$actividades_rom_upt = IsaActividadesRom::findOne([ 
+															'id_reporte_operativo_misional' => $id,
+															'estado' 						=> 1,
+														]);
+					
 					//Array de actividades
 					$act =  [
-								'id' 			=> $evidencia->id_rom_actividad,
-								'descripcion' 	=> IsaRomActividades::findOne( $evidencia->id_rom_actividad )->descripcion,
-								'evidencia'		=> $evidencia,
+								'id' 				=> $evidencia->id_rom_actividad,
+								'descripcion' 		=> IsaRomActividades::findOne( $evidencia->id_rom_actividad )->descripcion,
+								'actividades_rom'	=> $actividades_rom_upt,
+								'evidencia'			=> $evidencia,
+								'poblacion'			=> IsaTipoCantidadPoblacionRom::findOne([ 
+																	'estado' 						=> 1, 
+																	'id_rom_actividades' 			=> $evidencia->id_rom_actividad,
+																	'id_reporte_operativo_misional' => $id,
+																]),
+								'integrante'		=> IsaActividadesRomXIntegranteGrupo::findOne([ 
+																	'estado' 						=> 1, 
+																	'diligencia' 					=> $id_perfil_persona,
+																	'id_rom_actividad' 				=> $evidencia->id_rom_actividad,
+																	'id_reporte_operativo_misional' => $id,
+																]),
+								'datosSoloLectura' 	=> IsaIntervencionIeo::findOne([
+																	'id' 		=> $actividades_rom_upt->sesion_actividad,
+																	'estado' 	=> 1,
+																]),
 							];
 					
 					//Adiciono la actividad al proceso
@@ -766,13 +1065,25 @@ class RomReporteOperativoMisionalController extends Controller
 			$datos[] = $proy;
 		}
 		
+		$dataActividadesParticipadas = IsaActividadesIsa::find()
+											->alias('a')
+											->innerJoin('isa.equipos_campo ec', 'ec.id=a.num_equipo_campo')
+											->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
+											->where( 'a.estado=1' )
+											->andWhere( 'ie.estado=1' )
+											->andWhere( 'ec.estado=1' )
+											->andWhere( 'ie.id_perfil_persona_institucion='.$id_perfil_persona )
+											->all();
+										
+		$actividadesParticipadas = ArrayHelper::map( $dataActividadesParticipadas,'id','descripcion' );
 		/************************************************************************************************************/
 
 		return $this->renderAjax( 'create', [
-			'model' 		=> $model,
-			'sedes'			=> $sedes,
-			'institucion'	=> $this->obtenerInstitucion(),
-			'datos'			=> $datos,
+			'model' 					=> $model,
+			'sedes'						=> $sedes,
+			'institucion'				=> $this->obtenerInstitucion(),
+			'datos'						=> $datos,
+			'actividadesParticipadas' 	=> $actividadesParticipadas,
 		]);
     }
 

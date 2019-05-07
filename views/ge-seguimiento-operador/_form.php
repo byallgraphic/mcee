@@ -98,30 +98,80 @@ if(Yii::$app->request->get('guardado')){
 
     <h3 style='background-color:#ccc;padding:5px;'><?= "REPORTE DE ACTIVIDADES"?></h3>
 
-    <div class="objetivo" id="objetivo-0">
-        <div id="" class="id_objetivo">
-            <?= $form->field($reportAct, 'objetivo')->textInput(['disabled' => false, 'id' => 'id_objetivo']) ?>
-            <?= $form->field($reportAct, 'actividad')->textInput(['disabled' => false, 'id' => 'id_actividad']) ?>
-            <?= $form->field($reportAct, 'descripcion')->textInput(['id' => 'descripcion_actividad']) ?>
-            <?= $form->field($reportAct, 'poblacion_beneficiaria')->dropDownList(['Docentes', 'Estudiantes', 'Directivos', 'Otros'], ['prompt' => 'Seleccione una opcion', 'id' => 'poblacion_beneficiaria']); ?>
-            <div id="id_quienes">
-                <?=  $form->field($reportAct, 'quienes')->textInput(['id' => 'quienes']); ?>
+    <?php if($reportExist){ ?>
+        <?php foreach ($reportAct AS $key => $report){ ?>
+            <div class="objetivo" id="objetivo-<?= $key ?>">
+                <div id="" class="id_objetivo">
+                    <?= $form->field($report, 'objetivo')->textInput(['disabled' => false, 'id' => 'id_objetivo']) ?>
+                    <?= $form->field($report, 'actividad')->textInput(['disabled' => false, 'id' => 'id_actividad']) ?>
+                    <?= $form->field($report, 'descripcion')->textInput(['id' => 'descripcion_actividad']) ?>
+                    <?= $form->field($report, 'poblacion_beneficiaria')->dropDownList(['Docentes', 'Estudiantes', 'Directivos', 'Otros'], ['prompt' => 'Seleccione una opcion', 'id' => 'poblacion_beneficiaria']); ?>
+                    <div id="id_quienes">
+                        <?=  $form->field($report, 'quienes')->textInput(['id' => 'quienes']); ?>
+                    </div>
+                    <?= $form->field($report, 'num_participantes')->textInput(['type' => 'number', 'id' => 'numero_participantes']) ?>
+                    <?= $form->field($report, 'duracion')->textInput(['id' => 'duracion_actividad']) ?>
+                    <?= $form->field($report, 'logros')->textarea(['id' => 'logros_alcanzados']) ?>
+                    <?= $form->field($report, 'dificultades')->textarea(['id' => 'dificultadades']) ?>
+                </div>
+
+                <div class="evidencia_actividades">
+                    <h3 style='background-color:#ccc;padding:5px;'><?= "Evidencias de soporte"?></h3>
+                    <p>Listado de participantes, registro visual, informe de actividades o acta</p>
+                    <?= $form->field($model, 'documentFile[]')->fileInput(['multiple' => true, 'id' => "file-upload-".$key]) ?>
+                    <div id="nameElement">
+
+                    </div>
+                </div>
             </div>
-            <?= $form->field($reportAct, 'num_participantes')->textInput(['type' => 'number', 'id' => 'numero_participantes']) ?>
-            <?= $form->field($reportAct, 'duracion')->textInput(['id' => 'duracion_actividad']) ?>
-            <?= $form->field($reportAct, 'logros')->textarea(['id' => 'logros_alcanzados']) ?>
-            <?= $form->field($reportAct, 'dificultades')->textarea(['id' => 'dificultadades']) ?>
+
+            <script>
+                $('#objetivo-'+ <?= $key ?> + ' #file-upload-'+ <?= $key ?> ).change(function(e){
+                    var files = $(this).prop("files");
+                    var files_length = files.length;
+                    for (var x = 0; x < files_length; x++) {
+                        $(this).parent().parent().find('#nameElement').append('<label>'+files[x].name+'</label><br>')
+                    }
+                });
+            </script>
+        <?php } ?>
+    <?php }else{ ?>
+        <div class="objetivo" id="objetivo-0">
+            <div id="" class="id_objetivo">
+                <?= $form->field($reportAct, 'objetivo')->textInput(['disabled' => false, 'id' => 'id_objetivo']) ?>
+                <?= $form->field($reportAct, 'actividad')->textInput(['disabled' => false, 'id' => 'id_actividad']) ?>
+                <?= $form->field($reportAct, 'descripcion')->textInput(['id' => 'descripcion_actividad']) ?>
+                <?= $form->field($reportAct, 'poblacion_beneficiaria')->dropDownList(['Docentes', 'Estudiantes', 'Directivos', 'Otros'], ['prompt' => 'Seleccione una opcion', 'id' => 'poblacion_beneficiaria']); ?>
+                <div id="id_quienes">
+                    <?=  $form->field($reportAct, 'quienes')->textInput(['id' => 'quienes']); ?>
+                </div>
+                <?= $form->field($reportAct, 'num_participantes')->textInput(['type' => 'number', 'id' => 'numero_participantes']) ?>
+                <?= $form->field($reportAct, 'duracion')->textInput(['id' => 'duracion_actividad']) ?>
+                <?= $form->field($reportAct, 'logros')->textarea(['id' => 'logros_alcanzados']) ?>
+                <?= $form->field($reportAct, 'dificultades')->textarea(['id' => 'dificultadades']) ?>
+            </div>
+
+            <div class="evidencia_actividades">
+                <h3 style='background-color:#ccc;padding:5px;'><?= "Evidencias de soporte"?></h3>
+                <p>Listado de participantes, registro visual, informe de actividades o acta</p>
+                <?= $form->field($model, 'documentFile[]')->fileInput(['multiple' => true, 'id' => "file-upload-0"]) ?>
+                <div id="nameElement">
+
+                </div>
+            </div>
         </div>
 
-        <div class="evidencia_actividades">
-            <h3 style='background-color:#ccc;padding:5px;'><?= "Evidencias de soporte"?></h3>
-            <p>Listado de participantes, registro visual, informe de actividades o acta</p>
-            <?= $form->field($model, 'documentFile[]')->fileInput(['multiple' => true, 'id' => "file-upload-0"]) ?>
-            <div id="nameElement">
 
-            </div>
-        </div>
-    </div>
+        <script>
+            $('#file-upload-0').change(function(e){
+                var files = $(this).prop("files");
+                var files_length = files.length;
+                for (var x = 0; x < files_length; x++) {
+                    $(this).parent().parent().find('#nameElement').append('<label>'+files[x].name+'</label><br>')
+                }
+            });
+        </script>
+    <?php } ?>
 
     <button id="btnAgregarObj" type="button" class="btn btn-primary" value="0">Agregar Actividades</button>
     <br>
@@ -201,14 +251,6 @@ if(Yii::$app->request->get('guardado')){
 
 
             id_objetivo.prop('disabled', true);
-        });
-
-        $('#file-upload-0').change(function(e){
-            var files = $(this).prop("files");
-            var files_length = files.length;
-            for (var x = 0; x < files_length; x++) {
-                $(this).parent().parent().find('#nameElement').append('<label>'+files[x].name+'</label><br>')
-            }
         });
 
         $('#save_form').click(function(e){
@@ -394,6 +436,7 @@ if(Yii::$app->request->get('guardado')){
                     success: function (res, status) {
                         if (status == 'success') {
                             $("#modal-ge").modal('hide');
+                            $("#datatables_w0").load(location.href + " #datatables_w0");
                             swal({
                                 text: 'Registro guardado',
                                 icon: 'success',

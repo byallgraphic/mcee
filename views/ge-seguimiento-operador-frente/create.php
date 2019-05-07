@@ -6,28 +6,18 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\GeSeguimientoOperadorFrente */
 
-$this->title = 'Seguimiento Operador Frente';
-$this->params['breadcrumbs'][] = ['label' => 'Seguimiento Operador Frentes', 'url' => ['index']];
-$this->params['breadcrumbs'][] = "Agregar";
+$this->title = '';
 ?>
 
-<?= Html::a('Volver', 
-									[
-										'acompanamiento-in-situ/index',
-									], 
-									['class' => 'btn btn-info']) ?>
-				
 				
 <div class="ge-seguimiento-operador-frente-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
 		'guardado' 			=> $guardado,
 		'personas' 			=> $personas,
 		'mesReporte' 			=> $mesReporte,
 		'sino' 			=> $sino,
+        'idTipoSeguimiento' => Yii::$app->request->get( 'idTipoSeguimiento' ),
         'sede'				=> $sede,
 		'seleccion' 			=> $seleccion,
     ]) ?>
