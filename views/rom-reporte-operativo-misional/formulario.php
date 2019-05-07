@@ -68,7 +68,7 @@ $evidencias_rom->fecha_entrega_envio = '';
 <div class="row">
 		
 	<div class="col-md-6">
-		<?= $form->field($actividades_rom, "[$idActividad]sesion_actividad")->label('Nombre o título de la actividad o encuentro')->dropDownList($actividadesParticipadas = [1,2,3], ['prompt' => 'Seleccione...']) ?>
+		<?= $form->field($actividades_rom, "[$idActividad]sesion_actividad")->label('Nombre o título de la actividad o encuentro')->dropDownList($actividadesParticipadas, ['prompt' => 'Seleccione...']) ?>
 	</div>
 	
 	<div class="col-md-6">
@@ -98,13 +98,13 @@ $evidencias_rom->fecha_entrega_envio = '';
 		
 	<div class="col-md-6">
 		<div class="form-group">
-			<input id="nro_equipo" class="form-control" readonly>
+			<input id="nro_equipo-<?=$idActividad ?>" class="form-control" readonly value='<?= $datos_adicionales['equipo_nombre']?>'>
 		</div>	
 	</div>
 			
 	<div class="col-md-6">
 		<div class="form-group">
-			<input id="perfiles" class="form-control" readonly>
+			<input id="perfiles-<?=$idActividad ?>" class="form-control" readonly value='<?= $datos_adicionales['perfiles']?>'>
 		</div>	
 	</div>
 
@@ -124,7 +124,7 @@ $evidencias_rom->fecha_entrega_envio = '';
 		
 	<div class="col-md-6">
 		<div class="form-group">
-			<input id="docente_orientador" class="form-control" readonly>
+			<input id="docente_orientador-<?=$idActividad ?>" class="form-control" readonly value='<?= $datos_adicionales['docente_orientador']?>'>
 		</div>	
 	</div>
 

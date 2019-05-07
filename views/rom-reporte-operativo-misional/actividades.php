@@ -26,7 +26,8 @@ foreach( $actividades as $idActividad => $v )
 														'tipo_poblacion_rom'		=> $v['poblacion'],
 														'integrante'				=> $v['integrante'],
 														'actividades_rom'			=> $v['actividades_rom'],
-														'actividadesParticipadas'	=> $actividadesParticipadas,
+														'actividadesParticipadas'	=> $v['actividadesParticipadas'],
+														'datos_adicionales'			=> $v['datos_adicionales'],
 													] 
 										),
 					'headerOptions' => ['class' => 'tab1', 'style' => "background-color: $colors[$idActividad];"],

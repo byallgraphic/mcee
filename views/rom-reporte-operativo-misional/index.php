@@ -79,17 +79,43 @@ $this->registerJs("
 			
 			__self = this;
 			
-			$.post( 'index.php?r=rom-reporte-operativo-misional/consultar-mision', 
-					{ 
-						rom_actividades	: __target, 
-						sesion_actividad: $( __self ).val() ,
-					}, 
-					function( data ){
-						if( data != '' ){
-							$( '#modalContent' ).html( data );
+			if( $( __self ).val() == '' )
+			{
+				$( '#nro_equipo-'+__target ).val( '' )
+				$( '#perfiles-'+__target ).val( '' )
+				$( '#docente_orientador-'+__target ).val( '' )
+			}
+			else
+			{	
+				$.post( 'index.php?r=rom-reporte-operativo-misional/consultar-mision', 
+						{ 
+							rom_actividades	: __target, 
+							sesion_actividad: $( __self ).val() ,
+						}, 
+						function( data ){
+							if( data != '' ){
+								$( '#modalContent' ).html( data );
+							}
+							else{
+								
+								$.get( 'index.php?r=rom-reporte-operativo-misional/consultar-intervencion-ieo', 
+										{
+											id: $( __self ).val() ,
+										}, 
+										function( data ){
+											console.log( data );
+											if( data ){
+												$( '#nro_equipo-'+__target ).val( data.equipo_nombre )
+												$( '#perfiles-'+__target ).val( data.perfiles )
+												$( '#docente_orientador-'+__target ).val( data.docente_orientador )
+											}
+										},
+										'json'
+								);							
+							}
 						}
-					}
-			);
+				);
+			}
 		});
 	
 	

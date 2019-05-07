@@ -53,6 +53,7 @@ use app\models\IsaRomActividades;
 use app\models\IsaActividadesIsa;
 use app\models\IsaActividadesRomXIntegranteGrupo;
 use app\models\IsaIntervencionIeo;
+use app\models\IsaEquiposCampo;
 use yii\bootstrap\Collapse;
 use app\models\UploadForm;
 use yii\helpers\ArrayHelper;
@@ -61,6 +62,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\controllers\DateTime;
+use yii\helpers\Json;
 
 /**
  * RomReporteOperativoMisionalController implements the CRUD actions for RomReporteOperativoMisional model.
@@ -126,7 +128,9 @@ class RomReporteOperativoMisionalController extends Controller
 			$val[$key] = $value;
 		}
 		
-		return $value;
+		$val['equipo_nombre'] = IsaEquiposCampo::findOne( $modelIntervencion->id_equipo_campos )->nombre;
+		
+		return Json::encode($val);
 	}
 
     /**
@@ -528,6 +532,29 @@ class RomReporteOperativoMisionalController extends Controller
 		
 		$datos = [];
 		
+		$dataActividadesParticipadas = IsaActividadesIsa::find()
+										->alias('a')
+										->innerJoin('isa.equipos_campo ec', 'ec.id=a.num_equipo_campo')
+										->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
+										->where( 'a.estado=1' )
+										->andWhere( 'ie.estado=1' )
+										->andWhere( 'ec.estado=1' )
+										->andWhere( 'ie.id_perfil_persona_institucion='.$_SESSION['id'] )
+										->all();
+										
+		$dataActividadesParticipadas = IsaIntervencionIeo::find()
+										->alias('i')
+										->innerJoin('isa.actividades_isa a', 'a.id=i.id_actividades_isa')
+										->innerJoin('isa.equipos_campo ec', 'ec.id=a.num_equipo_campo')
+										->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
+										->where( 'a.estado=1' )
+										->andWhere( 'ie.estado=1' )
+										->andWhere( 'ec.estado=1' )
+										->andWhere( 'ie.id_perfil_persona_institucion='.$_SESSION['id'] )
+										->all();
+										
+		$actividadesParticipadas = ArrayHelper::map( $dataActividadesParticipadas,'id','nombre_actividad' );
+		
 		foreach( $proyectos as $idProyecto => $descripcionProyecto )
 		{
 			$proy = [
@@ -559,12 +586,14 @@ class RomReporteOperativoMisionalController extends Controller
 				{
 					//Array de actividades
 					$act =  [
-								'id' 				=> $idActividad,
-								'descripcion' 		=> $descripcionActividad,
-								'actividades_rom' 	=> new IsaActividadesRom(),
-								'evidencia'			=> new IsaEvidenciasRom(),
-								'poblacion'			=> new IsaTipoCantidadPoblacionRom(),
-								'integrante'		=> new IsaActividadesRomXIntegranteGrupo(),
+								'id' 						=> $idActividad,
+								'descripcion' 				=> $descripcionActividad,
+								'actividades_rom' 			=> new IsaActividadesRom(),
+								'evidencia'					=> new IsaEvidenciasRom(),
+								'poblacion'					=> new IsaTipoCantidadPoblacionRom(),
+								'integrante'				=> new IsaActividadesRomXIntegranteGrupo(),
+								'actividadesParticipadas' 	=> $actividadesParticipadas,
+								'datos_adicionales' 		=> [ 'equipo_nombre' => '', 'perfiles' => '', 'docente_orientador' => '' ],
 							];
 					
 					//Adiciono la actividad al proceso
@@ -578,18 +607,6 @@ class RomReporteOperativoMisionalController extends Controller
 			
 			$datos[] = $proy;
 		}
-		
-		$dataActividadesParticipadas = IsaActividadesIsa::find()
-										->alias('a')
-										->innerJoin('isa.equipos_campo ec', 'ec.id=a.num_equipo_campo')
-										->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
-										->where( 'a.estado=1' )
-										->andWhere( 'ie.estado=1' )
-										->andWhere( 'ec.estado=1' )
-										->andWhere( 'ie.id_perfil_persona_institucion='.$id_perfil_persona )
-										->all();
-										
-		$actividadesParticipadas = ArrayHelper::map( $dataActividadesParticipadas,'id','descripcion' );
 		
 		/************************************************************************************************************/
 
@@ -1031,28 +1048,35 @@ class RomReporteOperativoMisionalController extends Controller
 															'id_reporte_operativo_misional' => $id,
 															'estado' 						=> 1,
 														]);
+														
+					$dataActividadesParticipadas = IsaIntervencionIeo::findOne( $actividades_rom_upt->sesion_actividad );
+										
+					$actividadesParticipadas = [ $dataActividadesParticipadas->id => $dataActividadesParticipadas->nombre_actividad ];
 					
 					//Array de actividades
 					$act =  [
-								'id' 				=> $evidencia->id_rom_actividad,
-								'descripcion' 		=> IsaRomActividades::findOne( $evidencia->id_rom_actividad )->descripcion,
-								'actividades_rom'	=> $actividades_rom_upt,
-								'evidencia'			=> $evidencia,
-								'poblacion'			=> IsaTipoCantidadPoblacionRom::findOne([ 
+								'id' 						=> $evidencia->id_rom_actividad,
+								'descripcion' 				=> IsaRomActividades::findOne( $evidencia->id_rom_actividad )->descripcion,
+								'actividades_rom'			=> $actividades_rom_upt,
+								'evidencia'					=> $evidencia,
+								'poblacion'					=> IsaTipoCantidadPoblacionRom::findOne([ 
 																	'estado' 						=> 1, 
 																	'id_rom_actividades' 			=> $evidencia->id_rom_actividad,
 																	'id_reporte_operativo_misional' => $id,
 																]),
-								'integrante'		=> IsaActividadesRomXIntegranteGrupo::findOne([ 
+								'integrante'				=> IsaActividadesRomXIntegranteGrupo::findOne([ 
 																	'estado' 						=> 1, 
 																	'diligencia' 					=> $id_perfil_persona,
 																	'id_rom_actividad' 				=> $evidencia->id_rom_actividad,
 																	'id_reporte_operativo_misional' => $id,
 																]),
-								'datosSoloLectura' 	=> IsaIntervencionIeo::findOne([
+								'datosSoloLectura' 			=> IsaIntervencionIeo::findOne([
 																	'id' 		=> $actividades_rom_upt->sesion_actividad,
 																	'estado' 	=> 1,
 																]),
+																
+								'actividadesParticipadas' 	=> $actividadesParticipadas,
+								'datos_adicionales' 		=> Json::decode( $this->actionConsultarIntervencionIeo( $dataActividadesParticipadas->id ) ),
 							];
 					
 					//Adiciono la actividad al proceso
@@ -1076,6 +1100,19 @@ class RomReporteOperativoMisionalController extends Controller
 											->all();
 										
 		$actividadesParticipadas = ArrayHelper::map( $dataActividadesParticipadas,'id','descripcion' );
+		
+		$dataActividadesParticipadas = IsaIntervencionIeo::find()
+										->alias('i')
+										->innerJoin('isa.actividades_isa a', 'a.id=i.id_actividades_isa')
+										->innerJoin('isa.equipos_campo ec', 'ec.id=a.num_equipo_campo')
+										->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
+										->where( 'a.estado=1' )
+										->andWhere( 'ie.estado=1' )
+										->andWhere( 'ec.estado=1' )
+										->andWhere( 'ie.id_perfil_persona_institucion='.$_SESSION['id'] )
+										->all();
+										
+		$actividadesParticipadas = ArrayHelper::map( $dataActividadesParticipadas,'id','nombre_actividad' );
 		/************************************************************************************************************/
 
 		return $this->renderAjax( 'create', [
