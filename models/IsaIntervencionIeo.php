@@ -54,7 +54,7 @@ class IsaIntervencionIeo extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'perfiles' => 'Perfiles',
-            'docente_orientador' => 'Docente Orientador',
+            'docente_orientador' => 'Lider técnico pedagógico ',
             'fases' => 'Fases',
             'num_encuentro' => 'Num Encuentro',
             'nombre_actividad' => 'Nombre Actividad',

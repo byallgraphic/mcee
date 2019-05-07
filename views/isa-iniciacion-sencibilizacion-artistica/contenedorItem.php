@@ -22,8 +22,6 @@ use nex\chosen\Chosen;
 use yii\helpers\Url;
 
 
-
-
 //saber que se esta editando
 if( strpos($_GET['r'], 'update') > -1)
 {
@@ -36,7 +34,10 @@ if( strpos($_GET['r'], 'update') > -1)
 	$actividades_isa = IsaActividadesIsa::findOne(key($isa));
 	
 	//trae la informacion del modelo IsaIntervencionIeo (esto es temporal mientras se adecua para hacerlo multiple)
-	$intervencionIEO = IsaIntervencionIeo::findOne(key($isa));
+	
+	$idintervencion = IsaIntervencionIeo::find()->Where("id_actividades_isa=".key($isa))->all();
+	$idintervencion = ArrayHelper::map($idintervencion,'id','estado');
+	$intervencionIEO = IsaIntervencionIeo::findOne(key($idintervencion));
 }
 
 
@@ -124,7 +125,7 @@ if( strpos($_GET['r'], 'update') > -1)
 						Chosen::className(), [
 							'items' => $docenteOrientador,
 							'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
-							'multiple' => true,
+							'multiple' => false,
 							'clientOptions' => [
 								'search_contains' => true,
 								'single_backstroke_delete' => false,

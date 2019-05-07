@@ -95,13 +95,13 @@ $("#modalEquipo").click(function()
 		<?php
             if (Yii::$app->request->get('id'))
 			{
-				 echo Html::submitButton('Guardar actualizar', ['class' => 'btn btn-success']);
+				  Html::submitButton('Guardar actualizar', ['class' => 'btn btn-success']);
             }
 			else
 			{
-				echo Html::button('Guardar', ['class' => 'btn btn-success',  'id' => 'save_form', 'value' => 0]);
+				 Html::button('Guardar', ['class' => 'btn btn-success',  'id' => 'save_form', 'value' => 0]);
             }
-        
+				echo Html::submitButton('Guardar', ['class' => 'btn btn-success']);
 		 ?>
 		<?php  Html::button('Guardar save form', ['class' => 'btn btn-success', 'id' => 'save_form', 'value' => 0]) ?>
 		
