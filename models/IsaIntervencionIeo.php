@@ -54,14 +54,14 @@ class IsaIntervencionIeo extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'perfiles' => 'Perfiles',
-            'docente_orientador' => 'Lider técnico pedagógico ',
+            'docente_orientador' => 'Líder técnico pedagógico ',
             'fases' => 'Fases',
             'num_encuentro' => 'Num Encuentro',
             'nombre_actividad' => 'Nombre Actividad',
             'actividad_desarrollar' => 'Actividad Desarrollar',
             'lugares_recorrer' => 'Lugares Recorrer',
-            'tematicas_abordadas' => 'Tematicas Abordadas',
-            'objetivos_especificos' => 'Objetivos Especificos',
+            'tematicas_abordadas' => 'Temáticas Abordadas',
+            'objetivos_especificos' => 'Objetivos Específicos',
             'tiempo_previsto' => 'Tiempo Previsto (en minutos)',
             'id_actividades_isa' => 'Id Actividades Isa',
             'id_equipo_campos' => 'Id Equipo Campos',
@@ -69,4 +69,5 @@ class IsaIntervencionIeo extends \yii\db\ActiveRecord
             'productos' => 'Productos',
         ];
     }
+
 }

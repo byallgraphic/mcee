@@ -131,7 +131,7 @@ if( strpos($_GET['r'], 'update') > -1)
 								'single_backstroke_delete' => false,
 							],
                             'placeholder' => 'Seleccione..',
-					])->label("Lider técnico pedagógico")?></div>
+					])?></div>
 	</div>
 
 

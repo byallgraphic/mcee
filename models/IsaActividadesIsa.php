@@ -74,13 +74,13 @@ class IsaActividadesIsa extends \yii\db\ActiveRecord
             'contenido_si_no' => 'Contenido Si No',
             'contenido_nombre' => 'Contenido Nombre',
             'contenido_fecha' => 'Contenido Fecha',
-            'contenido_justificacion' => 'Contenido Justificacion',
+            'contenido_justificacion' => 'Contenido Justificación',
             'articulacion' => 'Articulacion',
             'cantidad_participantes' => 'Cantidad Participantes',
-            'requerimientos_tecnicos' => 'Requerimientos Tecnicos',
-            'requerimientos_logisticos' => 'Requerimientos Logisticos',
+            'requerimientos_tecnicos' => 'Requerimientos Técnicos',
+            'requerimientos_logisticos' => 'Requerimientos Logísticos',
             'destinatarios' => 'Destinatarios',
-            'fecha_entrega_envio' => 'Fecha Entrega Envio',
+            'fecha_entrega_envio' => 'Fecha Entrega Envío',
             'observaciones_generales' => 'Observaciones Generales',
             'nombre_diligencia' => 'Nombre Diligencia',
             'rol' => 'Rol',
@@ -88,4 +88,5 @@ class IsaActividadesIsa extends \yii\db\ActiveRecord
             'estado' => 'Estado',
         ];
     }
+
 }
