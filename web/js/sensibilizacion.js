@@ -1,6 +1,6 @@
 $( document ).ready(function() 
 {
-	
+
 	// se ocultan de entrada
   //caracterizacion nombre
 	$( ".field-isainiciacionsencibilizacionartistica-caracterizacion_nombre" ).toggle();

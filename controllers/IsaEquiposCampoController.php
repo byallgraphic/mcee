@@ -89,7 +89,7 @@ class IsaEquiposCampoController extends Controller
 				$integranteEquipo = new IsaIntegrantesXEquipo();
 				$integranteEquipo->id_equipo_campo 	= $model->id;
 				$integranteEquipo->id_perfil_persona_institucion= $integrantes;
-				$integranteEquipo->estado	= 1;
+				$integranteEquipo->estado = 1;
 				$integranteEquipo->save(false);
 			}
         }
@@ -163,9 +163,9 @@ class IsaEquiposCampoController extends Controller
 		$data[]="<option value=''>Seleccione..</option>";
 		foreach ($equiposCampo as $key => $value) 
 		{
-			$id 		 = $key;
+			$id = $key;
 			$nombre = $value;
-			$data[]="<option value=$id>$nombre</option>";
+			$data[]="<option value='$id'>$nombre</option>";
 		}
 		
 		echo Json::encode($data);

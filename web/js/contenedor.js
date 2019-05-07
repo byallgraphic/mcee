@@ -35,29 +35,36 @@ $( document ).ready(function()
 	$('#save_form').click(function(e)
 	{
 		e.preventDefault();
-		var i=0;
-		var intervencion_ieo = [];
-		$('.intervencion').each(function( index ) 
-		{
-			intervencion_ieo[index] = 
-			{
-				perfiles				:$('#isaintervencionieo-'+index+'-perfiles').val(),
-				docente_orientador		:$('#isaintervencionieo-'+index+'-docente_orientador').val(),
-				fases					:$('#isaintervencionieo-'+index+'-fases').val(),
-				num_encuentro			:$('#isaintervencionieo-'+index+'-num_encuentro').val(),
-				nombre_actividad		:$('#isaintervencionieo-'+index+'-nombre_actividad').val(),
-				actividad_desarrollar	:$('#isaintervencionieo-'+index+'-actividad_desarrollar').val(),
-				lugares_recorrer		:$('#isaintervencionieo-'+index+'-lugares_recorrer').val(),
-				tematicas_abordadas		:$('#isaintervencionieo-'+index+'-tematicas_abordadas').val(),
-				objetivos_especificos	:$('#isaintervencionieo-'+index+'-objetivos_especificos').val(),
-				tiempo_previsto			:$('#isaintervencionieo-'+index+'-tiempo_previsto').val(),
-				id_equipos_campo		:$('#isaactividadesisa-'+index+'-num_equipo_campo').val(),
-				productos				:$('#isaintervencionieo-'+index+'-productos').val()
-			};
-		});
+		
+		// var intervencion_ieo = [];
+		// $('.intervencion').each(function( index ) 
+		// {
+			// intervencion_ieo[index] = 
+			// {
+				// perfiles				:$('#isaintervencionieo-'+index+'-perfiles').val(),
+				// docente_orientador		:$('#isaintervencionieo-'+index+'-docente_orientador').val(),
+				// fases					:$('#isaintervencionieo-'+index+'-fases').val(),
+				// num_encuentro			:$('#isaintervencionieo-'+index+'-num_encuentro').val(),
+				// nombre_actividad		:$('#isaintervencionieo-'+index+'-nombre_actividad').val(),
+				// actividad_desarrollar	:$('#isaintervencionieo-'+index+'-actividad_desarrollar').val(),
+				// lugares_recorrer		:$('#isaintervencionieo-'+index+'-lugares_recorrer').val(),
+				// tematicas_abordadas		:$('#isaintervencionieo-'+index+'-tematicas_abordadas').val(),
+				// objetivos_especificos	:$('#isaintervencionieo-'+index+'-objetivos_especificos').val(),
+				// tiempo_previsto			:$('#isaintervencionieo-'+index+'-tiempo_previsto').val(),
+				// id_equipos_campo		:$('#isaactividadesisa-'+index+'-num_equipo_campo').val(),
+				// productos				:$('#isaintervencionieo-'+index+'-productos').val()
+			// };
+		// });
+		
+		
+		
+		
+		
+		
 		
 		
 		var activadesIsa = [];
+		var intervencion_ieo = [];
 		
 		$.each([ 1, 2, 4 ], function( index, value ) 
 		{
@@ -80,8 +87,23 @@ $( document ).ready(function()
 				rol 						: $('#isaactividadesisa-'+value+'-rol').val(),
 				fecha 						: $('#isaactividadesisa-'+value+'-fecha').val(),
 				id_procesos_generales 		: $('#isaactividadesisa-'+value+'-id_procesos_generales').val()
-	
 			}
+			
+			intervencion_ieo[value] = 
+			{
+				perfiles				:$('#isaintervencionieo-'+value+'-perfiles').val(),
+				docente_orientador		:$('#isaintervencionieo-'+value+'-docente_orientador').val(),
+				fases					:$('#isaintervencionieo-'+value+'-fases').val(),
+				num_encuentro			:$('#isaintervencionieo-'+value+'-num_encuentro').val(),
+				nombre_actividad		:$('#isaintervencionieo-'+value+'-nombre_actividad').val(),
+				actividad_desarrollar	:$('#isaintervencionieo-'+value+'-actividad_desarrollar').val(),
+				lugares_recorrer		:$('#isaintervencionieo-'+value+'-lugares_recorrer').val(),
+				tematicas_abordadas		:$('#isaintervencionieo-'+value+'-tematicas_abordadas').val(),
+				objetivos_especificos	:$('#isaintervencionieo-'+value+'-objetivos_especificos').val(),
+				tiempo_previsto			:$('#isaintervencionieo-'+value+'-tiempo_previsto').val(),
+				id_equipos_campo		:$('#isaactividadesisa-'+value+'-num_equipo_campo').val(),
+				productos				:$('#isaintervencionieo-'+value+'-productos').val()
+			};
 			
 		});
 	
