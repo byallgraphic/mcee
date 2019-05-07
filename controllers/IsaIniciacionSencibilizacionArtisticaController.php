@@ -72,7 +72,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
             ],
         ];
     }
-	crud
 
     /**
      * Lists all IsaIniciacionSencibilizacionArtistica models.
