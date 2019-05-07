@@ -352,7 +352,16 @@ $evidencias_rom->fecha_entrega_envio = '';
 <div class="row">
 
 	<div class="col-md-6">
-		<?= $form->field($integrante, "[$idActividad]fecha_diligencia")->label()->textInput(['value' => date("Y-m-d") ]) ?>
+		<?= $form->field($integrante, "[$idActividad]fecha_diligencia")->label()->widget(
+				DatePicker::className(), [
+					// modify template for custom rendering
+					'template' => '{addon}{input}',
+					'language' => 'es',
+					'clientOptions' => [
+						'autoclose' => true,
+						'format'    => 'yyyy-mm-dd',
+				],
+			]);  ?>
 	</div>
 	
 </div>
