@@ -44,7 +44,7 @@ class IsaEvidenciasRom extends \yii\db\ActiveRecord
     {
         return [
             // [['id_rom_actividad', 'actas', 'reportes', 'listados', 'plan_trabajo', 'formato_seguimiento', 'formato_evaluacion', 'fotografias', 'vidoes', 'otros_productos', 'cantidad', 'archivos_enviados_entregados', 'fecha_entrega_envio', 'estado', 'id_reporte_operativo_misional'], 'required'],
-            [['id_rom_actividad', 'cantidad', 'archivos_enviados_entregados', 'fecha_entrega_envio', 'estado', 'id_reporte_operativo_misional'], 'required'],
+            [['id_rom_actividad', 'cantidad', 'estado', 'id_reporte_operativo_misional'], 'required'],
             [['id_rom_actividad', 'cantidad', 'estado', 'id_reporte_operativo_misional'], 'default', 'value' => null],
             [['id_rom_actividad', 'cantidad', 'estado', 'id_reporte_operativo_misional'], 'integer'],
             [['actas','reportes', 'listados', 'plan_trabajo', 'formato_seguimiento', 'formato_evaluacion', 'fotografias', 'vidoes', 'otros_productos', 'archivos_enviados_entregados'], 'string'],
@@ -74,7 +74,7 @@ class IsaEvidenciasRom extends \yii\db\ActiveRecord
             'vidoes' => 'Vidoes',
             'otros_productos' => 'Otros Productos',
             'cantidad' => 'Cantidad',
-            'archivos_enviados_entregados' => 'Archivos Enviados Entregados',
+            'archivos_enviados_entregados' => 'Archivos enviados o entregados a:',
             'fecha_entrega_envio' => 'Fecha Entrega Envio',
             'estado' => 'Estado',
             'id_reporte_operativo_misional' => 'Id Reporte Operativo Misional',

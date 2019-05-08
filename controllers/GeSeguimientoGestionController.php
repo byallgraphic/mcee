@@ -155,15 +155,7 @@ class GeSeguimientoGestionController extends Controller
         $sede = Sedes::findOne( $id_sede );
 
         if( $model->load(Yii::$app->request->post())){
-            $searchModel = new GeSeguimientoGestionBuscar();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            $dataProvider->query->andWhere(['id_tipo_seguimiento' => Yii::$app->request->post('idTipoSeguimiento')]);
-
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-                'guardado' 			=> $guardado,
-            ]);
+            return $this->redirect('index.php?r=ge-seguimiento-gestion&idTipoSeguimiento='.Yii::$app->request->post('idTipoSeguimiento').'&guardado=true');
         }
 
         return $this->render('create', [

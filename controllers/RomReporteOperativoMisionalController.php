@@ -6,6 +6,14 @@ Desarrollador: Oscar David Lopez Villa
 Descripción: crud orientacion proceseso 
 ---------------------------------------
 Modificaciones:
+Fecha:	07-05-2019
+Persona encargada: Edwin Molina Grisales
+Cambios realizados: Se hacen cambios varios
+					- Se agregan campos faltantes
+					- Se carga los datos correspondientes según actividades ingresadas anteriormente 
+					- Los datos correspondientes a logros son individuales según el grupo que conforma la actividad
+----------------------------------------
+Modificaciones:
 Fecha: 15-04-2019
 Persona encargada: Edwin Molina Grisales
 Cambios realizados: Se hacen cambios varios para permitir al usuario subir más de un archivo por opción y se filtra los datos de acuerdo a la sede e institución seleccionada y se muestra los datos a más de un columna
@@ -111,7 +119,8 @@ class RomReporteOperativoMisionalController extends Controller
 							]);
 			
 			if( $model ){
-				$val = $this->actionUpdate( $model->id_reporte_operativo_misional );
+				// $val = $this->actionUpdate( $model->id_reporte_operativo_misional );
+				$val = $id_reporte;
 			}
 		}
 		
@@ -1046,12 +1055,24 @@ class RomReporteOperativoMisionalController extends Controller
 				{
 					$actividades_rom_upt = IsaActividadesRom::findOne([ 
 															'id_reporte_operativo_misional' => $id,
+															'id_rom_actividad' 				=> $evidencia->id_rom_actividad,
 															'estado' 						=> 1,
 														]);
 														
-					$dataActividadesParticipadas = IsaIntervencionIeo::findOne( $actividades_rom_upt->sesion_actividad );
+					$dataActividadesParticipadas= IsaIntervencionIeo::findOne( $actividades_rom_upt->sesion_actividad );
 										
-					$actividadesParticipadas = [ $dataActividadesParticipadas->id => $dataActividadesParticipadas->nombre_actividad ];
+					$actividadesParticipadas 	= [ $dataActividadesParticipadas->id => $dataActividadesParticipadas->nombre_actividad ];
+					
+					$modelIntegrante 			= IsaActividadesRomXIntegranteGrupo::findOne([ 
+																	'estado' 						=> 1, 
+																	'diligencia' 					=> $id_perfil_persona,
+																	'id_rom_actividad' 				=> $evidencia->id_rom_actividad,
+																	'id_reporte_operativo_misional' => $id,
+																]);
+																
+					if( !$modelIntegrante ){
+						$modelIntegrante = new IsaActividadesRomXIntegranteGrupo();
+					}
 					
 					//Array de actividades
 					$act =  [
@@ -1064,12 +1085,7 @@ class RomReporteOperativoMisionalController extends Controller
 																	'id_rom_actividades' 			=> $evidencia->id_rom_actividad,
 																	'id_reporte_operativo_misional' => $id,
 																]),
-								'integrante'				=> IsaActividadesRomXIntegranteGrupo::findOne([ 
-																	'estado' 						=> 1, 
-																	'diligencia' 					=> $id_perfil_persona,
-																	'id_rom_actividad' 				=> $evidencia->id_rom_actividad,
-																	'id_reporte_operativo_misional' => $id,
-																]),
+								'integrante'				=> $modelIntegrante,
 								'datosSoloLectura' 			=> IsaIntervencionIeo::findOne([
 																	'id' 		=> $actividades_rom_upt->sesion_actividad,
 																	'estado' 	=> 1,
@@ -1089,17 +1105,17 @@ class RomReporteOperativoMisionalController extends Controller
 			$datos[] = $proy;
 		}
 		
-		$dataActividadesParticipadas = IsaActividadesIsa::find()
-											->alias('a')
-											->innerJoin('isa.equipos_campo ec', 'ec.id=a.num_equipo_campo')
-											->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
-											->where( 'a.estado=1' )
-											->andWhere( 'ie.estado=1' )
-											->andWhere( 'ec.estado=1' )
-											->andWhere( 'ie.id_perfil_persona_institucion='.$id_perfil_persona )
-											->all();
+		// $dataActividadesParticipadas = IsaActividadesIsa::find()
+											// ->alias('a')
+											// ->innerJoin('isa.equipos_campo ec', 'ec.id=a.num_equipo_campo')
+											// ->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
+											// ->where( 'a.estado=1' )
+											// ->andWhere( 'ie.estado=1' )
+											// ->andWhere( 'ec.estado=1' )
+											// ->andWhere( 'ie.id_perfil_persona_institucion='.$id_perfil_persona )
+											// ->all();
 										
-		$actividadesParticipadas = ArrayHelper::map( $dataActividadesParticipadas,'id','descripcion' );
+		// $actividadesParticipadas = ArrayHelper::map( $dataActividadesParticipadas,'id','descripcion' );
 		
 		$dataActividadesParticipadas = IsaIntervencionIeo::find()
 										->alias('i')

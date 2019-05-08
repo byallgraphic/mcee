@@ -43,7 +43,7 @@ class IsaActividadesRomXIntegranteGrupo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['duracion_sesion', 'logros', 'fortalezas', 'debilidades', 'alternativas', 'retos', 'articulacion', 'evaluacion', 'observaciones_generales', 'alarmas', 'justificacion_activiad_no_realizada', 'fecha_reprogramacion', 'diligencia', 'rol', 'fecha_diligencia', 'id_rom_actividad', 'estado', 'id_reporte_operativo_misional'], 'required'],
+            [['duracion_sesion', 'logros', 'fortalezas', 'debilidades', 'alternativas', 'retos', 'articulacion', 'evaluacion', 'observaciones_generales', 'alarmas', 'justificacion_activiad_no_realizada', 'diligencia', 'rol', 'fecha_diligencia', 'id_rom_actividad', 'estado', 'id_reporte_operativo_misional'], 'required'],
             [['duracion_sesion', 'logros', 'fortalezas', 'debilidades', 'alternativas', 'retos', 'articulacion', 'evaluacion', 'observaciones_generales', 'alarmas', 'justificacion_activiad_no_realizada', 'diligencia', 'rol', 'fecha_diligencia'], 'string'],
             [['fecha_reprogramacion'], 'safe'],
             [['id_rom_actividad', 'estado', 'id_reporte_operativo_misional'], 'default', 'value' => null],

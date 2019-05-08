@@ -189,7 +189,7 @@ class GcMomento1Controller extends Controller
             $propositoMomento = new GcPropositosMomento1();
             $propositoMomento->id_proposito = $proposito;
             $propositoMomento->id_momento1 = $id;
-            if ($propositoMomento->save()){
+            if ($propositoMomento->save(false)){
                 $saveMomento1 = true;
             }
         }
@@ -199,7 +199,7 @@ class GcMomento1Controller extends Controller
             $textoMomento->id_momento1_planeacion = $id;
             $textoMomento->id_dia = $key;
             $textoMomento->descripcion_plan = $day;
-            if ($textoMomento->save()){
+            if ($textoMomento->save(false)){
                 $saveMomento1 = true;
             }
         }
@@ -216,7 +216,7 @@ class GcMomento1Controller extends Controller
                 $resultados->id_momento1 = 1;
                 $resultados->estado = 1;
                 $resultados->nombre = $item[0];
-                $resultados->save();
+                $resultados->save(false);
             }
         }
 
