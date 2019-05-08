@@ -58,16 +58,24 @@ $this->registerJs("
 			__target = __target[1];
 			
 			var frep = $( '#isaactividadesromxintegrantegrupo'+'-'+__target+'-fecha_reprogramacion' );
+			var jus = $( '#isaactividadesromxintegrantegrupo'+'-'+__target+'-justificacion_activiad_no_realizada' );
 			
 			if( $(this).val() == 179 )
 			{
 				frep.attr({disabled:true})
 				frep.attr({readonly:true})
+				
+				jus.attr({readonly:true})
+					.val('No Aplica');
 			}
 			else
 			{
 				frep.attr({disabled:false});
 				frep.attr({readonly:false});
+				
+				jus.attr({readonly:false})
+					.val('')
+				
 			}
 		});
 		

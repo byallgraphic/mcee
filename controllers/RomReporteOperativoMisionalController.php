@@ -1055,6 +1055,7 @@ class RomReporteOperativoMisionalController extends Controller
 				{
 					$actividades_rom_upt = IsaActividadesRom::findOne([ 
 															'id_reporte_operativo_misional' => $id,
+															'id_rom_actividad' 				=> $evidencia->id_rom_actividad,
 															'estado' 						=> 1,
 														]);
 														

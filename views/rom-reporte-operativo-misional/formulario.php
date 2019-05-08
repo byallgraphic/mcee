@@ -33,6 +33,20 @@ $estados_actividad = ArrayHelper::map( $estados_actividad,'id','descripcion' );
 $total = 0;
 
 $evidencias_rom->fecha_entrega_envio = '';
+
+if( $integrante->fecha_reprogramacion == gmdate( "Y-m-d", 0 )){
+	$integrante->fecha_reprogramacion = '';
+}
+
+
+$array1 = [];
+$array2 = [];
+
+if( $actividades_rom->estado_actividad !== 179 ){
+	$array1 = ['readonly' => 'readonly'];
+	$array2 = [ 'readonly' => 'readonly', 'disabled' => 'disabled' ];
+}
+
 ?>
 
 <!-- ACTIVIDADES ROM -->
@@ -274,7 +288,7 @@ $evidencias_rom->fecha_entrega_envio = '';
 	</div>
 	
 	<div class="col-md-6">
-		<?= $form->field($integrante, "[$idActividad]logros")->label()->textInput() ?>
+		<?= $form->field($integrante, "[$idActividad]logros")->label('Logros (Indique los resultados de avance que permitan constatar que, por medio de las actividades realizadas, se está logrando sensibilizar a la comunidad sobre la importancia del arte y la cultura a través de la oferta cultural del municipio para fortalecer el vínculo comunidad-escuela mediante el mejoramiento de la oferta en artes y cultura desde las instituciones educativas oficiales para la ocupación del tiempo libre en las comunas y corregimientos de Santiago de Cali).')->textarea() ?>
 	</div>
 	
 </div>
@@ -282,23 +296,11 @@ $evidencias_rom->fecha_entrega_envio = '';
 <div class="row">
 
 	<div class="col-md-6">
-		<?= $form->field($integrante, "[$idActividad]fortalezas")->label()->textInput() ?>
+		<?= $form->field($integrante, "[$idActividad]fortalezas")->label( 'Fortalezas (Describa las fortalezas que se detectaron en el desarrollo de la actividad para potenciar los objetivos del proyecto.)' )->textarea() ?>
 	</div>
 	
 	<div class="col-md-6">
-		<?= $form->field($integrante, "[$idActividad]debilidades")->label()->textInput() ?>
-	</div>
-	
-</div>
-
-<div class="row">
-
-	<div class="col-md-6">
-		<?= $form->field($integrante, "[$idActividad]alternativas")->label()->textInput() ?>
-	</div>
-	
-	<div class="col-md-6">
-		<?= $form->field($integrante, "[$idActividad]retos")->label()->textInput() ?>
+		<?= $form->field($integrante, "[$idActividad]debilidades")->label( 'Debilidades (Describa las debilidades, dificultades, problemas que se le presentaron en el desarrollo de la actividad y que pueden afectar negativamente el  cumplimiento de los objetivos del proyecto)' )->textarea() ?>
 	</div>
 	
 </div>
@@ -306,23 +308,11 @@ $evidencias_rom->fecha_entrega_envio = '';
 <div class="row">
 
 	<div class="col-md-6">
-		<?= $form->field($integrante, "[$idActividad]articulacion")->label()->textInput() ?>
+		<?= $form->field($integrante, "[$idActividad]alternativas")->label('Alternativas: Describa las decisiones y acciones adoptadas por su equipo para superar las dificultades presentadas.')->textarea() ?>
 	</div>
 	
 	<div class="col-md-6">
-		<?= $form->field($integrante, "[$idActividad]evaluacion")->label()->textInput() ?>
-	</div>
-	
-</div>
-
-<div class="row">
-
-	<div class="col-md-6">
-		<?= $form->field($integrante, "[$idActividad]observaciones_generales")->label()->textInput() ?>
-	</div>
-	
-	<div class="col-md-6">
-		<?= $form->field($integrante, "[$idActividad]alarmas")->label()->textInput() ?>
+		<?= $form->field($integrante, "[$idActividad]retos")->label('Retos (Condiciones externas a tener en cuenta y que pueden afectar o beneficiar el logro de  los objetivos del proyecto)')->textarea() ?>
 	</div>
 	
 </div>
@@ -330,20 +320,47 @@ $evidencias_rom->fecha_entrega_envio = '';
 <div class="row">
 
 	<div class="col-md-6">
-		<?= $form->field($integrante, "[$idActividad]justificacion_activiad_no_realizada")->label()->textInput() ?>
+		<?= $form->field($integrante, "[$idActividad]articulacion")->label('Articulación  Resultado de la articulación con otros proyectos de la iniciativa MCEE (Si aplica)')->textarea() ?>
+	</div>
+	
+	<div class="col-md-6">
+		<?= $form->field($integrante, "[$idActividad]evaluacion")->label('Evaluación (Si se realizó evaluación de las actividades desarrolladas, describa el método y nombre del documento)')->textarea() ?>
+	</div>
+	
+</div>
+
+<div class="row">
+
+	<div class="col-md-6">
+		<?= $form->field($integrante, "[$idActividad]observaciones_generales")->label('Observaciones generales (Mencione temas identificados y aspectos adicionales que deban considerarse en el proceso que se sigue en esta sede)')->textarea() ?>
+	</div>
+	
+	<div class="col-md-6">
+		<?= $form->field($integrante, "[$idActividad]alarmas")->label('Alarmas:  Situaciones emergentes que pueden impedir el desarrollo de actividades y/o el logro de objetivos.')->textarea() ?>
+	</div>
+	
+</div>
+
+<div class="row">
+
+	<div class="col-md-6">
+		<?= $form->field($integrante, "[$idActividad]justificacion_activiad_no_realizada")
+				->label('Si la actividad no se realizó explique por qué')
+				->textarea($array1) ?>
 	</div>
 	
 	<div class="col-md-6">
 		<?= $form->field($integrante, "[$idActividad]fecha_reprogramacion")->label()->widget(
 					DatePicker::className(), [
-						// modify template for custom rendering
-						'template' => '{addon}{input}',
-						'language' => 'es',
-						'clientOptions' => [
-							'autoclose' => true,
-							'format'    => 'yyyy-mm-dd',
-					],
-				]); ?>
+								// modify template for custom rendering
+								'template' => '{addon}{input}',
+								'language' => 'es',
+								'clientOptions' => [
+										'autoclose' => true,
+										'format'    => 'yyyy-mm-dd',
+									],
+								'options' => $array2,
+						]); ?>
 	</div>
 	
 </div>
@@ -354,14 +371,14 @@ $evidencias_rom->fecha_entrega_envio = '';
 	<div class="col-md-6">
 		<?= $form->field($integrante, "[$idActividad]fecha_diligencia")->label()->widget(
 				DatePicker::className(), [
-					// modify template for custom rendering
-					'template' => '{addon}{input}',
-					'language' => 'es',
-					'clientOptions' => [
-						'autoclose' => true,
-						'format'    => 'yyyy-mm-dd',
-				],
-			]);  ?>
+							// modify template for custom rendering
+							'template' => '{addon}{input}',
+							'language' => 'es',
+							'clientOptions' => [
+										'autoclose' => true,
+										'format'    => 'yyyy-mm-dd',
+								],
+					]);  ?>
 	</div>
 	
 </div>
