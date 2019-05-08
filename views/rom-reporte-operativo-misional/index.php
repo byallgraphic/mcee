@@ -94,7 +94,18 @@ $this->registerJs("
 						}, 
 						function( data ){
 							if( data != '' ){
-								$( '#modalContent' ).html( data );
+								
+								
+								$.get( 'index.php?r=rom-reporte-operativo-misional/update', 
+										{
+											id: data ,
+										}, 
+										function( data ){
+											$( '#modalContent' ).html( data );
+										}
+								);
+								
+								// $( '#modalContent' ).html( data );
 							}
 							else{
 								
