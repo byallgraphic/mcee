@@ -16,7 +16,7 @@ use Yii;
  * @property int $otro
  * @property string $justificacion_no_visita
  * @property string $estado
- * @property string $'descripcion_visita'
+ * @property string $descripcion_visita
  */
 class GcMomento2 extends \yii\db\ActiveRecord
 {

@@ -17,6 +17,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Momento 2', 'url' => ['index']];
     <?= $this->render('_form', [
         'model' => $model,
 		'modelEvidenciasMomento2' => $modelEvidenciasMomento2,
+        'planeacionDias' => $planeacionDias,
+        'id_semana' => $id_semana
     ]) ?>
 
 </div>

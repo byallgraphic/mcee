@@ -14,6 +14,20 @@ use yii\grid\GridView;
 
 $this->title = 'Seguimiento Gestión';
 $this->params['breadcrumbs'][] = $this->title;
+
+
+if( Yii::$app->request->get( 'guardado' ) ){
+
+    $this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
+
+    $this->registerJs( "
+	  swal({
+			text: 'Registro guardado',
+			icon: 'success',
+			button: 'Salir',
+		});"
+    );
+}
 ?> 
 
 <h1></h1>
