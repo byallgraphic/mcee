@@ -13,7 +13,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '3 Informe de Ejecucion Semanal Iniciacion y Sensibilizacion Artistica';
+$this->title = '3 Informe de Ejecucion Semanal';
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
@@ -31,7 +31,7 @@ if( isset($guardado) && $guardado == 1 ){
 <div class="modal-content">
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-<h3>Nuevo Informe de Ejecucion Semanal Iniciacion y Sensibilizacion Artistica</h3>
+<h3><?= $this->title ?></h3>
 </div>
 <div class="modal-body">
 <div id='modalContent'></div>
@@ -87,8 +87,6 @@ if( isset($guardado) && $guardado == 1 ){
 	],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
 			[
 			'attribute'=>'id_institucion',
 			'value' => function( $model )

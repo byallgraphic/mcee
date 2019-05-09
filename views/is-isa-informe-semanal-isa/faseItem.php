@@ -14,9 +14,8 @@ $index = 0;
      $actividades =[
         1 =>    "Actividad 1. Realizar encuentros de sensibilización sobre el valor del arte y la cultura en la comunidad, desde las instituciones educativas oficiales.",
         2 =>    "Actividad No. 2: Realizar visitas eventos culturales de la ciudad para sensibilizar en torno a la importancia de la iniciación artística.",
-        3 =>    "Actividad No. 3: Promover la oferta cultural del municipio para sensibilización e iniciación artística.",
+        // 3 =>    "Actividad No. 3: Promover la oferta cultural del municipio para sensibilización e iniciación artística.",
         4 =>    "Actividad No. 4: Realizar talleres de iniciación y sensibilización artística con la comunidad.",
-        5 =>    "",
     ];
 	
 	$colors = ["#cce5ff", "#d4edda", "#f8d7da", "#fff3cd", "#d1ecf1", "#d6d8d9", "#cce5ff"];
@@ -33,7 +32,6 @@ $index = 0;
                                                         'actividades_is_isa' => $actividades_is_isa,
                                                         'actividade_is_isa' => $actividade_is_isa,
                                                         'tipo_poblacion_is_isa' => $tipo_poblacion_is_isa,
-                                                        'evidencias_is_isa' => $evidencias_is_isa,
                                                         'index' => $keyFase
 													] 
 										),
@@ -50,7 +48,6 @@ $index = 0;
                                                         'actividades_is_isa' => $actividades_is_isa,
                                                         'actividade_is_isa' => $actividade_is_isa,
                                                         'tipo_poblacion_is_isa' => $tipo_poblacion_is_isa,
-                                                        'evidencias_is_isa' => $evidencias_is_isa,
                                                         'index' => $keyFase
 													] 
 										),

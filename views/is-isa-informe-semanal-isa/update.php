@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\IsIsaInformeSemanalIsa */
 
-$this->title = 'Actualizar';
-$this->params['breadcrumbs'][] = ['label' => 'Is Isa Informe Semanal Isas', 'url' => ['index']];
+$this->title = 'Actualizar Informe Semanal';
+$this->params['breadcrumbs'][] = ['label' => 'Informe Semanal', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = "Actualizar";
 ?>

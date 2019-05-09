@@ -70,7 +70,6 @@ class IsIsaInformeSemanalIsaController extends Controller
         $actividades_is_isa = new IsIsaActividadesIsIsa();
         $actividade_is_isa = new IsIsaActividadIsIsa();
         $tipo_poblacion_is_isa = new IsIsaTipoCantidadPoblacionIsIsa();
-        $evidencias_is_isa = new IsIsaEvidenciasIsIsa();
 
 
         $proyectos = [ 
@@ -85,7 +84,6 @@ class IsIsaInformeSemanalIsaController extends Controller
             'actividades_is_isa' => $actividades_is_isa,
             'actividade_is_isa' => $actividade_is_isa,
             'tipo_poblacion_is_isa' => $tipo_poblacion_is_isa,
-            'evidencias_is_isa' => $evidencias_is_isa,
         ]);
 		
 	}

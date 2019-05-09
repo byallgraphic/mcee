@@ -4,7 +4,8 @@ use yii\helpers\Html;
 $items = [];
 $index = 0;
 
-foreach( $fases as $keyFase => $fase ){
+foreach( $fases as $keyFase => $fase )
+{
 	
 	/*$sesiones = Sesiones::find()
 					->andWhere( 'id_fase='.$fase->id )
@@ -20,14 +21,13 @@ foreach( $fases as $keyFase => $fase ){
                                                         'actividades_is_isa' => $actividades_is_isa,
                                                         'actividade_is_isa' => $actividade_is_isa,
                                                         'tipo_poblacion_is_isa' => $tipo_poblacion_is_isa,
-                                                        'evidencias_is_isa' => $evidencias_is_isa,
 														
 													] 
 										),
 					'contentOptions'=> []
 				];
 				
-	$index ++;
+	$index++;
 }
 
 use yii\bootstrap\Collapse;

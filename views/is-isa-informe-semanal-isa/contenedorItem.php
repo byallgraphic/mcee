@@ -96,28 +96,46 @@ use dosamigos\datepicker\DatePicker;
 
     <h3 style='background-color: #ccc;padding:5px;'>Evidencias (Cantidad  de evidencias que resultaron de la actividad, tales  como fotografías, videos, actas, trabajos de los participantes, etc )</h3>
     <div class="row">
-	  <div class="col-md-6"><?= $form->field($evidencias_is_isa, "[$index]acta")->label('ACTAS (Cantidad)')->fileInput([ 'accept' => ".doc, .docx, .pdf, .xls" ]) ?></div>
-	  <div class="col-md-6"><?= $form->field($evidencias_is_isa, "[$index]reprote")->label('REPORTES  (Cantidad)')->fileInput([ 'accept' => ".doc, .docx, .pdf, .xls" ]) ?></div>
+		<div class="col-md-6"><label>ACTAS (Cantidad)</label></div>
+		<div class="col-md-6"><label>REPORTES (Cantidad)</label></div>
 	</div>
 	
 	<div class="row">
-	  <div class="col-md-6"><?= $form->field($evidencias_is_isa, "[$index]listados")->label('LISTADOS  (Cantidad)')->fileInput([ 'accept' => ".doc, .docx, .pdf, .xls" ]) ?></div>
-	  <div class="col-md-6"><?= $form->field($evidencias_is_isa, "[$index]plan_trabajo")->label('PLAN DE TRABAJO (Cantidad)')->fileInput([ 'accept' => ".doc, .docx, .pdf, .xls" ]) ?></div>
+		<div class="col-md-6"><label>3</label></div>
+		<div class="col-md-6"><label>3</label></div>
 	</div>
 	
 	<div class="row">
-	  <div class="col-md-6"><?= $form->field($evidencias_is_isa, "[$index]formato_seguimiento")->label('FORMATOS DE SEGUIMIENTO (Cantidad)')->fileInput([ 'accept' => ".doc, .docx, .pdf, .xls" ]) ?></div>
-	  <div class="col-md-6"><?= $form->field($evidencias_is_isa, "[$index]formato_evaluacion")->label('FORMATOS DE EVALUACIÓN (Cantidad)')->fileInput([ 'accept' => ".doc, .docx, .pdf, .xls" ]) ?></div>
+		<div class="col-md-6"><label>LISTADOS (Cantidad)</label></div>
+		<div class="col-md-6"><label>PLAN DE TRABAJO (Cantidad)</label></div>
+	</div>
+	
+		<div class="row">
+		<div class="col-md-6"><label>2</label></div>
+		<div class="col-md-6"><label>1</label></div>
+	</div>
+	<div class="row">
+		<div class="col-md-6"><label>FORMATOS DE SEGUIMIENTO (Cantidad)</label></div>
+		<div class="col-md-6"><label>FORMATOS DE EVALUACIÓN (Cantidad)</label></div>
+	</div>
+	
+		<div class="row">
+		<div class="col-md-6"><label>4</label></div>
+		<div class="col-md-6"><label>1</label></div>
 	</div>
    
     <div class="row">
-	  <div class="col-md-6"><?= $form->field($evidencias_is_isa, "[$index]fotografias")->label('FOTOGRAFÍAS (Cantidad)')->fileInput([ 'accept' => ".doc, .docx, .pdf, .xls" ]) ?></div>
-	  <div class="col-md-6"><?= $form->field($evidencias_is_isa, "[$index]videos")->label('VIDEOS (Cantidad)')->fileInput([ 'accept' => ".doc, .docx, .pdf, .xls" ]) ?></div>
+			<div class="col-md-6"><label>FOTOGRAFÍAS (Cantidad)</label></div>
+			<div class="col-md-6"><label>VIDEOS (Cantidad)</label></div>
+	</div>
+		<div class="row">
+		<div class="col-md-6"><label>3</label></div>
+		<div class="col-md-6"><label>3</label></div>
 	</div>
     
 	<div class="row">
-	  <div class="col-md-6"><?= $form->field($evidencias_is_isa, "[$index]otros")->label('Otros productos  de la actividad')->fileInput([ 'accept' => ".doc, .docx, .pdf, .xls" ]) ?></div>
-	  <div class="col-md-6"></div>
+		<div class="col-md-6"><label>Otros productos  de la actividad</label></div>
+		<div class="col-md-6"></div>
 	</div>
     
 	
@@ -125,7 +143,6 @@ use dosamigos\datepicker\DatePicker;
      
 	<div class="row">
 	  <div class="col-md-6"><?= $form->field($actividades_is_isa, "[$index]logros")->textarea(['rows' => '3']) ?></div>
-	  <div class="col-md-6"><?= $form->field($evidencias_is_isa, "[$index]estado")->hiddenInput(['value'=> 1])->label(false); ?></div>
 	</div>
     <h3 style='background-color: #ccc;padding:5px;'>Variaciones en la implementación del proyecto:</h3>
     <h3 style='background-color: #ccc;padding:5px;'>Situaciones de dificultad y/o ventaja, surgidos o presentes durante el periodo,  que influyen en el cumplimiento de los objetivos.</h3>

@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\IsIsaInformeSemanalIsa */
 
-$this->title = 'Agregar Is Isa Informe Semanal Isa';
+$this->title = 'Agregar Informe Semanal';
 $this->params['breadcrumbs'][] = ['label' => 'Is Isa Informe Semanal Isas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = "Agregar";
 ?>
