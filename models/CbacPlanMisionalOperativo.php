@@ -54,10 +54,10 @@ class CbacPlanMisionalOperativo extends \yii\db\ActiveRecord
             'id' => 'ID',
             'id_institucion' => 'Institución',
             'id_sede' => 'Sede',
-            'caracterizacion_diagnostico' => '¿Se hizo caracterización diagnóstica (por sedes) para realizar las actividades para el fortalecimiento de competencias básicas?',
+            'caracterizacion_diagnostico' => 'Caracterización',
             'fecha_caracterizacion_' => 'Fecha del documento',
             'nombre_caracterizacion' => 'Nombre del documento',
-            'caracterizacion_no_justificacion' => 'Justificacion',
+            'caracterizacion_no_justificacion' => 'Justificación',
             'estado' => 'Estado',
         ];
     }
