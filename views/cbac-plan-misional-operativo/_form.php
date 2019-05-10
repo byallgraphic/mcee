@@ -14,13 +14,23 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'nombre_institucion')->textInput(['readonly' => true, 'value' => $institucion]) ?>
+    <div class="row">
+	  <div class="col-md-8"> <?= $form->field($model, 'nombre_institucion')->textInput(['readonly' => true, 'value' => $institucion]) ?></div>
+	  <div class="col-md-4"></div>
+	</div>
+	
+	<div class="row">
+	  <div class="col-md-8"> <?= $form->field($model, 'id_sede')->dropDownList( $sedes, [ 'prompt' => 'Seleccione...' ] ) ?></div>
+	  <div class="col-md-4"></div>
+	</div>
+	
+    <div class="row">
+	  <div class="col-md-6"><?= $form->field($model, 'caracterizacion_diagnostico')->dropDownList( [ 'prompt' => 'Seleccione...', 'SI', 'NO' ] ) ?></div>
+	  <div class="col-md-6"></div>
+	</div>
 
-    <?= $form->field($model, 'id_sede')->dropDownList( $sedes, [ 'prompt' => 'Seleccione...' ] ) ?>
-
-    <?= $form->field($model, 'caracterizacion_diagnostico')->dropDownList( [ 'prompt' => 'Seleccione...', 'SI', 'NO' ] ) ?>
-
-    <?= $form->field($model, "fecha_caracterizacion_")->widget(
+    <div class="row">
+	  <div class="col-md-6"><?= $form->field($model, "fecha_caracterizacion_")->widget(
         DatePicker::className(), [
             // modify template for custom rendering
             'template' => '{addon}{input}',
@@ -29,11 +39,15 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
                 'autoclose' => true,
                 'format'    => 'yyyy-mm-dd',
         ],
-    ]);  ?> 
+    ]);  ?> </div>
+	  <div class="col-md-6"><?= $form->field($model, 'nombre_caracterizacion')->textInput() ?></div>
+	</div>
 
-    <?= $form->field($model, 'nombre_caracterizacion')->textInput() ?>
-
-    <?= $form->field($model, 'caracterizacion_no_justificacion')->textInput() ?>
+    <div class="row">
+	  <div class="col-md-6"> <?= $form->field($model, 'caracterizacion_no_justificacion')->textArea(['rows'=>3,'cols'=>10]) ?></div>
+	  <div class="col-md-6"></div>
+	</div>
+   
 
     <?= $form->field($model, "estado")->hiddenInput(['value'=> 1])->label(false); ?>
 
