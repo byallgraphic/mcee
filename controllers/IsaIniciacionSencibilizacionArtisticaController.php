@@ -1,5 +1,19 @@
 <?php
 
+/**********
+Versión: 001
+Fecha: 06-05-2019
+Desarrollador: Oscar David Lopez Villa
+Descripción: crud orientacion proceseso 
+---------------------------------------
+Modificaciones:
+Fecha: 06-05-2019
+Persona encargada: Oscar David Lopez Villa
+Cambios realizados: guardar y editar
+----------------------------------------
+**********/
+
+
 namespace app\controllers;
 
 
@@ -146,14 +160,15 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
     public function actionCreate()
     {
         $model = new IsaIniciacionSencibilizacionArtistica();
-
+		//
         if ($model->load(Yii::$app->request->post()) && $model->save() ) 
 		{
 			//guardar en la tabla isa.actividades_isa
-			for( $i = 1; $i <= 4; $i++ )
-			{
-				$actividadesModel[$i] = new IsaActividadesIsa();
-			}
+			
+				$actividadesModel[1] = new IsaActividadesIsa();
+				$actividadesModel[2] = new IsaActividadesIsa();
+				$actividadesModel[4] = new IsaActividadesIsa();
+			
 
 			if (IsaActividadesIsa::loadMultiple($actividadesModel, Yii::$app->request->post())) 
 			{
@@ -161,8 +176,25 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 				{
 					$actividad->id_iniciacion_sencibilizacion_artistica = $model->id;
 					$actividad->save(false);
+					
+					$idActividades[$key] = $actividad->id;
 				}
 			}
+			
+				$intervencionModel[1] = new IsaIntervencionIeo();
+				$intervencionModel[2] = new IsaIntervencionIeo();
+				$intervencionModel[4] = new IsaIntervencionIeo();
+			
+
+			if (IsaIntervencionIeo::loadMultiple($intervencionModel, Yii::$app->request->post())) 
+			{
+				foreach ($intervencionModel as $key => $intervencion) 
+				{
+					$intervencion->id_actividades_isa = $idActividades[$key];
+					$intervencion->save(false);
+				}
+			}
+			
             return $this->redirect(['index', 'guardado' => 1]);
         }
 		
@@ -194,6 +226,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		
 		$intervencionIEO = json_decode($postDatos['intervencion_ieo']);
 		unset($intervencionIEO[0]);
+		unset($intervencionIEO[3]);
 		
 		// echo "<pre>"; print_r($intervencionIEO); echo "</pre>";
 		
@@ -207,7 +240,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 			
 			$aIsa->id_iniciacion_sencibilizacion_artistica = $model->id;
 			$aIsa->id_procesos_generales 		= $key ;
-			
 			$aIsa->fecha_prevista_desde 		= $actividadI->fecha_prevista_desde;
 			$aIsa->fecha_prevista_hasta 		= $actividadI->fecha_prevista_hasta;
 			$aIsa->contenido_si_no 				= $actividadI->contenido_si_no;
@@ -228,32 +260,48 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 			
 			$aIsa->save(false);
 			
-			foreach ($intervencionIEO as $iIEO)
-			{
-				$ieo = new IsaIntervencionIeo();
-				$ieo->perfiles 				= $iIEO->perfiles;
-				$ieo->docente_orientador 	= implode(",",$iIEO->docente_orientador);
-				$ieo->fases 				= $iIEO->fases;
-				$ieo->num_encuentro 		= $iIEO->num_encuentro;
-				$ieo->nombre_actividad 		= $iIEO->nombre_actividad;
-				$ieo->actividad_desarrollar = $iIEO->actividad_desarrollar;
-				$ieo->lugares_recorrer 		= $iIEO->lugares_recorrer;
-				$ieo->tematicas_abordadas 	= $iIEO->tematicas_abordadas;
-				$ieo->objetivos_especificos = $iIEO->objetivos_especificos;
-				$ieo->tiempo_previsto 		= $iIEO->tiempo_previsto;
-				$ieo->id_actividades_isa	= $aIsa->id;
-				$ieo->id_equipo_campos 		= $iIEO->id_equipos_campo;
-				$ieo->productos 			= $iIEO->productos;
-				$ieo->save(false);
-			}
+			
+			$ieo = new IsaIntervencionIeo();
+			$ieo->perfiles 				= $intervencionIEO[$key]->perfiles;
+			$ieo->docente_orientador 	= implode(",",$intervencionIEO[$key]->docente_orientador);
+			$ieo->fases 				= $intervencionIEO[$key]->fases;
+			$ieo->num_encuentro 		= $intervencionIEO[$key]->num_encuentro;
+			$ieo->nombre_actividad 		= $intervencionIEO[$key]->nombre_actividad;
+			$ieo->actividad_desarrollar = $intervencionIEO[$key]->actividad_desarrollar;
+			$ieo->lugares_recorrer 		= $intervencionIEO[$key]->lugares_recorrer;
+			$ieo->tematicas_abordadas 	= $intervencionIEO[$key]->tematicas_abordadas;
+			$ieo->objetivos_especificos = $intervencionIEO[$key]->objetivos_especificos;
+			$ieo->tiempo_previsto 		= $intervencionIEO[$key]->tiempo_previsto;
+			$ieo->id_actividades_isa	= $aIsa->id;
+			$ieo->id_equipo_campos 		= $intervencionIEO[$key]->id_equipos_campo;
+			$ieo->productos 			= $intervencionIEO[$key]->productos;
+			$ieo->save(false);
 			
 			
-			
+			// foreach ($intervencionIEO as $iIEO)
+			// {
+				// $ieo = new IsaIntervencionIeo();
+				// $ieo->perfiles 				= $iIEO->perfiles;
+				// $ieo->docente_orientador 	= implode(",",$iIEO->docente_orientador);
+				// $ieo->fases 				= $iIEO->fases;
+				// $ieo->num_encuentro 		= $iIEO->num_encuentro;
+				// $ieo->nombre_actividad 		= $iIEO->nombre_actividad;
+				// $ieo->actividad_desarrollar = $iIEO->actividad_desarrollar;
+				// $ieo->lugares_recorrer 		= $iIEO->lugares_recorrer;
+				// $ieo->tematicas_abordadas 	= $iIEO->tematicas_abordadas;
+				// $ieo->objetivos_especificos = $iIEO->objetivos_especificos;
+				// $ieo->tiempo_previsto 		= $iIEO->tiempo_previsto;
+				// $ieo->id_actividades_isa	= $aIsa->id;
+				// $ieo->id_equipo_campos 		= $iIEO->id_equipos_campo;
+				// $ieo->productos 			= $iIEO->productos;
+				// $ieo->save(false);
+			// }
 			
 		}
 
         Yii::$app->session->setFlash('ok');
-        return 'ok';
+        // return 'ok';
+		return $this->redirect(['index', 'guardado' => 1]);
     }
 	
 	
@@ -268,6 +316,9 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);	
+		
+	
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) 
 		{
 			
@@ -275,9 +326,14 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 			
 			//id del Yii::$app->request->post() e id de actividades deben ser iguales
 			$cont = 1;
-			foreach($actividades as $actividad)
+			foreach($actividades as $key => $actividad)
 			{
+				$idActividades[] = $key;
 				$actividadIsa[$cont] = $actividad;
+				
+				if ($cont == 2)
+					$cont++;
+				
 				$cont++;
 			}
 			
@@ -289,6 +345,28 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 				}
 			}
 			
+			$idActividades = implode(",",$idActividades); 
+			$intervencionIeo = IsaIntervencionIeo::find()->indexBy('id')->andWhere("id_actividades_isa in ( $idActividades )")->all();
+			
+			//id del Yii::$app->request->post() e id de intervencionIeo deben ser iguales
+			$cont = 1;
+			foreach($intervencionIeo as $intervencion)
+			{
+				$intervencionIsa[$cont] = $intervencion;
+				// actividades 1 2 4
+				if ($cont == 2)
+					$cont++;
+				
+				$cont++;
+			}
+			
+			if (Model::loadMultiple($intervencionIsa, Yii::$app->request->post()) && Model::validateMultiple($intervencionIsa) ) 
+			{
+				foreach ($intervencionIsa as $interIsa) 
+				{
+					$interIsa->save(false);
+				}
+			}			
 			return $this->redirect(['index','guardado' => 1]);
 			
 		}
@@ -329,7 +407,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 	public function obtenerEquiposCampo()
 	{
 		$equiposCampo = new IsaEquiposCampo();
-		$equiposCampo = $equiposCampo->find()->orderby("id")->all();
+		$equiposCampo = $equiposCampo->find()->orderby("id")->andWhere("estado = 1")->all();
 		$equiposCampo = ArrayHelper::map($equiposCampo,'id','nombre');
 		return $equiposCampo;
 	}

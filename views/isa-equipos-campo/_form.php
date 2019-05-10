@@ -9,6 +9,7 @@ use nex\chosen\Chosen;
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 $this->registerJs( file_get_contents( '../web/js/equipo_campo.js' ) );
 
+
 ?>
 
 <div class="isa-equipos-campo-form">

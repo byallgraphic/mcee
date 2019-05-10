@@ -18,18 +18,6 @@ if( !$sede ){
     return;
 }
 
-if( $guardado ){
-	
-	$this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
-	
-	$this->registerJs( "
-	  swal({
-			text: 'Registro guardado',
-			icon: 'success',
-			button: 'Salir',
-		});" 
-	);
-}
 ?>
 
 <div class="ge-seguimiento-operador-frente-form">
@@ -37,6 +25,7 @@ if( $guardado ){
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <?php /*$form->field($model, 'id_tipo_seguimiento')->textInput()*/ ?>
+    <input name="idTipoSeguimiento" type="hidden" value="<?= $idTipoSeguimiento ?>">
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 	

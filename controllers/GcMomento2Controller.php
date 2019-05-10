@@ -13,6 +13,9 @@ else
 	die;
 }
 
+use app\models\GcBitacora;
+use app\models\GcMomento1;
+use app\models\GcPlaneacionPorDia;
 use Yii;
 use app\models\GcMomento2;
 use app\models\GcMomento2Buscar;
@@ -50,6 +53,7 @@ class GcMomento2Controller extends Controller
         $searchModel = new GcMomento2Buscar();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -81,6 +85,11 @@ class GcMomento2Controller extends Controller
 		//se crea una instancia del modelo GcEvidenciasMomento2
 		$modelEvidenciasMomento2 		 	= new GcEvidenciasMomento2();
 
+
+        $bitacora = GcBitacora::findOne(Yii::$app->request->get('id_bitacora'));
+        $momentoI = GcMomento1::findOne($bitacora->semanas[0]->id);
+        $planeacionDias = GcPlaneacionPorDia::find()->where(['id_momento1_planeacion' => $momentoI->id])->asArray()->all();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
@@ -88,6 +97,8 @@ class GcMomento2Controller extends Controller
         return $this->render('create', [
             'model' => $model,
             'modelEvidenciasMomento2' => $modelEvidenciasMomento2,
+            'planeacionDias' => $planeacionDias,
+            'id_semana' => $bitacora->semanas[0]->id
         ]);
     }
 
@@ -139,5 +150,44 @@ class GcMomento2Controller extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionAddObject(){
+        $GCMomento2 = Yii::$app->request->post();
+        $model = new GcMomento2();
+        $model->id_semana = $GCMomento2['id_semana'];
+        $model->realizo_visita = $GCMomento2['descripcion_visita'];
+        $model->descripcion_visita = $GCMomento2['descripcion_visita'];
+        $model->estudiantes = $GCMomento2['estudiantes'];
+        $model->docentes = $GCMomento2['docentes'];
+        $model->directivos = $GCMomento2['directivos'];
+        $model->otro = $GCMomento2['otro'];
+        $model->estado = true;
+
+        $model->save(false);
+
+        $carpeta = "../documentos/momento2/";
+        if (!file_exists($carpeta)) {
+            mkdir($carpeta, 0777, true);
+        }
+
+        if (isset($_FILES['files']) && !empty($_FILES['files'])) {
+            $no_files = count($_FILES["files"]['name']);
+            for ($i = 0; $i < $no_files; $i++) {
+                $urlBase  = "../documentos/momento2/";
+                $name = $_FILES["files"]['name'][$i];//'segOperador'.$gs->id.'-'.$ra->id.'.'.substr($_FILES["files"]['name'][$i], strrpos($_FILES["files"]['name'][$i], '.') + 1);
+
+                move_uploaded_file($_FILES["files"]["tmp_name"][$i], $urlBase.$name);
+
+                $file_ra = new GcEvidenciasMomento2();
+                $file_ra->url = $urlBase.$name;
+                $file_ra->id_momento2 = $model->id;
+                $file_ra->estado = true;
+                $file_ra->id_planeacion_por_dia = 1;
+                $file_ra->save(false);
+            }
+        }
+
+        return 'ok';
     }
 }

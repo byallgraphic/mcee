@@ -32,6 +32,112 @@ $this->registerJs("
 		if( !conClase )
 			$( this, $( this).parent() ).addClass( 'tab-selected' );  
 	});
+	
+	
+	$( '#modal' )
+		.on( 'change', 'input:file', function(){ 
+			
+			var __target = this.id.split( '-' );
+			__target = __target[0] + \"-\" + __target[1];
+			
+			var can = $( '#'+__target+'-cantidad' );
+			
+			var total = 0;
+			
+			$( \"[id^=\"+__target+\"]input:file\" ).each(function(){
+				total += this.files.length;
+			});
+			
+			can.val( total );
+		});
+		
+	$( '#modal' )
+		.on( 'change', '[id$=estado_actividad]', function(){ 
+			
+			var __target = this.id.split( '-' );
+			__target = __target[1];
+			
+			var frep = $( '#isaactividadesromxintegrantegrupo'+'-'+__target+'-fecha_reprogramacion' );
+			var jus = $( '#isaactividadesromxintegrantegrupo'+'-'+__target+'-justificacion_activiad_no_realizada' );
+			
+			if( $(this).val() == 179 )
+			{
+				frep.attr({disabled:true})
+				frep.attr({readonly:true})
+				
+				jus.attr({readonly:true})
+					.val('No Aplica');
+			}
+			else
+			{
+				frep.attr({disabled:false});
+				frep.attr({readonly:false});
+				
+				jus.attr({readonly:false})
+					.val('')
+				
+			}
+		});
+		
+	$( '#modal' )
+		.on( 'change', '[id$=sesion_actividad]', function(){ 
+			
+			var __target = this.id.split( '-' );
+			__target = __target[1];
+			
+			__self = this;
+			
+			if( $( __self ).val() == '' )
+			{
+				$( '#nro_equipo-'+__target ).val( '' )
+				$( '#perfiles-'+__target ).val( '' )
+				$( '#docente_orientador-'+__target ).val( '' )
+			}
+			else
+			{	
+				$.post( 'index.php?r=rom-reporte-operativo-misional/consultar-mision', 
+						{ 
+							rom_actividades	: __target, 
+							sesion_actividad: $( __self ).val() ,
+						}, 
+						function( data ){
+							if( data != '' ){
+								
+								
+								$.get( 'index.php?r=rom-reporte-operativo-misional/update', 
+										{
+											id: data ,
+										}, 
+										function( data ){
+											$( '#modalContent' ).html( data );
+										}
+								);
+								
+								// $( '#modalContent' ).html( data );
+							}
+							else{
+								
+								$.get( 'index.php?r=rom-reporte-operativo-misional/consultar-intervencion-ieo', 
+										{
+											id: $( __self ).val() ,
+										}, 
+										function( data ){
+											console.log( data );
+											if( data ){
+												$( '#nro_equipo-'+__target ).val( data.equipo_nombre )
+												$( '#perfiles-'+__target ).val( data.perfiles )
+												$( '#docente_orientador-'+__target ).val( data.docente_orientador )
+											}
+										},
+										'json'
+								);							
+							}
+						}
+				);
+			}
+		});
+	
+	
 ");
 
 if( isset($guardado) && $guardado == 1 ){

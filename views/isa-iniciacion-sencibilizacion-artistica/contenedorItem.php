@@ -22,8 +22,6 @@ use nex\chosen\Chosen;
 use yii\helpers\Url;
 
 
-
-
 //saber que se esta editando
 if( strpos($_GET['r'], 'update') > -1)
 {
@@ -34,9 +32,15 @@ if( strpos($_GET['r'], 'update') > -1)
 	
 	//traer el modelo con los datos de cada actividad
 	$actividades_isa = IsaActividadesIsa::findOne(key($isa));
+	
+	//trae la informacion del modelo IsaIntervencionIeo (esto es temporal mientras se adecua para hacerlo multiple)
+	
+	$idintervencion = IsaIntervencionIeo::find()->Where("id_actividades_isa=".key($isa))->all();
+	$idintervencion = ArrayHelper::map($idintervencion,'id','estado');
+	$intervencionIEO = IsaIntervencionIeo::findOne(key($idintervencion));
 }
 
-$this->registerJs( file_get_contents( '../web/js/sensibilizacion.js' ) );
+
 ?>
 
 <style>
@@ -81,7 +85,7 @@ $this->registerJs( file_get_contents( '../web/js/sensibilizacion.js' ) );
    <div class="row">
 	  <div class="col-md-8">
 	  
-	  <?= $form->field($actividades_isa, "[$idProceso]num_equipo_campo")->widget(
+	  <?= $form->field($intervencionIEO, "[$idProceso]id_equipo_campos")->widget(
 		Chosen::className(), [
 			'items' => $equiposCampo,
 			'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
@@ -91,9 +95,9 @@ $this->registerJs( file_get_contents( '../web/js/sensibilizacion.js' ) );
                 'search_contains' => true,
                 'single_backstroke_delete' => false,
             ],
-	]); ?></div>
+	])->label("Equipos Campo"); ?></div>
 	  <div class="col-md-4">
-        <?=  Html::button('Agregar Equipo Campo',['value'=> "/mcee/web/index.php?r=isa-equipos-campo%2Fcreate" ,'class'=>'btn btn-success','id'=>'modalEquipo']) ?>
+        <?=  Html::button('Agregar Equipo Campo',['value'=> "index.php?r=isa-equipos-campo%2Fcreate" ,'class'=>'btn btn-success','id'=>'modalEquipo']) ?>
 		
 		</div>
 	</div>
@@ -121,13 +125,13 @@ $this->registerJs( file_get_contents( '../web/js/sensibilizacion.js' ) );
 						Chosen::className(), [
 							'items' => $docenteOrientador,
 							'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
-							'multiple' => true,
+							'multiple' => false,
 							'clientOptions' => [
 								'search_contains' => true,
 								'single_backstroke_delete' => false,
 							],
                             'placeholder' => 'Seleccione..',
-					])->label("Lider técnico pedagógico")?></div>
+					])?></div>
 	</div>
 
 
@@ -158,7 +162,7 @@ $this->registerJs( file_get_contents( '../web/js/sensibilizacion.js' ) );
   
 </div>
 
-<button id="btnAgregarObj" type="button" class="btn btn-primary" value="0" >Agregar Actividades</button>   
+<!-- <button id="btnAgregarObj" type="button" class="btn btn-primary" value="0" >Agregar Actividades</button>   -->
 
    <h3 style='background-color: #ccc;padding:5px;'>¿El contenido de esta actividad  responde al plan de acción construido colectivamente para la institución desde la articulación de la estrategia MCEE?</h3>
    

@@ -13,17 +13,8 @@ use Yii;
  * @property string $fecha_prevista_desde
  * @property string $fecha_prevista_hasta
  * @property int $num_equipo_campo
- * @property string $perfiles
  * @property string $docente_orientador
- * @property string $fases
- * @property int $num_encuentro
  * @property string $nombre_actividad
- * @property string $actividad_desarrollar
- * @property string $lugares_recorrer
- * @property string $tematicas_abordadas
- * @property string $objetivos_especificos
- * @property string $tiempo_previsto
- * @property string $productos
  * @property string $contenido_si_no
  * @property string $contenido_nombre
  * @property string $contenido_fecha
@@ -56,10 +47,10 @@ class IsaActividadesIsa extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_iniciacion_sencibilizacion_artistica', 'id_procesos_generales', 'num_equipo_campo', 'num_encuentro', 'cantidad_participantes', 'estado'], 'default', 'value' => ''],
-            [['id_iniciacion_sencibilizacion_artistica', 'id_procesos_generales', 'num_equipo_campo', 'num_encuentro', 'cantidad_participantes', 'estado', 'contenido_si_no'], 'integer'],
+            [['id_iniciacion_sencibilizacion_artistica', 'id_procesos_generales', 'num_equipo_campo',  'cantidad_participantes', 'estado'], 'default', 'value' => ''],
+            [['id_iniciacion_sencibilizacion_artistica', 'id_procesos_generales', 'num_equipo_campo',  'cantidad_participantes', 'estado', 'contenido_si_no'], 'integer'],
             [['fecha_prevista_desde', 'fecha_prevista_hasta', 'contenido_fecha', 'fecha'], 'safe'],
-            [['perfiles', 'docente_orientador', 'fases', 'nombre_actividad', 'actividad_desarrollar', 'lugares_recorrer', 'tematicas_abordadas', 'objetivos_especificos', 'tiempo_previsto', 'productos', 'contenido_nombre', 'contenido_justificacion', 'articulacion', 'requerimientos_tecnicos', 'requerimientos_logisticos', 'destinatarios', 'fecha_entrega_envio', 'observaciones_generales', 'nombre_diligencia', 'rol'], 'string'],
+            [['docente_orientador', 'nombre_actividad','contenido_nombre', 'contenido_justificacion', 'articulacion', 'requerimientos_tecnicos', 'requerimientos_logisticos', 'destinatarios', 'fecha_entrega_envio', 'observaciones_generales', 'nombre_diligencia', 'rol'], 'string'],
             [['id_iniciacion_sencibilizacion_artistica'], 'exist', 'skipOnError' => true, 'targetClass' => IsaIniciacionSencibilizacionArtistica::className(), 'targetAttribute' => ['id_iniciacion_sencibilizacion_artistica' => 'id']],
             [['id_procesos_generales'], 'exist', 'skipOnError' => true, 'targetClass' => IsaProcesosGenerales::className(), 'targetAttribute' => ['id_procesos_generales' => 'id']],
             [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Estados::className(), 'targetAttribute' => ['estado' => 'id']],
@@ -78,27 +69,18 @@ class IsaActividadesIsa extends \yii\db\ActiveRecord
             'fecha_prevista_desde' => 'Fecha Prevista Desde',
             'fecha_prevista_hasta' => 'Fecha Prevista Hasta',
             'num_equipo_campo' => 'Num Equipo Campo',
-            'perfiles' => 'Perfiles',
             'docente_orientador' => 'Coordinador técnico pedagógico',
-            'fases' => 'Ciclos',
-            'num_encuentro' => 'Num Encuentro',
             'nombre_actividad' => 'Nombre Actividad',
-            'actividad_desarrollar' => 'Actividad Desarrollar',
-            'lugares_recorrer' => 'Lugares Recorrer',
-            'tematicas_abordadas' => 'Tematicas Abordadas',
-            'objetivos_especificos' => 'Objetivos Especificos',
-            'tiempo_previsto' => 'Tiempo Previsto',
-            'productos' => 'Productos',
             'contenido_si_no' => 'Contenido Si No',
             'contenido_nombre' => 'Contenido Nombre',
             'contenido_fecha' => 'Contenido Fecha',
-            'contenido_justificacion' => 'Contenido Justificacion',
+            'contenido_justificacion' => 'Contenido Justificación',
             'articulacion' => 'Articulacion',
             'cantidad_participantes' => 'Cantidad Participantes',
-            'requerimientos_tecnicos' => 'Requerimientos Tecnicos',
-            'requerimientos_logisticos' => 'Requerimientos Logisticos',
+            'requerimientos_tecnicos' => 'Requerimientos Técnicos',
+            'requerimientos_logisticos' => 'Requerimientos Logísticos',
             'destinatarios' => 'Destinatarios',
-            'fecha_entrega_envio' => 'Fecha Entrega Envio',
+            'fecha_entrega_envio' => 'Fecha Entrega Envío',
             'observaciones_generales' => 'Observaciones Generales',
             'nombre_diligencia' => 'Nombre Diligencia',
             'rol' => 'Rol',
@@ -106,4 +88,5 @@ class IsaActividadesIsa extends \yii\db\ActiveRecord
             'estado' => 'Estado',
         ];
     }
+
 }

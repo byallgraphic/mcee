@@ -50,7 +50,7 @@ $( "#BtnGuardar" ).click(function()
 				var i;
 				for (i = 1; i <= 4; i++) 
 				{ 
-					equipos = $('#isaactividadesisa-'+i+'-num_equipo_campo');
+					equipos = $('#isaintervencionieo-'+i+'-id_equipo_campos');
 					equipos.html('');
 					equipos.trigger("chosen:updated");
 					equipos.append(data);

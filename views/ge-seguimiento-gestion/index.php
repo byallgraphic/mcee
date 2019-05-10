@@ -12,8 +12,22 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\GeSeguimientoGestionBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ge Seguimiento Gestions';
+$this->title = 'Seguimiento Gestión';
 $this->params['breadcrumbs'][] = $this->title;
+
+
+if( Yii::$app->request->get( 'guardado' ) ){
+
+    $this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
+
+    $this->registerJs( "
+	  swal({
+			text: 'Registro guardado',
+			icon: 'success',
+			button: 'Salir',
+		});"
+    );
+}
 ?> 
 
 <h1></h1>
@@ -38,8 +52,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?=  Html::button('Agregar',['value'=>Url::to(['create']),'class'=>'btn btn-success','id'=>'modalButton']) ?>
-		
+        <?=  Html::button('Agregar',['value'=>Url::to(['create', 'idTipoSeguimiento'  => Yii::$app->request->get( 'idTipoSeguimiento' )]),'class'=>'btn btn-success','id'=>'modalButton']) ?>
+
+        <?= Html::a('Volver',
+            [
+                'acompanamiento-in-situ/index',
+            ],
+            ['class' => 'btn btn-info']) ?>
     </p>
 
     <?= DataTables::widget([
@@ -112,7 +131,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				},
 
 				'update' => function ($url, $model) {
-					return Html::a('<span name="actualizar" class="glyphicon glyphicon-pencil" value ="'.Url::to(['create', 'id' => 1]).'"></span>', Url::to(['create', 'id' => 1]), [
+					return Html::a('<span name="actualizar" class="glyphicon glyphicon-pencil" value ="'.Url::to(['create', 'id' => $model->id, 'idTipoSeguimiento'  => Yii::$app->request->get( 'idTipoSeguimiento' )]).'"></span>', Url::to(['create', 'id' => $model->id, 'idTipoSeguimiento'  => Yii::$app->request->get( 'idTipoSeguimiento' )]), [
 								'title' => Yii::t('app', 'lead-update'),
 					]);
 				}

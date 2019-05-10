@@ -9,7 +9,7 @@ use yii\bootstrap\Tabs;
 use yii\helpers\Html;
 
 $colors = ["#cce5ff", "#d4edda", "#f8d7da", "#fff3cd", "#d1ecf1", "#d6d8d9", "#cce5ff"];
-       
+
 foreach( $actividades as $idActividad => $v )
 {
 	$labels[] = $v['descripcion'];
@@ -17,12 +17,17 @@ foreach( $actividades as $idActividad => $v )
 					'label' 		=>  $v['descripcion'],
 					'content' 		=>  $this->render( 'formulario', 
 													[ 
-														'idActividad' 	=> $v['id'],
-														'form' 			=> $form,
-														'idProyecto'	=> $idProyecto,
-														// 'datos'			=> $datos,
-														'estados'		=> $estados,
-														'evidencias_rom'=> $v['evidencia'],
+														'idActividad' 				=> $v['id'],
+														'form' 						=> $form,
+														'idProyecto'				=> $idProyecto,
+														// 'datos'					=> $datos,
+														'estados'					=> $estados,
+														'evidencias_rom'			=> $v['evidencia'],
+														'tipo_poblacion_rom'		=> $v['poblacion'],
+														'integrante'				=> $v['integrante'],
+														'actividades_rom'			=> $v['actividades_rom'],
+														'actividadesParticipadas'	=> $v['actividadesParticipadas'],
+														'datos_adicionales'			=> $v['datos_adicionales'],
 													] 
 										),
 					'headerOptions' => ['class' => 'tab1', 'style' => "background-color: $colors[$idActividad];"],

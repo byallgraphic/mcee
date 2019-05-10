@@ -17,6 +17,7 @@ use dosamigos\datepicker\DatePicker;
 /* @var $form yii\widgets\ActiveForm */
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 $this->registerJs( file_get_contents( '../web/js/contenedor.js' ) );
+$this->registerJs( file_get_contents( '../web/js/sensibilizacion.js' ) );
 
 
 ?>
@@ -90,7 +91,21 @@ $("#modalEquipo").click(function()
     <div class="form-group">
         <?php  Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
 		
-		<?= Html::button('Guardar save form', ['class' => 'btn btn-success', 'id' => 'save_form', 'value' => 0]) ?>
+		
+		<?php
+            if (Yii::$app->request->get('id'))
+			{
+				  Html::submitButton('Guardar actualizar', ['class' => 'btn btn-success']);
+            }
+			else
+			{
+				 Html::button('Guardar', ['class' => 'btn btn-success',  'id' => 'save_form', 'value' => 0]);
+            }
+				echo Html::submitButton('Guardar', ['class' => 'btn btn-success']);
+		 ?>
+		<?php  Html::button('Guardar save form', ['class' => 'btn btn-success', 'id' => 'save_form', 'value' => 0]) ?>
+		
+		<?php Html::button('Guardar save form', ['class' => 'btn btn-success', 'id' => 'save_form', 'value' => 1]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
