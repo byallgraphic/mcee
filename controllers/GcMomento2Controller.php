@@ -175,7 +175,7 @@ class GcMomento2Controller extends Controller
             $no_files = count($_FILES["files"]['name']);
             for ($i = 0; $i < $no_files; $i++) {
                 $urlBase  = "../documentos/momento2/";
-                $name = $_FILES["files"]['name'][$i];//'segOperador'.$gs->id.'-'.$ra->id.'.'.substr($_FILES["files"]['name'][$i], strrpos($_FILES["files"]['name'][$i], '.') + 1);
+                $name = $_FILES["files"]['name'][$i];
 
                 move_uploaded_file($_FILES["files"]["tmp_name"][$i], $urlBase.$name);
 
@@ -189,5 +189,13 @@ class GcMomento2Controller extends Controller
         }
 
         return 'ok';
+    }
+
+
+    public function actionGetEvidencia(){
+        $id = Yii::$app->request->get("id");
+        $data = GcEvidenciasMomento2::find()->where(["id_momento2" => $id])->asArray()->all();
+
+        return json_encode($data);
     }
 }

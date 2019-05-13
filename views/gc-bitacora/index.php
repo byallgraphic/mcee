@@ -15,6 +15,7 @@ use yii\grid\GridView;
 
 $this->title = 'Bitácora';
 $this->params['breadcrumbs'][] = $this->title;
+$this->registerJsFile('@web/js/jquery-3.3.1.min.js');
 ?>
 <p>
     <?=  Html::a( '<span class="btn btn-success">Crear Bitácora</span>', Url::to(['create']), []); ?>

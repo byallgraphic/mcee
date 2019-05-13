@@ -38,6 +38,7 @@ jQuery(document).ready(function() {
                 counter,
                 descripcion_visita.val(),
                 estudiantes.val(),
+                "<button type=\"button\" class=\"btn btn-primary\" onclick=\"ok2(5);\" data-whatever=\"5\">Visualizar</button>",
                 docentes.val(),
                 directivos.val(),
                 otro.val()
@@ -67,9 +68,9 @@ jQuery(document).ready(function() {
                 type: 'POST',
                 success: function (res, status) {
                     if (status == 'success') {
-
+                        location.reload();
                     }
-                },
+                }
             });
 
             counter++;

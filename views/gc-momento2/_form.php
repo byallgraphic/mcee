@@ -11,6 +11,7 @@ use app\models\GcMomento2Buscar;
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 
 $this->registerCssFile("@web/css/momentos.css");
+$this->registerJsFile('@web/js/jquery-3.3.1.min.js');
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/momento2.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 
 //se captura el valor de la semana
@@ -25,17 +26,16 @@ $id_momento1= 2;
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Evidencias</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                ...
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
@@ -159,11 +159,9 @@ $id_momento1= 2;
                                                    'buttons' => [
                                                        'myButton' => function ($url, $model) {
                                                            $t = 'index.php?r=site/update&id='.$model->id;
-                                                           return Html::button('Visualizar evidencia', ['class'=>"btn btn-primary", 'data-target'=>"#exampleModal", 'data-toggle'=>"modal"]);
+                                                           return Html::button('Visualizar', ['class'=>"btn btn-primary", "onclick" => "ok2(".$model->id.");", "data-whatever"=> $model->id]);
                                                        },
-
                                                    ],
-
                                                 ],
 												'docentes',
 												'directivos',
@@ -216,3 +214,22 @@ $id_momento1= 2;
 									<?php ActiveForm::end(); ?>
 
 </div>
+
+<script>
+    function ok2(id) {
+        $.get( "index.php?r=gc-momento2%2Fget-evidencia&id="+id ,function( data ) {
+            var modalMomento2 = $("#exampleModal");
+            modalMomento2.modal("show");
+            var evidencia = $.parseJSON(data);
+
+            html = "";
+            $.each( evidencia, function( key, value ) {
+                html += "<img src=\""+value["url"]+"\" alt=\"\" height=\"100\" width=\"100\"><br><br>";
+            });
+
+
+            modalMomento2.find(".modal-body").html(html);
+
+        });
+    }
+</script>
