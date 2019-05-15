@@ -35,6 +35,7 @@ use app\models\Instituciones;
 use app\models\IsaProyectosGenerales;
 use app\models\IsaEquiposCampo;
 use app\models\IsaIntervencionIeo;
+use app\models\IsaRequerimientosTecnicos;
 use yii\base\Model;
 
 use yii\helpers\ArrayHelper;
@@ -99,6 +100,105 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
         $actividades_isa = new IsaActividadesIsa();
         $intervencionIEO = new IsaIntervencionIeo();
 		
+		$ciclos = 
+		[
+			1 => "Caracterización",
+			2 => "Diseño e implementación de planes de acción",
+			3 => "Recepción activa y proyección de acciones",
+			4 => "Procesos de creación",
+			5 => "Procesos de socialización",
+			6 => "Evaluación artística participativa",
+			7 => "Evaluación",
+			8 => "Nuevos proyectos"
+		];
+		
+		$reqTecnicos = 
+		[
+			1 =>"Acuarela Escolar (x 12) Buss Pelikan",
+			2 =>"Acetatos en Octavos x 20 octavos",
+			3 =>"Bastidor Marco 20 x 20",
+			4 =>"block para dibujo de 20 hojas",
+			5 =>"Borrador De Nata",
+			6 =>"Caja de lápices",
+			7 =>"Caja marcadores permanentes x 6 colores surtidos",
+			8 =>"Caja de clips",
+			9 =>"Caja de colores x 12 colores",
+			10 =>"Caja de colores stanford Recreo Bicolor 12/24",
+			11 =>"Caja de crayones x 12 unidades",
+			12 =>"Caja de lapiceros negros x 12 unidades",
+			13 =>"Caja de marcadores de punta fina x 6 colores surtidos",
+			14 =>"Caja Plumon Magicolor x 12 Delgado",
+			15 =>"Caja Plumon Est. Colorella Star x 12 (1217)",
+			16 =>"Caja Pomo Triangular para maquillaje x 8",
+			17 =>"Caja de tizas grandes x 8 colores surtidos",
+			18 =>"Caja de tizas pequeñas x 10 colores surtidos",
+			19 =>"Caja de vinilos x 6 colores surtidos",
+			20 =>"Carton Paja Crema 1/8",
+			21 =>"Cartón paja pliego",
+			22 =>"Cartulina Bristol 1/8",
+			23 =>"Cartulina legajadora x 25 unidades",
+			24 =>"Cinta de enmascarar 18mm x 40 mts",
+			25 =>"Cinta de enmascarar 12mm x 40 mts",
+			26 =>"Cuaderno linea corriente 100 hojas",
+			27 =>"Cuaderno cuadriculados 100 hojas",
+			28 =>"Escarcha x 200 grs",
+			29 =>"Escarapela sencilla",
+			30 =>"Fomi en 1/8",
+			31 =>"Gancho legajador",
+			32 =>"Kit de pinceles #3 #6 #7",
+			33 =>"Lana Escolar 16 GR Azul Oscuro #2",
+			34 =>"Lana en ovillo 15 grs",
+			35 =>"Lapiz Delineador de ojos café",
+			36 =>"Lapiz Delineador de ojos negro",
+			37 =>"Lapiz #2 HB",
+			38 =>"Lapiz #2 B",
+			39 =>"Marcador borrable negro",
+			40 =>"Marcador borrable azul",
+			41 =>"Marcador borrable verde",
+			42 =>"Marcador borrable rojo",
+			43 =>"Marcador permanente Azul",
+			44 =>"Marcador permanente Negro",
+			45 =>"Marcador permanente Rojo",
+			46 =>"Marcador permanente Verde",
+			47 =>"Nylon 1 mm x 100 mts",
+			48 =>"palestras para mezclar el vinilo",
+			49 =>"Palo Paleta corto (x1000) Lastra",
+			50 =>"Papel silueta x8 unidades en tamaño 1/8",
+			51 =>"Paquete de letras didacticas",
+			52 =>"Pegante liquido x 4000 grs",
+			53 =>"Pegante liquido x 1000 grs",
+			54 =>"Pegante liquido x 20 Litros",
+			55 =>"Pega stic x 20 grs",
+			56 =>"Pincel Maquillaje Kit 4ref",
+			57 =>"Pincel Redondo 582 #5 Tipo Eterna",
+			58 =>"Pinceles Cerdas Suaves Juego X 6 Unidades",
+			59 =>"Pintucarita surtido x 12 GRAL",
+			60 =>"Piola",
+			61 =>"Platilina en barra x 200 grs",
+			62 =>"Porcelanicrón barra x 250 grs",
+			63 =>"Post it",
+			64 =>"Regla x 30 cms",
+			65 =>"Regla x 15 cms",
+			66 =>"Resaltador Berol Amarillo",
+			67 =>"Resaltador Berol Azul",
+			68 =>"Resaltador Berol Fuscia",
+			69 =>"Resaltador Berol Naranja",
+			70 =>"Resaltador Berol Verde",
+			71 =>"Resma de papel tamaño carta",
+			72 =>"Rollo de papel kraff",
+			73 =>"Stikers de letras y figuras",
+			74 =>"Tabla legajadora oficio azul",
+			75 =>"Tabla legajadora oficio verde",
+			76 =>"Tabla legajadora oficio roja",
+			77 =>"Taja lapiz",
+			78 =>"Tijeras punta roma",
+			79 =>"Vinilo rojo 260 cc",
+			80 =>"Vinilo amarillo 260 cc",
+			81 =>"Vinilo azul 260 cc",
+			82 =>"Vinilo blanco 260 cc",
+			83 =>"Vinilo negro 260 cc",
+		];
+		
 		
 		//tipo_proyecto diferenciador para usar la misma tabla para varios proyectos
 		$proyectos = $proyectos->find()->andWhere("tipo_proyecto = 1")->orderby("id")->all();
@@ -118,8 +218,11 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 																'actividades_isa' => $actividades_isa,
 																'arraySiNo' => $this->arraySiNo,
 																'equiposCampo' => $this->obtenerEquiposCampo(),
-																'docenteOrientador' => $this->obtenerNombresXPerfiles(),
+																'docenteOrientador' => $this->obtenerDocenteOrientador(),
 																'intervencionIEO' => $intervencionIEO,
+																'ciclos' => $ciclos,
+																'perfiles' => $this->obtenerPefiles(),
+																'reqTecnicos' => $reqTecnicos
 																
 															] 
 												),
@@ -138,6 +241,35 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		]);
 		
 	}
+	
+	public function obtenerPefiles()
+	{
+		$idInstitucion 	= $_SESSION['instituciones'][0];
+		/**
+		* Llenar nombre de los cooordinadores-eje
+		*/
+		//variable con la conexion a la base de datos 
+		$connection = Yii::$app->getDb();
+		$command = $connection->createCommand("
+			SELECT ppi.id, concat(pe.nombres,' ',pe.apellidos) as nombres
+			FROM perfiles_x_personas as pp, 
+			personas as pe,
+			perfiles_x_personas_institucion ppi
+			WHERE pp.id_personas = pe.id
+			AND pp.id_perfiles = 11
+			AND ppi.id_perfiles_x_persona = pp.id
+			AND ppi.id_institucion = $idInstitucion
+		");
+		$result = $command->queryAll();
+		$nombresPerfil = array();
+		foreach ($result as $r)
+		{
+			$nombresPerfil[$r['id']]= $r['nombres'];
+		}
+		
+		return $nombresPerfil;
+	}
+	
 
     /**
      * Displays a single IsaIniciacionSencibilizacionArtistica model.
@@ -163,6 +295,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		//
         if ($model->load(Yii::$app->request->post()) && $model->save() ) 
 		{
+			
 			//guardar en la tabla isa.actividades_isa
 			
 				$actividadesModel[1] = new IsaActividadesIsa();
@@ -194,6 +327,24 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 					$intervencion->save(false);
 				}
 			}
+			
+			//guardar los Requerimientos Técnicos 
+			foreach(Yii::$app->request->post()['requerimientos'] as $requerimientos )
+			{
+				foreach ($requerimientos as $idActividad => $requerimiento)
+				{
+					$idRequerimiento = key($requerimiento);
+					$cantidaRequerimiento = $requerimiento[$idRequerimiento];
+					
+					$IRT = new IsaRequerimientosTecnicos();
+					$IRT->id_requerimiento	= $idRequerimiento;
+					$IRT->cantidad 			= $cantidaRequerimiento;
+					$IRT->id_actividad 		= $idActividad;
+					$IRT->id_iniciacion_sencibilizacion_artistica = $model->id;
+					$IRT->save(false);
+				}
+			}
+			
 			
             return $this->redirect(['index', 'guardado' => 1]);
         }
@@ -277,25 +428,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 			$ieo->productos 			= $intervencionIEO[$key]->productos;
 			$ieo->save(false);
 			
-			
-			// foreach ($intervencionIEO as $iIEO)
-			// {
-				// $ieo = new IsaIntervencionIeo();
-				// $ieo->perfiles 				= $iIEO->perfiles;
-				// $ieo->docente_orientador 	= implode(",",$iIEO->docente_orientador);
-				// $ieo->fases 				= $iIEO->fases;
-				// $ieo->num_encuentro 		= $iIEO->num_encuentro;
-				// $ieo->nombre_actividad 		= $iIEO->nombre_actividad;
-				// $ieo->actividad_desarrollar = $iIEO->actividad_desarrollar;
-				// $ieo->lugares_recorrer 		= $iIEO->lugares_recorrer;
-				// $ieo->tematicas_abordadas 	= $iIEO->tematicas_abordadas;
-				// $ieo->objetivos_especificos = $iIEO->objetivos_especificos;
-				// $ieo->tiempo_previsto 		= $iIEO->tiempo_previsto;
-				// $ieo->id_actividades_isa	= $aIsa->id;
-				// $ieo->id_equipo_campos 		= $iIEO->id_equipos_campo;
-				// $ieo->productos 			= $iIEO->productos;
-				// $ieo->save(false);
-			// }
 			
 		}
 
@@ -396,7 +528,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 	
 	public function obtenerSede()
 	{
-		$idSedes 		= $_SESSION['sede'][0];
+		$idSedes = $_SESSION['sede'][0];
 		$sedes = new Sedes();
 		$sedes = $sedes->find()->where("id =  $idSedes")->all();
 		$sedes = ArrayHelper::map($sedes,'id','descripcion');
@@ -412,11 +544,30 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		return $equiposCampo;
 	}
 	
+	// public function obtenerEquiposCampo()
+	// {
+		// $equiposCampo = new IsaEquiposCampo();
+		// $equiposCampo = $equiposCampo->find()->orderby("id")->andWhere("estado = 1")->all();
+		// $equiposCampo = ArrayHelper::map($equiposCampo,'id','nombre');
+		// return $equiposCampo;
+	// }
+	
+	
+	public function actionRequerimientos($id)
+	{
+		$requerimientos = new IsaRequerimientosTecnicos();
+		$requerimientos = $requerimientos->find()->orderby("id")->andWhere("id_iniciacion_sencibilizacion_artistica = $id")->all();
+		$requerimientos = ArrayHelper::map($requerimientos,'id_requerimiento','cantidad','id_actividad');
+		
+		// echo "<pre>"; print_r($requerimientos); echo "</pre>"; 
+		echo json_encode( $requerimientos);
+	}
+	
 	
 	/****
 		obtener el nombre de la persona de acuerdo el id del perfil y la institucion
 	****/
-	public function obtenerNombresXPerfiles()
+	public function obtenerDocenteOrientador()
 	{
 		$idInstitucion 	= $_SESSION['instituciones'][0];
 		/**

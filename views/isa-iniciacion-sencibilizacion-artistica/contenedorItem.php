@@ -118,7 +118,7 @@ if( strpos($_GET['r'], 'update') > -1)
 	
 	
    <div class="row">
-	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]perfiles")->textInput(['title'=>'Seleccione el perfil y cantidad por perfiles de profesionales en campo', 'data-toggle'=>'tooltip']) ?></div>
+	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]perfiles")->DropDownList( $perfiles,['prompt' =>'Seleccione...','title'=>'Seleccione el perfil y cantidad por perfiles de profesionales en campo', 'data-toggle'=>'tooltip']) ?></div>
 	  <div class="col-md-6">
 	  
 	  <?= $form->field($intervencionIEO, "[$idProceso]docente_orientador")->widget(
@@ -136,7 +136,7 @@ if( strpos($_GET['r'], 'update') > -1)
 
 
 	<div class="row">
-	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]fases")->textInput( ['title'=>'Indique la fase del Proyecto MCEE desde las Artes y las Culturas en el que se encuentra la actividad', 'data-toggle'=>'tooltip']) ?></div>
+	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]fases")->DropDownList( $ciclos,['prompt' =>'Seleccione...', 'title'=>'Indique la fase del Proyecto MCEE desde las Artes y las Culturas en el que se encuentra la actividad', 'data-toggle'=>'tooltip']) ?></div>
 	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]num_encuentro")->textInput([ 'type' => 'number' , 'title'=>'Indique el número del encuentro según la propuesta metodológica ', 'data-toggle'=>'tooltip']) ?></div>
 	</div>
    
@@ -164,7 +164,7 @@ if( strpos($_GET['r'], 'update') > -1)
 
 <!-- <button id="btnAgregarObj" type="button" class="btn btn-primary" value="0" >Agregar Actividades</button>   -->
 
-   <h3 style='background-color: #ccc;padding:5px;'>¿El contenido de esta actividad  responde al plan de acción construido colectivamente para la institución desde la articulación de la estrategia MCEE?</h3>
+   <h3 style='background-color: #ccc;padding:5px;'>¿El contenido de esta actividad responde al plan de acción construido colectivamente para la institución desde la articulación de la estrategia MCEE?</h3>
    
    
 <div class="panel panel-default">
@@ -205,10 +205,35 @@ if( strpos($_GET['r'], 'update') > -1)
    
    <h3 style='background-color: #ccc;padding:5px;'>Recursos previstos para realizar la actividad</h3>
    <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]requerimientos_tecnicos")->textInput(['title'=>'Indique los requerimientos  técnicos,  materiales y de espacio', 'data-toggle'=>'tooltip']) ?></div>
+	  <div class="col-md-6"><?php  $form->field($actividades_isa, "[$idProceso]requerimientos_tecnicos")->textInput(['title'=>'Indique los requerimientos  técnicos,  materiales y de espacio', 'data-toggle'=>'tooltip']) ?>
+	  
+	  <?= $form->field($actividades_isa, "[$idProceso]requerimientos_tecnicos")->widget(
+						Chosen::className(), [
+							'items' => $reqTecnicos,
+							'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
+							'multiple' => false,
+							'clientOptions' => [
+								'search_contains' => true,
+								'single_backstroke_delete' => false,
+								'title'=>'Indique los requerimientos  técnicos,  materiales y de espacio', 
+								'data-toggle'=>'tooltip'
+							],
+                            'placeholder' => 'Seleccione Requerimientos Técnicos ',
+					])?>
+	  
+	  </div>
+	  
+	
+	  
 	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]requerimientos_logisticos")->textInput(['title'=>'Indique los requerimientos  logísticos, No. de refrigerios, No. de vehículos y capacidad de transporte, etc.', 'data-toggle'=>'tooltip']) ?></div>
    </div>
    
+	
+	<div class="chosen-container-multi" style="width: 48.5%;" title="" id="reqTecnicos-<?php echo $idProceso; ?>">
+		<ul class="chosen-choices">
+		</ul>
+	</div>
+			
    
    <h3 style='background-color: #ccc;padding:5px;'>Programación: Entrega o envío de la programación de la actividad a los participantes,  líderes comunitarios o directivas de la institución</h3>
    <div class="row">
