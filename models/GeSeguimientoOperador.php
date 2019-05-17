@@ -29,6 +29,7 @@ use Yii;
  * @property string $estado
  * @property string $id_operador
  * @property string $indicador
+ * @property string $dificultades
  *
  * @property GeTipoSeguimiento $tipo_seguimiento
  */
@@ -65,7 +66,6 @@ class GeSeguimientoOperador extends \yii\db\ActiveRecord
 				'numero_participantes',
 				'duracion_actividad',
 				'logros_alcanzados',
-				'dificultadades',
 				'avances_cumplimiento_cuantitativos',
 				'avances_cumplimiento_cualitativos',
 				'propuesta_dificultades',

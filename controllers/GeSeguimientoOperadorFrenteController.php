@@ -214,8 +214,7 @@ class GeSeguimientoOperadorFrenteController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        return $this->redirect('index.php?r=ge-seguimiento-operador-frente&idTipoSeguimiento=3');
     }
 
     /**

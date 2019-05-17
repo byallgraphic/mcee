@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\GeSeguimientoOperadorFrente */
 
 $this->title = "Detalles";
-$this->params['breadcrumbs'][] = ['label' => 'Ge Seguimiento Operador Frentes', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Seguimiento Operador Frentes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 ?>
