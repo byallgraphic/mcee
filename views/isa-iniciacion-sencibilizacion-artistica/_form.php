@@ -56,7 +56,9 @@ if( strpos($_GET['r'], 'update') > -1)
 
 //Click del boton agregar equipo campo y cargar contenido del formulario agregar en el modal
 $("#modalEquipo").click(function()
+// $(".modalEquipo").click(function()
 {
+	alert();
 	$("#modalCampo").modal('show')
 	.find("#modalContenido")
 	.load($(this).attr('value'));

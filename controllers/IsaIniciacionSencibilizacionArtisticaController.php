@@ -56,8 +56,8 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 	
 	public $arraySiNo = 
 		[
-			1 => "No",
-			2 => "Si"		
+			1 => "Si",
+			2 => "No"		
 		];
     /**
      * @inheritdoc
@@ -466,68 +466,26 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		
 			$eliminar = [];
 			$insertar = [];
+			
+			//se borran los registros y luego se insertan nuevamente
+			$models = IsaRequerimientosTecnicos::find()->where("id_iniciacion_sencibilizacion_artistica = $id")->all();
+						foreach ($models as $model) {
+							$model->delete();
+						}
 			foreach ($arrayRequerimientos as $key => $arrayReq)
 			{
 				
-				if ( isset($requerimientos[$key] ))
+				foreach ($arrayReq as $key => $cantidad)
 				{
-					$eliminar = array_diff_assoc($arrayReq,$requerimientos[$key]);
-					$insertar = array_diff_assoc($requerimientos[$key],$arrayReq);
-					
-					echo "<pre>"; print_r($eliminar); echo "</pre>"; 
-					echo "<pre>"; print_r($insertar); echo "</pre>"; 
-					
-					
-					foreach ($eliminar as $key => $delete)
-					{
-						
-					}
+					$IRT = new IsaRequerimientosTecnicos();
+					$IRT->id_requerimiento	= $key;
+					$IRT->cantidad 			= $cantidad;
+					$IRT->id_actividad 		= $key;
+					$IRT->id_iniciacion_sencibilizacion_artistica = $id;
+					$IRT->save(false);
 				}
-				elseif ( !isset($requerimientos[$key]) )
-				{
-					//si no existe $requerimientos[$key] es porque no existe nada en la base de datos y se inserta todo
-					$insertar = $arrayReq;
-					foreach ($insertar as $key => $cantidad)
-					{
-						$IRT = new IsaRequerimientosTecnicos();
-						$IRT->id_requerimiento	= $key;
-						$IRT->cantidad 			= $cantidad;
-						$IRT->id_actividad 		= $key;
-						$IRT->id_iniciacion_sencibilizacion_artistica = $id;
-						$IRT->save(false);
-					}
-					
-				}
-				
-				
-				
 			}
 			
-			$reqTec = IsaRequerimientosTecnicos::find()->orderby("id")->andWhere("id_iniciacion_sencibilizacion_artistica = $id and id_requerimiento = 3")->all();
-			$reqTec = ArrayHelper::getColumn($reqTec,'id');
-			
-			$reqTec = IsaRequerimientosTecnicos::findOne( $reqTec[0]);
-			$reqTec->cantidad = 10;
-			$reqTec->save(false);
-			// foreach ($requerimientos as $idActividad => $requerimiento)
-				// {
-					// $idRequerimiento = key($requerimiento);
-					// $cantidaRequerimiento = $requerimiento[$idRequerimiento];
-					
-					// $IRT = new IsaRequerimientosTecnicos();
-					// $IRT->id_requerimiento	= $idRequerimiento;
-					// $IRT->cantidad 			= $cantidaRequerimiento;
-					// $IRT->id_actividad 		= $idActividad;
-					// $IRT->id_iniciacion_sencibilizacion_artistica = $model->id;
-					// $IRT->save(false);
-				// }
-			
-		
-			
-			
-			
-			
-			// die;
 			$actividades = IsaActividadesIsa::find()->indexBy('id')->andWhere("id_iniciacion_sencibilizacion_artistica = $id")->all();
 			
 			//id del Yii::$app->request->post() e id de actividades deben ser iguales
