@@ -84,7 +84,7 @@ class CbacPmoActividades extends \yii\db\ActiveRecord
             'hasta' => 'Hasta',
             'num_equipos' => 'Num Equipos campo',
             'perfiles' => 'Perfiles',
-            'docentes' => 'Lider técnico pedagógico',
+            'docentes' => 'Coordinador técnico pedagógico',
             'fases' => 'Ciclos ',
             'num_encuentro' => 'No. de Encuentro',
             'nombre_actividad' => 'Nombre actividad',

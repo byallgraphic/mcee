@@ -35,6 +35,7 @@ $index = 0;
                                                         'actividades_pom' => $actividades_pom,
                                                         'index' => $keyFase,
                                                         'datos' => $datos,
+														'arraySiNo' => $arraySiNo,
 													] 
 										),
 					'contentOptions'=> []
@@ -49,6 +50,7 @@ $index = 0;
                                                         'actividades_pom' => $actividades_pom,
                                                         'index' => $keyFase,
                                                         'datos' => $datos,
+														'arraySiNo' => $arraySiNo,
 													] 
 										),
 					'contentOptions'=> []
@@ -64,6 +66,7 @@ $index = 0;
                                                         'actividades_pom' => $actividades_pom,
                                                         'index' => $keyFase,
                                                         'datos' => $datos,
+														'arraySiNo' => $arraySiNo,
 													] 
 										),
 					'contentOptions'=> []

@@ -18,7 +18,8 @@ foreach( $fases as $keyFase => $fase ){
                                                         "model" => $model,
                                                         'proyecto' => $keyFase,
 														'actividades_pom' => $actividades_pom,
-														'datos' => $datos,														
+														'datos' => $datos,
+														'arraySiNo' => $arraySiNo,
 													] 
 										),
 					'contentOptions'=> []
