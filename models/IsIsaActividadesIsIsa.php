@@ -56,7 +56,7 @@ class IsIsaActividadesIsIsa extends \yii\db\ActiveRecord
             'id' => 'ID',
             'id_informe_semanal_isa' => 'Informe Semanal Isa',
             'duracion' => 'Duración',
-            'docente' => 'Docente',
+            'docente' => 'Coordinador técnico pedagógico',
             'equipos' => 'Equipos',
             'logros' => 'Logros',
             'variaciones_devilidades' => 'Variaciones Debilidades',
