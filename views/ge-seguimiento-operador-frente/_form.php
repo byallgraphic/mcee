@@ -102,3 +102,6 @@ if( !$sede ){
     <?php ActiveForm::end(); ?>
 
 </div>
+<?php
+    $this->registerJs( "$('#modalContent .main-footer').hide()" );
+?>

@@ -32,6 +32,7 @@ if(Yii::$app->request->get('guardado')){
 
 	$this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
     $this->registerJsFile(Yii::$app->request->baseUrl.'/js/GeSeguimientos.js');
+    $this->registerJsFile(Yii::$app->request->baseUrl.'/js/tests.js');
 
     $this->registerJs( "
 	  swal({
@@ -105,8 +106,8 @@ if(Yii::$app->request->get('guardado')){
                     <?= $form->field($report, 'objetivo')->textInput(['disabled' => false, 'id' => 'id_objetivo']) ?>
                     <?= $form->field($report, 'actividad')->textInput(['disabled' => false, 'id' => 'id_actividad']) ?>
                     <?= $form->field($report, 'descripcion')->textInput(['id' => 'descripcion_actividad']) ?>
-                    <?= $form->field($report, 'poblacion_beneficiaria')->dropDownList(['Docentes', 'Estudiantes', 'Directivos', 'Otros'], ['prompt' => 'Seleccione una opcion', 'id' => 'poblacion_beneficiaria']); ?>
-                    <div id="id_quienes">
+                    <?= $form->field($report, 'poblacion_beneficiaria')->dropDownList(['Docentes', 'Estudiantes', 'Directivos', 'Otros'], ['prompt' => 'Seleccione una opción', 'id' => 'poblacion_beneficiaria']); ?>
+                    <div id="id_quienes-<?= $key ?>">
                         <?=  $form->field($report, 'quienes')->textInput(['id' => 'quienes']); ?>
                     </div>
                     <?= $form->field($report, 'num_participantes')->textInput(['type' => 'number', 'id' => 'numero_participantes']) ?>
@@ -120,12 +121,18 @@ if(Yii::$app->request->get('guardado')){
                     <p>Listado de participantes, registro visual, informe de actividades o acta</p>
                     <?= $form->field($model, 'documentFile[]')->fileInput(['multiple' => true, 'id' => "file-upload-".$key]) ?>
                     <div id="nameElement">
-
+                        <?php $files = \app\models\GeSeguimientoFile::find()->where(['id_reporte_actividades' => $report->id ])->asArray()->all(); ?>
+                        <ul>
+                            <?php foreach($files AS $file){ ?>
+                                <li><a href="..\documentos\seguimientoOperador\<?= $file['file'] ?>" download><?= $file['file'] ?></a></li>
+                            <?php } ?>
+                        </ul>
                     </div>
                 </div>
             </div>
 
             <script>
+                $("#id_quienes-<?= $key ?>").hide();
                 $('#objetivo-'+ <?= $key ?> + ' #file-upload-'+ <?= $key ?> ).change(function(e){
                     var files = $(this).prop("files");
                     var files_length = files.length;
@@ -141,9 +148,9 @@ if(Yii::$app->request->get('guardado')){
                 <?= $form->field($reportAct, 'objetivo')->textInput(['disabled' => false, 'id' => 'id_objetivo']) ?>
                 <?= $form->field($reportAct, 'actividad')->textInput(['disabled' => false, 'id' => 'id_actividad']) ?>
                 <?= $form->field($reportAct, 'descripcion')->textInput(['id' => 'descripcion_actividad']) ?>
-                <?= $form->field($reportAct, 'poblacion_beneficiaria')->dropDownList(['Docentes', 'Estudiantes', 'Directivos', 'Otros'], ['prompt' => 'Seleccione una opcion', 'id' => 'poblacion_beneficiaria']); ?>
+                <?= $form->field($reportAct, 'poblacion_beneficiaria')->dropDownList(['Docentes', 'Estudiantes', 'Directivos', 'Otros'], ['prompt' => 'Seleccione una opción', 'id' => 'poblacion_beneficiaria']); ?>
                 <div id="id_quienes">
-                    <?=  $form->field($reportAct, 'quienes')->textInput(['id' => 'quienes']); ?>
+                    <?=  $form->field($reportAct, 'quienes')->hiddenInput(['id' => 'quienes']); ?>
                 </div>
                 <?= $form->field($reportAct, 'num_participantes')->textInput(['type' => 'number', 'id' => 'numero_participantes']) ?>
                 <?= $form->field($reportAct, 'duracion')->textInput(['id' => 'duracion_actividad']) ?>
@@ -195,7 +202,17 @@ if(Yii::$app->request->get('guardado')){
     <?php ActiveForm::end(); ?>
 
 </div>
+<script>
+    var timepicker = new TimePicker('duracion_actividad', {
+        lang: 'en',
+        theme: 'dark'
+    });
+    timepicker.on('change', function(evt) {
+        var value = (evt.hour || '00') + ':' + (evt.minute || '00');
+        evt.element.value = value;
 
+    });
+</script>
 <script>
     $( document ).ready(function() {
         //$('#modal-form').modal('show');
@@ -222,10 +239,26 @@ if(Yii::$app->request->get('guardado')){
 
         var btnObj = $( "#btnAgregarObj" );
         btnObj.click(function(){
+            var validacion = 1;
+            $('.objetivo').each(function() {
+                $(this).find('input[type!="hidden"]').each(function(){
+                    if (!$(this).val() && ($(this).attr('id') !== 'quienes')) {
+                        $(this).parent().addClass('has-error');
+                        $(this).parent().find('.help-block').html('Este campo es requerido.');
+                        validacion = 0;
+                    } else
+                        $(this).parent().removeClass('has-error');
+                });
+            });
+
+            if (validacion === 0){
+                return false;
+            }
+
             var id_objetivo = $("#objetivo-0");
             var valueBtn = parseInt(btnObj.val(), 'number') + 1;
 
-            id_objetivo.after(
+            $('#objetivo-'+ ($(this).val())).after(
                 id_objetivo
                     .clone()
                     .attr('id', 'objetivo-'+ (valueBtn))
@@ -267,7 +300,8 @@ if(Yii::$app->request->get('guardado')){
             var indicador = $('#geseguimientooperador-indicador');
             var avances_cumplimiento_cuantitativos = $('#geseguimientooperador-avances_cumplimiento_cuantitativos');
             var avances_cumplimiento_cualitativos = $('#geseguimientooperador-avances_cumplimiento_cualitativos');
-            var dificultades = $('#geseguimientooperador-dificultades');
+            var dificultades_indicadores = $('#geseguimientooperador-dificultades');
+            var dificultades = $('#dificultadades');
             var propuesta_dificultades = $('#geseguimientooperador-propuesta_dificultades');
             var reporte_obj = $('.objetivo');
 
@@ -353,8 +387,7 @@ if(Yii::$app->request->get('guardado')){
 
             reporte_obj.each(function() {
                 $(this).find('input[type!="hidden"]').each(function(){
-                    if (!$(this).val() && ($(this).attr('id') !== 'quienes')) {
-                        console.log($(this));
+                    if (!$(this).val() && ($(this).attr('id') !== 'quienes') && $('#save_form').text() !== "Actualizar") {
                         $(this).parent().addClass('has-error');
                         $(this).parent().find('.help-block').html('Este campo es requerido.');
                         validacion = 0;
@@ -362,6 +395,14 @@ if(Yii::$app->request->get('guardado')){
                         $(this).parent().removeClass('has-error');
                 });
             });
+
+            var reg = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+            var duracion = $("#duracion_actividad");
+            if (!reg.test(duracion.val())){
+                 duracion.parent().addClass('has-error');
+                 duracion.parent().find('.help-block').html('Hora no permitida.');
+                validacion = 0;
+            }
 
             if (validacion === 0){
                 return false;
@@ -394,7 +435,7 @@ if(Yii::$app->request->get('guardado')){
             formData.append("indicador", indicador.val());
             formData.append("avances_cumplimiento_cuantitativos", avances_cumplimiento_cuantitativos.val());
             formData.append("avances_cumplimiento_cualitativos", avances_cumplimiento_cuantitativos.val());
-            formData.append("dificultades", dificultades.val());
+            formData.append("dificultades", dificultades_indicadores.val());
             formData.append("propuesta_dificultades", propuesta_dificultades.val());
             formData.append("reporte_actividades", JSON.stringify(reporte_actividades));
 

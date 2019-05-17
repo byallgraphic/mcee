@@ -100,6 +100,7 @@ class RomReporteOperativoMisionalController extends Controller
 		$val 			= '';
 		$romActividad 	= Yii::$app->request->post('rom_actividades');
 		$sesionActividad= Yii::$app->request->post('sesion_actividad');
+		$nro_semana		= Yii::$app->request->post('nro_semana');
 		
 		$modelReporteMisional = RomReporteOperativoMisional::findOne([
 											'estado' 		=> 1,
@@ -116,6 +117,7 @@ class RomReporteOperativoMisionalController extends Controller
 								'id_rom_actividad' 				=> $romActividad,
 								'sesion_actividad' 				=> $sesionActividad,
 								'id_reporte_operativo_misional' => $id_reporte,
+								'nro_semana' 					=> $nro_semana,
 							]);
 			
 			if( $model ){
@@ -307,7 +309,7 @@ class RomReporteOperativoMisionalController extends Controller
 					}
 					
 					//guarda la informa en la tabla isa.actividades segun como vienen los datos en el post
-					$columnNameArrayActividades=['fecha_desde','fecha_hasta','sesion_actividad','estado_actividad','id_reporte_operativo_misional','estado','id_rom_actividad'];
+					$columnNameArrayActividades=['nro_semana','fecha_desde','fecha_hasta','sesion_actividad','estado_actividad','id_reporte_operativo_misional','estado','id_rom_actividad'];
 					// $columnNameArrayActividades=['fecha_desde','fecha_hasta','sesion_actividad','estado_actividad','id_reporte_operativo_misional','estado'];
 					// inserta todos los datos que trae el array arrayDatosActividades
 					$insertCount = Yii::$app->db->createCommand()
@@ -367,6 +369,9 @@ class RomReporteOperativoMisionalController extends Controller
 						{
 							$k = $key+1;
 							
+							if( empty( $arrayDatosEvidencias[$k] ) )
+								continue;
+							
 							//recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
 							//para posteriormente guardar en la base de datos
 							foreach($propiedades as $propiedad)
@@ -413,13 +418,23 @@ class RomReporteOperativoMisionalController extends Controller
 							$modeloEvidencias[$key]->id_rom_actividad				= $arrayDatosEvidencias[$k]['id_rom_actividad'];
 							$modeloEvidencias[$key]->id_reporte_operativo_misional 	= $rom_id;
 							
+							if( empty($modeloEvidencias[$key]->fecha_entrega_envio) )
+							{
+								$modeloEvidencias[$key]->fecha_entrega_envio = gmdate( "Y-m-d", 0 );
+							}
+							
 							//Siempre activo
 							$modeloEvidencias[$key]->estado = 1;
 						}
 						
 						//Guarda la informacion que tiene $model en la base de datos
 						foreach( $modeloEvidencias as $key => $model) 
-						{	
+						{
+							$k = $key+1;
+							
+							if( empty( $arrayDatosEvidencias[$k] ) )
+								continue;
+							
 							$model->save(false);
 						}
 						
@@ -764,8 +779,11 @@ class RomReporteOperativoMisionalController extends Controller
 						
 						//recorre el array $modeloEvidencias con cada modelo creado dinamicamente
 						foreach( $modeloEvidencias as $key => $model) 
-						{
+						{	
 							$k = $key+1;
+							
+							if( empty($arrayDatosEvidencias[$k]) )
+								continue;
 							
 							//recorre el array $propiedades, para subir los archivos y asigarles las rutas de las ubicaciones de los arhivos en el servidor
 							//para posteriormente guardar en la base de datos
@@ -845,6 +863,8 @@ class RomReporteOperativoMisionalController extends Controller
 								}
 							}
 							
+							
+							
 							//se deben asignar los valores ya que se crean los modelos dinamicamente, yii no los agrega
 							//los datos que vienen por post
 							$modeloEvidencias[$key]->cantidad  						= $arrayDatosEvidencias[$k]['cantidad'];
@@ -865,6 +885,11 @@ class RomReporteOperativoMisionalController extends Controller
 						//Guarda la informacion que tiene $model en la base de datos
 						foreach( $modeloEvidencias as $key => $m) 
 						{
+							$k = $key+1;
+							
+							if( empty($arrayDatosEvidencias[$k]) )
+								continue;
+							
 							$m->save(false);
 						}
 						

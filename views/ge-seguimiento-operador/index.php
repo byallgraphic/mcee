@@ -23,6 +23,8 @@ $this->registerJsFile('@web/js/jquery-3.3.1.min.js');
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 $this->registerJsFile('@web/js/GeSeguimientos.js');
 $this->registerJsFile('@web/js/GeSeguimientosForm.js');
+$this->registerJsFile("http://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.js");
+$this->registerCssFile("http://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.css");
 
 ?>
 

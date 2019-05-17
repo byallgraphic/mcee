@@ -99,6 +99,7 @@ $this->registerJs("
 						{ 
 							rom_actividades	: __target, 
 							sesion_actividad: $( __self ).val() ,
+							nro_semana		: $( '#isaactividadesrom-'+ __target + '-nro_semana' ).val() ,
 						}, 
 						function( data ){
 							if( data != '' ){

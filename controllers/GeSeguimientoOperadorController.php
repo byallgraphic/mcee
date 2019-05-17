@@ -177,6 +177,7 @@ class GeSeguimientoOperadorController extends Controller
         $gs->avances_cumplimiento_cualitativos = $GeSeguimientoOperador['avances_cumplimiento_cualitativos'];
         $gs->propuesta_dificultades = $GeSeguimientoOperador['propuesta_dificultades'];
         $gs->indicador =  $GeSeguimientoOperador['indicador'];
+        $gs->dificultades = $GeSeguimientoOperador['dificultades'];
         $gs->estado = 1;
         $gs->save(false);
 
@@ -242,6 +243,7 @@ class GeSeguimientoOperadorController extends Controller
         $gs->avances_cumplimiento_cualitativos = $GeSeguimientoOperador['avances_cumplimiento_cualitativos'];
         $gs->propuesta_dificultades = $GeSeguimientoOperador['propuesta_dificultades'];
         $gs->indicador =  $GeSeguimientoOperador['indicador'];
+        $gs->dificultades = $GeSeguimientoOperador['dificultades'];
         $gs->estado = 1;
         $gs->save(false);
 
@@ -293,8 +295,7 @@ class GeSeguimientoOperadorController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        return $this->redirect('index.php?r=ge-seguimiento-operador&idTipoSeguimiento=1');
     }
 
     /**

@@ -12,7 +12,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\GeSeguimientoOperadorFrenteBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ge Seguimiento Operador Frentes';
+$this->title = 'Seguimiento Operador Frentes';
 $this->params['breadcrumbs'][] = $this->title;
 
 
