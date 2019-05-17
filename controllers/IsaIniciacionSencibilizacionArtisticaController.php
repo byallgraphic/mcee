@@ -527,7 +527,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 			
 			
 			
-			die;
+			// die;
 			$actividades = IsaActividadesIsa::find()->indexBy('id')->andWhere("id_iniciacion_sencibilizacion_artistica = $id")->all();
 			
 			//id del Yii::$app->request->post() e id de actividades deben ser iguales
