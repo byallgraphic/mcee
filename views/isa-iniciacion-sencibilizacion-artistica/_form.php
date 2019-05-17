@@ -20,7 +20,39 @@ $this->registerJs( file_get_contents( '../web/js/contenedor.js' ) );
 $this->registerJs( file_get_contents( '../web/js/sensibilizacion.js' ) );
 
 
+
+//no se puede saber cuando se edita en el js
+if( strpos($_GET['r'], 'update') > -1)
+{
 ?>
+	<script>
+		id = $("#id").val();
+		$.get( "index.php?r=isa-iniciacion-sencibilizacion-artistica/requerimientos&id="+id,
+			function( data )
+			{
+				$.each(data, function( index, value ) 
+				{
+					idActividad = index;
+					selectActividad = $("#isaactividadesisa-"+index+"-requerimientos_tecnicos");
+					
+					$.each( data[index], function( idRequerimiento, value1 ) 
+					{
+						texto = $('#'+selectActividad.attr('id')+' option:eq('+idRequerimiento+')').text();
+						idNombre = "requerimientos[]["+idActividad+"]["+idRequerimiento+"]";
+						$("#reqTecnicos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a><input id="'+idNombre+'" name="'+idNombre+'"  value = '+value1+' type="number" size="2" maxlength="2" min="0" style="width:10%;" ></li>');
+					});
+						   
+						   
+				});
+			},
+		"json");
+	</script>
+	
+<?php 
+} 
+?>
+	
+
 
 <script>
 
@@ -33,6 +65,8 @@ $("#modalEquipo").click(function()
 });
 
 </script>
+
+
 
 
 <div class="isa-iniciacion-sencibilizacion-artistica-form">
@@ -88,24 +122,12 @@ $("#modalEquipo").click(function()
     </div>
   
 
+    <input type="hidden" id="id" value="<?= isset($model->id) ? $model->id : ''?>">
+
     <div class="form-group">
-        <?php  Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+       
+		<?= Html::submitButton('Guardar', ['class' => 'btn btn-success']);	 ?>
 		
-		
-		<?php
-            if (Yii::$app->request->get('id'))
-			{
-				  Html::submitButton('Guardar actualizar', ['class' => 'btn btn-success']);
-            }
-			else
-			{
-				 Html::button('Guardar', ['class' => 'btn btn-success',  'id' => 'save_form', 'value' => 0]);
-            }
-				echo Html::submitButton('Guardar', ['class' => 'btn btn-success']);
-		 ?>
-		<?php  Html::button('Guardar save form', ['class' => 'btn btn-success', 'id' => 'save_form', 'value' => 0]) ?>
-		
-		<?php Html::button('Guardar save form', ['class' => 'btn btn-success', 'id' => 'save_form', 'value' => 1]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

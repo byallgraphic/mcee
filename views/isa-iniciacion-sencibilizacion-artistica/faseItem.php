@@ -29,7 +29,10 @@ $procesos = ArrayHelper::map($procesos,'id','descripcion');
 														'arraySiNo' => $arraySiNo,
 														'equiposCampo' => $equiposCampo,
 														'docenteOrientador'=> $docenteOrientador,
-														'intervencionIEO' => $intervencionIEO
+														'intervencionIEO' => $intervencionIEO,
+														'ciclos' => $ciclos,
+														'perfiles' => $perfiles,
+														'reqTecnicos' => $reqTecnicos
 													] 
 										),
 					'contentOptions'=> [],
