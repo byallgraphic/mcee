@@ -122,3 +122,10 @@ if( $guardado ){
     <?php ActiveForm::end(); ?>
 
 </div>
+<?php
+    $this->registerJs( "
+        $( document ).ready(function() {
+            $('.main-footer').hide()
+        });"
+    );
+?>

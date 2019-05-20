@@ -241,14 +241,16 @@ if(Yii::$app->request->get('guardado')){
         btnObj.click(function(){
             var validacion = 1;
             $('.objetivo').each(function() {
-                $(this).find('input[type!="hidden"]').each(function(){
-                    if (!$(this).val() && ($(this).attr('id') !== 'quienes')) {
-                        $(this).parent().addClass('has-error');
-                        $(this).parent().find('.help-block').html('Este campo es requerido.');
-                        validacion = 0;
-                    } else
-                        $(this).parent().removeClass('has-error');
-                });
+                if($(this).find('.evidencia_actividades').find('#nameElement').find('li').length === 0){
+                    $(this).find('input[type!="hidden"]').each(function(){
+                        if (!$(this).val() && ($(this).attr('id') !== 'quienes')) {
+                            $(this).parent().addClass('has-error');
+                            $(this).parent().find('.help-block').html('Este campo es requerido.');
+                            validacion = 0;
+                        } else
+                            $(this).parent().removeClass('has-error');
+                    });
+                }
             });
 
             if (validacion === 0){
@@ -273,15 +275,15 @@ if(Yii::$app->request->get('guardado')){
             $('#objetivo-'+ (valueBtn) + ' #nameElement').empty();
             $('#objetivo-'+ (valueBtn) + ' textarea').val('');
 
-
-            $('#objetivo-'+ (valueBtn) + ' #file-upload-'+ (valueBtn)).change(function(e){
-                var files = $(this).prop("files");
-                var files_length = files.length;
-                for (var x = 0; x < files_length; x++) {
-                    $(this).parent().parent().find('#nameElement').append('<label>'+files[x].name+'</label><br>')
-                }
-            });
-
+            if ($('#nameElement').find('li').length === 0 ){
+                $('#objetivo-'+ (valueBtn) + ' #file-upload-'+ (valueBtn)).change(function(e){
+                    var files = $(this).prop("files");
+                    var files_length = files.length;
+                    for (var x = 0; x < files_length; x++) {
+                        $(this).parent().parent().find('#nameElement').append('<label>'+files[x].name+'</label><br>')
+                    }
+                });
+            }
 
             id_objetivo.prop('disabled', true);
         });

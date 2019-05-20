@@ -24,7 +24,12 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 	</div>
 
 	<div class="row">
-	  <div class="col-md-6"><?= $form->field($model, "desde")->widget(
+	  
+		<div class="col-md-4">
+			<?= $form->field($model, 'nro_semana')->textInput() ?>
+		</div>
+	  
+	  <div class="col-md-4"><?= $form->field($model, "desde")->widget(
         DatePicker::className(), [
             // modify template for custom rendering
             'template' => '{addon}{input}',
@@ -33,16 +38,17 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
                 'autoclose' => true,
                 'format'    => 'yyyy-mm-dd',
         ],
-    ]);  ?> </div>
-	  <div class="col-md-6"> <?= $form->field($model, "hasta")->widget(
-        DatePicker::className(), [
-            // modify template for custom rendering
-            'template' => '{addon}{input}',
-            'language' => 'es',
-            'clientOptions' => [
-                'autoclose' => true,
-                'format'    => 'yyyy-mm-dd',
-        ],
+    ]);  ?> 
+		</div>
+		<div class="col-md-4"> <?= $form->field($model, "hasta")->widget(
+			DatePicker::className(), [
+				// modify template for custom rendering
+				'template' => '{addon}{input}',
+				'language' => 'es',
+				'clientOptions' => [
+					'autoclose' => true,
+					'format'    => 'yyyy-mm-dd',
+			],
     ]);  ?> </div>
 	</div>
     
@@ -59,9 +65,9 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
     </div>
 
 
-    <div class="form-group">
+    <!-- <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
-    </div>
+    </div> -->
 
     <?php ActiveForm::end(); ?>
 

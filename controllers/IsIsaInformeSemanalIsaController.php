@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Nota:
+ * Total de sesiones(o encuentros) por actividad: Total de actividades que halla por tabla intervención_ieo
+ */
+
 namespace app\controllers;
 
 if(@$_SESSION['sesion']=="si")
