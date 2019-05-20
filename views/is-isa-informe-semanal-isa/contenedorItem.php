@@ -27,6 +27,8 @@ use app\models\IsaEvidenciasRom;
 use app\models\IsaIntervencionIeo;
 use app\models\IsaActividadesRomXIntegranteGrupo;
 use app\models\IsaTipoCantidadPoblacionRom;
+use app\models\Personas;
+use app\models\IsaEquiposCampo;
 use yii\helpers\ArrayHelper;
 
 use yii\helpers\Json;
@@ -50,7 +52,7 @@ use yii\helpers\Json;
 
 
 
-
+$coordinadoresTecnico = [];
 
 $sesiones_realizadas 	= 0;
 $sesiones_aplazadas 	= 0;
@@ -64,6 +66,16 @@ $total += $organizaciones_locales 	= 0;
 $total += $grupos_comunitarios 		= 0;
 $total += $otos_actores 			= 0;
 
+$actas 				= 0;
+$reportes 			= 0;
+$listados 			= 0;
+$plan_trabajo 		= 0;
+$formato_seguimiento= 0;
+$formato_evaluacion = 0;
+$fotografias 		= 0;
+$vidoes 			= 0;
+$otros_productos 	= 0;
+
 
 $fortalezas 				= [];
 $debilidades 				= [];
@@ -74,6 +86,21 @@ $evaluacion 				= [];
 $observaciones_generales 	= [];
 $alarmas 					= [];
 $logros 					= [];
+$duracion 					= 0;
+$totalSesiones				= 0;
+
+
+
+
+// $model = IsaActividadesRom::findOne([
+								// 'estado' => 1,
+								// 'id_rom_actividad' 				=> $romActividad,
+								// 'sesion_actividad' 				=> $sesionActividad,
+								// 'id_reporte_operativo_misional' => $id_reporte,
+								// 'nro_semana' 					=> $nro_semana,
+							// ]);
+
+
 
 	$id_perfil_persona = $_SESSION['id'];
 
@@ -83,6 +110,7 @@ $logros 					= [];
 
 
 	$rom = IsaReporteOperativoMisional::findOne([
+						'estado'			=> 1,
 						'id_institucion' 	=> $idInstitucion,
 						'id_sedes' 			=> $id_sede,
 					]);
@@ -122,6 +150,8 @@ $logros 					= [];
 					'actividades_rom2'	=> IsaActividadesRom::findOne([ 
 																'id_reporte_operativo_misional' => $id,
 																'estado' 						=> 1,
+																'nro_semana' 					=> 1,
+																'id_rom_actividad' 				=> $index,
 															]),
 					'procesos'			=> [],
 				];
@@ -157,6 +187,7 @@ $logros 					= [];
 									->all();
 			// $evidencias = ArrayHelper::map($evidencias,'id','descripcion');
 			
+			
 				   
 			foreach( $evidencias as $evidencia )
 			{
@@ -170,16 +201,16 @@ $logros 					= [];
 									
 				$actividadesParticipadas 	= [ $dataActividadesParticipadas->id => $dataActividadesParticipadas->nombre_actividad ];
 				
-				$modelIntegrante 			= IsaActividadesRomXIntegranteGrupo::findOne([ 
-																'estado' 						=> 1, 
-																'diligencia' 					=> $id_perfil_persona,
-																'id_rom_actividad' 				=> $evidencia->id_rom_actividad,
-																'id_reporte_operativo_misional' => $id,
-															]);
+				$modelIntegrante 			= IsaActividadesRomXIntegranteGrupo::find()
+														->where( 'estado=1' )
+														// ->andWhere( 'diligencia=$id_perfil_persona' )
+														->andWhere( 'id_rom_actividad='.$index /*$evidencia->id_rom_actividad*/ )
+														->andWhere( 'id_reporte_operativo_misional='.$id )
+														->all();
 															
-				if( !$modelIntegrante ){
-					$modelIntegrante = new IsaActividadesRomXIntegranteGrupo();
-				}
+				// if( !$modelIntegrante ){
+					// $modelIntegrante = new IsaActividadesRomXIntegranteGrupo();
+				// }
 				
 				//Array de actividades
 				$act =  [
@@ -192,7 +223,7 @@ $logros 					= [];
 																'id_rom_actividades' 			=> $evidencia->id_rom_actividad,
 																'id_reporte_operativo_misional' => $id,
 															]),
-							'integrante'				=> $modelIntegrante,
+							// 'integrante'				=> $modelIntegrante,
 							'datosSoloLectura' 			=> IsaIntervencionIeo::findOne([
 																'id' 		=> $actividades_rom_upt->sesion_actividad,
 																'estado' 	=> 1,
@@ -215,9 +246,28 @@ $logros 					= [];
 				 * ============================++++++++++++++++++++++??????????????++++++++++++++++
 				 ***************************************************************************************************************************************/
 				 
+				$coordinadoresTecnico[] = Personas::findOne( $dataActividadesParticipadas->docente_orientador );
+				$equipos[] 				= IsaEquiposCampo::findOne( $dataActividadesParticipadas->id_equipo_campos );
+				 
 				$sesiones_realizadas 	+= $actividades_rom_upt->estado_actividad == 179;
 				$sesiones_aplazadas 	+= $actividades_rom_upt->estado_actividad == 180;
 				$sesiones_canceladas 	+= $actividades_rom_upt->estado_actividad == 181;
+				
+				
+				
+				
+				$propiedades = array( "actas", "reportes", "listados", "plan_trabajo", "formato_seguimiento", "formato_evaluacion", "fotografias", "vidoes", "otros_productos");
+				$actas 				+= count( explode( ',', $evidencia->actas ) );
+				$reportes 			+= count( explode( ',', $evidencia->reportes ) );
+				$listados 			+= count( explode( ',', $evidencia->listados ) );
+				$plan_trabajo 		+= count( explode( ',', $evidencia->plan_trabajo ) );
+				$formato_seguimiento+= count( explode( ',', $evidencia->formato_seguimiento ) );
+				$formato_evaluacion += count( explode( ',', $evidencia->formato_evaluacion ) );
+				$fotografias 		+= count( explode( ',', $evidencia->fotografias ) );
+				$vidoes 			+= count( explode( ',', $evidencia->vidoes ) );
+				$otros_productos 	+= count( explode( ',', $evidencia->otros_productos ) );
+				
+				
 				
 				$total += $vecinos 					+= $act[ 'poblacion' ]->vecinos;
 				$total += $lideres_comunitarios 	+= $act[ 'poblacion' ]->lideres_comunitarios;
@@ -226,16 +276,20 @@ $logros 					= [];
 				$total += $grupos_comunitarios 		+= $act[ 'poblacion' ]->grupos_comunitarios;
 				$total += $otos_actores 			+= $act[ 'poblacion' ]->otos_actores;
 				
-				
-				$fortalezas[] 				= $modelIntegrante->fortalezas;
-				$debilidades[] 				= $modelIntegrante->debilidades;
-				$alternativas[] 			= $modelIntegrante->alternativas;
-				$retos[] 					= $modelIntegrante->retos;
-				$articulacion[] 			= $modelIntegrante->articulacion;
-				$evaluacion[] 				= $modelIntegrante->evaluacion;
-				$observaciones_generales[] 	= $modelIntegrante->observaciones_generales;
-				$alarmas[] 					= $modelIntegrante->alarmas;
-				$logros[] 					= $modelIntegrante->logros;
+				foreach( $modelIntegrante as $key => $integrante ){
+					
+					$fortalezas[] 				= $integrante->fortalezas;
+					$debilidades[] 				= $integrante->debilidades;
+					$alternativas[] 			= $integrante->alternativas;
+					$retos[] 					= $integrante->retos;
+					$articulacion[] 			= $integrante->articulacion;
+					$evaluacion[] 				= $integrante->evaluacion;
+					$observaciones_generales[] 	= $integrante->observaciones_generales;
+					$alarmas[] 					= $integrante->alarmas;
+					$logros[] 					= $integrante->logros;
+					$duracion					+=$integrante->duracion_sesion;
+					$totalSesiones++;
+				}
 				/****************************************************************************************************************************************/
 				
 				
@@ -336,9 +390,23 @@ $logros 					= [];
     <?= $form->field($actividade_is_isa, "[$index]estado")->hiddenInput(['value'=> 1])->label(false); ?>
 	
 	<div class="row">
-	  <div class="col-md-4"><?= $form->field($actividades_is_isa, "[$index]duracion")->textInput() ?></div>
-	  <div class="col-md-4"><?= $form->field($actividades_is_isa, "[$index]docente")->textInput() ?></div>
-	  <div class="col-md-4"><?= $form->field($actividades_is_isa, "[$index]equipos")->textInput() ?></div>
+		<div class="col-md-4"><?= $form->field($actividades_is_isa, "[$index]duracion")->textInput([ 'value' => $duracion/$totalSesiones ]) ?></div>
+		<div class="col-md-4">
+			<label>Coordinador técnico pedagógico</label>
+			<?php 
+				foreach( $coordinadoresTecnico as $key => $value ){
+					echo $form->field($actividades_is_isa, "[$index]docente")->textInput([ 'value'=> $value->nombres." ".$value->apellidos ])->label(false);
+				}
+			?>
+		</div>
+		<div class="col-md-4">
+			<label>Equipos</label>
+			<?php 
+				foreach( $equipos as $key => $value ){
+					echo $form->field($actividades_is_isa, "[$index]docente")->textInput([ 'value'=> $value->nombre ])->label(false);
+				}
+			?>
+		</div>
 	</div>
 
 
@@ -373,8 +441,8 @@ $logros 					= [];
 	</div>
 	
 	<div class="row">
-		<div class="col-md-6"><label>3</label></div>
-		<div class="col-md-6"><label>3</label></div>
+		<div class="col-md-6"><label><?=$actas?></label></div>
+		<div class="col-md-6"><label><?=$reportes?></label></div>
 	</div>
 	
 	<div class="row">
@@ -383,8 +451,8 @@ $logros 					= [];
 	</div>
 	
 		<div class="row">
-		<div class="col-md-6"><label>2</label></div>
-		<div class="col-md-6"><label>1</label></div>
+		<div class="col-md-6"><label><?=$listados?></label></div>
+		<div class="col-md-6"><label><?=$plan_trabajo?></label></div>
 	</div>
 	<div class="row">
 		<div class="col-md-6"><label>FORMATOS DE SEGUIMIENTO (Cantidad)</label></div>
@@ -392,8 +460,8 @@ $logros 					= [];
 	</div>
 	
 		<div class="row">
-		<div class="col-md-6"><label>4</label></div>
-		<div class="col-md-6"><label>1</label></div>
+		<div class="col-md-6"><label><?=$formato_seguimiento?></label></div>
+		<div class="col-md-6"><label><?=$formato_evaluacion?></label></div>
 	</div>
    
     <div class="row">
@@ -401,35 +469,85 @@ $logros 					= [];
 			<div class="col-md-6"><label>VIDEOS (Cantidad)</label></div>
 	</div>
 		<div class="row">
-		<div class="col-md-6"><label>3</label></div>
-		<div class="col-md-6"><label>3</label></div>
+		<div class="col-md-6"><label><?=$fotografias?></label></div>
+		<div class="col-md-6"><label><?=$vidoes?></label></div>
 	</div>
     
 	<div class="row">
 		<div class="col-md-6"><label>Otros productos  de la actividad</label></div>
-		<div class="col-md-6"></div>
+		<div class="col-md-6"><?=$otros_productos?></div>
 	</div>
     
 	
 
      
 	<div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_is_isa, "[$index]logros")->textarea(['rows' => '3']) ?></div>
+		<div class="col-md-6">
+			<label class="control-label" for="isisaactividadesisisa-1-retos">Logros</label>
+			<?php 
+				foreach( $logros as $key => $value ){
+					
+					echo $form->field($actividades_is_isa, "[$index]logros")->textarea(['value' => $value])->label(false);
+				} 
+			?>
+		</div>
 	</div>
     <h3 style='background-color: #ccc;padding:5px;'>Variaciones en la implementación del proyecto:</h3>
     <h3 style='background-color: #ccc;padding:5px;'>Situaciones de dificultad y/o ventaja, surgidos o presentes durante el periodo,  que influyen en el cumplimiento de los objetivos.</h3>
     <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_is_isa, "[$index]variaciones_devilidades")->textarea(['rows' => '3']) ?> </div>
-	  <div class="col-md-6"><?= $form->field($actividades_is_isa, "[$index]variaciones_fortalezas")->textarea(['rows' => '3']) ?></div>
+	  <div class="col-md-6">
+		<label class="control-label" for="isisaactividadesisisa-1-retos">Debilidades</label>
+			<?php 
+				foreach( $debilidades as $key => $value ){
+					
+					echo $form->field($actividades_is_isa, "[$index]variaciones_devilidades")->textarea(['value' => $value])->label(false);
+				} 
+			?>
+		</div>
+	  
+	   <div class="col-md-6">
+		<label class="control-label" for="isisaactividadesisisa-1-retos">Fortalezas</label>
+			<?php 
+				foreach( $fortalezas as $key => $value ){
+					
+					echo $form->field($actividades_is_isa, "[$index]variaciones_fortalezas")->textarea(['value' => $value])->label(false);
+				} 
+			?>
+		</div>
 	</div>
 	
 	<div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_is_isa, "[$index]retos")->textarea(['rows' => '3']) ?></div>
-	  <div class="col-md-6"><?= $form->field($actividades_is_isa, "[$index]articulacion")->textarea(['rows' => '3']) ?></div>
+		<div class="col-md-6">
+		<label class="control-label" for="isisaactividadesisisa-1-retos">Retos</label>
+			<?php 
+				foreach( $retos as $key => $value ){
+					
+					echo $form->field($actividades_is_isa, "[$index]retos")->textarea(['value' => $value])->label(false);
+				} 
+			?>
+		</div>
+	  
+	  <div class="col-md-6">
+		<label class="control-label" for="isisaactividadesisisa-1-retos">Retos</label>
+			<?php 
+				foreach( $articulacion as $key => $value ){
+					
+					echo $form->field($actividades_is_isa, "[$index]articulacion")->textarea(['value' => $value])->label(false);
+				} 
+			?>
+		</div>
 	</div>
     
     <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_is_isa, "[$index]alrmas")->textarea(['value' => $alarmas[0]])->label('Alarmas') ?></div>
+		<div class="col-md-6">
+			<label class="control-label" for="isisaactividadesisisa-1-alrmas">Logros</label>
+			<?php 
+				foreach( $alarmas as $key => $value ){
+					
+					echo $form->field($actividades_is_isa, "[$index]alrmas")->textarea(['value' => $value])->label(false);
+				} 
+			?>
+		</div>
 	  <div class="col-md-6"><?= $form->field($actividades_is_isa, "[$index]estado")->hiddenInput(['value'=> 1])->label(false); ?></div>
 	</div>
     
