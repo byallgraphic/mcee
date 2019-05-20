@@ -85,7 +85,7 @@ if( !$sede ){
 
     <?= $form->field($model, 'dificultades')->textarea(['maxlength' => true]) ?>
 	
-	<?= $form->field($model, 'documentFile')->fileInput() ?>
+	<?= $form->field($model, 'documentFile')->fileInput(['multiple' => true]) ?>
 
     <?php /* $form->field($model, 'estado')->textInput() */ ?>
 

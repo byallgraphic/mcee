@@ -203,7 +203,7 @@ class GeSeguimientoGestionController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect('index.php?r=ge-seguimiento-gestion&idTipoSeguimiento=4');
     }
 
     /**
