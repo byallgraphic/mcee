@@ -31,11 +31,11 @@ class IsaActividadesRom extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fecha_desde', 'fecha_hasta', 'estado_actividad', 'estado', 'id_reporte_operativo_misional','sesion_actividad','id_rom_actividad'], 'required'],
+            [['fecha_desde', 'fecha_hasta', 'estado_actividad', 'estado', 'id_reporte_operativo_misional','sesion_actividad','id_rom_actividad','nro_semana'], 'required'],
             [['fecha_desde', 'fecha_hasta'], 'safe'],
             [['estado_actividad'], 'string'],
             [['estado', 'id_reporte_operativo_misional','id_rom_actividad'], 'default', 'value' => null],
-            [['estado', 'id_reporte_operativo_misional','sesion_actividad','id_rom_actividad'], 'integer'],
+            [['estado', 'id_reporte_operativo_misional','sesion_actividad','id_rom_actividad','nro_semana'], 'integer'],
             [['id_reporte_operativo_misional'], 'exist', 'skipOnError' => true, 'targetClass' => IsaReporteOperativoMisional::className(), 'targetAttribute' => ['id_reporte_operativo_misional' => 'id']],
             [['id_rom_actividad'], 'exist', 'skipOnError' => true, 'targetClass' => IsaRomActividades::className(), 'targetAttribute' => ['id_rom_actividad' => 'id']],
             [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Parametro::className(), 'targetAttribute' => ['estado' => 'id']],
@@ -56,6 +56,7 @@ class IsaActividadesRom extends \yii\db\ActiveRecord
             'estado' => 'Estado',
             'id_reporte_operativo_misional' => 'Id Reporte Operativo Misional',
             'sesion_actividad' => 'Nombre o título de la actividad o encuentro',
+            'nro_semana' => 'Número de semana',
         ];
     }
 }

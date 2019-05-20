@@ -8,6 +8,7 @@ use dosamigos\datepicker\DatePicker;
 /* @var $model app\models\CbacPlanMisionalOperativo */
 /* @var $form yii\widgets\ActiveForm */
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
+$this->registerJs( file_get_contents( '../web/js/arteCultura.js' ) );
 ?>
 
 <div class="cbac-plan-misional-operativo-form">
@@ -25,7 +26,7 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 	</div>
 	
     <div class="row">
-	  <div class="col-md-6"><?= $form->field($model, 'caracterizacion_diagnostico')->dropDownList( [ 'prompt' => 'Seleccione...', 'SI', 'NO' ] ) ?></div>
+	  <div class="col-md-6"><?= $form->field($model, 'caracterizacion_diagnostico')->dropDownList( $arraySiNo ) ?></div>
 	  <div class="col-md-6"></div>
 	</div>
 

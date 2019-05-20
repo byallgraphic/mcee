@@ -2,18 +2,14 @@ $( document ).ready(function()
 {
 
 	// se ocultan de entrada
-  //caracterizacion nombre
-	$( ".field-isainiciacionsencibilizacionartistica-caracterizacion_nombre" ).toggle();
-	
-	//carcterizacion fecha 
-	$( ".field-isainiciacionsencibilizacionartistica-caracterizacion_fecha" ).toggle();
+  //caracterizacion caracterizacion_justificacion
+	$( ".field-isainiciacionsencibilizacionartistica-caracterizacion_justificacion" ).toggle();
 	
 	for(i=1;i<=4;i++)
 	{
-		$( ".field-isaactividadesisa-"+i+"-contenido_nombre" ).toggle();
-		$( ".field-isaactividadesisa-"+i+"-contenido_fecha" ).toggle();
+		$( ".field-isaactividadesisa-"+i+"-contenido_justificacion" ).toggle();
 	}
-   
+ 
 });
 
 

@@ -33,7 +33,9 @@ class IsIsaInformeSemanalIsa extends \yii\db\ActiveRecord
         return [
             [['id_institucion', 'id_sede', 'estado'], 'default', 'value' => null],
             [['id_institucion', 'id_sede', 'estado'], 'integer'],
+            [['nro_semana'], 'integer', 'min' => 1 ],
             [['desde', 'hasta'], 'safe'],
+            [['desde', 'hasta','nro_semana'], 'required'],
             [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Estados::className(), 'targetAttribute' => ['estado' => 'id']],
             [['id_institucion'], 'exist', 'skipOnError' => true, 'targetClass' => Instituciones::className(), 'targetAttribute' => ['id_institucion' => 'id']],
             [['id_sede'], 'exist', 'skipOnError' => true, 'targetClass' => Sedes::className(), 'targetAttribute' => ['id_sede' => 'id']],
@@ -52,7 +54,8 @@ class IsIsaInformeSemanalIsa extends \yii\db\ActiveRecord
             'desde' => 'Desde',
             'hasta' => 'Hasta',
             'estado' => 'Estado',
-            'nombre_institucion' => 'Nombre institución'
+            'nombre_institucion' => 'Nombre institución',
+			'nro_semana' => 'Número de semana',
         ];
     }
 }

@@ -41,8 +41,6 @@ if( strpos($_GET['r'], 'update') > -1)
 						idNombre = "requerimientos[]["+idActividad+"]["+idRequerimiento+"]";
 						$("#reqTecnicos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a><input id="'+idNombre+'" name="'+idNombre+'"  value = '+value1+' type="number" size="2" maxlength="2" min="0" style="width:10%;" ></li>');
 					});
-						   
-						   
 				});
 			},
 		"json");
@@ -58,7 +56,9 @@ if( strpos($_GET['r'], 'update') > -1)
 
 //Click del boton agregar equipo campo y cargar contenido del formulario agregar en el modal
 $("#modalEquipo").click(function()
+// $(".modalEquipo").click(function()
 {
+	alert();
 	$("#modalCampo").modal('show')
 	.find("#modalContenido")
 	.load($(this).attr('value'));

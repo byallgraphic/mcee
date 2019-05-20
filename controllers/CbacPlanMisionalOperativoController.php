@@ -31,7 +31,13 @@ use yii\filters\VerbFilter;
  */
 class CbacPlanMisionalOperativoController extends Controller
 {
-    /**
+    
+	public $arraySiNo = 
+		[
+			1 => "Si",
+			2 => "No"		
+		];
+	/**
      * @inheritdoc
      */
     public function behaviors()
@@ -91,6 +97,7 @@ class CbacPlanMisionalOperativoController extends Controller
             "model" => $model,
             'actividades_pom' => $actividades_pom,
             'datos' => $datos,
+			'arraySiNo' => $this->arraySiNo,
         ]);
 		
 	}
@@ -146,6 +153,7 @@ class CbacPlanMisionalOperativoController extends Controller
             'model' => $model,
             'sedes' => $sedes,
             'institucion' => $institucion->descripcion,
+			'arraySiNo' => $this->arraySiNo,
         ]);
     }
 

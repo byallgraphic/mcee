@@ -113,7 +113,7 @@ use dosamigos\datepicker\DatePicker;
     <div class="panel panel-default">
 		<div class="panel-body">
 			<div class="row">
-			  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]contenido_si_no")->dropDownList( [ 'prompt' => 'Seleccione...', 'SI', 'NO' ] ) ?></div>
+			  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]contenido_si_no")->dropDownList( $arraySiNo ) ?></div>
 			  <div class="col-md-6"></div>
 			</div>
 			<div class="row">
@@ -174,7 +174,7 @@ use dosamigos\datepicker\DatePicker;
     
     <h3 style='background-color: #ccc;padding:5px;'>Diligenciamiento del Plan de Actividades</h3>
     <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]nombre_dilegencia")->textInput([ 'value' => isset($datos[$index]['nombre_dilegencia']) ? $datos[$index]['nombre_dilegencia'] : '' ]) ?></div>
+	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]nombre_dilegencia")->textInput(["value" => $_SESSION['nombres']." ".$_SESSION['apellidos'],'disabled' => 'disabled']) ?></div>
 	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]rol")->textInput([ 'value' => isset($datos[$index]['rol']) ? $datos[$index]['rol'] : '' ]) ?></div>
 	</div>
 	
