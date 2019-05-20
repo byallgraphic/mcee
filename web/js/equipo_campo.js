@@ -65,9 +65,12 @@ $( "#BtnGuardar" ).click(function()
 
 
 //cierra el modal en caso de no ser necesario
-$('#BtnCerrar').click(function()
+// $('#BtnCerrar').click(function()
+$('.BtnCerrar').click(function()
 {
-	$('#modalCampo').modal('hide');
+	$('#modalCampo_1').modal('hide');
+	$('#modalCampo_2').modal('hide');
+	$('#modalCampo_4').modal('hide');
 	$('body').removeClass('modal-open');
 	$('.modal-backdrop').remove();
 	$('body').css( "overflow: auto;");

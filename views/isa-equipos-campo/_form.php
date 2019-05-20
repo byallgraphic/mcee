@@ -40,7 +40,7 @@ $this->registerJs( file_get_contents( '../web/js/equipo_campo.js' ) );
 		
         <button type="button" class='btn btn-success' name ='BtnGuardar' id='BtnGuardar'>Guardar</button>
         
-		<button type="button" class='btn btn-info' id='BtnCerrar'>Cerrar</button>
+		<button type="button" class='btn btn-info BtnCerrar' id='BtnCerrar'>Cerrar</button>
 	
 		<?php Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>

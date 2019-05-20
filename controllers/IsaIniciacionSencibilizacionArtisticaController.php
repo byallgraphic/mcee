@@ -36,6 +36,8 @@ use app\models\IsaProyectosGenerales;
 use app\models\IsaEquiposCampo;
 use app\models\IsaIntervencionIeo;
 use app\models\IsaRequerimientosTecnicos;
+use app\models\PerfilesXPersonas;
+use app\models\Perfiles;
 use yii\base\Model;
 
 use yii\helpers\ArrayHelper;
@@ -95,7 +97,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 
     function actionViewFases($model, $form)
 	{
-        
+       
         $proyectos = new IsaProyectosGenerales();
         $actividades_isa = new IsaActividadesIsa();
         $intervencionIEO = new IsaIntervencionIeo();
@@ -200,6 +202,15 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		];
 		
 		
+		$idUsuario = $_SESSION['id'];
+		$nombre = $_SESSION['nombres']." ".$_SESSION['apellidos'];
+		
+		$nombreDiligencia[ $idUsuario ] = $nombre;
+		
+		$PerfilesXPersonas = PerfilesXPersonas::findOne($_SESSION['perfilesxpersonas']);
+		$perfil = Perfiles::findOne($PerfilesXPersonas->id_perfiles);
+		
+		$rol[$perfil->id]  = $perfil->descripcion;
 		//tipo_proyecto diferenciador para usar la misma tabla para varios proyectos
 		$proyectos = $proyectos->find()->andWhere("tipo_proyecto = 1")->orderby("id")->all();
 		$proyectos = ArrayHelper::map($proyectos,'id','descripcion');
@@ -222,7 +233,9 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 																'intervencionIEO' => $intervencionIEO,
 																'ciclos' => $ciclos,
 																'perfiles' => $this->obtenerPefiles(),
-																'reqTecnicos' => $reqTecnicos
+																'reqTecnicos' => $reqTecnicos,
+																'nombreDiligencia'=> $nombreDiligencia,
+																'rol'			  => $rol,
 																
 															] 
 												),
