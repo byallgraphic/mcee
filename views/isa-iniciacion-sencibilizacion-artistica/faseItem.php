@@ -35,6 +35,7 @@ $procesos = ArrayHelper::map($procesos,'id','descripcion');
 														'reqTecnicos' => $reqTecnicos,
 														'nombreDiligencia'=> $nombreDiligencia,
 														'rol'			  => $rol,
+														'reqLogisticos'  => $reqLogisticos,
 													] 
 										),
 					'contentOptions'=> [],
