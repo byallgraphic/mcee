@@ -382,8 +382,9 @@
 									],
 					],
 					['label' => 'Gestor Documental',
-						'icon' => 'fas fa-archive',
+						'icon' => 'file-archive',
 						'url' => 'http://200.29.107.196:8080/share/page',
+						'template' => '<a href="{url}" target="_blank"  class="">{label}</a>',
 					],
 					],  //mcee
 					['label' => 'Poblaciones',
@@ -414,29 +415,29 @@
 														
 														
 														
-													],
-										],
-										['label' => 'Estudiantes',
-										'icon' => 'male',
-										'url' => '#',
-										 'items' => [
-														['label' => 'Estudiantes', 'icon' => 'circle-o', 'url' => ['representantes-legales/index'],],
-														['label' => 'Hoja de vida', 'icon' => 'circle-o', 'url' => ['hoja-vida-estudiante/index'],],
-													],
+													// ],
+										// ],
+										// ['label' => 'Estudiantes',
+										// 'icon' => 'male',
+										// 'url' => '#',
+										 // 'items' => [
+														// ['label' => 'Estudiantes', 'icon' => 'circle-o', 'url' => ['representantes-legales/index'],],
+														// ['label' => 'Hoja de vida', 'icon' => 'circle-o', 'url' => ['hoja-vida-estudiante/index'],],
+													// ],
 										
-										],
+										// ],
 										
-									],
+									// ],
 						
-					],
-					['label' => 'Indicadores',
-						'icon' => 'line-chart',
-						'url' => '#',
-						'items' => [
-										['label' => 'Clima Escolar', 'icon' => 'thermometer-0', 'url' => '#',],
-										['label' => 'Sistema de Monitoreo', 'icon' => 'desktop', 'url' => '#',],
-									],
-					],
+					// ],
+					// ['label' => 'Indicadores',
+						// 'icon' => 'line-chart',
+						// 'url' => '#',
+						// 'items' => [
+										// ['label' => 'Clima Escolar', 'icon' => 'thermometer-0', 'url' => '#',],
+										// ['label' => 'Sistema de Monitoreo', 'icon' => 'desktop', 'url' => '#',],
+									// ],
+					// ],
 									
 									
                 ],
