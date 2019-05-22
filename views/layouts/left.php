@@ -381,6 +381,10 @@
 										['label' => 'Sistema de Monitoreo', 'icon' => 'desktop', 'url' => '#',],
 									],
 					],
+					['label' => 'Gestor Documental',
+						'icon' => 'fas fa-archive',
+						'url' => 'http://200.29.107.196:8080/share/page',
+					],
 					],  //mcee
 					['label' => 'Poblaciones',
 						'icon' => 'user-circle',
@@ -425,17 +429,13 @@
 									],
 						
 					],
-					['label' => 'Indicadddddddddores',
+					['label' => 'Indicadores',
 						'icon' => 'line-chart',
 						'url' => '#',
 						'items' => [
 										['label' => 'Clima Escolar', 'icon' => 'thermometer-0', 'url' => '#',],
 										['label' => 'Sistema de Monitoreo', 'icon' => 'desktop', 'url' => '#',],
 									],
-					],
-					['label' => 'Gestor Documental',
-						'icon' => 'fas fa-archive',
-						'url' => 'http://200.29.107.196:8080/share/page',
 					],
 									
 									
