@@ -32,7 +32,10 @@ $procesos = ArrayHelper::map($procesos,'id','descripcion');
 														'intervencionIEO' => $intervencionIEO,
 														'ciclos' => $ciclos,
 														'perfiles' => $perfiles,
-														'reqTecnicos' => $reqTecnicos
+														'reqTecnicos' => $reqTecnicos,
+														'nombreDiligencia'=> $nombreDiligencia,
+														'rol'			  => $rol,
+														'reqLogisticos'  => $reqLogisticos,
 													] 
 										),
 					'contentOptions'=> [],

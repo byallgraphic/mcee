@@ -97,19 +97,19 @@ if( strpos($_GET['r'], 'update') > -1)
             ],
 	])->label("Equipos Campo"); ?></div>
 	  <div class="col-md-4">
-        <?=  Html::button('Agregar Equipo Campo',['value'=> "index.php?r=isa-equipos-campo%2Fcreate" ,'class'=>'btn btn-success modalEquipo','id'=>'modalEquipo']) ?>
+        <?=  Html::button('Agregar Equipo Campo',['value'=> "index.php?r=isa-equipos-campo%2Fcreate" ,'class'=>'btn btn-success modalEquipo','id'=>"modalEquipo_$idProceso"]) ?>
 		
 		</div>
 	</div>
 	
-	<div id="modalCampo" class="fade modal" role="dialog" tabindex="-1" >
+	<div id="modalCampo_<?=$idProceso;?>" class="fade modal" role="dialog" tabindex="-1" >
 		<div class="modal-dialog modal-md">
 			<div class="modal-content" style="margin-top:138%; margin-left:0%">
 				<div class="modal-header">
 					<h3>Agregar Equipo Campo</h3>
 				</div>
 				<div class="modal-body">
-					<div id='modalContenido'></div>
+					<div id='modalContenido_<?=$idProceso;?>'></div>
 				</div>
 			</div>
 		</div>
@@ -197,17 +197,17 @@ if( strpos($_GET['r'], 'update') > -1)
 	<div class="panel-body">
 		<div class="row">
 			<div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]articulacion")->textInput(['title'=>'Si es el caso, describa cómo la actividad o actividades planeadas se articulan con las actividades de otros proyectos de la iniciativa MCEE', 'data-toggle'=>'tooltip']) ?></div>
-			<div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]cantidad_participantes")->textInput(['title'=>'Indique el número de personas que espera que participen de la actividad, considerando la convocatoria realizada por su equipo', 'data-toggle'=>'tooltip']) ?></div>
+			<div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]cantidad_participantes")->textInput(['type' => 'number' ,'title'=>'Indique el número de personas que espera que participen de la actividad, considerando la convocatoria realizada por su equipo', 'data-toggle'=>'tooltip']) ?></div>
 		</div>
 	</div>
 </div>
   
    
-   <h3 style='background-color: #ccc;padding:5px;'>Recursos previstos para realizar la actividad</h3>
-   <div class="row">
-	  <div class="col-md-6"><?php  $form->field($actividades_isa, "[$idProceso]requerimientos_tecnicos")->textInput(['title'=>'Indique los requerimientos  técnicos,  materiales y de espacio', 'data-toggle'=>'tooltip']) ?>
-	  
-	  <?= $form->field($actividades_isa, "[$idProceso]requerimientos_tecnicos")->widget(
+<h3 style='background-color: #ccc;padding:5px;'>Recursos previstos para realizar la actividad</h3>
+<div class="row">
+	<div class="col-md-6">
+  
+		<?= $form->field($actividades_isa, "[$idProceso]requerimientos_tecnicos")->widget(
 						Chosen::className(), [
 							'items' => $reqTecnicos,
 							'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
@@ -218,23 +218,41 @@ if( strpos($_GET['r'], 'update') > -1)
 								'title'=>'Indique los requerimientos  técnicos,  materiales y de espacio', 
 								'data-toggle'=>'tooltip'
 							],
-                            'placeholder' => 'Seleccione Requerimientos Técnicos ',
+							'placeholder' => 'Seleccione',
 					])?>
 	  
-	  </div>
+		<div class="chosen-container-multi" title="" id="reqTecnicos-<?php echo $idProceso; ?>">
+			<ul class="chosen-choices">
+			</ul>
+		</div>
 	  
-	
-	  
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]requerimientos_logisticos")->textInput(['title'=>'Indique los requerimientos  logísticos, No. de refrigerios, No. de vehículos y capacidad de transporte, etc.', 'data-toggle'=>'tooltip']) ?></div>
-   </div>
-   
-	
-	<div class="chosen-container-multi" style="width: 48.5%;" title="" id="reqTecnicos-<?php echo $idProceso; ?>">
-		<ul class="chosen-choices">
-		</ul>
 	</div>
-			
-   
+	<div class="col-md-6">
+		<?php //$form->field($actividades_isa, "[$idProceso]requerimientos_logisticos")->textInput(['title'=>'Indique los requerimientos logísticos, No. de refrigerios, No. de vehículos y capacidad de transporte, etc.', 'data-toggle'=>'tooltip']) ?>
+	  
+		<?= $form->field($actividades_isa, "[$idProceso]requerimientos_logisticos")->widget(
+						Chosen::className(), [
+							'items' => $reqLogisticos,
+							'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
+							'multiple' => false,
+							'clientOptions' => [
+								'search_contains' => true,
+								'single_backstroke_delete' => false,
+								'title'=>'Indique los requerimientos  logísticos, No. de refrigerios, No. de vehículos y capacidad de transporte, etc.', 
+								'data-toggle'=>'tooltip'
+							],
+							'placeholder' => 'Seleccione',
+					])?>
+
+
+		<div class="chosen-container-multi" title="" id="reqLogisticos-<?php echo $idProceso; ?>">
+			<ul class="chosen-choices">
+			</ul>
+		</div>
+	</div>
+</div>
+	
+	
    <h3 style='background-color: #ccc;padding:5px;'>Programación: Entrega o envío de la programación de la actividad a los participantes,  líderes comunitarios o directivas de la institución</h3>
    <div class="row">
 	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]destinatarios")->textInput() ?></div>
@@ -257,9 +275,10 @@ if( strpos($_GET['r'], 'update') > -1)
   
    <h3 style='background-color: #ccc;padding:5px;'>Diligenciamiento del Plan de Actividades</h3>
    <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]nombre_diligencia")->textInput(["value" => $_SESSION['nombres']." ".$_SESSION['apellidos'],'disabled' => 'disabled']) ?></div>
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]rol")->textInput() ?></div>
+	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]nombre_diligencia")->dropDownList($nombreDiligencia,['disabled' => 'disabled']) ?></div>
+	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]rol")->dropDownList($rol,['disabled' => 'disabled']) ?></div>
 	</div>
+   
    
   <div class="row">
 	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]fecha")->widget(

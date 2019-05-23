@@ -26,24 +26,57 @@ if( strpos($_GET['r'], 'update') > -1)
 {
 ?>
 	<script>
+	
 		id = $("#id").val();
-		$.get( "index.php?r=isa-iniciacion-sencibilizacion-artistica/requerimientos&id="+id,
-			function( data )
-			{
-				$.each(data, function( index, value ) 
-				{
-					idActividad = index;
-					selectActividad = $("#isaactividadesisa-"+index+"-requerimientos_tecnicos");
-					
-					$.each( data[index], function( idRequerimiento, value1 ) 
-					{
-						texto = $('#'+selectActividad.attr('id')+' option:eq('+idRequerimiento+')').text();
-						idNombre = "requerimientos[]["+idActividad+"]["+idRequerimiento+"]";
-						$("#reqTecnicos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a><input id="'+idNombre+'" name="'+idNombre+'"  value = '+value1+' type="number" size="2" maxlength="2" min="0" style="width:10%;" ></li>');
-					});
-				});
-			},
-		"json");
+		
+		function actualizarReqTecnicos(id)
+		{
+			$.get( "index.php?r=isa-iniciacion-sencibilizacion-artistica/requerimientos&id="+id,
+						function( data )
+						{
+							$.each(data, function( index, value ) 
+							{
+								idActividad = index;
+								selectActividad = $("#isaactividadesisa-"+index+"-requerimientos_tecnicos");
+								
+								$.each( data[index], function( idRequerimiento, value1 ) 
+								{
+									texto = $('#'+selectActividad.attr('id')+' option:eq('+idRequerimiento+')').text();
+									idNombre = "requerimientos[]["+idActividad+"]["+idRequerimiento+"]";
+									$("#reqTecnicos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a><input id="'+idNombre+'" name="'+idNombre+'"  value = '+value1+' type="text" size="2" maxlength="2" min="0" style="width:35px;" ></li>');
+								});
+							});
+						},
+					"json");
+		}
+	
+		
+		function actualizarReqLogisticos(id)
+		{
+			$.get( "index.php?r=isa-iniciacion-sencibilizacion-artistica/requerimientos-logisticos&id="+id,
+						function( data )
+						{
+							$.each(data, function( index, value ) 
+							{
+								idActividad = index;
+								selectActividad = $("#isaactividadesisa-"+index+"-requerimientos_logisticos");
+								
+								$.each( data[index], function( idRequerimiento, value1 ) 
+								{
+									texto = $('#'+selectActividad.attr('id')+' option:eq('+idRequerimiento+')').text();
+									idNombre = "reqLogisticos[]["+idActividad+"]["+idRequerimiento+"]";
+									$("#reqLogisticos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a><input id="'+idNombre+'" name="'+idNombre+'"  value = '+value1+' type="text" size="2" maxlength="2" min="0" style="width:35px;" ></li>');
+								});
+							});
+						},
+					"json");
+		}
+
+		
+		
+		actualizarReqTecnicos(id);
+		actualizarReqLogisticos(id);
+		
 	</script>
 	
 <?php 
@@ -55,12 +88,14 @@ if( strpos($_GET['r'], 'update') > -1)
 <script>
 
 //Click del boton agregar equipo campo y cargar contenido del formulario agregar en el modal
-$("#modalEquipo").click(function()
-// $(".modalEquipo").click(function()
+// $("#modalEquipo").click(function()
+$(".modalEquipo").click(function()
 {
-	alert();
-	$("#modalCampo").modal('show')
-	.find("#modalContenido")
+	$( '[id^=modalContenido]' ).html('')
+	num = $(this).attr('id').split("_")[1];
+	
+	$("#modalCampo_"+num+"").modal('show')
+	.find("#modalContenido_"+num+"")
 	.load($(this).attr('value'));
 });
 

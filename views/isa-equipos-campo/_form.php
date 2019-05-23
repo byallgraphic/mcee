@@ -38,9 +38,9 @@ $this->registerJs( file_get_contents( '../web/js/equipo_campo.js' ) );
 	<input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" id ="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
     <div class="form-group">
 		
-        <button type="button" class='btn btn-success' name ='BtnGuardar' id='BtnGuardar'>Guardar</button>
+        <button type="button" class='btn btn-success BtnGuardar' name ='BtnGuardar' id='BtnGuardar'>Guardar</button>
         
-		<button type="button" class='btn btn-info' id='BtnCerrar'>Cerrar</button>
+		<button type="button" class='btn btn-info BtnCerrar' id='BtnCerrar'>Cerrar</button>
 	
 		<?php Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>

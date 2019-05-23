@@ -12,7 +12,8 @@ Cambios realizados: se guarda el formulario mediante ajax para evitar redireccio
 **********/
 
 //guarda la informacion cuando se de click en el boton
-$( "#BtnGuardar" ).click(function() 
+// $( "BtnGuardar" ).click(function() 
+$( ".BtnGuardar" ).click(function() 
 {
 	_csrf = $("#_csrf").val();
 	nombre = $("#isaequiposcampo-nombre").val();
@@ -39,7 +40,9 @@ $( "#BtnGuardar" ).click(function()
 		success: function() 
 		{
 			//se quita todo del modal de equipos
-			$('#modalCampo').modal('hide');
+			$('#modalCampo_1').modal('hide');
+			$('#modalCampo_2').modal('hide');
+			$('#modalCampo_4').modal('hide');
 			$('body').removeClass('modal-open');
 			$('.modal-backdrop').remove();
 			//se llena nuevamente el chosen con la informacion
@@ -65,9 +68,12 @@ $( "#BtnGuardar" ).click(function()
 
 
 //cierra el modal en caso de no ser necesario
-$('#BtnCerrar').click(function()
+// $('#BtnCerrar').click(function()
+$('.BtnCerrar').click(function()
 {
-	$('#modalCampo').modal('hide');
+	$('#modalCampo_1').modal('hide');
+	$('#modalCampo_2').modal('hide');
+	$('#modalCampo_4').modal('hide');
 	$('body').removeClass('modal-open');
 	$('.modal-backdrop').remove();
 	$('body').css( "overflow: auto;");

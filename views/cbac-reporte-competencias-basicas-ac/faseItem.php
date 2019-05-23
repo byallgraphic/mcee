@@ -1,5 +1,8 @@
 <?php
 use yii\helpers\Html;
+use yii\bootstrap\Collapse;
+use yii\bootstrap\Tabs;
+
 //$id_sede 		= $_SESSION['sede'][0];
 $id_sede 		= 1;
 $id_institucion	= $_SESSION['instituciones'][0];
@@ -23,10 +26,13 @@ $index = 0;
         11 =>    "Actividad 11. Realizar seguimiento y evaluación de las acciones desarrolladas con las familias de las instituciones educativas.",
         12 =>    "",
     ];
-    
-    foreach( $actividades as $keyFase => $actividad ){ 
-            
-            if($proyecto ==  1 && $keyFase <= 2){
+	
+	$colors = ["#cce5ff", "#d4edda", "#f8d7da", "#fff3cd", "#d1ecf1", "#d6d8d9"];
+	
+	foreach( $actividades as $keyFase => $actividad )
+	{       
+            if($proyecto ==  1 && $keyFase <= 2)
+			{
                 $contenedores[] = 	[
 					'label' 		=>  $actividad,
 					'content' 		=>  $this->render( 'contenedorItem', 
@@ -40,9 +46,12 @@ $index = 0;
                                                         'datos' => $datos
 													] 
 										),
+					'headerOptions' => ['class' => 'tab1', 'style' => "background-color: ".( $colors[$index%count($colors)] ).";"],
 					'contentOptions'=> []
 				];
-            }else if($proyecto ==  2 && $keyFase > 2 && $keyFase <= 7){
+            }
+			else if($proyecto ==  2 && $keyFase > 2 && $keyFase <= 7)
+			{
                 $contenedores[] = 	[
 					'label' 		=>  $actividad,
 					'content' 		=>  $this->render( 'contenedorItem', 
@@ -56,9 +65,12 @@ $index = 0;
                                                         'datos' => $datos
 													] 
 										),
+					'headerOptions' => ['class' => 'tab1', 'style' => "background-color: ".( $colors[$index%count($colors)] ).";"],
 					'contentOptions'=> []
 				];
-            }else if($proyecto ==  3 && $keyFase < 12){
+            }
+			else if($proyecto ==  3 && $keyFase < 12)
+			{
                 $contenedores[] = 	[
 					'label' 		=>  $actividad,
 					'content' 		=>  $this->render( 'contenedorItem', 
@@ -72,10 +84,12 @@ $index = 0;
                                                         'datos' => $datos
 													]
 										),
+					'headerOptions' => ['class' => 'tab1', 'style' => "background-color: ".( $colors[$index%count($colors)] ).";"],
 					'contentOptions'=> []
 				];
             } 
-            else if($proyecto ==  3 && $keyFase == 12){
+            else if($proyecto ==  3 && $keyFase == 12)
+			{
                 $contenedores[] = 	[
                     'label' 		=>  $actividad,
                     'content' 		=>  $this->render( 'contenedorItem', 
@@ -90,24 +104,114 @@ $index = 0;
                                                     ]
                                         ),
                     'options' => ['style' => 'display: none;'],
+					'headerOptions' => ['class' => 'tab1', 'style' => "background-color: ".( $colors[$index%count($colors)] ).";"],
                     'contentOptions'=> []
                 ];
             }  
         
             
 
-    $index ++;
+		$index ++;
     }
-    
-    use yii\bootstrap\Collapse;
-    echo Collapse::widget([
-        'items' => $contenedores,
-    ]);
-
-?>
-
-
-
-
 	
+	
+	
+	echo Tabs::widget([
+		'items' => $contenedores, 
+	]);
+	
+	$this->registerCss(".nav-tabs {
+						display: flex;
+						flex-wrap: wrap;
+					}
+					
+					.nav-tabs > li {
+						display: flex;
+						width: 50%;
+						flex-wrap: wrap;
+					}
+					
+					.row {
+						margin-left: 2px;
+					}");
+    
+    // foreach( $actividades as $keyFase => $actividad ){ 
+            
+            // if($proyecto ==  1 && $keyFase <= 2){
+                // $contenedores[] = 	[
+					// 'label' 		=>  $actividad,
+					// 'content' 		=>  $this->render( 'contenedorItem', 
+													// [  
+                                                        // 'form' => $form,
+                                                        // "model" => $model,
+                                                        // 'actividades_rom' => $actividades_rom,
+                                                        // 'tipo_poblacion_rom' => $tipo_poblacion_rom,
+                                                        // 'evidencias_rom' => $evidencias_rom,
+                                                        // 'index' => $keyFase,
+                                                        // 'datos' => $datos
+													// ] 
+										// ),
+					// 'contentOptions'=> []
+				// ];
+            // }else if($proyecto ==  2 && $keyFase > 2 && $keyFase <= 7){
+                // $contenedores[] = 	[
+					// 'label' 		=>  $actividad,
+					// 'content' 		=>  $this->render( 'contenedorItem', 
+													// [  
+                                                        // 'form' => $form,
+                                                        // "model" => $model,
+                                                        // 'actividades_rom' => $actividades_rom,
+                                                        // 'tipo_poblacion_rom' => $tipo_poblacion_rom,
+                                                        // 'evidencias_rom' => $evidencias_rom,
+                                                        // 'index' => $keyFase,
+                                                        // 'datos' => $datos
+													// ] 
+										// ),
+					// 'contentOptions'=> []
+				// ];
+            // }else if($proyecto ==  3 && $keyFase < 12){
+                // $contenedores[] = 	[
+					// 'label' 		=>  $actividad,
+					// 'content' 		=>  $this->render( 'contenedorItem', 
+													// [  
+                                                        // 'form' => $form,
+                                                        // "model" => $model,
+                                                        // 'actividades_rom' => $actividades_rom,
+                                                        // 'tipo_poblacion_rom' => $tipo_poblacion_rom,
+                                                        // 'evidencias_rom' => $evidencias_rom,
+                                                        // 'index' => $keyFase,
+                                                        // 'datos' => $datos
+													// ]
+										// ),
+					// 'contentOptions'=> []
+				// ];
+            // } 
+            // else if($proyecto ==  3 && $keyFase == 12){
+                // $contenedores[] = 	[
+                    // 'label' 		=>  $actividad,
+                    // 'content' 		=>  $this->render( 'contenedorItem', 
+                                                    // [  
+                                                        // 'form' => $form,
+                                                        // "model" => $model,
+                                                        // 'actividades_rom' => $actividades_rom,
+                                                        // 'tipo_poblacion_rom' => $tipo_poblacion_rom,
+                                                        // 'evidencias_rom' => $evidencias_rom,
+                                                        // 'index' => $keyFase,
+                                                        // 'datos' => $datos
+                                                    // ]
+                                        // ),
+                    // 'options' => ['style' => 'display: none;'],
+                    // 'contentOptions'=> []
+                // ];
+            // }  
+        
+            
 
+		// $index ++;
+    // }
+    
+    // use yii\bootstrap\Collapse;
+    // echo Collapse::widget([
+        // 'items' => $contenedores,
+    // ]);
+	
