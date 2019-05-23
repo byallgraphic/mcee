@@ -91,6 +91,7 @@ if( strpos($_GET['r'], 'update') > -1)
 // $("#modalEquipo").click(function()
 $(".modalEquipo").click(function()
 {
+	$( '[id^=modalContenido]' ).html('')
 	num = $(this).attr('id').split("_")[1];
 	
 	$("#modalCampo_"+num+"").modal('show')
