@@ -88,7 +88,12 @@ class GcMomento2Controller extends Controller
 
         $bitacora = GcBitacora::findOne(Yii::$app->request->get('id_bitacora'));
         $momentoI = GcMomento1::findOne($bitacora->semanas[0]->id);
-        $planeacionDias = GcPlaneacionPorDia::find()->where(['id_momento1_planeacion' => $momentoI->id])->asArray()->all();
+
+        if (isset($momentoI)){
+            $planeacionDias = GcPlaneacionPorDia::find()->where(['id_momento1_planeacion' => $momentoI->id])->asArray()->all();
+        }else{
+            return $this->redirect('momento1/index?r=gc-momento1%2Fcreate&id=1&id_bitacora='.$bitacora->id);
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);

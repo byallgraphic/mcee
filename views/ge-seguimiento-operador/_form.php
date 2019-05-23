@@ -479,12 +479,14 @@ if(Yii::$app->request->get('guardado')){
                     success: function (res, status) {
                         if (status == 'success') {
                             $("#modal-ge").modal('hide');
-                            $("#datatables_w0").load(location.href + " #datatables_w0");
                             swal({
                                 text: 'Registro guardado',
                                 icon: 'success',
                                 button: 'Salir',
                             });
+
+
+                            location.reload();
                         }
                     },
                 });

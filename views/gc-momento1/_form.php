@@ -20,15 +20,6 @@ $id_momento1= 1;
 ?>
 
 <?= Html::a('Volver',['gc-bitacora/view2','id'=>$id_momento1],['class' => 'btn btn-info']) ?>
-<div class="modal fade" id="modalSaveData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                Guardado con exito
-            </div>
-        </div>
-    </div>
-</div>
 <section class="form-box" >
     <div class="container">
 

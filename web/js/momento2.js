@@ -26,7 +26,6 @@ jQuery(document).ready(function() {
     dataPaso2.resultados = [];
 
     listPaso2.click(function () {
-        var t = $('#datatables_w1').DataTable();
         if (
             descripcion_visita.val() !== "" &&
             estudiantes.val() != 0 &&
@@ -34,15 +33,6 @@ jQuery(document).ready(function() {
             directivos.val() != 0 &&
             otro.val() != 0
         ){
-            t.row.add( [
-                counter,
-                descripcion_visita.val(),
-                estudiantes.val(),
-                "<button type=\"button\" class=\"btn btn-primary\" onclick=\"ok2(5);\" data-whatever=\"5\">Visualizar</button>",
-                docentes.val(),
-                directivos.val(),
-                otro.val()
-            ] ).draw( false );
 
             var formData = new FormData();
             formData.append("id_semana", $('#id_semana').val());

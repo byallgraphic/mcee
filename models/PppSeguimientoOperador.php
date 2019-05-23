@@ -28,13 +28,16 @@ use Yii;
  * @property string $dificultades
  * @property string $propuesta_dificultades
  * @property string $estado
- * @property string $id_indicador
+ * @property string $indicador
  * @property string $id_operador
  * @property string $id_objetivo
  * @property string $id_actividad
+ *
+ * @property GeTipoSeguimiento $tipo_seguimiento
  */
 class PppSeguimientoOperador extends \yii\db\ActiveRecord
 {
+    var $documentFile;
     /**
      * @inheritdoc
      */
@@ -49,12 +52,12 @@ class PppSeguimientoOperador extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_tipo_seguimiento', 'id_ie', 'id_persona_responsable', 'estado', 'id_indicador', 'id_operador', 'id_objetivo', 'id_actividad'], 'required'],
-            [['id_tipo_seguimiento', 'id_ie', 'id_persona_responsable', 'numero_participantes', 'estado', 'id_indicador', 'id_operador', 'id_objetivo', 'id_actividad'], 'default', 'value' => null],
-            [['id_tipo_seguimiento', 'id_ie', 'id_persona_responsable', 'numero_participantes', 'estado', 'id_indicador', 'id_operador', 'id_objetivo', 'id_actividad'], 'integer'],
+            [['id_tipo_seguimiento', 'id_ie', 'id_persona_responsable', 'estado',
+                'indicador', 'id_operador', 'id_objetivo', 'id_actividad'], 'required'],
+            [['id_tipo_seguimiento', 'id_ie', 'id_persona_responsable', 'numero_participantes', 'estado', 'id_operador', 'id_objetivo', 'id_actividad'], 'default', 'value' => null],
+            [['id_tipo_seguimiento', 'id_ie', 'id_persona_responsable', 'numero_participantes', 'estado', 'id_operador', 'id_objetivo', 'id_actividad'], 'integer'],
             [['email', 'cual_operador', 'proyecto_reportar', 'mes_reporte', 'semana_reporte', 'descripcion_actividad', 'poblacion_beneficiaria', 'quienes', 'duracion_actividad', 'logros_alcanzados', 'dificultadades', 'avances_cumplimiento_cuantitativos', 'avances_cumplimiento_cualitativos', 'dificultades', 'propuesta_dificultades'], 'string'],
             [['id_actividad'], 'exist', 'skipOnError' => true, 'targetClass' => PppActividades::className(), 'targetAttribute' => ['id_actividad' => 'id']],
-            [['id_indicador'], 'exist', 'skipOnError' => true, 'targetClass' => PppIndicadores::className(), 'targetAttribute' => ['id_indicador' => 'id']],
             [['id_objetivo'], 'exist', 'skipOnError' => true, 'targetClass' => PppObjetivos::className(), 'targetAttribute' => ['id_objetivo' => 'id']],
             [['id_tipo_seguimiento'], 'exist', 'skipOnError' => true, 'targetClass' => PppTipoSeguimiento::className(), 'targetAttribute' => ['id_tipo_seguimiento' => 'id']],
             [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Estados::className(), 'targetAttribute' => ['estado' => 'id']],
@@ -70,32 +73,39 @@ class PppSeguimientoOperador extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'id_tipo_seguimiento' => 'Tipo Seguimiento',
-            'email' => 'Email',
-            'cual_operador' => 'Cual Operador',
-            'proyecto_reportar' => 'Proyecto Reportar',
-            'id_ie' => 'Institución educativa',
-            'mes_reporte' => 'Mes Reporte',
-            'semana_reporte' => 'Semana Reporte',
-            'id_persona_responsable' => 'Persona Responsable',
-            'descripcion_actividad' => 'Descripción Actividad',
-            'poblacion_beneficiaria' => 'Población Beneficiaria',
-            'quienes' => 'Quienes',
-            'numero_participantes' => 'Numero Participantes',
-            'duracion_actividad' => 'Duración Actividad',
-            'logros_alcanzados' => 'Logros Alcanzados',
-            'dificultadades' => 'Dificultades',
-            'avances_cumplimiento_cuantitativos' => 'Avances Cumplimiento Cuantitativos',
-            'avances_cumplimiento_cualitativos' => 'Avances Cumplimiento Cualitativos',
-            'dificultades' => 'Dificultades',
-            'propuesta_dificultades' => 'Propuesta Dificultades',
-            'estado' => 'Estado',
-            'id_indicador' => 'Indicador',
-            'id_operador' => 'Operador',
-            'id_objetivo' => 'Objetivo',
-            'id_actividad' => 'Actividad',
+            'id' 								=> 'ID',
+            'id_tipo_seguimiento' 				=> 'Id Tipo Seguimiento',
+            'email' 							=> 'Dirección de correo electrónico',
+            'id_operador' 						=> '1. Nombre del operador',
+            'cual_operador' 					=> 'Cuál?',
+            'proyecto_reportar' 				=> '2. Proyecto a reportar',
+            'id_ie' 							=> '3. IEO reportada',
+            'mes_reporte' 						=> '4. Mes reporte',
+            'semana_reporte' 					=> '5. Semana a reportar',
+            'id_persona_responsable'			=> '6. Profesional responsable',
+            'descripcion_actividad' 			=> 'Descripción de la Actividad',
+            'poblacion_beneficiaria'			=> 'Población Beneficiaria',
+            'quienes' 							=> 'Quienes?',
+            'numero_participantes' 				=> 'Número de participantes',
+            'duracion_actividad' 				=> 'Duración de la actividad',
+            'logros_alcanzados' 				=> 'Logros alcanzados',
+            'dificultadades' 					=> 'Dificultades presentadas',
+            'avances_cumplimiento_cuantitativos'=> '8. Describa los avances para el cumplimiento del indicador seleccionado en terminos cuantitativos',
+            'avances_cumplimiento_cualitativos' => '9. Describa los avances para el cumplimiento del inidcador seleccionado en terminos cualitativos Avances Cumplimiento Cualitativos',
+            'dificultades' 						=> '10. Mencione las dificultades para el cumplimiento de los indicadores si las hay',
+            'propuesta_dificultades' 			=> '11. Qué propuesta(s) plantea para superar esas dificultades presentadas',
+            'estado' 							=> 'Estado',
+            'indicador'						    => '7. A qué indicador del proyecto le apuntó la actividad?',
+            'documentFile'						=> 'Agregar Archivo',
         ];
 
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTipo_seguimiento()
+    {
+        return $this->hasOne(GeTipoSeguimiento::className(), ['id' => 'id_tipo_seguimiento']);
     }
 }

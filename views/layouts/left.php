@@ -211,8 +211,8 @@
 																['label' => 'Caja de herramientas', 'icon' => 'circle-o','url' => '#',],  
 															],
 														],
-														['label' => 'Proyectos pedagogicos productivos', 'icon' => 'arrow-right', 'url' => ['ppp-seguimiento-operador/index'],],
-														
+														['label' => 'Proyectos pedagogicos productivos', 'icon' => 'arrow-right', 'url' => ['ppp-seguimiento-operador/index', 'idTipoSeguimiento'	=> 5],],
+
 														],
 													],
 													

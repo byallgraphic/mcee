@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\GeSeguimientoOperador */
+/* @var $model app\models\pppSeguimientooperador */
 
 $this->title = 'Seguimiento al Operador';
 $this->params['breadcrumbs'][] = ['label' => 'Seguimiento al Operador', 'url' => ['index']];
@@ -16,16 +16,16 @@ $this->params['breadcrumbs'][] = "Agregar";
 
     <?= $this->render('_form', [
         'model' 			=> $model,
-		'nombresOperador' 	=> $nombresOperador,
-		'mesReporte' 		=> $mesReporte,
-		'personas' 			=> $personas,
-		'institucion' 		=> $institucion,
-		'indicadores' 		=> $indicadores,
-		'objetivos' 		=> $objetivos,
-		'actividades' 		=> $actividades,
-		'guardado' 			=> $guardado,
-		'idTipoSeguimiento' => $idTipoSeguimiento,
-		
+        'nombresOperador' 	=> $nombresOperador,
+        'mesReporte' 		=> $mesReporte,
+        'personas' 			=> $personas,
+        'institucion' 		=> $institucion,
+        'sede'				=> $sede,
+        'indicadores' 		=> $indicadores,
+        'actividades' 		=> $actividades,
+        'guardado' 			=> $guardado,
+        'reportAct'         => $reportAct,
+        'reportExist'       => $reportExist
     ]) ?>
 
 </div>

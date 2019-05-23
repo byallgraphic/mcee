@@ -50,8 +50,6 @@ jQuery(document).ready(function() {
         var arrayDays = {};
         var i = 0;
 
-
-
         checkProposito.each(function( index, element ) {
             if (element.checked){
                 arrayCheckPropositos[i] = element.value;
@@ -73,35 +71,40 @@ jQuery(document).ready(function() {
             arrayDay: arrayDays
         };
 
+
         // fields validation
-        next_step = true;
-        parent_fieldset.find('.required').each(function() {
-            if( $(this).val() === "") {
+        parent_fieldset.find('.required').each(function () {
+            if ($(this).val() === "") {
                 $(this).addClass('input-error');
                 next_step = false;
             }
         });
 
-        if (next_step) {
-            $.post( "index.php?r=gc-momento1%2Fadd-object", data, function( data ) {
-                if(data){
-                    $('#modalSaveData').modal('show');
-                    parent_fieldset.fadeOut(400, function() {
-                        // change icons
-                        current_active_step.removeClass('active').addClass('activated').next().addClass('active');
-                        // progress bar
-                        bar_progress(progress_line, 'right');
-                        // show next step
-                        $(this).next().fadeIn();
-                        // scroll window to beginning of the form
-                        scroll_to_class( $('.form-wizard'), 20 );
-                    });
-                    setTimeout(function(){
-                        $('#modalSaveData').modal("hide");
-                    }, 1500)
-                }
+        $.post("index.php?r=gc-momento1%2Fadd-object", data, function () {
+        })
+        .done(function () {
+            next_step = true;
+            parent_fieldset.fadeOut(400, function() {
+                // change icons
+                current_active_step.removeClass('active').addClass('activated').next().addClass('active');
+                // progress bar
+                bar_progress(progress_line, 'right');
+                // show next step
+                $(this).next().fadeIn();
+                // scroll window to beginning of the form
+                scroll_to_class( $('.form-wizard'), 20 );
             });
-        }
+
+            swal({
+                text: 'Registro guardado',
+                icon: 'success',
+                button: 'Salir',
+            });
+        })
+        .fail(function () {
+            next_step = false;
+        });
+
     });
 
     var listPaso2 = $('#listPaso2');
@@ -112,30 +115,22 @@ jQuery(document).ready(function() {
     dataPaso2.resultados = [];
 
     listPaso2.click(function () {
-        var t = $('#datatables_w2').DataTable();
         if (nombre.val() !== "" && description.val() !== ""){
-            t.row.add( [
-                counter,
-                nombre.val(),
-                description.val()
-            ] ).draw( false );
             dataPaso2.resultados.push([nombre.val(), description.val()]);
             counter++;
             nombre.val("");
             $('#gcresultadosmomento1-descripcion').val("");
+
+            var data = {
+                resultados: dataPaso2
+            };
+
+            $.post( "index.php?r=gc-momento1%2Fadd-object2", data, function() {
+            })
+            .done(function () {
+                $("#w2").load(location.href+" #w2>*","");
+            });
         }
-    });
-
-    $('#finalizar_momneto1').click(function () {
-        var data = {
-            resultados: dataPaso2
-        };
-
-        $.post( "index.php?r=gc-momento1%2Fadd-object2", data, function( data ) {
-            if (data){
-
-            }
-        });
     });
 
     /*
