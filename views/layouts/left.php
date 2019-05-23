@@ -334,8 +334,7 @@
 						'icon' => 'user-circle',
 						'url' => '#',
 						'items' => [
-										[
-											'label' => 'Personas',
+										[	'label' => 'Personas',
 											'icon' => 'user-circle-o',
 											'url' => '#',
 											'items' => [
@@ -415,8 +414,8 @@
 														
 														
 														
-													// ],
-										// ],
+													],
+										],
 										// ['label' => 'Estudiantes',
 										// 'icon' => 'male',
 										// 'url' => '#',
@@ -427,9 +426,9 @@
 										
 										// ],
 										
-									// ],
+									],
 						
-					// ],
+					],
 					// ['label' => 'Indicadores',
 						// 'icon' => 'line-chart',
 						// 'url' => '#',
