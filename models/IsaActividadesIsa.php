@@ -48,7 +48,7 @@ class IsaActividadesIsa extends \yii\db\ActiveRecord
     {
         return [
             [['id_iniciacion_sencibilizacion_artistica', 'id_procesos_generales', 'num_equipo_campo',  'cantidad_participantes', 'estado'], 'default', 'value' => ''],
-            [['id_iniciacion_sencibilizacion_artistica', 'id_procesos_generales', 'num_equipo_campo',  'cantidad_participantes', 'estado', 'contenido_si_no'], 'integer'],
+            [['id_iniciacion_sencibilizacion_artistica', 'id_procesos_generales', 'num_equipo_campo',  'cantidad_participantes', 'estado', 'contenido_si_no','numero_semana'], 'integer'],
             [['fecha_prevista_desde', 'fecha_prevista_hasta', 'contenido_fecha', 'fecha'], 'safe'],
             [['docente_orientador', 'nombre_actividad','contenido_nombre', 'contenido_justificacion', 'articulacion', 'requerimientos_tecnicos', 'requerimientos_logisticos', 'destinatarios', 'fecha_entrega_envio', 'observaciones_generales', 'nombre_diligencia', 'rol'], 'string'],
             [['id_iniciacion_sencibilizacion_artistica'], 'exist', 'skipOnError' => true, 'targetClass' => IsaIniciacionSencibilizacionArtistica::className(), 'targetAttribute' => ['id_iniciacion_sencibilizacion_artistica' => 'id']],

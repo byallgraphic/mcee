@@ -54,9 +54,11 @@ if( strpos($_GET['r'], 'update') > -1)
 </script>
     <h3 style='background-color: #ccc;padding:5px;'>Fecha prevista para realizar la actividad</h3>
 	<div class="row">
-	  <div class="col-md-6">
+	  <div class="col-md-4">
 	  
-	  
+	  <?= $form->field($actividades_isa, "[$idProceso]numero_semana")->textInput(['type' => 'number']) ?>
+	  </div>
+	  <div class="col-md-4">
 	  <?= $form->field($actividades_isa, "[$idProceso]fecha_prevista_desde")->widget(
         DatePicker::className(), [
             // modify template for custom rendering
@@ -67,7 +69,7 @@ if( strpos($_GET['r'], 'update') > -1)
                 'format'    => 'yyyy-mm-dd',
         ],
     ]);  ?></div>
-	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]fecha_prevista_hasta")->widget(
+	  <div class="col-md-4"><?= $form->field($actividades_isa, "[$idProceso]fecha_prevista_hasta")->widget(
         DatePicker::className(), [
             // modify template for custom rendering
             'template' => '{addon}{input}',
