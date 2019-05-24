@@ -350,40 +350,43 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 				}
 			}
 			
-			//guardar los Requerimientos Técnicos 
-			foreach(Yii::$app->request->post()['requerimientos'] as $requerimientos )
+			if (@Yii::$app->request->post()['requerimientos'])
 			{
-				foreach ($requerimientos as $idActividad => $requerimiento)
+				//guardar los Requerimientos Técnicos 
+				foreach(Yii::$app->request->post()['requerimientos'] as $requerimientos )
 				{
-					$idRequerimiento = key($requerimiento);
-					$cantidaRequerimiento = $requerimiento[$idRequerimiento];
-					
-					$RT = new IsaRequerimientosTecnicos();
-					$RT->id_requerimiento	= $idRequerimiento;
-					$RT->cantidad 			= $cantidaRequerimiento;
-					$RT->id_actividad 		= $idActividad;
-					$RT->id_iniciacion_sencibilizacion_artistica = $model->id;
-					$RT->save(false);
+					foreach ($requerimientos as $idActividad => $requerimiento)
+					{
+						$idRequerimiento = key($requerimiento);
+						$cantidaRequerimiento = $requerimiento[$idRequerimiento];
+						
+						$RT = new IsaRequerimientosTecnicos();
+						$RT->id_requerimiento	= $idRequerimiento;
+						$RT->cantidad 			= $cantidaRequerimiento;
+						$RT->id_actividad 		= $idActividad;
+						$RT->id_iniciacion_sencibilizacion_artistica = $model->id;
+						$RT->save(false);
+					}
 				}
 			}
-			
-			
-			foreach(Yii::$app->request->post()['reqLogisticos'] as $requerimientosL )
+			if (@Yii::$app->request->post()['reqLogisticos'])
 			{
-				foreach ($requerimientosL as $idActividad => $requerimiento)
+				foreach(Yii::$app->request->post()['reqLogisticos'] as $requerimientosL )
 				{
-					$idRequerimiento = key($requerimiento);
-					$cantidaRequerimiento = $requerimiento[$idRequerimiento];
-					
-					$RL = new IsaRequerimientosLogisticos();
-					$RL->id_requerimiento	= $idRequerimiento;
-					$RL->cantidad 			= $cantidaRequerimiento;
-					$RL->id_actividad 		= $idActividad;
-					$RL->id_iniciacion_sencibilizacion_artistica = $model->id;
-					$RL->save(false);
+					foreach ($requerimientosL as $idActividad => $requerimiento)
+					{
+						$idRequerimiento = key($requerimiento);
+						$cantidaRequerimiento = $requerimiento[$idRequerimiento];
+						
+						$RL = new IsaRequerimientosLogisticos();
+						$RL->id_requerimiento	= $idRequerimiento;
+						$RL->cantidad 			= $cantidaRequerimiento;
+						$RL->id_actividad 		= $idActividad;
+						$RL->id_iniciacion_sencibilizacion_artistica = $model->id;
+						$RL->save(false);
+					}
 				}
 			}
-			
             return $this->redirect(['index', 'guardado' => 1]);
         }
 		
@@ -417,7 +420,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		unset($intervencionIEO[0]);
 		unset($intervencionIEO[3]);
 		
-		// echo "<pre>"; print_r($intervencionIEO); echo "</pre>";
 		
 		$activadesIsa = json_decode($postDatos['activadesIsa']);
 		unset($activadesIsa[0]);
@@ -470,7 +472,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		}
 
         Yii::$app->session->setFlash('ok');
-        // return 'ok';
 		return $this->redirect(['index', 'guardado' => 1]);
     }
 	
