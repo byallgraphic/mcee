@@ -24,9 +24,6 @@ else
 	die;
 }
 
-use app\models\GeActividades;
-use app\models\GeReporteActividades;
-use app\models\GeSeguimientoFile;
 use app\models\PppReporteActividades;
 use app\models\PppSeguimientoFile;
 use app\models\Sedes;
@@ -41,7 +38,6 @@ use app\models\Parametro;
 use app\models\Personas;
 use app\models\Instituciones;
 use app\models\PppIndicadores;
-use app\models\PppObjetivos;
 use app\models\PppActividades;
 use yii\helpers\ArrayHelper;
 

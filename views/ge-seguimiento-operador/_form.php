@@ -491,7 +491,7 @@ if(Yii::$app->request->get('guardado')){
                     },
                 });
             }
-            
+
 
         })
     });
