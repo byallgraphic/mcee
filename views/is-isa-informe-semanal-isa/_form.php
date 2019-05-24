@@ -7,6 +7,8 @@ use dosamigos\datepicker\DatePicker;
 /* @var $model app\models\IsIsaInformeSemanalIsa */
 /* @var $form yii\widgets\ActiveForm */
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
+
+$nroSemana = empty( $_POST['nroSemana'] ) ? '' : $_POST['nroSemana'];
 ?>
 
 <div class="is-isa-informe-semanal-isa-form">
@@ -26,7 +28,7 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 	<div class="row">
 	  
 		<div class="col-md-4">
-			<?= $form->field($model, 'nro_semana')->textInput() ?>
+			<?= $form->field($model, 'nro_semana')->textInput([ 'value' => $nroSemana ]) ?>
 		</div>
 	  
 	  <div class="col-md-4"><?= $form->field($model, "desde")->widget(
