@@ -12,7 +12,7 @@ use Yii;
  * @property int $id_sede
  * @property string $desde
  * @property string $hasta
- * @property int $estado
+ * @property int $estado 
  */
 class IsIsaInformeSemanalIsa extends \yii\db\ActiveRecord
 {
