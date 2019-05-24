@@ -556,23 +556,32 @@ class RomReporteOperativoMisionalController extends Controller
 		
 		$datos = [];
 		
-		$dataActividadesParticipadas = IsaActividadesIsa::find()
-										->alias('a')
-										->innerJoin('isa.equipos_campo ec', 'ec.id=a.num_equipo_campo')
-										->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
-										->where( 'a.estado=1' )
-										->andWhere( 'ie.estado=1' )
-										->andWhere( 'ec.estado=1' )
-										->andWhere( 'ie.id_perfil_persona_institucion='.$_SESSION['id'] )
-										->all();
+		// $dataActividadesParticipadas = IsaActividadesIsa::find()
+										// ->alias('a')
+										// ->innerJoin('isa.equipos_campo ec', 'ec.id=a.num_equipo_campo')
+										// ->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
+										// ->where( 'a.estado=1' )
+										// ->andWhere( 'ie.estado=1' )
+										// ->andWhere( 'ec.estado=1' )
+										// ->andWhere( 'ie.id_perfil_persona_institucion='.$_SESSION['id'] )
+										// ->all();
+										
+		// $dataActividadesParticipadas = IsaIntervencionIeo::find()
+										// ->alias('i')
+										// ->innerJoin('isa.actividades_isa a', 'a.id=i.id_actividades_isa')
+										// ->innerJoin('isa.equipos_campo ec', 'ec.id=a.num_equipo_campo')
+										// ->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
+										// ->where( 'a.estado=1' )
+										// ->andWhere( 'ie.estado=1' )
+										// ->andWhere( 'ec.estado=1' )
+										// ->andWhere( 'ie.id_perfil_persona_institucion='.$_SESSION['id'] )
+										// ->all();
 										
 		$dataActividadesParticipadas = IsaIntervencionIeo::find()
 										->alias('i')
-										->innerJoin('isa.actividades_isa a', 'a.id=i.id_actividades_isa')
-										->innerJoin('isa.equipos_campo ec', 'ec.id=a.num_equipo_campo')
+										->innerJoin('isa.equipos_campo ec', 'ec.id=i.id_equipo_campos')
 										->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
-										->where( 'a.estado=1' )
-										->andWhere( 'ie.estado=1' )
+										->where( 'ie.estado=1' )
 										->andWhere( 'ec.estado=1' )
 										->andWhere( 'ie.id_perfil_persona_institucion='.$_SESSION['id'] )
 										->all();
