@@ -50,7 +50,7 @@ use yii\helpers\Json;
 
 
 
-
+$nroSemana = empty( $_POST['nroSemana'] ) ? 0 : $_POST['nroSemana'];
 
 $coordinadoresTecnico = [];
 
@@ -77,6 +77,7 @@ $vidoes 			= 0;
 $otros_productos 	= 0;
 
 
+$equipos 				= [];
 $fortalezas 				= [];
 $debilidades 				= [];
 $alternativas 				= [];
@@ -110,197 +111,200 @@ $totalSesiones				= 0;
 
 
 	$rom = IsaReporteOperativoMisional::findOne([
-						'estado'			=> 1,
+						'estado'			=> 3,
 						'id_institucion' 	=> $idInstitucion,
 						'id_sedes' 			=> $id_sede,
 					]);
 
-	$id = $rom->id;
+	if( $rom ){
 
-	$proyectos = new IsaRomProyectos();
-	$proyectos = $proyectos->find()
-						->alias( 'py' )
-						->innerJoin( 'isa.rom_procesos p', 'p.id_rom_proyectos=py.id' )
-						->innerJoin( 'isa.rom_actividades a', 'a.id_rom_procesos=p.id' )
-						->innerJoin( 'isa.evidencias_rom er', 'er.id_rom_actividad = a.id' )
-						->where('py.estado=1')
-						->andWhere('a.estado=1')
-						->andWhere('p.estado=1')
-						->andWhere( 'er.id_reporte_operativo_misional='.$id )
-						->groupby("py.id")
-						->orderby("py.id")
-						->all();
-	$proyectos = ArrayHelper::map($proyectos,'id','descripcion');
-	
-	$dataParametros = Parametro::find()
-						// ->where( "id_tipo_parametro=$idTipoParametro" )
-						->where( 'estado=1' )
-						->orderby( 'id' )
-						->all();
-						
-	$parametros		= ArrayHelper::map( $dataParametros, 'id', 'descripcion' );
-	
-	$datos = [];
-	
-	foreach( $proyectos as $idProyecto => $descripcionProyecto )
-	{
-		$proy = [
-					'id' 				=> $idProyecto,
-					'descripcion' 		=> $descripcionProyecto,
-					'actividades_rom2'	=> IsaActividadesRom::findOne([ 
-																'id_reporte_operativo_misional' => $id,
-																'estado' 						=> 1,
-																'nro_semana' 					=> 1,
-																'id_rom_actividad' 				=> $index,
-															]),
-					'procesos'			=> [],
-				];
-		
-		$dataProcesos = IsaRomProcesos::find()
-							->alias( 'p' )
+		$id = $rom->id;
+
+		$proyectos = new IsaRomProyectos();
+		$proyectos = $proyectos->find()
+							->alias( 'py' )
+							->innerJoin( 'isa.rom_procesos p', 'p.id_rom_proyectos=py.id' )
 							->innerJoin( 'isa.rom_actividades a', 'a.id_rom_procesos=p.id' )
 							->innerJoin( 'isa.evidencias_rom er', 'er.id_rom_actividad = a.id' )
-							->where( "p.id_rom_proyectos=".$idProyecto )
+							->where('py.estado=1')
 							->andWhere('a.estado=1')
 							->andWhere('p.estado=1')
 							->andWhere( 'er.id_reporte_operativo_misional='.$id )
-							->groupby("p.id")
+							->groupby("py.id")
+							->orderby("py.id")
+							->all();
+		$proyectos = ArrayHelper::map($proyectos,'id','descripcion');
+		
+		$dataParametros = Parametro::find()
+							// ->where( "id_tipo_parametro=$idTipoParametro" )
+							->where( 'estado=1' )
+							->orderby( 'id' )
 							->all();
 							
-		$procesos = ArrayHelper::map($dataProcesos,'id','descripcion');
+		$parametros		= ArrayHelper::map( $dataParametros, 'id', 'descripcion' );
 		
-		foreach( $procesos as $idProceso => $descripcionProceso )
+		$datos = [];
+		
+		foreach( $proyectos as $idProyecto => $descripcionProyecto )
 		{
-			$procs = 	[
-							'id' 			=> $idProceso,
-							'descripcion' 	=> $descripcionProceso,
-							'actividades'	=> [],
-						];
-						
-			$evidencias = IsaEvidenciasRom::find()
-									->alias('er')
-									->innerJoin( 'isa.rom_actividades a', 'a.id=er.id_rom_actividad' )
-									->where('er.estado=1')
-									->andWhere('a.estado=1')
-									->andWhere('a.id_rom_procesos='.$idProceso)
-									->andWhere( 'er.id_reporte_operativo_misional='.$id )
-									->all();
-			// $evidencias = ArrayHelper::map($evidencias,'id','descripcion');
+			$proy = [
+						'id' 				=> $idProyecto,
+						'descripcion' 		=> $descripcionProyecto,
+						'actividades_rom2'	=> IsaActividadesRom::findOne([ 
+																	'id_reporte_operativo_misional' => $id,
+																	'estado' 						=> 1,
+																	'nro_semana' 					=> $nroSemana,
+																	'id_rom_actividad' 				=> $index,
+																]),
+						'procesos'			=> [],
+					];
 			
+			$dataProcesos = IsaRomProcesos::find()
+								->alias( 'p' )
+								->innerJoin( 'isa.rom_actividades a', 'a.id_rom_procesos=p.id' )
+								->innerJoin( 'isa.evidencias_rom er', 'er.id_rom_actividad = a.id' )
+								->where( "p.id_rom_proyectos=".$idProyecto )
+								->andWhere('a.estado=1')
+								->andWhere('p.estado=1')
+								->andWhere( 'er.id_reporte_operativo_misional='.$id )
+								->groupby("p.id")
+								->all();
+								
+			$procesos = ArrayHelper::map($dataProcesos,'id','descripcion');
 			
-				   
-			foreach( $evidencias as $evidencia )
+			foreach( $procesos as $idProceso => $descripcionProceso )
 			{
-				$actividades_rom_upt = IsaActividadesRom::findOne([ 
-														'id_reporte_operativo_misional' => $id,
-														'id_rom_actividad' 				=> $evidencia->id_rom_actividad,
-														'estado' 						=> 1,
-													]);
-													
-				$dataActividadesParticipadas= IsaIntervencionIeo::findOne( $actividades_rom_upt->sesion_actividad );
-									
-				$actividadesParticipadas 	= [ $dataActividadesParticipadas->id => $dataActividadesParticipadas->nombre_actividad ];
-				
-				$modelIntegrante 			= IsaActividadesRomXIntegranteGrupo::find()
-														->where( 'estado=1' )
-														// ->andWhere( 'diligencia=$id_perfil_persona' )
-														->andWhere( 'id_rom_actividad='.$index /*$evidencia->id_rom_actividad*/ )
-														->andWhere( 'id_reporte_operativo_misional='.$id )
-														->all();
-															
-				// if( !$modelIntegrante ){
-					// $modelIntegrante = new IsaActividadesRomXIntegranteGrupo();
-				// }
-				
-				//Array de actividades
-				$act =  [
-							'id' 						=> $evidencia->id_rom_actividad,
-							'descripcion' 				=> IsaRomActividades::findOne( $evidencia->id_rom_actividad )->descripcion,
-							'actividades_rom'			=> $actividades_rom_upt,
-							'evidencia'					=> $evidencia,
-							'poblacion'					=> IsaTipoCantidadPoblacionRom::findOne([ 
-																'estado' 						=> 1, 
-																'id_rom_actividades' 			=> $evidencia->id_rom_actividad,
-																'id_reporte_operativo_misional' => $id,
-															]),
-							// 'integrante'				=> $modelIntegrante,
-							'datosSoloLectura' 			=> IsaIntervencionIeo::findOne([
-																'id' 		=> $actividades_rom_upt->sesion_actividad,
-																'estado' 	=> 1,
-															]),
-															
-							'actividadesParticipadas' 	=> $actividadesParticipadas,
-							// 'datos_adicionales' 		=> Json::decode( $this->actionConsultarIntervencionIeo( $dataActividadesParticipadas->id ) ),
-						];
-				
-				//Adiciono la actividad al proceso
-				$procs[ 'actividades' ][] = $act;
+				$procs = 	[
+								'id' 			=> $idProceso,
+								'descripcion' 	=> $descripcionProceso,
+								'actividades'	=> [],
+							];
+							
+				$evidencias = IsaEvidenciasRom::find()
+										->alias('er')
+										->innerJoin( 'isa.rom_actividades a', 'a.id=er.id_rom_actividad' )
+										->where('er.estado=1')
+										->andWhere('a.estado=1')
+										->andWhere('a.id_rom_procesos='.$idProceso)
+										->andWhere( 'er.id_reporte_operativo_misional='.$id )
+										->all();
+				// $evidencias = ArrayHelper::map($evidencias,'id','descripcion');
 				
 				
-				
-				
-				
-				/***************************************************************************************************************************************
-				 * Calculando
-				 *
-				 * ============================++++++++++++++++++++++??????????????++++++++++++++++
-				 ***************************************************************************************************************************************/
-				 
-				$coordinadoresTecnico[] = Personas::findOne( $dataActividadesParticipadas->docente_orientador );
-				$equipos[] 				= IsaEquiposCampo::findOne( $dataActividadesParticipadas->id_equipo_campos );
-				 
-				$sesiones_realizadas 	+= $actividades_rom_upt->estado_actividad == 179;
-				$sesiones_aplazadas 	+= $actividades_rom_upt->estado_actividad == 180;
-				$sesiones_canceladas 	+= $actividades_rom_upt->estado_actividad == 181;
-				
-				
-				
-				
-				$propiedades = array( "actas", "reportes", "listados", "plan_trabajo", "formato_seguimiento", "formato_evaluacion", "fotografias", "vidoes", "otros_productos");
-				$actas 				+= count( explode( ',', $evidencia->actas ) );
-				$reportes 			+= count( explode( ',', $evidencia->reportes ) );
-				$listados 			+= count( explode( ',', $evidencia->listados ) );
-				$plan_trabajo 		+= count( explode( ',', $evidencia->plan_trabajo ) );
-				$formato_seguimiento+= count( explode( ',', $evidencia->formato_seguimiento ) );
-				$formato_evaluacion += count( explode( ',', $evidencia->formato_evaluacion ) );
-				$fotografias 		+= count( explode( ',', $evidencia->fotografias ) );
-				$vidoes 			+= count( explode( ',', $evidencia->vidoes ) );
-				$otros_productos 	+= count( explode( ',', $evidencia->otros_productos ) );
-				
-				
-				
-				$total += $vecinos 					+= $act[ 'poblacion' ]->vecinos;
-				$total += $lideres_comunitarios 	+= $act[ 'poblacion' ]->lideres_comunitarios;
-				$total += $empresarios_comerciantes	+= $act[ 'poblacion' ]->empresarios_comerciantes;
-				$total += $organizaciones_locales 	+= $act[ 'poblacion' ]->organizaciones_locales;
-				$total += $grupos_comunitarios 		+= $act[ 'poblacion' ]->grupos_comunitarios;
-				$total += $otos_actores 			+= $act[ 'poblacion' ]->otos_actores;
-				
-				foreach( $modelIntegrante as $key => $integrante ){
+					   
+				foreach( $evidencias as $evidencia )
+				{
+					$actividades_rom_upt = IsaActividadesRom::findOne([ 
+															'id_reporte_operativo_misional' => $id,
+															'id_rom_actividad' 				=> $evidencia->id_rom_actividad,
+															'estado' 						=> 1,
+														]);
+														
+					$dataActividadesParticipadas= IsaIntervencionIeo::findOne( $actividades_rom_upt->sesion_actividad );
+										
+					$actividadesParticipadas 	= [ $dataActividadesParticipadas->id => $dataActividadesParticipadas->nombre_actividad ];
 					
-					$fortalezas[] 				= $integrante->fortalezas;
-					$debilidades[] 				= $integrante->debilidades;
-					$alternativas[] 			= $integrante->alternativas;
-					$retos[] 					= $integrante->retos;
-					$articulacion[] 			= $integrante->articulacion;
-					$evaluacion[] 				= $integrante->evaluacion;
-					$observaciones_generales[] 	= $integrante->observaciones_generales;
-					$alarmas[] 					= $integrante->alarmas;
-					$logros[] 					= $integrante->logros;
-					$duracion					+=$integrante->duracion_sesion;
-					$totalSesiones++;
+					$modelIntegrante 			= IsaActividadesRomXIntegranteGrupo::find()
+															->where( 'estado=1' )
+															// ->andWhere( 'diligencia=$id_perfil_persona' )
+															->andWhere( 'id_rom_actividad='.$index /*$evidencia->id_rom_actividad*/ )
+															->andWhere( 'id_reporte_operativo_misional='.$id )
+															->all();
+																
+					// if( !$modelIntegrante ){
+						// $modelIntegrante = new IsaActividadesRomXIntegranteGrupo();
+					// }
+					
+					//Array de actividades
+					$act =  [
+								'id' 						=> $evidencia->id_rom_actividad,
+								'descripcion' 				=> IsaRomActividades::findOne( $evidencia->id_rom_actividad )->descripcion,
+								'actividades_rom'			=> $actividades_rom_upt,
+								'evidencia'					=> $evidencia,
+								'poblacion'					=> IsaTipoCantidadPoblacionRom::findOne([ 
+																	'estado' 						=> 1, 
+																	'id_rom_actividades' 			=> $evidencia->id_rom_actividad,
+																	'id_reporte_operativo_misional' => $id,
+																]),
+								// 'integrante'				=> $modelIntegrante,
+								'datosSoloLectura' 			=> IsaIntervencionIeo::findOne([
+																	'id' 		=> $actividades_rom_upt->sesion_actividad,
+																	'estado' 	=> 1,
+																]),
+																
+								'actividadesParticipadas' 	=> $actividadesParticipadas,
+								// 'datos_adicionales' 		=> Json::decode( $this->actionConsultarIntervencionIeo( $dataActividadesParticipadas->id ) ),
+							];
+					
+					//Adiciono la actividad al proceso
+					$procs[ 'actividades' ][] = $act;
+					
+					
+					
+					
+					
+					/***************************************************************************************************************************************
+					 * Calculando
+					 *
+					 * ============================++++++++++++++++++++++??????????????++++++++++++++++
+					 ***************************************************************************************************************************************/
+					 
+					$coordinadoresTecnico[] = Personas::findOne( $dataActividadesParticipadas->docente_orientador );
+					$equipos[] 				= IsaEquiposCampo::findOne( $dataActividadesParticipadas->id_equipo_campos );
+					 
+					$sesiones_realizadas 	+= $actividades_rom_upt->estado_actividad == 179;
+					$sesiones_aplazadas 	+= $actividades_rom_upt->estado_actividad == 180;
+					$sesiones_canceladas 	+= $actividades_rom_upt->estado_actividad == 181;
+					
+					
+					
+					
+					$propiedades = array( "actas", "reportes", "listados", "plan_trabajo", "formato_seguimiento", "formato_evaluacion", "fotografias", "vidoes", "otros_productos");
+					$actas 				+= count( explode( ',', $evidencia->actas ) );
+					$reportes 			+= count( explode( ',', $evidencia->reportes ) );
+					$listados 			+= count( explode( ',', $evidencia->listados ) );
+					$plan_trabajo 		+= count( explode( ',', $evidencia->plan_trabajo ) );
+					$formato_seguimiento+= count( explode( ',', $evidencia->formato_seguimiento ) );
+					$formato_evaluacion += count( explode( ',', $evidencia->formato_evaluacion ) );
+					$fotografias 		+= count( explode( ',', $evidencia->fotografias ) );
+					$vidoes 			+= count( explode( ',', $evidencia->vidoes ) );
+					$otros_productos 	+= count( explode( ',', $evidencia->otros_productos ) );
+					
+					
+					
+					$total += $vecinos 					+= $act[ 'poblacion' ]->vecinos;
+					$total += $lideres_comunitarios 	+= $act[ 'poblacion' ]->lideres_comunitarios;
+					$total += $empresarios_comerciantes	+= $act[ 'poblacion' ]->empresarios_comerciantes;
+					$total += $organizaciones_locales 	+= $act[ 'poblacion' ]->organizaciones_locales;
+					$total += $grupos_comunitarios 		+= $act[ 'poblacion' ]->grupos_comunitarios;
+					$total += $otos_actores 			+= $act[ 'poblacion' ]->otos_actores;
+					
+					foreach( $modelIntegrante as $key => $integrante ){
+						
+						$fortalezas[] 				= $integrante->fortalezas;
+						$debilidades[] 				= $integrante->debilidades;
+						$alternativas[] 			= $integrante->alternativas;
+						$retos[] 					= $integrante->retos;
+						$articulacion[] 			= $integrante->articulacion;
+						$evaluacion[] 				= $integrante->evaluacion;
+						$observaciones_generales[] 	= $integrante->observaciones_generales;
+						$alarmas[] 					= $integrante->alarmas;
+						$logros[] 					= $integrante->logros;
+						$duracion					+=$integrante->duracion_sesion;
+						$totalSesiones++;
+					}
+					/****************************************************************************************************************************************/
+					
+					
+					
+					
 				}
-				/****************************************************************************************************************************************/
 				
-				
-				
-				
+				$proy['procesos'][] = $procs;
 			}
 			
-			$proy['procesos'][] = $procs;
+			$datos[] = $proy;
 		}
-		
-		$datos[] = $proy;
 	}
 
 
@@ -390,20 +394,24 @@ $totalSesiones				= 0;
     <?= $form->field($actividade_is_isa, "[$index]estado")->hiddenInput(['value'=> 1])->label(false); ?>
 	
 	<div class="row">
-		<div class="col-md-4"><?= $form->field($actividades_is_isa, "[$index]duracion")->textInput([ 'value' => $duracion/$totalSesiones ]) ?></div>
+		<div class="col-md-4"><?= $form->field($actividades_is_isa, "[$index]duracion")->textInput([ 'value' =>  $totalSesiones ? $duracion/$totalSesiones : 0 ]) ?></div>
 		<div class="col-md-4">
 			<label>Coordinador técnico pedagógico</label>
 			<?php 
-				foreach( $coordinadoresTecnico as $key => $value ){
-					echo $form->field($actividades_is_isa, "[$index]docente")->textInput([ 'value'=> $value->nombres." ".$value->apellidos ])->label(false);
-				}
+				// if( $coordinadoresTecnico )
+					// foreach( $coordinadoresTecnico as $key => $value ){
+						// echo $form->field($actividades_is_isa, "[$index]docente")->textInput([ 'value'=> $value->nombres." ".$value->apellidos ])->label(false);
+					// }
 			?>
 		</div>
 		<div class="col-md-4">
 			<label>Equipos</label>
 			<?php 
-				foreach( $equipos as $key => $value ){
-					echo $form->field($actividades_is_isa, "[$index]docente")->textInput([ 'value'=> $value->nombre ])->label(false);
+				if( count( $equipos ) > 0 )
+				{
+					foreach( $equipos as $key => $value ){
+						echo $form->field($actividades_is_isa, "[$index]docente")->textInput([ 'value'=> $value->nombre ])->label(false);
+					}
 				}
 			?>
 		</div>
@@ -498,20 +506,26 @@ $totalSesiones				= 0;
 	  <div class="col-md-6">
 		<label class="control-label" for="isisaactividadesisisa-1-retos">Debilidades</label>
 			<?php 
-				foreach( $debilidades as $key => $value ){
-					
-					echo $form->field($actividades_is_isa, "[$index]variaciones_devilidades")->textarea(['value' => $value])->label(false);
-				} 
+				if( count( $debilidades ) > 0 )
+				{
+					foreach( $debilidades as $key => $value ){
+						
+						echo $form->field($actividades_is_isa, "[$index]variaciones_devilidades")->textarea(['value' => $value])->label(false);
+					} 
+				}
 			?>
 		</div>
 	  
 	   <div class="col-md-6">
 		<label class="control-label" for="isisaactividadesisisa-1-retos">Fortalezas</label>
 			<?php 
-				foreach( $fortalezas as $key => $value ){
-					
-					echo $form->field($actividades_is_isa, "[$index]variaciones_fortalezas")->textarea(['value' => $value])->label(false);
-				} 
+				if( count( $fortalezas ) > 0 )
+				{	
+					foreach( $fortalezas as $key => $value ){
+						
+						echo $form->field($actividades_is_isa, "[$index]variaciones_fortalezas")->textarea(['value' => $value])->label(false);
+					} 
+				}
 			?>
 		</div>
 	</div>
@@ -520,9 +534,12 @@ $totalSesiones				= 0;
 		<div class="col-md-6">
 		<label class="control-label" for="isisaactividadesisisa-1-retos">Retos</label>
 			<?php 
-				foreach( $retos as $key => $value ){
-					
-					echo $form->field($actividades_is_isa, "[$index]retos")->textarea(['value' => $value])->label(false);
+				if( count( $retos ) > 0 )
+				{
+					foreach( $retos as $key => $value ){
+						
+						echo $form->field($actividades_is_isa, "[$index]retos")->textarea(['value' => $value])->label(false);
+					} 
 				} 
 			?>
 		</div>
@@ -530,10 +547,13 @@ $totalSesiones				= 0;
 	  <div class="col-md-6">
 		<label class="control-label" for="isisaactividadesisisa-1-retos">Retos</label>
 			<?php 
-				foreach( $articulacion as $key => $value ){
-					
-					echo $form->field($actividades_is_isa, "[$index]articulacion")->textarea(['value' => $value])->label(false);
-				} 
+				if( count( $articulacion ) > 0 )
+				{	
+					foreach( $articulacion as $key => $value ){
+						
+						echo $form->field($actividades_is_isa, "[$index]articulacion")->textarea(['value' => $value])->label(false);
+					} 
+				}
 			?>
 		</div>
 	</div>
@@ -542,9 +562,12 @@ $totalSesiones				= 0;
 		<div class="col-md-6">
 			<label class="control-label" for="isisaactividadesisisa-1-alrmas">Logros</label>
 			<?php 
-				foreach( $alarmas as $key => $value ){
-					
-					echo $form->field($actividades_is_isa, "[$index]alrmas")->textarea(['value' => $value])->label(false);
+				if( count( $alarmas ) > 0 )
+				{
+					foreach( $alarmas as $key => $value ){
+						
+						echo $form->field($actividades_is_isa, "[$index]alrmas")->textarea(['value' => $value])->label(false);
+					} 
 				} 
 			?>
 		</div>
