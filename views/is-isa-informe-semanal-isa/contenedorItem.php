@@ -111,7 +111,7 @@ $totalSesiones				= 0;
 
 
 	$rom = IsaReporteOperativoMisional::findOne([
-						'estado'			=> 3,
+						'estado'			=> 1,
 						'id_institucion' 	=> $idInstitucion,
 						'id_sedes' 			=> $id_sede,
 					]);
