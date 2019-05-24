@@ -16,10 +16,12 @@ foreach( $fases as $keyFase => $fase ){
 													[  
 														'form' => $form,
                                                         "model" => $model,
-                                                        'proyecto' => $keyFase,
+                                                        'idproyecto' => $keyFase,
 														'actividades_pom' => $actividades_pom,
-														'datos' => $datos,
 														'arraySiNo' => $arraySiNo,
+														'rol'			  => $rol,
+														'reqLogisticos'  => $reqLogisticos,
+														'reqTecnicos' => $reqTecnicos,
 													] 
 										),
 					'contentOptions'=> []

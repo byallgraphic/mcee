@@ -41,18 +41,29 @@ $('div[id *= cbacpmoactividades-],[id *= -contenido_si_no]').change(function(){
 
 });
 
-$('div[id *= isaactividadesisa-],[id *= -requerimientos_tecnicos]').change(function(){
-  
-  // console.log('El texto seleccionado es:', $('option:selected',$(this)).text());
+
+//crear los requerimientos tecnicos con el campo de texto para la cantidad
+$('div[id *= cbacpmoactividades-],[id *= -requerimientos_tecnicos]').change(function(){
   resul = $(this).attr("id").split("-");
   idActividad = resul[1];
   texto = $('option:selected',$(this)).text();
   idReqTecnicos = $(this).val();
-  // idNombre = "requerimiento_"+idActividad+"_"+idReqTecnicos;
   idNombre = "requerimientos[]["+idActividad+"]["+idReqTecnicos+"]";
   
-  $("#reqTecnicos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a><input id="'+idNombre+'" name="'+idNombre+'"  type="number" size="2" maxlength="2" min="0" style="width:10%;" ></li>');
+  $("#reqTecnicos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a><input id="'+idNombre+'" name="'+idNombre+'"  type="text" size="2" maxlength="2"  style="width:35px;" ></li>');
   
 });
 
+//crear los requerimientos tecnicos con el campo de texto para la cantidad
+$('div[id *= cbacpmoactividades-],[id *= -requerimientos_logoisticos]').change(function(){
+  
+  resul = $(this).attr("id").split("-");
+  idActividad = resul[1];
+  texto = $('option:selected',$(this)).text();
+  idReqLogisticos = $(this).val();
+  idNombre = "reqLogisticos[]["+idActividad+"]["+idReqLogisticos+"]";
+  
+  $("#reqLogisticos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a><input id="'+idNombre+'" name="'+idNombre+'"  type="text" size="2" maxlength="2"  style="width:35px;" ></li>');
+  
+});
 

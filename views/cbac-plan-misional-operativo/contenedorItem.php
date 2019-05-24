@@ -16,28 +16,25 @@ else
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use dosamigos\datepicker\DatePicker;
+use nex\chosen\Chosen;
+use app\models\CbacPmoActividades;
+use yii\helpers\ArrayHelper;
 
-
-    if($index <= 2){?>
-        <div style ="display : none">
-            <?= $form->field($actividades_pom, "[$index]id_componentes")->textInput(["value" => 3]) ?>
-            <?= $form->field($actividades_pom, "[$index]id_actividad")->textInput(["value" => $index]) ?>
-        </div>
-    <?php
-    }else if($index > 2 && $index <= 7){ ?>
-        <div style ="display : none">
-            <?= $form->field($actividades_pom, "[$index]id_componentes")->textInput(["value" => 4]) ?>
-            <?= $form->field($actividades_pom, "[$index]id_actividad")->textInput(["value" => $index]) ?>
-        </div>
-    <?php
-    }else{ ?>
-        <div style ="display : none">
-            <?= $form->field($actividades_pom, "[$index]id_componentes")->textInput(["value" => 5]) ?>
-            <?= $form->field($actividades_pom, "[$index]id_actividad")->textInput(["value" => $index]) ?>
-        </div>
-    <?php 
-        }
-    ?>
+//saber que se esta editando
+if( strpos($_GET['r'], 'update') > -1)
+{
+	// traer el id de la tabla cbac.pmo_actividades para luego traer el modelo con los datos correspondintes
+	$pmo = new CbacPmoActividades();
+	$pmo = $pmo->find()->where("id_actividad = $index and id_pmo =". $model->id)->all();
+	$pmo = ArrayHelper::getColumn($pmo,'id');
+	
+	// traer el modelo con los datos de cada actividad
+	$actividades_pom = CbacPmoActividades::findOne($pmo[0]);
+	
+}
+?>
+	<?= $form->field($actividades_pom, "[$index]id_actividad")->hiddenInput(["value" => $index])->label(false) ?>
+	
     <h3 style='background-color: #ccc;padding:5px;'>Fecha de realización de la o las actividades</h3>
     <div class="row">
 	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]desde")->widget(
@@ -141,15 +138,65 @@ use dosamigos\datepicker\DatePicker;
 		<div class="panel-body">
 			<div class="row">
 			  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]acticulacion")->textInput([ 'value' => isset($datos[$index]['acticulacion']) ? $datos[$index]['acticulacion'] : '' ]) ?></div>
-			  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]cantidad_participantes")->textInput([ 'value' => isset($datos[$index]['cantidad_participantes']) ? $datos[$index]['cantidad_participantes'] : '' ]) ?></div>
+			  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]cantidad_participantes")->textInput([ 'type'=>'number','value' => isset($datos[$index]['cantidad_participantes']) ? $datos[$index]['cantidad_participantes'] : '' ]) ?></div>
 			</div>
 		</div>
 	</div>
    
     <h3 style='background-color: #ccc;padding:5px;'>Recursos previstos para realizar la actividad</h3>
     <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]requerimientos_tecnicos")->textInput([ 'value' => isset($datos[$index]['requerimientos_tecnicos']) ? $datos[$index]['requerimientos_tecnicos'] : '' ]) ?></div>
-	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]requerimientos_logoisticos")->textInput([ 'value' => isset($datos[$index]['requerimientos_logoisticos']) ? $datos[$index]['requerimientos_logoisticos'] : '' ]) ?></div>
+	  <div class="col-md-6">
+	  
+	  
+	  <?= $form->field($actividades_pom, "[$index]requerimientos_tecnicos")->widget(
+						Chosen::className(), [
+							'items' => $reqTecnicos,
+							'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
+							'multiple' => false,
+							'clientOptions' => [
+								'search_contains' => true,
+								'single_backstroke_delete' => false,
+								'title'=>'Indique los requerimientos  logísticos, No. de refrigerios, No. de vehículos y capacidad de transporte, etc.', 
+								'data-toggle'=>'tooltip'
+							],
+							'placeholder' => 'Seleccione',
+					])?>
+
+	  
+	  <div class="chosen-container-multi" title="" id="reqTecnicos-<?php echo $index; ?>">
+			<ul class="chosen-choices">
+			</ul>
+		</div>
+	  
+	  
+	  
+	  </div>
+	  
+	  
+	  
+	  <div class="col-md-6">
+	  
+	  
+	  
+	   <?= $form->field($actividades_pom, "[$index]requerimientos_logoisticos")->widget(
+						Chosen::className(), [
+							'items' => $reqLogisticos,
+							'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
+							'multiple' => false,
+							'clientOptions' => [
+								'search_contains' => true,
+								'single_backstroke_delete' => false,
+								'title'=>'Indique los requerimientos  logísticos, No. de refrigerios, No. de vehículos y capacidad de transporte, etc.', 
+								'data-toggle'=>'tooltip'
+							],
+							'placeholder' => 'Seleccione',
+					])?>
+	  <div class="chosen-container-multi" title="" id="reqLogisticos-<?php echo $index; ?>">
+			<ul class="chosen-choices">
+			</ul>
+		</div>
+	  
+	  </div>
 	</div>
 
    <h3 style='background-color: #ccc;padding:5px;'>Programación: Entrega o envío de la programación de la actividad a las directivas o representantes de la institución</h3>
@@ -175,7 +222,7 @@ use dosamigos\datepicker\DatePicker;
     <h3 style='background-color: #ccc;padding:5px;'>Diligenciamiento del Plan de Actividades</h3>
     <div class="row">
 	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]nombre_dilegencia")->textInput(["value" => $_SESSION['nombres']." ".$_SESSION['apellidos'],'disabled' => 'disabled']) ?></div>
-	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]rol")->textInput([ 'value' => isset($datos[$index]['rol']) ? $datos[$index]['rol'] : '' ]) ?></div>
+	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]rol")->DropDownList($rol,['disabled' => 'disabled']) ?></div>
 	</div>
 	
     <div class="row">

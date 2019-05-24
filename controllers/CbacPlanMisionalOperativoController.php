@@ -18,7 +18,10 @@ use app\models\CbacPlanMisionalOperativo;
 use app\models\Sedes;
 use app\models\Instituciones;
 use app\models\CbacPmoActividades;
-
+use app\models\PerfilesXPersonas;
+use app\models\Perfiles;
+use app\models\CbacRequerimientosLogisticos;
+use app\models\CbacRequerimientosTecnicos;	
 use yii\web\UploadedFile;
 use yii\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
@@ -59,7 +62,7 @@ class CbacPlanMisionalOperativoController extends Controller
     public function actionIndex($guardado = 0)
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => CbacPlanMisionalOperativo::find(),
+            'query' => CbacPlanMisionalOperativo::find()->andWhere("estado =1")->orderby("id"),
         ]);
 
         return $this->render('index', [
@@ -81,23 +84,137 @@ class CbacPlanMisionalOperativoController extends Controller
         ]);
     }
 
-    function actionViewFases($model, $form, $datos = 0){
+    function actionViewFases($model, $form){
         
         $actividades_pom = new CbacPmoActividades();
         
         $proyectos = [ 
             1 => "Desarrollar herramientas en docentes y directivos docentes de las IEO que implementen componentes artísticos y culturales.",
             2 => "Fortalecer la oferta de programas culturales para estudiantes en el proceso formativo de competencias básicas dentro y fuera del aula.",
-            3 => "Promover el acompañamiento de padres de familia desde el arte y la cultura en el proceso de fortalecimiento de competencias básicas de estudiantes de las IEO.",
+            // 3 => "Promover el acompañamiento de padres de familia desde el arte y la cultura en el proceso de fortalecimiento de competencias básicas de estudiantes de las IEO.",
         ];
+		
+		$ciclos = 
+		[
+			1 => "Caracterización",
+			2 => "Diseño e implementación de planes de acción",
+			3 => "Recepción activa y proyección de acciones",
+			4 => "Procesos de creación",
+			5 => "Procesos de socialización",
+			6 => "Evaluación artística participativa",
+			7 => "Evaluación",
+			8 => "Nuevos proyectos"
+		];
+		
+		$reqTecnicos = 
+		[
+			1 =>"Acuarela Escolar (x 12) Buss Pelikan",
+			2 =>"Acetatos en Octavos x 20 octavos",
+			3 =>"Bastidor Marco 20 x 20",
+			4 =>"block para dibujo de 20 hojas",
+			5 =>"Borrador De Nata",
+			6 =>"Caja de lápices",
+			7 =>"Caja marcadores permanentes x 6 colores surtidos",
+			8 =>"Caja de clips",
+			9 =>"Caja de colores x 12 colores",
+			10 =>"Caja de colores stanford Recreo Bicolor 12/24",
+			11 =>"Caja de crayones x 12 unidades",
+			12 =>"Caja de lapiceros negros x 12 unidades",
+			13 =>"Caja de marcadores de punta fina x 6 colores surtidos",
+			14 =>"Caja Plumon Magicolor x 12 Delgado",
+			15 =>"Caja Plumon Est. Colorella Star x 12 (1217)",
+			16 =>"Caja Pomo Triangular para maquillaje x 8",
+			17 =>"Caja de tizas grandes x 8 colores surtidos",
+			18 =>"Caja de tizas pequeñas x 10 colores surtidos",
+			19 =>"Caja de vinilos x 6 colores surtidos",
+			20 =>"Carton Paja Crema 1/8",
+			21 =>"Cartón paja pliego",
+			22 =>"Cartulina Bristol 1/8",
+			23 =>"Cartulina legajadora x 25 unidades",
+			24 =>"Cinta de enmascarar 18mm x 40 mts",
+			25 =>"Cinta de enmascarar 12mm x 40 mts",
+			26 =>"Cuaderno linea corriente 100 hojas",
+			27 =>"Cuaderno cuadriculados 100 hojas",
+			28 =>"Escarcha x 200 grs",
+			29 =>"Escarapela sencilla",
+			30 =>"Fomi en 1/8",
+			31 =>"Gancho legajador",
+			32 =>"Kit de pinceles #3 #6 #7",
+			33 =>"Lana Escolar 16 GR Azul Oscuro #2",
+			34 =>"Lana en ovillo 15 grs",
+			35 =>"Lapiz Delineador de ojos café",
+			36 =>"Lapiz Delineador de ojos negro",
+			37 =>"Lapiz #2 HB",
+			38 =>"Lapiz #2 B",
+			39 =>"Marcador borrable negro",
+			40 =>"Marcador borrable azul",
+			41 =>"Marcador borrable verde",
+			42 =>"Marcador borrable rojo",
+			43 =>"Marcador permanente Azul",
+			44 =>"Marcador permanente Negro",
+			45 =>"Marcador permanente Rojo",
+			46 =>"Marcador permanente Verde",
+			47 =>"Nylon 1 mm x 100 mts",
+			48 =>"palestras para mezclar el vinilo",
+			49 =>"Palo Paleta corto (x1000) Lastra",
+			50 =>"Papel silueta x8 unidades en tamaño 1/8",
+			51 =>"Paquete de letras didacticas",
+			52 =>"Pegante liquido x 4000 grs",
+			53 =>"Pegante liquido x 1000 grs",
+			54 =>"Pegante liquido x 20 Litros",
+			55 =>"Pega stic x 20 grs",
+			56 =>"Pincel Maquillaje Kit 4ref",
+			57 =>"Pincel Redondo 582 #5 Tipo Eterna",
+			58 =>"Pinceles Cerdas Suaves Juego X 6 Unidades",
+			59 =>"Pintucarita surtido x 12 GRAL",
+			60 =>"Piola",
+			61 =>"Platilina en barra x 200 grs",
+			62 =>"Porcelanicrón barra x 250 grs",
+			63 =>"Post it",
+			64 =>"Regla x 30 cms",
+			65 =>"Regla x 15 cms",
+			66 =>"Resaltador Berol Amarillo",
+			67 =>"Resaltador Berol Azul",
+			68 =>"Resaltador Berol Fuscia",
+			69 =>"Resaltador Berol Naranja",
+			70 =>"Resaltador Berol Verde",
+			71 =>"Resma de papel tamaño carta",
+			72 =>"Rollo de papel kraff",
+			73 =>"Stikers de letras y figuras",
+			74 =>"Tabla legajadora oficio azul",
+			75 =>"Tabla legajadora oficio verde",
+			76 =>"Tabla legajadora oficio roja",
+			77 =>"Taja lapiz",
+			78 =>"Tijeras punta roma",
+			79 =>"Vinilo rojo 260 cc",
+			80 =>"Vinilo amarillo 260 cc",
+			81 =>"Vinilo azul 260 cc",
+			82 =>"Vinilo blanco 260 cc",
+			83 =>"Vinilo negro 260 cc",
+		];
+		
+		$reqLogisticos =
+		[
+			1 => "Transporte",
+			2 => "Refrigerio",
+		];
+		
+		$PerfilesXPersonas = PerfilesXPersonas::findOne($_SESSION['perfilesxpersonas']);
+		$perfil = Perfiles::findOne($PerfilesXPersonas->id_perfiles);
+		$rol[$perfil->id]  = $perfil->descripcion;
+		
+		
 		
 		return $this->renderAjax('fases', [
             'fases' => $proyectos,
             'form' => $form,
             "model" => $model,
             'actividades_pom' => $actividades_pom,
-            'datos' => $datos,
 			'arraySiNo' => $this->arraySiNo,
+			'rol'			  => $rol,
+			'reqLogisticos'  => $reqLogisticos,
+			'reqTecnicos' => $reqTecnicos,
+																
         ]);
 		
 	}
@@ -113,42 +230,79 @@ class CbacPlanMisionalOperativoController extends Controller
         $idInstitucion = $_SESSION['instituciones'][0];
         $institucion = Instituciones::findOne($idInstitucion);
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) 
+		{
             
             $model->id_institucion = $idInstitucion;
-            if($model->save()){
-                $id_pmo = $model->id;
-                //$id_pmo = 2;
+            if($model->save())
+			{
 
-                if (Yii::$app->request->post('CbacPmoActividades')){
+                if (Yii::$app->request->post('CbacPmoActividades'))
+				{
                     $data = Yii::$app->request->post('CbacPmoActividades');
                     $count 	= count($data);
                     $modelActividades = [];
 
-                    for( $i = 0; $i < 12; $i++ ){
-                        $modelActividades[] = new CbacPmoActividades();
-                    }
+                    for( $i = 1; $i <= 6; $i++ )
+                        $modelActividades[$i] = new CbacPmoActividades();
+                    
 
-                    if (CbacPmoActividades::loadMultiple($modelActividades, Yii::$app->request->post() )) {
-                        foreach( $modelActividades as $key => $modelActividad) {
-                            if($modelActividad->desde and $modelActividad->hasta){
-                                $modelActividad->id_pmo = $id_pmo;
-                                $modelActividad->save();
-                            }
+                    if (CbacPmoActividades::loadMultiple($modelActividades, Yii::$app->request->post() )) 
+					{
+                        foreach( $modelActividades as $key => $modelActividad) 
+						{
+							$modelActividad->id_pmo = $model->id;
+                            $modelActividad->save(false);
                         }
                     }
-
                 }
-
-
-
+				
+				if (@Yii::$app->request->post()['requerimientos'])
+				{
+				//guardar los Requerimientos Técnicos 
+					foreach(Yii::$app->request->post()['requerimientos'] as $requerimientos )
+					{
+						foreach ($requerimientos as $idActividad => $requerimiento)
+						{
+							$idRequerimiento = key($requerimiento);
+							$cantidaRequerimiento = $requerimiento[$idRequerimiento];
+							
+							$RT = new CbacRequerimientosTecnicos();
+							$RT->id_requerimiento	= $idRequerimiento;
+							$RT->cantidad 			= $cantidaRequerimiento;
+							$RT->id_actividad 		= $idActividad;
+							$RT->id_plan_misional_operativo = $model->id;
+							$RT->save(false);
+						}
+					}
+				}
+				
+				if (@Yii::$app->request->post()['reqLogisticos'])
+				{
+					foreach(Yii::$app->request->post()['reqLogisticos'] as $requerimientosL )
+					{
+						foreach ($requerimientosL as $idActividad => $requerimiento)
+						{
+							$idRequerimiento = key($requerimiento);
+							$cantidaRequerimiento = $requerimiento[$idRequerimiento];
+							
+							$RL = new CbacRequerimientosLogisticos();
+							$RL->id_requerimiento	= $idRequerimiento;
+							$RL->cantidad 			= $cantidaRequerimiento;
+							$RL->id_actividad 		= $idActividad;
+							$RL->id_plan_misional_operativo = $model->id;
+							$RL->save(false);
+						}
+					}
+				}
+			
             }
             return $this->redirect(['index', 'guardado' => 1 ]);
         }
 
         $Sedes  = Sedes::find()->where( "id_instituciones = $idInstitucion" )->all();
         $sedes	= ArrayHelper::map( $Sedes, 'id', 'descripcion' );
-
+		
         return $this->renderAjax('create', [
             'model' => $model,
             'sedes' => $sedes,
@@ -169,109 +323,10 @@ class CbacPlanMisionalOperativoController extends Controller
         $model = $this->findModel($id);
 
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            
-            $post = Yii::$app->request->post();
-			
-			$arrayDatosAvances = $post['CbacPmoActividades'];
-			$connection = Yii::$app->getDb();
-            
-            foreach($arrayDatosAvances as $idAcciones => $valores)
-			{
-                
-				if($valores['desde'] != ""){
-                    $command = $connection->createCommand
-                    (" 
-                        UPDATE cbac.pmo_actividades set 			
-                        desde						='". $valores['desde']."',
-                        hasta					='". $valores['hasta']."',
-                        num_equipos					='". $valores['num_equipos']."',
-                        perfiles				='". $valores['perfiles']."',
-                        docentes						='". $valores['docentes']."',
-                        fases					='". $valores['fases']."',
-                        num_encuentro		='". $valores['num_encuentro']."',
-                        nombre_actividad		='". $valores['nombre_actividad']."',
-                        actividades_desarrolladas						='". $valores['actividades_desarrolladas']."',
-                        tematicas				='". $valores['tematicas']."',
-                        objetivos_especificos						='". $valores['objetivos_especificos']."',
-                        tiempo_previsto	='". $valores['tiempo_previsto']."',
-                        productos						='". $valores['productos']."',
-                        contenido_si_no				='". $valores['contenido_si_no']."',
-                        contenido_nombre						='". $valores['contenido_nombre']."',
-                        contenido_fecha						='". $valores['contenido_fecha']."',
-                        contenido_justificacion						='". $valores['contenido_justificacion']."',
-                        acticulacion						='". $valores['acticulacion']."',
-                        cantidad_participantes						='". $valores['cantidad_participantes']."',
-                        requerimientos_tecnicos						='". $valores['requerimientos_tecnicos']."',
-                        requerimientos_logoisticos						='". $valores['requerimientos_logoisticos']."',
-                        destinatarios						='". $valores['destinatarios']."',
-                        fehca_entrega						='". $valores['fehca_entrega']."',
-                        observaciones_generales						='". $valores['observaciones_generales']."',
-                        rol						='". $valores['rol']."',
-                        
-                       
-                        contenido_vigencia						='". $valores['contenido_vigencia']."'
-                        
-
-                        WHERE id_actividad = $idAcciones and id_pmo = $id
-                    ");
-                    $result = $command->queryAll();
-                }
-                
-			}
-
-            return $this->redirect(['index']);
-        }
-
-        
-        $actividades = new CbacPmoActividades();
-        $actividades = $actividades->find()->orderby("id")->andWhere("id_pmo=$id")->all();
-
-
-        $result = ArrayHelper::getColumn($actividades, function ($element) 
+        if ($model->load(Yii::$app->request->post()) && $model->save()) 
 		{
-            $dato[$element['id_actividad']]['desde']= $element['desde'];
-            $dato[$element['id_actividad']]['hasta']= $element['hasta'];
-            $dato[$element['id_actividad']]['num_equipos']= $element['num_equipos'];
-            $dato[$element['id_actividad']]['perfiles']= $element['perfiles'];
-            $dato[$element['id_actividad']]['docentes']= $element['docentes'];
-            $dato[$element['id_actividad']]['fases']= $element['fases'];
-            $dato[$element['id_actividad']]['num_encuentro']= $element['num_encuentro'];
-            $dato[$element['id_actividad']]['nombre_actividad']= $element['nombre_actividad'];
-            $dato[$element['id_actividad']]['actividades_desarrolladas']= $element['actividades_desarrolladas'];
-            $dato[$element['id_actividad']]['tematicas']= $element['tematicas'];
-            $dato[$element['id_actividad']]['objetivos_especificos']= $element['objetivos_especificos'];
-            $dato[$element['id_actividad']]['tiempo_previsto']= $element['tiempo_previsto'];
-            $dato[$element['id_actividad']]['productos']= $element['productos'];
-            $dato[$element['id_actividad']]['contenido_si_no']= $element['contenido_si_no'];
-            $dato[$element['id_actividad']]['contenido_nombre']= $element['contenido_nombre'];
-            $dato[$element['id_actividad']]['contenido_fecha']= $element['contenido_fecha'];
-            $dato[$element['id_actividad']]['contenido_justificacion']= $element['contenido_justificacion'];
-            $dato[$element['id_actividad']]['acticulacion']= $element['acticulacion'];
-            $dato[$element['id_actividad']]['cantidad_participantes']= $element['cantidad_participantes'];
-            $dato[$element['id_actividad']]['requerimientos_tecnicos']= $element['requerimientos_tecnicos'];
-            $dato[$element['id_actividad']]['requerimientos_logoisticos']= $element['requerimientos_logoisticos'];
-            $dato[$element['id_actividad']]['destinatarios']= $element['destinatarios'];
-            $dato[$element['id_actividad']]['fehca_entrega']= $element['fehca_entrega'];
-            $dato[$element['id_actividad']]['observaciones_generales']= $element['observaciones_generales'];
-            $dato[$element['id_actividad']]['nombre_dilegencia']= $element['nombre_dilegencia'];
-            $dato[$element['id_actividad']]['rol']= $element['rol'];
-            $dato[$element['id_actividad']]['lugares_visitados']= $element['lugares_visitados'];
-            $dato[$element['id_actividad']]['penalistas_invitados']= $element['penalistas_invitados'];
-            $dato[$element['id_actividad']]['programacion']= $element['programacion'];
-            $dato[$element['id_actividad']]['tematicas_abordadas']= $element['tematicas_abordadas'];
-            $dato[$element['id_actividad']]['resultado_producto_esperado']= $element['resultado_producto_esperado'];
-            $dato[$element['id_actividad']]['contenido_vigencia']= $element['contenido_vigencia'];
-
-            return $dato;
-
-        });
-
-        foreach	($result as $r => $valor)
-        {
-            foreach	($valor as $ids => $valores)
-                
-                $datos[$ids] = $valores;
+            
+            return $this->redirect(['index']);
         }
 
         $idInstitucion = $_SESSION['instituciones'][0];
@@ -281,7 +336,7 @@ class CbacPlanMisionalOperativoController extends Controller
             'model' => $model,
             'sedes' => $this->obtenerSede(),
             'institucion' => $institucion->descripcion,
-            'datos'=>$datos,
+			'arraySiNo' => $this->arraySiNo,
         ]);
     }
 
@@ -304,7 +359,9 @@ class CbacPlanMisionalOperativoController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+		$model = $this->findModel($id);
+		$model->estado = 2;
+		$model->update(false);
 
         return $this->redirect(['index']);
     }

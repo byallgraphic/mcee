@@ -54,9 +54,8 @@ $this->registerJs( file_get_contents( '../web/js/arteCultura.js' ) );
 
     <div class="panel panel panel-primary" >
         <div class="panel-heading" style="margin-bottom: 15px;">Implementar estrategias artisticas y culturales que fortalezcan las competencias básicas de los estudiantes de grados sexto a once de las Instituciones Educativas Oficiales </div>
-        <?= $this->context->actionViewFases($model, $form, isset($datos) ? $datos : 0);   ?>
+        <?= $this->context->actionViewFases($model, $form);   ?>
     </div>
-
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
