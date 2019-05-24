@@ -28,6 +28,8 @@ use app\models\IsaIntervencionIeo;
 use app\models\IsaActividadesRomXIntegranteGrupo;
 use app\models\IsaTipoCantidadPoblacionRom;
 use app\models\Personas;
+use app\models\PerfilesXPersonasInstitucion;
+use app\models\PerfilesXPersonas;
 use app\models\IsaEquiposCampo;
 use yii\helpers\ArrayHelper;
 
@@ -249,8 +251,10 @@ $totalSesiones				= 0;
 					 * ============================++++++++++++++++++++++??????????????++++++++++++++++
 					 ***************************************************************************************************************************************/
 					 
-					$coordinadoresTecnico[] = Personas::findOne( $dataActividadesParticipadas->docente_orientador );
-					$equipos[] 				= IsaEquiposCampo::findOne( $dataActividadesParticipadas->id_equipo_campos );
+					$perfilXPesonaInstitucion 	= PerfilesXPersonasInstitucion::findOne( $dataActividadesParticipadas->docente_orientador );
+					$perfilXPesona			  	= PerfilesXPersonas::findOne( $perfilXPesonaInstitucion->id_perfiles_x_persona );
+					$coordinadoresTecnico[]   	= Personas::findOne( $perfilXPesona->id_personas );
+					$equipos[] 					= IsaEquiposCampo::findOne( $dataActividadesParticipadas->id_equipo_campos );
 					 
 					$sesiones_realizadas 	+= $actividades_rom_upt->estado_actividad == 179;
 					$sesiones_aplazadas 	+= $actividades_rom_upt->estado_actividad == 180;
@@ -398,10 +402,10 @@ $totalSesiones				= 0;
 		<div class="col-md-4">
 			<label>Coordinador técnico pedagógico</label>
 			<?php 
-				// if( $coordinadoresTecnico )
-					// foreach( $coordinadoresTecnico as $key => $value ){
-						// echo $form->field($actividades_is_isa, "[$index]docente")->textInput([ 'value'=> $value->nombres." ".$value->apellidos ])->label(false);
-					// }
+				if( $coordinadoresTecnico )
+					foreach( $coordinadoresTecnico as $key => $value ){
+						echo $form->field($actividades_is_isa, "[$index]docente")->textInput([ 'value'=> $value->nombres." ".$value->apellidos ])->label(false);
+					}
 			?>
 		</div>
 		<div class="col-md-4">
