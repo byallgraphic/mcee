@@ -70,6 +70,8 @@ class PppSeguimientoOperadorController extends Controller
     {
         $searchModel = new PppSeguimientoOperadorBuscar();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['estado' => 1]);
+
 
         return $this->render('index', [
             'searchModel' => $searchModel,

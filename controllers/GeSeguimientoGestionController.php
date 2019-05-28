@@ -201,9 +201,10 @@ class GeSeguimientoGestionController extends Controller
      */
     public function actionDelete($id)
     {
+        $tipo = $this->findModel($id)['id_tipo_seguimiento'];
         $this->findModel($id)->delete();
 
-        return $this->redirect('index.php?r=ge-seguimiento-gestion&idTipoSeguimiento=4');
+        return $this->redirect('index.php?r=ge-seguimiento-gestion&idTipoSeguimiento='.$tipo);
     }
 
     /**

@@ -12,7 +12,11 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\GeSeguimientoGestionBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Seguimiento Gestión';
+$title = 'Seguimiento gestión';
+if(Yii::$app->request->get( 'idTipoSeguimiento' ) == 2){
+    $title = 'Seguimiento institucional';
+}
+$this->title = $title;
 $this->params['breadcrumbs'][] = $this->title;
 
 

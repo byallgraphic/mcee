@@ -12,7 +12,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\GeSeguimientoOperadorBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Seguimiento operador';
+$this->title = 'Proyectos pedagógicos';
 $this->params['breadcrumbs'][] = $this->title;
 
 

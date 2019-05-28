@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\pppSeguimientooperador */
 
-$this->title = 'Seguimiento al Operador';
-$this->params['breadcrumbs'][] = ['label' => 'Seguimiento al Operador', 'url' => ['index']];
+$this->title = '';
+$this->params['breadcrumbs'][] = ['label' => 'Proyectos pedagógicos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = "Agregar";
 ?>
 <div class="ge-seguimiento-operador-create">

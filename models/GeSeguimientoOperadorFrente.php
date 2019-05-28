@@ -87,7 +87,7 @@ class GeSeguimientoOperadorFrente extends \yii\db\ActiveRecord
             'id_tipo_seguimiento' 		=> 'Id Tipo Seguimiento',
             'email' 					=> 'Dirección de correo electrónico',
             'id_persona_diligencia' 	=> 'Nombre de quien diligencia',
-            'id_gestor_a_evaluar' 		=> 'Gestor(a) a quien se evalúa',
+            'id_gestor_a_evaluar' 		=> 'Gestor o Gestora a quien se evalúa',
             'mes_reporte' 				=> 'Mes de reporte',
             'fecha_corte' 				=> 'Fecha de corte',
             'cumple_cronograma' 		=> 'Se cumplió con el cronograma establecido?',
