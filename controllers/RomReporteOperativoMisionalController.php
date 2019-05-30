@@ -342,9 +342,10 @@ class RomReporteOperativoMisionalController extends Controller
 					//se deben crear modelos de forma dinamica para posteriormente hacer el guardado de la informacion
 					$modeloEvidencias = [];
 					$cantidad = count($arrayDatosEvidencias);
-					for( $i = 0; $i < $cantidad; $i++ )
+					// for( $i = 0; $i < $cantidad; $i++ )
+					foreach( $arrayDatosEvidencias as $key => $value )
 					{
-						$modeloEvidencias[] = new IsaEvidenciasRom();
+						$modeloEvidencias[$key] = new IsaEvidenciasRom();
 					}
 					
 					//carga la informacion 
@@ -367,7 +368,8 @@ class RomReporteOperativoMisionalController extends Controller
 						//recorre el array $modeloEvidencias con cada modelo creado dinamicamente
 						foreach( $modeloEvidencias as $key => $model) 
 						{
-							$k = $key+1;
+							// $k = $key+1;
+							$k = $key;
 							
 							if( empty( $arrayDatosEvidencias[$k] ) )
 								continue;
@@ -430,7 +432,8 @@ class RomReporteOperativoMisionalController extends Controller
 						//Guarda la informacion que tiene $model en la base de datos
 						foreach( $modeloEvidencias as $key => $model) 
 						{
-							$k = $key+1;
+							// $k = $key+1;
+							$k = $key;
 							
 							if( empty( $arrayDatosEvidencias[$k] ) )
 								continue;
