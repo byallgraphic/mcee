@@ -11,6 +11,24 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 $this->registerJs( file_get_contents( '../web/js/arteCultura.js' ) );
 ?>
 
+
+<script>
+
+//Click del boton agregar equipo campo y cargar contenido del formulario agregar en el modal
+// $("#modalEquipo").click(function()
+$(".modalEquipo").click(function()
+{
+	
+	$( '[id^=modalContenido]' ).html('')
+	num = $(this).attr('id').split("_")[1];
+	$("#modalCampo_"+num+"").modal('show')
+	.find("#modalContenido_"+num+"")
+	.load($(this).attr('value'));
+});
+
+</script>
+
+
 <div class="cbac-plan-misional-operativo-form">
 
     <?php $form = ActiveForm::begin(); ?>

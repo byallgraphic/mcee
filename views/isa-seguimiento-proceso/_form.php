@@ -14,7 +14,7 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 
     <?php $form = ActiveForm::begin(); ?>
 	
-	<?= $form->field($model, "seguimiento_proceso")->textarea(['rows' => '2'])?>
+	<label>Actividad</label><?= Html::dropDownList('actividad', null,$isaIntervencionIeo, array('id'=> 'actividad','prompt'=>"Seleccione..")); ?>
 	
 	<div class="row">
 	  <div class="col-md-8"> <?= $form->field($model, 'id_institucion')->dropDownList($instituciones) ?></div>

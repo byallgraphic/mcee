@@ -19,6 +19,8 @@ use app\models\Sedes;
 use app\models\Instituciones;
 use app\models\CbacPmoActividades;
 use app\models\PerfilesXPersonas;
+use app\models\CbacIntervencionIeo;
+use app\models\CbacEquiposCampo;
 use app\models\Perfiles;
 use app\models\CbacRequerimientosLogisticos;
 use app\models\CbacRequerimientosTecnicos;	
@@ -87,6 +89,7 @@ class CbacPlanMisionalOperativoController extends Controller
     function actionViewFases($model, $form){
         
         $actividades_pom = new CbacPmoActividades();
+        $intervencionIeo = new CbacIntervencionIeo();
         
         $proyectos = [ 
             1 => "Desarrollar herramientas en docentes y directivos docentes de las IEO que implementen componentes artísticos y culturales.",
@@ -214,6 +217,8 @@ class CbacPlanMisionalOperativoController extends Controller
 			'rol'			  => $rol,
 			'reqLogisticos'  => $reqLogisticos,
 			'reqTecnicos' => $reqTecnicos,
+			'equiposCampo' => $this->obtenerEquiposCampo(),
+			'intervencionIeo' =>  $intervencionIeo,
 																
         ]);
 		
@@ -259,7 +264,7 @@ class CbacPlanMisionalOperativoController extends Controller
 				
 				if (@Yii::$app->request->post()['requerimientos'])
 				{
-				//guardar los Requerimientos Técnicos 
+					//guardar los Requerimientos Técnicos 
 					foreach(Yii::$app->request->post()['requerimientos'] as $requerimientos )
 					{
 						foreach ($requerimientos as $idActividad => $requerimiento)
@@ -340,6 +345,16 @@ class CbacPlanMisionalOperativoController extends Controller
         ]);
     }
 
+
+	public function obtenerEquiposCampo()
+	{
+		$equiposCampo = new CbacEquiposCampo();
+		$equiposCampo = $equiposCampo->find()->orderby("id")->andWhere("estado = 1")->all();
+		$equiposCampo = ArrayHelper::map($equiposCampo,'id','nombre');
+		return $equiposCampo;
+	}
+	
+	
     public function obtenerSede()
 	{
         $idInstitucion = $_SESSION['instituciones'][0];

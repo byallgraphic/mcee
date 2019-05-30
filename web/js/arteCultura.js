@@ -67,3 +67,7 @@ $('div[id *= cbacpmoactividades-],[id *= -requerimientos_logoisticos]').change(f
   
 });
 
+function borrarRequerimiento(obj)
+{
+	$(obj).parent().remove();	
+};

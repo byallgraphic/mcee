@@ -22,6 +22,8 @@ foreach( $fases as $keyFase => $fase ){
 														'rol'			  => $rol,
 														'reqLogisticos'  => $reqLogisticos,
 														'reqTecnicos' => $reqTecnicos,
+														'equiposCampo' => $equiposCampo,
+														'intervencionIeo' =>  $intervencionIeo,
 													] 
 										),
 					'contentOptions'=> []

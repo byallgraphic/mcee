@@ -446,9 +446,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 				}
 			}
 			
-			
-
-			
 			$arrayRequerimientosL = [];
 			foreach(Yii::$app->request->post()['reqLogisticos'] as $req )
 			{

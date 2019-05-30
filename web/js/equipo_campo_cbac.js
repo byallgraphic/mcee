@@ -15,20 +15,17 @@ Cambios realizados: se guarda el formulario mediante ajax para evitar redireccio
 // $( "BtnGuardar" ).click(function() 
 $( ".BtnGuardar" ).click(function() 
 {
-	_csrf 		= $("#_csrf").val();
-	nombre 		= $("#isaequiposcampo-nombre").val();
-	descripcion = $("#isaequiposcampo-descripcion").val();
-	cantidad 	= $("#isaequiposcampo-cantidad").val();
-	integrantes = $("#isaintegrantesxequipo-id").val();
-	
+	_csrf = $("#_csrf").val();
+	nombre = $("#cbacequiposcampo-nombre").val();
+	descripcion =$("#cbacequiposcampo-descripcion").val();
+	integrantes = $("#cbacintegrantesxequipo-id_perfil_persona_institucion").val();
 	var parametros = 
 	{
 		_csrf,
-		"isaEquiposCampo" : 
+		"CbacEquiposCampo" : 
 		{
 			'nombre':nombre,
 			'descripcion':descripcion,
-			'cantidad':cantidad,
 			'integrantes':integrantes,
 		}
 	};
@@ -36,28 +33,27 @@ $( ".BtnGuardar" ).click(function()
 	$.ajax(
 	{
 		type: "POST",
-		url: "index.php?r=isa-equipos-campo/create",
+		url: "index.php?r=cbac-equipos-campo/crear-equipo",
 		data: parametros,
 		success: function() 
 		{
 			//se quita todo del modal de equipos
 			// $('#modalCampo_1').modal('hide');
-			
 			$('body').removeClass('modal-open');
 			$('.modal-backdrop').remove();
 			//se llena nuevamente el chosen con la informacion
 			
-			$.get("index.php?r=isa-equipos-campo/equipos",
+			$.get("index.php?r=cbac-equipos-campo/equipos",
 			function( data )
 			{
 				var i;
-				for (i = 1; i <= 4; i++) 
+				for (i = 1; i <= 6; i++) 
 				{ 
 					$('#modalCampo_'+i+'').modal('hide');
-					equipos = $('#isaintervencionieo-'+i+'-id_equipo_campos');
+					equipos = $('#cbacintervencionieo-'+i+'-id_equipo_campos');
 					equipos.html('');
 					equipos.trigger("chosen:updated");
-					equipos.append(data);
+					equipos.append( JSON.parse(data));
 					equipos.trigger("chosen:updated");
 				}
 			});
@@ -67,14 +63,14 @@ $( ".BtnGuardar" ).click(function()
 });
 
 
-
 //cierra el modal en caso de no ser necesario
-// $('#BtnCerrar').click(function()
 $('.BtnCerrar').click(function()
 {
-	$('#modalCampo_1').modal('hide');
-	$('#modalCampo_2').modal('hide');
-	$('#modalCampo_4').modal('hide');
+	for (i = 1; i <= 6; i++) 
+	{ 
+		$('#modalCampo_'+i+'').modal('hide');
+		
+	}
 	$('body').removeClass('modal-open');
 	$('.modal-backdrop').remove();
 	$('body').css( "overflow: auto;");

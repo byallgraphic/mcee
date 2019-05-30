@@ -31,7 +31,7 @@ class IsaSeguimientoProceso extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['seguimiento_proceso', 'fecha_desde', 'fecha_hasta', 'id_institucion', 'id_sede', 'estado'], 'required'],
+            [['fecha_desde', 'fecha_hasta', 'id_institucion', 'id_sede', 'estado'], 'required'],
             [['seguimiento_proceso'], 'string'],
             [['fecha_desde', 'fecha_hasta'], 'safe'],
             [['id_institucion', 'id_sede', 'estado'], 'default', 'value' => null],

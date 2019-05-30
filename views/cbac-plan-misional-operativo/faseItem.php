@@ -49,6 +49,8 @@ $index = 0;
 														'rol'			  => $rol,
 														'reqLogisticos'  => $reqLogisticos,
 														'reqTecnicos' => $reqTecnicos,
+														'equiposCampo' => $equiposCampo,
+														'intervencionIeo' => $intervencionIeo,
 													] 
 										),
 					'contentOptions'=> [],

@@ -33,9 +33,15 @@ if( strpos($_GET['r'], 'update') > -1)
 	
 }
 ?>
+
+<style>
+.modal {
+  overflow-y:auto;
+}
+</style>
 	<?= $form->field($actividades_pom, "[$index]id_actividad")->hiddenInput(["value" => $index])->label(false) ?>
 	
-    <h3 style='background-color: #ccc;padding:5px;'>Fecha de realización de la o las actividades</h3>
+    <h3 style='background-color: #ccc;padding:5px;'>Fecha prevista para realizar la actividad</h3>
     <div class="row">
 	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]desde")->widget(
         DatePicker::className(), [
@@ -60,27 +66,62 @@ if( strpos($_GET['r'], 'update') > -1)
     ]);  ?></div>
 	</div>
 	
-    
-
+    	<div id="modalCampo_<?=$index;?>" class="fade modal" role="dialog" tabindex="-1" >
+		<div class="modal-dialog modal-md">
+			<div class="modal-content" style="margin-top:138%; margin-left:0%">
+				<div class="modal-header">
+					<h3>Agregar Equipo Campo</h3>
+				</div>
+				<div class="modal-body">
+					<div id='modalContenido_<?=$index;?>'></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+<div class="intervencion" style="border:1px solid #46a3dc;padding:1%;border-radius:1%;margin-bottom:3%" id="intervencion-0">  
     <h3 style='background-color: #ccc;padding:5px;'>Equipo o equipos de intervención encargado(s)</h3>
     <div class="row">
-	  <div class="col-md-8"><?= $form->field($actividades_pom, "[$index]num_equipos")->textInput([ 'value' => isset($datos[$index]['num_equipos']) ? $datos[$index]['num_equipos'] : '' ]) ?></div>
-	  <div class="col-md-4">Boton equipos</div>
+	  <div class="col-md-8">
+	  
+	 
+	  <?= $form->field($intervencionIeo, "[$index]id_equipo_campos")->widget(
+						Chosen::className(), [
+							'items' => $equiposCampo,
+							'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
+							'multiple' => false,
+							'clientOptions' => [
+								'search_contains' => true,
+								'single_backstroke_delete' => false,
+								'data-toggle'=>'tooltip'
+							],
+							'placeholder' => 'Seleccione',
+					])?>
+	  
+	  </div>
+	    <div class="col-md-4">
+        <?=  Html::button('Agregar Equipo Campo',['value'=> "index.php?r=cbac-equipos-campo%2Fcrear-equipo" ,'class'=>'btn btn-success modalEquipo','id'=>"modalEquipo_$index"]) ?>
+		
+		</div>
+	</div>
+	
+	
+		  
+	  
+	<div class="row">
+	  <div class="col-md-6"><?= $form->field($intervencionIeo, "[$index]perfiles")->textInput( ['title'=>'Seleccione el perfil y cantidad por perfiles de profesionales en campo', 'data-toggle'=>'tooltip']) ?> </div>
+	  <div class="col-md-6"><?= $form->field($intervencionIeo, "[$index]docente_orientador")->textInput([ 'value' => isset($datos[$index]['docentes']) ? $datos[$index]['docentes'] : '' ]) ?></div>
 	</div>
 	<div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]perfiles")->textInput([ 'value' => isset($datos[$index]['perfiles']) ? $datos[$index]['perfiles'] : '' ]) ?> </div>
-	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]docentes")->textInput([ 'value' => isset($datos[$index]['docentes']) ? $datos[$index]['docentes'] : '' ]) ?></div>
-	</div>
-	<div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]fases")->textInput([ 'value' => isset($datos[$index]['fases']) ? $datos[$index]['fases'] : '' ]) ?></div>
-	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]num_encuentro")->textInput([ 'value' => isset($datos[$index]['num_encuentro']) ? $datos[$index]['num_encuentro'] : '' ]) ?></div>
+	  <div class="col-md-6"><?= $form->field($intervencionIeo, "[$index]fases")->textInput([ 'title'=>'Indique la fase del Proyecto MCEE desde las Artes y las Culturas en el que se encuentra la actividad', 'data-toggle'=>'tooltip']) ?></div>
+	  <div class="col-md-6"><?= $form->field($intervencionIeo, "[$index]num_encuentro")->textInput([ 'title'=>'Indique el número del encuentro según la propuesta metodológica ', 'data-toggle'=>'tooltip']) ?></div>
 	</div>
     <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]nombre_actividad")->textInput([ 'value' => isset($datos[$index]['nombre_actividad']) ? $datos[$index]['nombre_actividad'] : '' ]) ?></div>
+	  <div class="col-md-6"><?= $form->field($intervencionIeo, "[$index]nombre_actividad")->textInput([ 'value' => isset($datos[$index]['nombre_actividad']) ? $datos[$index]['nombre_actividad'] : '' ]) ?></div>
 	  <?php
         if($index == 7){
 			echo '<div class="col-md-6">';
-				echo  $form->field($actividades_pom, "[$index]lugares_visitados")->textInput([ 'value' => isset($datos[$index]['lugares_visitados']) ? $datos[$index]['lugares_visitados'] : '' ]);
+				echo  $form->field($intervencionIeo, "[$index]lugares_visitados")->textInput([ 'value' => isset($datos[$index]['lugares_visitados']) ? $datos[$index]['lugares_visitados'] : '' ]);
 			echo '</div>';
 		}else if($index == 2){
             echo '<div class="col-md-6">';
@@ -91,20 +132,20 @@ if( strpos($_GET['r'], 'update') > -1)
 	</div>
 	
 	<div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]actividades_desarrolladas")->textArea([ 'rows'=>3,'cols'=>10,'value' => isset($datos[$index]['actividades_desarrolladas']) ? $datos[$index]['actividades_desarrolladas'] : '' ]) ?></div>
-	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]tematicas")->textArea([ 'rows'=>3,'cols'=>10,'value' => isset($datos[$index]['tematicas']) ? $datos[$index]['tematicas'] : '' ]) ?></div>
+	  <div class="col-md-6"><?= $form->field($intervencionIeo, "[$index]actividad_desarrollar")->textArea([ 'rows'=>3,'cols'=>10,'title'=>'Didácticas que estructuran el encuentro', 'data-toggle'=>'tooltip' ]) ?></div>
+	  <div class="col-md-6"><?= $form->field($intervencionIeo, "[$index]tematicas_abordadas")->textArea([ 'rows'=>3,'cols'=>10,'value' => isset($datos[$index]['tematicas']) ? $datos[$index]['tematicas'] : '' ]) ?></div>
 	</div>
     
     <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]objetivos_especificos")->textArea([ 'rows'=>3,'cols'=>10,'value' => isset($datos[$index]['objetivos_especificos']) ? $datos[$index]['objetivos_especificos'] : '' ]) ?></div>
+	  <div class="col-md-6"><?= $form->field($intervencionIeo, "[$index]objetivos_especificos")->textArea([ 'rows'=>3,'cols'=>10,'title'=>'Especifique cómo se espera lograr, con cada una de las actividades, sensibilizar a la comunidad sobre la importancia del arte y la cultura a través de la oferta cultural del municipio para fortalecer el vínculo comunidad-escuela mediante el mejoramiento de la oferta en artes y cultura desde las instituciones educativas oficiales para la ocupación del tiempo libre en las comunas y corregimientos de Santiago de Cali.', 'data-toggle'=>'tooltip' ]) ?></div>
 	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]productos")->textArea([ 'rows'=>3,'cols'=>10,'value' => isset($datos[$index]['productos']) ? $datos[$index]['productos'] : '' ]) ?></div>
 	</div>
-    
+
     <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]tiempo_previsto")->textInput([ 'value' => isset($datos[$index]['tiempo_previsto']) ? $datos[$index]['tiempo_previsto'] : '' ]) ?></div>
+	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]tiempo_previsto")->textInput([ 'type' => 'number']) ?></div>
 	  <div class="col-md-6"></div>
 	</div>
-    
+        </div>
 
     <h3 style='background-color: #ccc;padding:5px;'>¿El contenido de esta actividad  responde al plan de acción construido colectivamente para la institución desde la articulación de la estrategia MCEE?</h3>
     <div class="panel panel-default">

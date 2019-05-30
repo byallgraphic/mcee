@@ -36,6 +36,7 @@ use app\models\IsaSemanaLogros;
 use app\models\IsaSemanaLogrosForDebRet;
 use app\models\IsaOrientacionMetodologicaActividades;
 use app\models\IsaOrientacionMetodologicaVariaciones;
+use app\models\IsaIntervencionIeo;
 
 
 /**
@@ -94,7 +95,7 @@ class IsaSeguimientoProcesoController extends Controller
 														'datos' => $datos,
 													] 
 										),
-					'contentOptions'=> []
+					'contentOptions'=>  ['class' => 'in'],
 				];
 	
 		}
@@ -253,14 +254,19 @@ class IsaSeguimientoProcesoController extends Controller
 					  
             return $this->redirect(['index']);
         }
-
+	
+		
+		
          return $this->renderAjax('create', [
             'model' => $model,
 			'sedes' => $this->obtenerSede(),
 			'instituciones'=> $this->obtenerInstituciones(),
+			'isaIntervencionIeo' => $this->intervencioIEO(),
         ]);
     }
 
+
+	
     /**
      * Updates an existing IsaSeguimientoProceso model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -502,9 +508,21 @@ class IsaSeguimientoProcesoController extends Controller
 			'sedes' => $this->obtenerSede(),
 			'instituciones'=> $this->obtenerInstituciones(),
 			'datos'=>$datos,
+			'isaIntervencionIeo' => $this->intervencioIEO(),
         ]);
     }
 
+
+	public function intervencioIEO()
+	{
+		$isaIntervencionIeo = new IsaIntervencionIeo();
+		$isaIntervencionIeo = $isaIntervencionIeo->find()->orderby("id")->all();
+		$isaIntervencionIeo = ArrayHelper::map($isaIntervencionIeo,'id','nombre_actividad');
+		
+		return $isaIntervencionIeo;
+	}
+	
+	
     /**
      * Deletes an existing IsaSeguimientoProceso model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
