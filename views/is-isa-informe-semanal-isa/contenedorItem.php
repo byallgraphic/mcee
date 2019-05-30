@@ -35,22 +35,7 @@ use yii\helpers\ArrayHelper;
 
 use yii\helpers\Json;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//comenzando a calcular datos
 
 $nroSemana = empty( $_POST['nroSemana'] ) ? 0 : $_POST['nroSemana'];
 
@@ -93,19 +78,6 @@ $duracion 					= 0;
 $totalSesiones				= 0;
 $total_actividades			= 0;
 $porcetaje_actividades		= 0;
-
-
-
-
-// $model = IsaActividadesRom::findOne([
-								// 'estado' => 1,
-								// 'id_rom_actividad' 				=> $romActividad,
-								// 'sesion_actividad' 				=> $sesionActividad,
-								// 'id_reporte_operativo_misional' => $id_reporte,
-								// 'nro_semana' 					=> $nro_semana,
-							// ]);
-
-
 
 	$id_perfil_persona = $_SESSION['id'];
 
@@ -196,83 +168,9 @@ $porcetaje_actividades		= 0;
 										->all();
 				// $evidencias = ArrayHelper::map($evidencias,'id','descripcion');
 				
-				
-					   
 				foreach( $evidencias as $evidencia )
 				{
-					$actividades_rom_upt = IsaActividadesRom::findOne([ 
-															'id_reporte_operativo_misional' => $id,
-															'id_rom_actividad' 				=> $evidencia->id_rom_actividad,
-															'estado' 						=> 1,
-															// 'nro_semana' 					=> $nroSemana,
-															'nro_semana' 					=> 1,
-														]);
-					
-					if( $actividades_rom_upt )
-					{
-						$dataActividadesParticipadas= IsaIntervencionIeo::findOne( $actividades_rom_upt->sesion_actividad );
-											
-						$actividadesParticipadas 	= [ $dataActividadesParticipadas->id => $dataActividadesParticipadas->nombre_actividad ];
-						
-						$modelIntegrante 			= IsaActividadesRomXIntegranteGrupo::find()
-																->where( 'estado=1' )
-																// ->andWhere( 'diligencia=$id_perfil_persona' )
-																->andWhere( 'id_rom_actividad='.$index /*$evidencia->id_rom_actividad*/ )
-																->andWhere( 'id_reporte_operativo_misional='.$id )
-																->all();
-																	
-						// if( !$modelIntegrante ){
-							// $modelIntegrante = new IsaActividadesRomXIntegranteGrupo();
-						// }
-						
-						//Array de actividades
-						$act =  [
-									'id' 						=> $evidencia->id_rom_actividad,
-									'descripcion' 				=> IsaRomActividades::findOne( $evidencia->id_rom_actividad )->descripcion,
-									'actividades_rom'			=> $actividades_rom_upt,
-									'evidencia'					=> $evidencia,
-									'poblacion'					=> IsaTipoCantidadPoblacionRom::findOne([ 
-																		'estado' 						=> 1, 
-																		'id_rom_actividades' 			=> $evidencia->id_rom_actividad,
-																		'id_reporte_operativo_misional' => $id,
-																	]),
-									// 'integrante'				=> $modelIntegrante,
-									'datosSoloLectura' 			=> IsaIntervencionIeo::findOne([
-																		'id' 		=> $actividades_rom_upt->sesion_actividad,
-																		'estado' 	=> 1,
-																	]),
-																	
-									'actividadesParticipadas' 	=> $actividadesParticipadas,
-									// 'datos_adicionales' 		=> Json::decode( $this->actionConsultarIntervencionIeo( $dataActividadesParticipadas->id ) ),
-								];
-						
-						//Adiciono la actividad al proceso
-						$procs[ 'actividades' ][] = $act;
-						
-						
-						
-						
-						
-						/***************************************************************************************************************************************
-						 * Calculando
-						 *
-						 * ============================++++++++++++++++++++++??????????????++++++++++++++++
-						 ***************************************************************************************************************************************/
-						 
-						$perfilXPesonaInstitucion 	= PerfilesXPersonasInstitucion::findOne( $dataActividadesParticipadas->docente_orientador );
-						$perfilXPesona			  	= PerfilesXPersonas::findOne( $perfilXPesonaInstitucion->id_perfiles_x_persona );
-						$coordinadoresTecnico[]   	= Personas::findOne( $perfilXPesona->id_personas );
-						$equipos[] 					= IsaEquiposCampo::findOne( $dataActividadesParticipadas->id_equipo_campos );
-						 
-						$sesiones_realizadas 	+= $actividades_rom_upt->estado_actividad == 179;
-						$sesiones_aplazadas 	+= $actividades_rom_upt->estado_actividad == 180;
-						$sesiones_canceladas 	+= $actividades_rom_upt->estado_actividad == 181;
-						$total_actividades++;
-						
-						$porcetaje_actividades = $sesiones_realizadas/$total_actividades;
-						
-						
-						$propiedades = array( "actas", "reportes", "listados", "plan_trabajo", "formato_seguimiento", "formato_evaluacion", "fotografias", "vidoes", "otros_productos");
+					$propiedades = array( "actas", "reportes", "listados", "plan_trabajo", "formato_seguimiento", "formato_evaluacion", "fotografias", "vidoes", "otros_productos");
 						$actas 				+= empty( $evidencia->actas ) ? 0 : count( explode( ',', $evidencia->actas ) );
 						$reportes 			+= empty( $evidencia->reportes ) ? 0 : count( explode( ',', $evidencia->reportes ) );
 						$listados 			+= empty( $evidencia->listados ) ? 0 : count( explode( ',', $evidencia->listados ) );
@@ -282,84 +180,87 @@ $porcetaje_actividades		= 0;
 						$fotografias 		+= empty( $evidencia->fotografias ) ? 0 : count( explode( ',', $evidencia->fotografias ) );
 						$vidoes 			+= empty( $evidencia->vidoes ) ? 0 : count( explode( ',', $evidencia->vidoes ) );
 						$otros_productos 	+= empty( $evidencia->otros_productos ) ? 0 : count( explode( ',', $evidencia->otros_productos ) );
-						
-						
-						
-						$total += $vecinos 					+= $act[ 'poblacion' ]->vecinos;
-						$total += $lideres_comunitarios 	+= $act[ 'poblacion' ]->lideres_comunitarios;
-						$total += $empresarios_comerciantes	+= $act[ 'poblacion' ]->empresarios_comerciantes;
-						$total += $organizaciones_locales 	+= $act[ 'poblacion' ]->organizaciones_locales;
-						$total += $grupos_comunitarios 		+= $act[ 'poblacion' ]->grupos_comunitarios;
-						$total += $otos_actores 			+= $act[ 'poblacion' ]->otos_actores;
-						
-						foreach( $modelIntegrante as $key => $integrante ){
-							
-							$fortalezas[] 				= $integrante->fortalezas;
-							$debilidades[] 				= $integrante->debilidades;
-							$alternativas[] 			= $integrante->alternativas;
-							$retos[] 					= $integrante->retos;
-							$articulacion[] 			= $integrante->articulacion;
-							$evaluacion[] 				= $integrante->evaluacion;
-							$observaciones_generales[] 	= $integrante->observaciones_generales;
-							$alarmas[] 					= $integrante->alarmas;
-							$logros[] 					= $integrante->logros;
-							$duracion					+=$integrante->duracion_sesion;
-							$totalSesiones++;
-						}
-						/****************************************************************************************************************************************/
+				}
+													
+				$actividades_rom_upts = IsaActividadesRom::find()
+											->where( 'id_reporte_operativo_misional='.$id )
+											->andWhere( 'id_rom_actividad='.$index )
+											->andWhere( 'estado=1' )
+											->andWhere( 'nro_semana='.$nroSemana )
+											// ->andWhere( 'nro_semana=1' )
+											->all();
+				
+				// if( $actividades_rom_upt )
+				foreach( $actividades_rom_upts as $actividades_rom_upt )
+				{
+					$dataActividadesParticipadas= IsaIntervencionIeo::findOne( $actividades_rom_upt->sesion_actividad );
+										
+					$actividadesParticipadas 	= [ $dataActividadesParticipadas->id => $dataActividadesParticipadas->nombre_actividad ];
 					
-					}
+					/***************************************************************************************************************************************
+					 * Calculando
+					 *
+					 * ============================++++++++++++++++++++++??????????????++++++++++++++++
+					 ***************************************************************************************************************************************/
+					
+					$perfilXPesonaInstitucion 	= PerfilesXPersonasInstitucion::findOne( $dataActividadesParticipadas->docente_orientador );
+					$perfilXPesona			  	= PerfilesXPersonas::findOne( $perfilXPesonaInstitucion->id_perfiles_x_persona );
+					$coordinadoresTecnico[]   	= Personas::findOne( $perfilXPesona->id_personas );
+					$equipos[] 					= IsaEquiposCampo::findOne( $dataActividadesParticipadas->id_equipo_campos );
+					 
+					$sesiones_realizadas 	+= $actividades_rom_upt->estado_actividad == 179;
+					$sesiones_aplazadas 	+= $actividades_rom_upt->estado_actividad == 180;
+					$sesiones_canceladas 	+= $actividades_rom_upt->estado_actividad == 181;
+					$total_actividades++;
+					
+					$porcetaje_actividades = $sesiones_realizadas/$total_actividades;
 					
 					
+					/****************************************************************************************************************************************/
+				
 				}
 				
-				$proy['procesos'][] = $procs;
+				$modelIntegrante 			= IsaActividadesRomXIntegranteGrupo::find()
+															->where( 'estado=1' )
+															// ->andWhere( 'diligencia=$id_perfil_persona' )
+															->andWhere( 'id_rom_actividad='.$index /*$evidencia->id_rom_actividad*/ )
+															->andWhere( 'id_reporte_operativo_misional='.$id )
+															->all();
+				
+				foreach( $modelIntegrante as $key => $integrante ){
+						
+					$fortalezas[] 				= $integrante->fortalezas;
+					$debilidades[] 				= $integrante->debilidades;
+					$alternativas[] 			= $integrante->alternativas;
+					$retos[] 					= $integrante->retos;
+					$articulacion[] 			= $integrante->articulacion;
+					$evaluacion[] 				= $integrante->evaluacion;
+					$observaciones_generales[] 	= $integrante->observaciones_generales;
+					$alarmas[] 					= $integrante->alarmas;
+					$logros[] 					= $integrante->logros;
+					$duracion					+=$integrante->duracion_sesion;
+					$totalSesiones++;
+				}
+				
+				$poblaciones = IsaTipoCantidadPoblacionRom::find()
+									->where('estado=1')
+									->andWhere( 'id_rom_actividades='.$index )
+									->andWhere( 'id_reporte_operativo_misional='.$id )
+									->all();
+				
+				foreach( $poblaciones as $poblacion ){
+					$total += $vecinos 					+= $poblacion->vecinos;
+					$total += $lideres_comunitarios 	+= $poblacion->lideres_comunitarios;
+					$total += $empresarios_comerciantes	+= $poblacion->empresarios_comerciantes;
+					$total += $organizaciones_locales 	+= $poblacion->organizaciones_locales;
+					$total += $grupos_comunitarios 		+= $poblacion->grupos_comunitarios;
+					$total += $otos_actores 			+= $poblacion->otos_actores;
+				}
 			}
 			
 			$datos[] = $proy;
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     if($index == 1 || $index == 2 || $index == 3){?>
         <div style ="display : none">

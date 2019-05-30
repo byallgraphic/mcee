@@ -286,7 +286,16 @@ class RomReporteOperativoMisionalController extends Controller
 		
 		$id_perfil_persona = $_SESSION['perfilesxpersonas'];
 		
-        $model = new RomReporteOperativoMisional();
+		
+		$model = RomReporteOperativoMisional::findOne([
+							'estado'			=> 1,
+							'id_institucion' 	=> $id_institucion,
+							'id_sedes' 			=> $id_sede,
+						]);
+		
+		if( !$model ){
+			$model = new RomReporteOperativoMisional();
+		}
 		
 		$idInstitucion = $_SESSION['instituciones'][0];
 		
