@@ -459,7 +459,7 @@ $porcetaje_actividades		= 0;
 		</div>
 	  
 	  <div class="col-md-6">
-		<label class="control-label" for="isisaactividadesisisa-1-retos">Retos</label>
+		<label class="control-label" for="isisaactividadesisisa-1-retos">Articulación</label>
 			<?php 
 				if( count( $articulacion ) > 0 )
 				{	

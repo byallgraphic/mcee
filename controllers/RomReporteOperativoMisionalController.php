@@ -1096,12 +1096,16 @@ class RomReporteOperativoMisionalController extends Controller
 										->all();
 				// $evidencias = ArrayHelper::map($evidencias,'id','descripcion');
 				
+				$actividades = IsaRomActividades::find()
+									->where( "estado=1 and id_rom_procesos=$idProceso" )
+									->all();
+				
 					   
-				foreach( $evidencias as $evidencia )
+				foreach( $actividades as $actividad )
 				{
 					$actividades_rom_upt = IsaActividadesRom::findOne([ 
 															'id_reporte_operativo_misional' => $id,
-															'id_rom_actividad' 				=> $evidencia->id_rom_actividad,
+															'id_rom_actividad' 				=> $actividad->id,
 															'estado' 						=> 1,
 														]);
 														
@@ -1112,7 +1116,7 @@ class RomReporteOperativoMisionalController extends Controller
 					$modelIntegrante 			= IsaActividadesRomXIntegranteGrupo::findOne([ 
 																	'estado' 						=> 1, 
 																	'diligencia' 					=> $id_perfil_persona,
-																	'id_rom_actividad' 				=> $evidencia->id_rom_actividad,
+																	'id_rom_actividad' 				=> $actividad->id,
 																	'id_reporte_operativo_misional' => $id,
 																]);
 																
@@ -1122,13 +1126,13 @@ class RomReporteOperativoMisionalController extends Controller
 					
 					//Array de actividades
 					$act =  [
-								'id' 						=> $evidencia->id_rom_actividad,
-								'descripcion' 				=> IsaRomActividades::findOne( $evidencia->id_rom_actividad )->descripcion,
+								'id' 						=> $actividad->id,
+								'descripcion' 				=> IsaRomActividades::findOne( $actividad->id )->descripcion,
 								'actividades_rom'			=> $actividades_rom_upt,
-								'evidencia'					=> $evidencia,
+								'evidencia'					=> new IsaEvidenciasRom(),
 								'poblacion'					=> IsaTipoCantidadPoblacionRom::findOne([ 
 																	'estado' 						=> 1, 
-																	'id_rom_actividades' 			=> $evidencia->id_rom_actividad,
+																	'id_rom_actividades' 			=> $actividad->id,
 																	'id_reporte_operativo_misional' => $id,
 																]),
 								'integrante'				=> $modelIntegrante,
