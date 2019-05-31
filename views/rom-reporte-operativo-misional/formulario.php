@@ -53,11 +53,11 @@ if( $actividades_rom->estado_actividad !== 179 ){
 
 <div class="row">
 	
-	<div class="col-md-4">
-		<?= $form->field($actividades_rom, "[$idActividad]nro_semana")->label('Número de semana')->textInput() ?>
+	<div class="col-md-4" style='display:none;'>
+		<?= $form->field($actividades_rom, "[$idActividad]nro_semana")->label('Número de semana')->textInput([ 'value' => 1 ]) ?>
 	</div>
 
-	<div class="col-md-4">
+	<div class="col-md-6">
 		<?= $form->field($actividades_rom, "[$idActividad]fecha_desde")->widget(
 					DatePicker::className(), [
 						// modify template for custom rendering
@@ -70,7 +70,7 @@ if( $actividades_rom->estado_actividad !== 179 ){
 				]); ?>
 	</div>
 
-	<div class="col-md-4">
+	<div class="col-md-6">
 		<?= $form->field($actividades_rom, "[$idActividad]fecha_hasta")->label('Hasta')->widget(
 					DatePicker::className(), [
 						// modify template for custom rendering
