@@ -589,16 +589,16 @@ class RomReporteOperativoMisionalController extends Controller
 										// ->andWhere( 'ie.id_perfil_persona_institucion='.$_SESSION['id'] )
 										// ->all();
 										
-		$dataActividadesParticipadas = IsaIntervencionIeo::find()
-										->alias('i')
-										->innerJoin('isa.equipos_campo ec', 'ec.id=i.id_equipo_campos')
-										->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
-										->where( 'ie.estado=1' )
-										->andWhere( 'ec.estado=1' )
-										->andWhere( 'ie.id_perfil_persona_institucion='.$_SESSION['id'] )
-										->all();
+		// $dataActividadesParticipadas = IsaIntervencionIeo::find()
+										// ->alias('i')
+										// ->innerJoin('isa.equipos_campo ec', 'ec.id=i.id_equipo_campos')
+										// ->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
+										// ->where( 'ie.estado=1' )
+										// ->andWhere( 'ec.estado=1' )
+										// ->andWhere( 'ie.id_perfil_persona_institucion='.$_SESSION['id'] )
+										// ->all();
 										
-		$actividadesParticipadas = ArrayHelper::map( $dataActividadesParticipadas,'id','nombre_actividad' );
+		// $actividadesParticipadas = ArrayHelper::map( $dataActividadesParticipadas,'id','nombre_actividad' );
 		
 		foreach( $proyectos as $idProyecto => $descripcionProyecto )
 		{
@@ -623,12 +623,29 @@ class RomReporteOperativoMisionalController extends Controller
 								'actividades'	=> [],
 							];
 							
-				$actividades = IsaRomActividades::find()->where( "estado=1 and id_rom_procesos=$idProceso" )->all();
+				$actividades = IsaRomActividades::find()
+									->where( "estado=1 and id_rom_procesos=$idProceso" )
+									->all();
+									
 				$actividades = ArrayHelper::map($actividades,'id','descripcion');
 				
 					   
 				foreach( $actividades as $idActividad => $descripcionActividad )
 				{
+					$dataActividadesParticipadas = IsaIntervencionIeo::find()
+										->alias('i')
+										->innerJoin('isa.equipos_campo ec', 'ec.id=i.id_equipo_campos')
+										->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
+										->innerJoin('isa.actividades_isa ai', 'ai.id=i.id_actividades_isa')
+										->innerJoin('isa.procesos_generales pg', 'pg.id=ai.id_procesos_generales')
+										->where( 'ie.estado=1' )
+										->andWhere( 'ec.estado=1' )
+										->andWhere( 'ie.id_perfil_persona_institucion='.$_SESSION['id'] )
+										->andWhere( 'pg.id='.$idActividad )
+										->all();
+										
+					$actividadesParticipadas = ArrayHelper::map( $dataActividadesParticipadas,'id','nombre_actividad' );
+					
 					//Array de actividades
 					$act =  [
 								'id' 						=> $idActividad,
