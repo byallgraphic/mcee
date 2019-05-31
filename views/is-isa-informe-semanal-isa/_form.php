@@ -27,11 +27,11 @@ $nroSemana = empty( $_POST['nroSemana'] ) ? '' : $_POST['nroSemana'];
 
 	<div class="row">
 	  
-		<div class="col-md-4">
+		<div class="col-md-4" style='display:none;'>
 			<?= $form->field($model, 'nro_semana')->textInput([ 'value' => $nroSemana ]) ?>
 		</div>
 	  
-	  <div class="col-md-4"><?= $form->field($model, "desde")->widget(
+	  <div class="col-md-6"><?= $form->field($model, "desde")->widget(
         DatePicker::className(), [
             // modify template for custom rendering
             'template' => '{addon}{input}',
@@ -42,7 +42,7 @@ $nroSemana = empty( $_POST['nroSemana'] ) ? '' : $_POST['nroSemana'];
         ],
     ]);  ?> 
 		</div>
-		<div class="col-md-4"> <?= $form->field($model, "hasta")->widget(
+		<div class="col-md-6"> <?= $form->field($model, "hasta")->widget(
 			DatePicker::className(), [
 				// modify template for custom rendering
 				'template' => '{addon}{input}',
