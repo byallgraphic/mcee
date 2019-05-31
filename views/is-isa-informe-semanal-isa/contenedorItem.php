@@ -37,7 +37,9 @@ use yii\helpers\Json;
 
 //comenzando a calcular datos
 
-$nroSemana = empty( $_POST['nroSemana'] ) ? 0 : $_POST['nroSemana'];
+$nroSemana 		= empty( $_POST['nroSemana'] ) ? 1 : $_POST['nroSemana'];
+$fecha_desde 	= empty( $_POST['fecha_desde'] ) ? date( "Y-m-d" ) : $_POST['fecha_desde'];
+$fecha_hasta 	= empty( $_POST['fecha_hasta'] ) ? date( "Y-m-d" ) : $_POST['fecha_hasta'];
 
 $coordinadoresTecnico = [];
 
@@ -187,6 +189,7 @@ $porcetaje_actividades		= 0;
 											->andWhere( 'id_rom_actividad='.$index )
 											->andWhere( 'estado=1' )
 											->andWhere( 'nro_semana='.$nroSemana )
+											// ->andWhere( "fecha_desde BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' OR fecha_hasta BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' " )
 											// ->andWhere( 'nro_semana=1' )
 											->all();
 				
