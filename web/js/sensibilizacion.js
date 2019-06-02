@@ -59,6 +59,13 @@ $('div[id *= isaactividadesisa-],[id *= -requerimientos_tecnicos]').change(funct
   idReqTecnicos = $(this).val();
   idNombre = "requerimientos[]["+idActividad+"]["+idReqTecnicos+"]";
   
+    
+  //se elimina el elemento del chosen para evitar que lo selecionen nuevamente
+  idSelect = "#"+$(this).attr("id");
+  $(""+ idSelect +" option[value='"+idReqTecnicos+"']").remove();
+  $(''+idSelect+'').trigger("chosen:updated");
+  
+  
   $("#reqTecnicos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a><input id="'+idNombre+'" name="'+idNombre+'"  type="text" size="2" maxlength="2"  style="width:35px;" ></li>');
   
 });
@@ -72,6 +79,12 @@ $('div[id *= isaactividadesisa-],[id *= -requerimientos_logistico]').change(func
   idReqLogisticos = $(this).val();
   idNombre = "reqLogisticos[]["+idActividad+"]["+idReqLogisticos+"]";
   
+  //se elimina el elemento del chosen para evitar que lo selecionen nuevamente
+  idSelect = "#"+$(this).attr("id");
+  $(""+ idSelect +" option[value='"+idReqLogisticos+"']").remove();
+  $(''+idSelect+'').trigger("chosen:updated");
+  
+  
   $("#reqLogisticos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a><input id="'+idNombre+'" name="'+idNombre+'"  type="text" size="2" maxlength="2"  style="width:35px;" ></li>');
   
 });
@@ -79,7 +92,30 @@ $('div[id *= isaactividadesisa-],[id *= -requerimientos_logistico]').change(func
 
 function borrarRequerimiento(obj)
 {
-	$(obj).parent().remove();	
+	
+	$(obj).parent().remove();
+	
+	idInput = $(obj).siblings("input").attr("id")
+	
+	infoInput = idInput.split("[");
+	idActividad =  infoInput[2].split("]")[0];
+	idItem =infoInput[3].split("]")[0] ;
+	nombreItem = $(obj).siblings("span").text()
+	// alert(infoInput[3].split("]")[0] );
+	if (infoInput[0] == "reqLogisticos")
+	{
+		idSelect = $("#isaactividadesisa-"+ idActividad +"-requerimientos_logisticos");
+		idSelect.append('<option value="'+ idItem +'">'+nombreItem+'</option>');
+		idSelect.trigger("chosen:updated");
+	}
+	if (infoInput[0] == "requerimientos")
+	{
+		idSelect = $("#isaactividadesisa-"+ idActividad +"-requerimientos_tecnicos");
+		idSelect.append('<option value="'+ idItem +'">'+nombreItem+'</option>');
+		idSelect.trigger("chosen:updated");
+	}
+
+	
 };
 
 
