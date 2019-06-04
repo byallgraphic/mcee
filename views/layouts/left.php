@@ -15,7 +15,7 @@
         </div>
         <form action="#" method="get" class="sidebar-form" autocomplete="off">
             <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Search..."/>
+                <input id="searchLeft" type="text" name="q" class="form-control" placeholder="Search..."/>
               <span class="input-group-btn">
                 <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i>
                 </button>
@@ -26,7 +26,7 @@
 
         <?= dmstr\widgets\Menu::widget(
             [
-                'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
+                'options' => ['id'=>'menuLeft','class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
 					['label' => 'Inicio', 'url' => Yii::$app->homeUrl,'icon' => 'home',],
 					//menu mcee
@@ -168,8 +168,9 @@
 											'icon' => 'users',
 											'url' => '#',
 											'items' => [
-														['label' => 'Documentos', 'icon' => 'circle-o', 'url' => ['documentos-gestion-comunitaria/index', 'tipo_documento'=>'Gestion Comunitaria']],
-														['label' => 'Aliados', 'icon' => 'circle-o', 'url' => ['documentos-aliados/index']],
+                                                ['label' => 'Documentos', 'icon' => 'circle-o', 'url' => ['documentos-gestion-comunitaria/index', 'tipo_documento'=>'Gestion Comunitaria']],
+                                                ['label' => 'Paz Cultural', 'icon' => 'circle-o', 'url' => ['paz-cultural/index', 'tipo_documento'=>'Gestion Comunitaria']],
+                                                ['label' => 'Aliados', 'icon' => 'circle-o', 'url' => ['documentos-aliados/index']],
 														// ['label' => 'Comité Gestión Riesgo', 'icon' => 'circle-o', 'url' => '#'],
 														// ['label' => 'PGIR', 'icon' => 'circle-o', 'url' => '#'],
 														// ['label' => 'Aliados', 'icon' => 'circle-o', 'url' => '#'],

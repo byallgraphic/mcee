@@ -114,7 +114,7 @@ $( "#cambiarSede" ).click(function()
 });
 
 $( document ).ready(function() {
-    $('input[type="text"]').keyup(function(){
+    $('#searchLeft').keyup(function(){
         var searchText = $(this).val();
 
         $('ul > li').each(function(){
