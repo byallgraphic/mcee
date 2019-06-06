@@ -37,15 +37,23 @@ if( strpos($_GET['r'], 'update') > -1)
 							$.each(data, function( index, value ) 
 							{
 								idActividad = index;
+								
 								selectActividad = $("#isaactividadesisa-"+index+"-requerimientos_tecnicos");
 								
 								$.each( data[index], function( idRequerimiento, value1 ) 
 								{
+									
+									//se elimina el elemento del chosen para evitar que lo selecionen nuevamente
+									idSelect = "#"+selectActividad.attr("id");
+									$(""+ idSelect +" option[value='"+idRequerimiento+"']").remove();
+									
 									texto = $('#'+selectActividad.attr('id')+' option:eq('+idRequerimiento+')').text();
 									idNombre = "requerimientos[]["+idActividad+"]["+idRequerimiento+"]";
 									$("#reqTecnicos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a><input id="'+idNombre+'" name="'+idNombre+'"  value = '+value1+' type="text" size="2" maxlength="2" min="0" style="width:35px;" ></li>');
 								});
 							});
+							//se actiualiza la informacion que tiene el chosen del id seleccionado
+							selectActividad.trigger("chosen:updated");
 						},
 					"json");
 		}
@@ -56,18 +64,45 @@ if( strpos($_GET['r'], 'update') > -1)
 			$.get( "index.php?r=isa-iniciacion-sencibilizacion-artistica/requerimientos-logisticos&id="+id,
 						function( data )
 						{
-							$.each(data, function( index, value ) 
+							$.each(data, function( index, datos ) 
 							{
-								idActividad = index;
-								selectActividad = $("#isaactividadesisa-"+index+"-requerimientos_logisticos");
 								
-								$.each( data[index], function( idRequerimiento, value1 ) 
+								idActividad = datos.id_actividad;
+								selectActividad = $("#isaactividadesisa-"+idActividad+"-requerimientos_logisticos");
+								idRequerimiento = datos.id_requerimiento;
+								cantidad = datos.cantidad;
+								dirOrigen  = datos.dir_origen; 
+								dirDestino = datos.dir_destino;
+								
+								texto = $('#'+selectActividad.attr('id')+' option:eq('+idRequerimiento+')').text();
+								// alert(texto);
+								idNombre = "reqLogisticos[]["+idActividad+"]["+idRequerimiento+"]";
+								
+								if(texto == "Transporte")
 								{
-									texto = $('#'+selectActividad.attr('id')+' option:eq('+idRequerimiento+')').text();
-									idNombre = "reqLogisticos[]["+idActividad+"]["+idRequerimiento+"]";
-									$("#reqLogisticos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a><input id="'+idNombre+'" name="'+idNombre+'"  value = '+value1+' type="text" size="2" maxlength="2" min="0" style="width:35px;" ></li>');
-								});
+									$("#reqLogisticos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a> <br>Cantidad &nbsp;&nbsp;&nbsp;<input id="'+idNombre+'" name="'+idNombre+'" value ="'+cantidad+'" type="text" size="2" maxlength="2"  style="width:35px;" >       <br> Dir.Origen &nbsp;<input id="'+idNombre+'" name="'+idNombre+'"  value ="'+dirOrigen+'"  type="text" size="30" >    <br>Dir.Destino    <input id="'+idNombre+'" name="'+idNombre+'"  value ="'+dirDestino+'"  type="text" size="30" ></li>');
+								}
+								else
+								{
+									$("#reqLogisticos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a><input id="'+idNombre+'" name="'+idNombre+'"  value = '+cantidad+' type="text" size="2" maxlength="2" min="0" style="width:35px;" ></li>');
+								}
 							});
+							
+							
+							// se elimina el elemento del chosen para evitar que lo selecionen nuevamente no funciona correctamente en el each que precede este
+							$.each(data, function( index, datos ) 
+							{
+								
+								idActividad = datos.id_actividad;
+								selectActividad = $("#isaactividadesisa-"+idActividad+"-requerimientos_logisticos");
+								idRequerimiento = datos.id_requerimiento;
+								
+								idSelect = "#"+selectActividad.attr("id");
+								$(""+ idSelect +" option[value='"+idRequerimiento+"']").remove();
+							});
+							
+							// se actiualiza la informacion que tiene el chosen del id seleccionado
+							selectActividad.trigger("chosen:updated");
 						},
 					"json");
 		}

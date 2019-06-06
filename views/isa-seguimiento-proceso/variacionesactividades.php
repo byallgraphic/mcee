@@ -5,7 +5,7 @@ use app\models\IsaVariacionesActividades;
 use nex\chosen\Chosen;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\Collapse;
-
+use yii\bootstrap\Tabs;
 
 
 $variaciones = IsaVariacionesActividades::find()->where( "estado=1 and id_actividades=$idActividad" )->all();
@@ -28,6 +28,10 @@ foreach ($variaciones as $idVariaciones => $dataVariaciones)
 
 }
 
+
+// echo tabs::widget([
+    // 'items' => $items, 
+// ]);
 
 echo Collapse::widget([
     'items' => $items, 

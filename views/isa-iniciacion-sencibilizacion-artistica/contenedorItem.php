@@ -56,7 +56,9 @@ if( strpos($_GET['r'], 'update') > -1)
 	<div class="row">
 	  <div class="col-md-4">
 	  
-	  <?= $form->field($actividades_isa, "[$idProceso]numero_semana")->textInput(['type' => 'number']) ?>
+	  <?= $form->field($actividades_isa, "[$idProceso]numero_semana")->hiddenInput(['value'=> 1])->label(false) ?> 
+	  
+ 
 	  </div>
 	  <div class="col-md-4">
 	  <?= $form->field($actividades_isa, "[$idProceso]fecha_prevista_desde")->widget(

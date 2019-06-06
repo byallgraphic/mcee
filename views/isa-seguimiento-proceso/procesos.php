@@ -27,8 +27,7 @@ foreach ($procesos as $idProceso => $labelProceso)
 
 
 }
-
-
+		
 echo Collapse::widget([
     'items' => $items, 
 ]);

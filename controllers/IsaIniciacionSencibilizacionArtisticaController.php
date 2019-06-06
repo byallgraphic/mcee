@@ -371,6 +371,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 			}
 			if (@Yii::$app->request->post()['reqLogisticos'])
 			{
+				
 				foreach(Yii::$app->request->post()['reqLogisticos'] as $requerimientosL )
 				{
 					foreach ($requerimientosL as $idActividad => $requerimiento)
@@ -421,57 +422,69 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		
 			
 			$arrayRequerimientos = [];
-			foreach(Yii::$app->request->post()['requerimientos'] as $req )
+			if (@Yii::$app->request->post()['requerimientos'])
 			{
-				//agrupa la informacion de los requerimintos con el id de la actividad 
-				$arrayRequerimientos[key($req)][key($req[key($req)])]= $req[key($req)][key($req[key($req)])];
-			}	
-		
-		
-			//se borran los registros y luego se insertan nuevamente
-			$models = IsaRequerimientosTecnicos::find()->where("id_iniciacion_sencibilizacion_artistica = $id")->all();
-						foreach ($models as $model) {
-							$model->delete();
-						}
-			foreach ($arrayRequerimientos as $idActividadReq => $arrayReq)
-			{
-				foreach ($arrayReq as $idReq => $cantidad)
+				foreach(Yii::$app->request->post()['requerimientos'] as $req )
 				{
-					$IRT = new IsaRequerimientosTecnicos();
-					$IRT->id_requerimiento	= $idReq;
-					$IRT->cantidad 			= $cantidad;
-					$IRT->id_actividad 		= $idActividadReq;
-					$IRT->id_iniciacion_sencibilizacion_artistica = $id;
-					$IRT->save(false);
+					//agrupa la informacion de los requerimintos con el id de la actividad 
+					$arrayRequerimientos[key($req)][key($req[key($req)])]= $req[key($req)][key($req[key($req)])];
+				}	
+			
+			
+				//se borran los registros y luego se insertan nuevamente
+				$models = IsaRequerimientosTecnicos::find()->where("id_iniciacion_sencibilizacion_artistica = $id")->all();
+							foreach ($models as $model) {
+								$model->delete();
+							}
+				foreach ($arrayRequerimientos as $idActividadReq => $arrayReq)
+				{
+					foreach ($arrayReq as $idReq => $cantidad)
+					{
+						$IRT = new IsaRequerimientosTecnicos();
+						$IRT->id_requerimiento	= $idReq;
+						$IRT->cantidad 			= $cantidad;
+						$IRT->id_actividad 		= $idActividadReq;
+						$IRT->id_iniciacion_sencibilizacion_artistica = $id;
+						$IRT->save(false);
+					}
 				}
 			}
-			
 			$arrayRequerimientosL = [];
-			foreach(Yii::$app->request->post()['reqLogisticos'] as $req )
-			{
-				//agrupa la informacion de los requerimintos con el id de la actividad 
-				$arrayRequerimientosL[key($req)][key($req[key($req)])]= $req[key($req)][key($req[key($req)])];
-			}	
-		
+			echo "<pre>"; print_r(Yii::$app->request->post()['reqLogisticos']); echo "</pre>";
 			
-			//se borran los registros y luego se insertan nuevamente
-			$models = IsaRequerimientosLogisticos::find()->where("id_iniciacion_sencibilizacion_artistica = $id")->all();
-						foreach ($models as $model) {
-							$model->delete();
-						}
-			foreach ($arrayRequerimientosL as $idActividadReqL => $arrayReq)
+			if (@Yii::$app->request->post()['reqLogisticos'])
 			{
-				foreach ($arrayReq as $idReqL => $cantidad)
+				foreach(Yii::$app->request->post()['reqLogisticos'] as $req )
 				{
-					$IRT = new IsaRequerimientosLogisticos();
-					$IRT->id_requerimiento	= $idReqL;
-					$IRT->cantidad 			= $cantidad;
-					$IRT->id_actividad 		= $idActividadReqL;
-					$IRT->id_iniciacion_sencibilizacion_artistica = $id;
-					$IRT->save(false);
+					//agrupa la informacion de los requerimintos con el id de la actividad 
+					$arrayRequerimientosL[key($req)][key($req[key($req)])][]= $req[key($req)][key($req[key($req)])];
+				}	
+		
+				//se borran los registros y luego se insertan nuevamente
+				$models = IsaRequerimientosLogisticos::find()->where("id_iniciacion_sencibilizacion_artistica = $id")->all();
+				
+					// echo "<pre>"; print_r($models); echo "</pre>"; 
+				// die;
+							foreach ($models as $model) {
+								$model->delete();
+							}
+				foreach ($arrayRequerimientosL as $idActividadReqL => $arrayReq)
+				{	
+					foreach ($arrayReq as $idReqL => $datos)
+					{
+						
+						$IRT = new IsaRequerimientosLogisticos();
+						$IRT->id_requerimiento	= $idReqL;
+						$IRT->cantidad 			= $datos[0];
+						$IRT->dir_origen 		= $datos[0];
+						$IRT->dir_destino 		= $datos[0];
+						$IRT->id_actividad 		= $idActividadReqL;
+						$IRT->id_iniciacion_sencibilizacion_artistica = $id;
+						$IRT->save(false);
+					}
 				}
-			}
 			
+			}
 			$actividades = IsaActividadesIsa::find()->indexBy('id')->andWhere("id_iniciacion_sencibilizacion_artistica = $id")->all();
 			
 			//id del Yii::$app->request->post() e id de actividades deben ser iguales
@@ -578,6 +591,8 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		$requerimientos = $requerimientos->find()->orderby("id")->andWhere("id_iniciacion_sencibilizacion_artistica = $id")->all();
 		$requerimientos = ArrayHelper::map($requerimientos,'id_requerimiento','cantidad','id_actividad');
 		
+		
+		
 		echo json_encode( $requerimientos );
 	}
 	
@@ -586,8 +601,9 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 	{
 		$requerimientosL = new IsaRequerimientosLogisticos();
 		$requerimientosL = $requerimientosL->find()->orderby("id")->andWhere("id_iniciacion_sencibilizacion_artistica = $id")->all();
-		$requerimientosL = ArrayHelper::map($requerimientosL,'id_requerimiento','cantidad','id_actividad');
-		
+		$requerimientosL = ArrayHelper::toArray($requerimientosL);
+			
+		// echo "<pre>"; print_r($requerimientosL); echo "</pre>"; 
 		echo json_encode( $requerimientosL );
 	}
 	
