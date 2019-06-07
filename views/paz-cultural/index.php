@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 			'descripcion',
             [
-				'attribute' => 'id_tipo_documento',
+				'attribute' => 'tipo_perfil',
 				'value' 	=> function( $model ){
 					
 					$tipoDocumento = \app\models\TipoPerfil::findOne( $model->tipo_perfil );

@@ -169,7 +169,6 @@
 											'url' => '#',
 											'items' => [
                                                 ['label' => 'Documentos', 'icon' => 'circle-o', 'url' => ['documentos-gestion-comunitaria/index', 'tipo_documento'=>'Gestion Comunitaria']],
-                                                ['label' => 'Paz Cultural', 'icon' => 'circle-o', 'url' => ['paz-cultural/index', 'tipo_documento'=>'Gestion Comunitaria']],
                                                 ['label' => 'Aliados', 'icon' => 'circle-o', 'url' => ['documentos-aliados/index']],
 														// ['label' => 'Comité Gestión Riesgo', 'icon' => 'circle-o', 'url' => '#'],
 														// ['label' => 'PGIR', 'icon' => 'circle-o', 'url' => '#'],
@@ -312,7 +311,7 @@
 															'icon' => 'arrow-right',
 															'url' => '#',
 															'items' => [
-																		['label' => 'Paz y cultura ciudadana', 'icon' => 'circle-o','url' => '#',],
+																		['label' => 'Paz y cultura ciudadana', 'icon' => 'circle-o','url' => 'index.php?r=paz-cultural%2Findex',],
 																		['label' => 'Formación a formadores culturales', 'icon' => 'circle-o','url' => '#',],
 																		['label' => 'Formación a formadores deportivos', 'icon' => 'circle-o','url' => '#',],
 																],		
