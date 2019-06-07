@@ -272,20 +272,27 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		//variable con la conexion a la base de datos 
 		$connection = Yii::$app->getDb();
 		$command = $connection->createCommand("
-			SELECT ppi.id, concat(pe.nombres,' ',pe.apellidos) as nombres
-			FROM perfiles_x_personas as pp, 
-			personas as pe,
-			perfiles_x_personas_institucion ppi
-			WHERE pp.id_personas = pe.id
-			AND pp.id_perfiles = 11
-			AND ppi.id_perfiles_x_persona = pp.id
-			AND ppi.id_institucion = $idInstitucion
+			SELECT pe.id, concat(pe.nombres,' ',pe.apellidos) as nombres, identificacion 
+			FROM personas as pe
+			
+			ORDER BY id ASC LIMIT 160
 		");
+		
+		// SELECT ppi.id, concat(pe.nombres,' ',pe.apellidos) as nombres
+			// FROM perfiles_x_personas as pp, 
+			// personas as pe,
+			// perfiles_x_personas_institucion ppi
+			// WHERE pp.id_personas = pe.id
+			// AND pp.id_perfiles = 11
+			// AND ppi.id_perfiles_x_persona = pp.id
+			// AND ppi.id_institucion = $idInstitucion
+		
+		
 		$result = $command->queryAll();
 		$nombresPerfil = array();
 		foreach ($result as $r)
 		{
-			$nombresPerfil[$r['id']]= $r['nombres'];
+			$nombresPerfil[$r['id']]= $r['nombres']." - ". $r['identificacion'] ;
 		}
 		
 		return $nombresPerfil;
@@ -343,8 +350,11 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 
 			if (IsaIntervencionIeo::loadMultiple($intervencionModel, Yii::$app->request->post())) 
 			{
+				//se llena los perfiles separados por comas //se pasa de selecion unica a mutiple
+				$postIEO = Yii::$app->request->post()['IsaIntervencionIeo'];
 				foreach ($intervencionModel as $key => $intervencion) 
 				{
+					$intervencion->perfiles = implode(",",$postIEO[$key]['perfiles']); 
 					$intervencion->id_actividades_isa = $idActividades[$key];
 					$intervencion->save(false);
 				}
@@ -415,7 +425,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		
         if ($model->load(Yii::$app->request->post()) && $model->save()) 
 		{	
-	
+			
 			$requerimientos = new IsaRequerimientosTecnicos();
 			$requerimientos = $requerimientos->find()->orderby("id")->andWhere("id_iniciacion_sencibilizacion_artistica = $id")->all();
 			$requerimientos = ArrayHelper::map($requerimientos,'id_requerimiento','cantidad','id_actividad');
@@ -450,7 +460,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 				}
 			}
 			$arrayRequerimientosL = [];
-			echo "<pre>"; print_r(Yii::$app->request->post()['reqLogisticos']); echo "</pre>";
+			
 			
 			if (@Yii::$app->request->post()['reqLogisticos'])
 			{
@@ -463,8 +473,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 				//se borran los registros y luego se insertan nuevamente
 				$models = IsaRequerimientosLogisticos::find()->where("id_iniciacion_sencibilizacion_artistica = $id")->all();
 				
-					// echo "<pre>"; print_r($models); echo "</pre>"; 
-				// die;
 							foreach ($models as $model) {
 								$model->delete();
 							}
@@ -524,13 +532,29 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 				$cont++;
 			}
 			
+			$postIEO = Yii::$app->request->post()['IsaIntervencionIeo'];
+			
+			//
+			foreach ($postIEO as $key => $inter )
+			{
+				if (isset($postIEO[$key]['perfiles']))
+				{
+					$perfiles[ $key ] =  implode(",",$postIEO[$key]['perfiles']);
+				}
+				else
+				{
+					$perfiles[ $key ] = "";
+				}
+			}
+			 
 			if (Model::loadMultiple($intervencionIsa, Yii::$app->request->post()) && Model::validateMultiple($intervencionIsa) ) 
 			{
-				foreach ($intervencionIsa as $interIsa) 
+				foreach ($intervencionIsa as  $key => $interIsa) 
 				{
+					$interIsa->perfiles = $perfiles[$key];
 					$interIsa->save(false);
-				}
-			}			
+				}	
+			}	
 			return $this->redirect(['index','guardado' => 1]);
 			
 		}
@@ -603,7 +627,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		$requerimientosL = $requerimientosL->find()->orderby("id")->andWhere("id_iniciacion_sencibilizacion_artistica = $id")->all();
 		$requerimientosL = ArrayHelper::toArray($requerimientosL);
 			
-		// echo "<pre>"; print_r($requerimientosL); echo "</pre>"; 
+		 
 		echo json_encode( $requerimientosL );
 	}
 	
