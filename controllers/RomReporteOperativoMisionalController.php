@@ -139,7 +139,11 @@ class RomReporteOperativoMisionalController extends Controller
 			$val[$key] = $value;
 		}
 		
-		$val['equipo_nombre'] = IsaEquiposCampo::findOne( $modelIntervencion->id_equipo_campos )->nombre;
+		$equipo = IsaEquiposCampo::findOne( $modelIntervencion->id_equipo_campos );
+		
+		$val['equipo_nombre'] = '';
+		if( $equipo && $equipo->nombre )
+			$val['equipo_nombre'] = $equipo->nombre;
 		
 		return Json::encode($val);
 	}
