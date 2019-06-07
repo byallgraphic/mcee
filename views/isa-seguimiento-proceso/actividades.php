@@ -48,18 +48,18 @@ foreach ($actividadesSeguimiento as $idActividad => $dataActividad)
 						[ 'class' => 'list-group-item' ]
 					);
 					
-		$content .= Html::tag( 
-						'div',  
-						$this->render( 'variacionesactividades', 
-										[ 
-											'idActividad' => $idActividad,
-											'form' => $form,
-											'datos' => $datos,
-											'idProyecto' => $idProyecto,
-										] 
-									),
-						[ 'class' => 'list-group-item' ]
-					);
+		// $content .= Html::tag( 
+						// 'div',  
+						// $this->render( 'variacionesactividades', 
+										// [ 
+											// 'idActividad' => $idActividad,
+											// 'form' => $form,
+											// 'datos' => $datos,
+											// 'idProyecto' => $idProyecto,
+										// ] 
+									// ),
+						// [ 'class' => 'list-group-item' ]
+					// );
 	
 		$items[] = 	[
 						'label' 		=>  $dataActividad,
@@ -67,110 +67,41 @@ foreach ($actividadesSeguimiento as $idActividad => $dataActividad)
 						'headerOptions' => ['class' => 'tab1', 'style' => "background-color: $colors[$idActividad];"],			
 						'contentOptions'=> [],
 						'active'		=> false,
-					];								
-					
+					];
+
+		
+		
 }
-
-
+	
 echo Tabs::widget([
     'items' => $items,
 ]);
 
-$this->registerCss(".nav-tabs > li {
+$this->registerCss("
+
+			.nav-tabs > li {
 						
 						width: 380px;
-						height: 80px;
+						height: 100px;
 					}
 					
+					#w3 li:first-child:hover
+						{
+						 height: 150px;
+						}
+					#w6 li:first-child:hover
+						{
+						 height: 150px;
+						}
+					#w9 li:first-child:hover
+						{
+						 height: 150px;
+						}
+					#w13 li:first-child:hover
+						{
+						 height: 150px;
+						}	
 					.row {
 						margin-left: 2px;
 					}");
 
-// foreach ($actividadesSeguimiento as $idActividad => $dataActividad)
-// {
-		// $items[] = 	[
-						// 'label' 		=>  $dataActividad,
-						// 'content' 		=>	[  
-												// $this->render
-														// ( 'porcentajes', 
-															// [ 
-																// 'idActividad' => $idActividad,
-																// 'form' => $form,
-																// 'datos' => $datos,
-																// 'idProyecto' => $idProyecto,
-															// ] 
-														// ),
-												// $this->render
-														// ( 'logros', 
-															// [ 
-																// 'idActividad' => $idActividad,
-																// 'form' => $form,
-																// 'datos' => $datos,
-																// 'idProyecto' => $idProyecto,
-															// ] 
-														// ),
-												// $this->render
-														// ( 'variacionesactividades', 
-															// [ 
-																// 'idActividad' => $idActividad,
-																// 'form' => $form,
-																// 'datos' => $datos,
-																// 'idProyecto' => $idProyecto,
-															// ] 
-														// ),														
-											// ],
-									
-						// 'contentOptions'=> []
-					// ];								
-					
-// }
-
-
-// $procesos = IsaOrientacionMetodologicaActividades::find()->where( "estado=1 and id_proyecto=$idProyecto" )->all();
-// $procesos = ArrayHelper::map($procesos,'id','descripcion');
-       
-// foreach ($procesos as $idProceso => $dataProceso)
-// {
-		// $items[] = 	[
-						// 'label' 		=>  $dataProceso,
-						// 'content' 		=>  $this->render( 'orientacion', 
-														// [ 
-															// 'idProceso' => $idProceso,
-															// 'form' => $form,
-															// 'idProyecto' => $idProyecto,
-															// 'datos' => $datos,
-														// ] 
-											// ),
-						// 'contentOptions'=> []
-					// ];			
-
-
-// }
-
-
-
-
-// $procesos = IsaVariacionesActividades::find()->where( "estado=1 and id_proyecto=$idProyecto" )->all();
-// $procesos = ArrayHelper::map($procesos,'id','descripcion');
-       
-// foreach ($procesos as $idProceso => $dataProceso)
-// {
-		// $items[] = 	[
-						// 'label' 		=>  $dataProceso,
-						// 'content' 		=>  $this->render( 'variacionesactividades', 
-														// [ 
-															// 'idProceso' => $idProceso,
-															// 'form' => $form,
-															// 'idProyecto' => $idProyecto,
-															// 'datos' => $datos,
-														// ] 
-											// ),
-						// 'contentOptions'=> []
-					// ];			
-
-
-// }
-
-// echo Collapse::widget([
-    // 'items' => $items, 
-// ]);

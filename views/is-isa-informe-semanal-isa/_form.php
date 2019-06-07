@@ -1,4 +1,11 @@
 <?php
+/**
+ * Desarrollador:	Edwin Molina Grisales
+ * Fecha: 2019-06-04
+ * Modificaciones: Se agrega filtro por fechas
+ * 
+ */
+
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -9,6 +16,11 @@ use dosamigos\datepicker\DatePicker;
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 
 $nroSemana = empty( $_POST['nroSemana'] ) ? '' : $_POST['nroSemana'];
+$fecha_desde 	= empty( $_POST['fecha_desde'] ) ? '' : $_POST['fecha_desde'];
+$fecha_hasta 	= empty( $_POST['fecha_hasta'] ) ? '' : $_POST['fecha_hasta'];
+
+$model->desde = $fecha_desde;
+$model->hasta = $fecha_hasta;
 ?>
 
 <div class="is-isa-informe-semanal-isa-form">

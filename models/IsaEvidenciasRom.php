@@ -44,6 +44,7 @@ class IsaEvidenciasRom extends \yii\db\ActiveRecord
     {
         return [
             // [['id_rom_actividad', 'actas', 'reportes', 'listados', 'plan_trabajo', 'formato_seguimiento', 'formato_evaluacion', 'fotografias', 'vidoes', 'otros_productos', 'cantidad', 'archivos_enviados_entregados', 'fecha_entrega_envio', 'estado', 'id_reporte_operativo_misional'], 'required'],
+            [['actas', 'reportes', 'listados', 'plan_trabajo', 'formato_seguimiento', 'formato_evaluacion', 'fotografias', 'vidoes', 'otros_productos'], 'required'],
             [['id_rom_actividad', 'cantidad', 'estado', 'id_reporte_operativo_misional'], 'required'],
             [['id_rom_actividad', 'cantidad', 'estado', 'id_reporte_operativo_misional'], 'default', 'value' => null],
             [['id_rom_actividad', 'cantidad', 'estado', 'id_reporte_operativo_misional'], 'integer'],

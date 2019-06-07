@@ -125,17 +125,17 @@ $porcetaje_actividades		= 0;
 		
 		foreach( $proyectos as $idProyecto => $descripcionProyecto )
 		{
-			$proy = [
-						'id' 				=> $idProyecto,
-						'descripcion' 		=> $descripcionProyecto,
-						'actividades_rom2'	=> IsaActividadesRom::findOne([ 
-																	'id_reporte_operativo_misional' => $id,
-																	'estado' 						=> 1,
-																	'nro_semana' 					=> $nroSemana,
-																	'id_rom_actividad' 				=> $index,
-																]),
-						'procesos'			=> [],
-					];
+			// $proy = [
+						// 'id' 				=> $idProyecto,
+						// 'descripcion' 		=> $descripcionProyecto,
+						// 'actividades_rom2'	=> IsaActividadesRom::findOne([ 
+																	// 'id_reporte_operativo_misional' => $id,
+																	// 'estado' 						=> 1,
+																	// 'nro_semana' 					=> $nroSemana,
+																	// 'id_rom_actividad' 				=> $index,
+																// ]),
+						// 'procesos'			=> [],
+					// ];
 			
 			$dataProcesos = IsaRomProcesos::find()
 								->alias( 'p' )
@@ -188,8 +188,8 @@ $porcetaje_actividades		= 0;
 											->where( 'id_reporte_operativo_misional='.$id )
 											->andWhere( 'id_rom_actividad='.$index )
 											->andWhere( 'estado=1' )
-											->andWhere( 'nro_semana='.$nroSemana )
-											// ->andWhere( "fecha_desde BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' OR fecha_hasta BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' " )
+											// ->andWhere( 'nro_semana='.$nroSemana )
+											->andWhere( "fecha_desde BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' OR fecha_hasta BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' " )
 											// ->andWhere( 'nro_semana=1' )
 											->all();
 				
@@ -261,7 +261,7 @@ $porcetaje_actividades		= 0;
 				}
 			}
 			
-			$datos[] = $proy;
+			// $datos[] = $proy;
 		}
 	}
 

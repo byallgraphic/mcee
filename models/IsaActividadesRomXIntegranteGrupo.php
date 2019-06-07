@@ -46,6 +46,7 @@ class IsaActividadesRomXIntegranteGrupo extends \yii\db\ActiveRecord
             [['duracion_sesion', 'logros', 'fortalezas', 'debilidades', 'alternativas', 'retos', 'articulacion', 'evaluacion', 'observaciones_generales', 'alarmas', 'justificacion_activiad_no_realizada', 'diligencia', 'rol', 'fecha_diligencia', 'id_rom_actividad', 'estado', 'id_reporte_operativo_misional'], 'required'],
             [['duracion_sesion', 'logros', 'fortalezas', 'debilidades', 'alternativas', 'retos', 'articulacion', 'evaluacion', 'observaciones_generales', 'alarmas', 'justificacion_activiad_no_realizada', 'diligencia', 'rol', 'fecha_diligencia'], 'string'],
             [['fecha_reprogramacion'], 'safe'],
+            [['duracion_sesion'],'match','pattern' => '/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/' ],
             [['id_rom_actividad', 'estado', 'id_reporte_operativo_misional'], 'default', 'value' => null],
             [['id_rom_actividad', 'estado', 'id_reporte_operativo_misional'], 'integer'],
             [['id_reporte_operativo_misional'], 'exist', 'skipOnError' => true, 'targetClass' => IsaReporteOperativoMisional::className(), 'targetAttribute' => ['id_reporte_operativo_misional' => 'id']],

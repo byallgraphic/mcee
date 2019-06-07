@@ -139,7 +139,11 @@ class RomReporteOperativoMisionalController extends Controller
 			$val[$key] = $value;
 		}
 		
-		$val['equipo_nombre'] = IsaEquiposCampo::findOne( $modelIntervencion->id_equipo_campos )->nombre;
+		$equipo = IsaEquiposCampo::findOne( $modelIntervencion->id_equipo_campos );
+		
+		$val['equipo_nombre'] = '';
+		if( $equipo && $equipo->nombre )
+			$val['equipo_nombre'] = $equipo->nombre;
 		
 		return Json::encode($val);
 	}
@@ -645,6 +649,18 @@ class RomReporteOperativoMisionalController extends Controller
 										->all();
 										
 					$actividadesParticipadas = ArrayHelper::map( $dataActividadesParticipadas,'id','nombre_actividad' );
+					
+					$dataActividadesParticipadas = IsaIntervencionIeo::find()
+										->alias('i')
+										->innerJoin('isa.actividades_isa ai', 'ai.id=i.id_actividades_isa')
+										->innerJoin('isa.procesos_generales pg', 'pg.id=ai.id_procesos_generales')
+										->where( 'i.estado=1' )
+										->andWhere( 'pg.estado=1' )
+										->andWhere('i.id_equipo_campos IS NULL')
+										->andWhere( 'pg.id='.$idActividad )
+										->all();
+					
+					$actividadesParticipadas += ArrayHelper::map( $dataActividadesParticipadas,'id','nombre_actividad' );
 					
 					//Array de actividades
 					$act =  [

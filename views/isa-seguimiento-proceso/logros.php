@@ -35,40 +35,32 @@ foreach ($logros as $idLogros => $dataLogros)
 		$index++;
 }
 
+$items[] = 	[
+				'label' 		=>  "Variaciones en la implementación del proyecto: Describa las situaciones de dificultad, reto  y/o ventaja, surgidos o presentes durante el periodo,  que influyen en el cumplimiento de los objetivos.",
+				'content' 		=>  $this->render( 'variacionesactividades', 
+												[ 
+													'idActividad' => $idActividad,
+													'form' => $form,
+													// 'idProyecto' => $idProyecto,
+													'datos' => $datos,
+												] 
+									),
+				'contentOptions'=> []
+			];
+					
+
 
 echo Tabs::widget([
     'items' => $items, 
 ]);
 
-$this->registerCss(".nav-tabs > li {
+// $this->registerCss(".nav-tabs > li {
 						
-						width: 380px;
-						height: 80px;
-					}
+						// width: 380px;
+						// height: 100px;
+					// }
 					
-					.row {
-						margin-left: 2px;
-					}");
+					// .row {
+						// margin-left: 2px;
+					// }");
 
-// foreach ($logros as $idLogros => $dataLogros)
-// {
-		// $items[] = 	[
-						// 'label' 		=>  $dataLogros,
-						// 'content' 		=>  $this->render( 'semanalogros', 
-														// [ 
-															// 'idLogros' => $idLogros,
-															// 'form' => $form,
-															// 'datos' => $datos,
-															// 'idActividad' => $idActividad,
-														// ] 
-											// ),
-						// 'contentOptions'=> []
-					// ];			
-
-
-// }
-
-
-// echo Collapse::widget([
-    // 'items' => $items, 
-// ]);

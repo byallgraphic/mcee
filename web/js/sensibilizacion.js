@@ -70,7 +70,7 @@ $('div[id *= isaactividadesisa-],[id *= -requerimientos_tecnicos]').change(funct
   
 });
 
-//crear los requerimientos tecnicos con el campo de texto para la cantidad
+//crear los requerimientos logisticos con el campo de texto para la cantidad
 $('div[id *= isaactividadesisa-],[id *= -requerimientos_logistico]').change(function(){
   
   resul = $(this).attr("id").split("-");
@@ -84,9 +84,18 @@ $('div[id *= isaactividadesisa-],[id *= -requerimientos_logistico]').change(func
   $(""+ idSelect +" option[value='"+idReqLogisticos+"']").remove();
   $(''+idSelect+'').trigger("chosen:updated");
   
+  if(texto == "Transporte")
+  {
+	$("#reqLogisticos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a> <br>Cantidad &nbsp;&nbsp;&nbsp;<input id="'+idNombre+'" name="'+idNombre+'"  type="text" size="2" maxlength="2"  style="width:35px;" >       <br> Dir.Origen &nbsp;<input id="'+idNombre+'" name="'+idNombre+'"  type="text" size="30" >    <br>Dir.Destino    <input id="'+idNombre+'" name="'+idNombre+'"  type="text" size="30" ></li>');
+    
+  }
+ else
+ {
+	$("#reqLogisticos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a><input id="'+idNombre+'" name="'+idNombre+'"  type="text" size="2" maxlength="2"  style="width:35px;" ></li>');
   
-  $("#reqLogisticos-"+idActividad+" ul").append('<li class="search-choice"><span>'+texto+'</span> <a onclick="borrarRequerimiento(this);" class="search-choice-close" data-option-array-index=""></a><input id="'+idNombre+'" name="'+idNombre+'"  type="text" size="2" maxlength="2"  style="width:35px;" ></li>');
+ }
   
+ 
 });
 
 
@@ -101,7 +110,7 @@ function borrarRequerimiento(obj)
 	idActividad =  infoInput[2].split("]")[0];
 	idItem =infoInput[3].split("]")[0] ;
 	nombreItem = $(obj).siblings("span").text()
-	// alert(infoInput[3].split("]")[0] );
+
 	if (infoInput[0] == "reqLogisticos")
 	{
 		idSelect = $("#isaactividadesisa-"+ idActividad +"-requerimientos_logisticos");
