@@ -20,6 +20,7 @@ else
 	die;
 }
 
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -27,8 +28,7 @@ use yii\widgets\ActiveForm;
 /* @var $model app\models\Documentos */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->registerJsFile(Yii::$app->request->baseUrl.'/js/documentosGestionComunitaria.js',['depends' => [\yii\web\JqueryAsset::className()]]);
-// $this->registerJs( "alert(1111)" );
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/paz-cultura.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 
 
 ?>
@@ -65,6 +65,12 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/documentosGestionComunita
 			<div class="form-group" style='display:inline;'>
 				<?= Html::buttonInput('Agregar', ['class' => 'btn btn-success', 'onclick' => 'agregarCampos()', 'id' => 'btnAgregar' ]) ?>
 			</div>
+
+            <?= Html::a('Volver',
+                [
+                    'paz-cultural/index',
+                ],
+                ['class' => 'btn btn-info']) ?>
 			
 			<div class="form-group" style='display:inline;'>
 				<?= Html::buttonInput('Eliminar', ['class' => 'btn btn-success', 'onclick' => 'eliminarCampos()', 'id' => 'btnEliminar', 'style' => 'display:none' ]) ?>
@@ -99,7 +105,7 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/documentosGestionComunita
     
 	
 	<div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+        <?= Html::button('Guardar', ['class' => 'btn btn-success', 'id' => 'pazCulturaSave']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -25,8 +25,7 @@ use yii\helpers\Json;
 
 class PoblarTablaController extends Controller
 {
-	public function actionColumnasPorTabla( $tabla ){
-		
+	public function actionColumnasPorTabla($schema, $tabla ){
 		$data = [
 			'error' => 0,
 			'msg' 	=> '',
@@ -34,7 +33,7 @@ class PoblarTablaController extends Controller
 		];
 		
 		// var_dump( $file );
-		$sql = "SELECT ordinal_position, column_name 
+		$sql = "SELECT ordinal_position, column_name, table_schema
 				  FROM information_schema.columns 
 				 WHERE table_name = '".$tabla."'
 			  ORDER BY 1;";
@@ -49,7 +48,10 @@ class PoblarTablaController extends Controller
 		{
 			// var_dump( $value );
 			// var_dump( $value['column_name'] );
-			$data['data'][] = $value['column_name'];
+
+            if($value['table_schema'] === $schema){
+                $data['data'][] = $value['column_name'];
+            }
 		}
 		
 		echo Json::encode( $data );
@@ -106,7 +108,7 @@ class PoblarTablaController extends Controller
     {
 		$connection = Yii::$app->getDb();
 		
-		$sql = "SELECT tablename FROM pg_tables WHERE schemaname = 'public' ORDER BY 1;";
+		$sql = "select schema_name from information_schema.schemata;";
 		
 		$command = $connection->createCommand($sql);
 					
@@ -115,7 +117,7 @@ class PoblarTablaController extends Controller
 		$tablas = [];
 		foreach( $result as $key => $value )
 		{
-			$tablas[$value['tablename']] = $value['tablename'];
+			$tablas[$value['schema_name']] = $value['schema_name'];
 		}
 		
 		$model = new PoblarTabla();
@@ -125,5 +127,24 @@ class PoblarTablaController extends Controller
 			'tablas'=> $tablas,
 			'msg'	=> $msg,
 		]);
+    }
+
+    public function actionTablas($schema){
+
+        $connection = Yii::$app->getDb();
+
+        $sql = "SELECT tablename FROM pg_tables WHERE schemaname = '$schema' ORDER BY 1;";
+
+        $command = $connection->createCommand($sql);
+
+        $result = $command->queryAll();
+
+        $tablas = [];
+        foreach( $result as $key => $value )
+        {
+            $tablas[$value['tablename']] = $value['tablename'];
+        }
+
+        return json_encode($result);
     }
 }

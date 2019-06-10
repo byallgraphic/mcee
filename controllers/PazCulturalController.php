@@ -232,15 +232,6 @@ class PazCulturalController extends Controller
                         exit("finnn....");
                     }
                 }
-                else{
-                    exit( "No hay archivo cargado" );
-                }
-            }
-
-            //Se valida que todos los campos de todos los modelos sean correctos
-            if (!DocumentosGestionComunitaria::validateMultiple($models)) {
-                Yii::$app->response->format = 'json';
-                return \yii\widgets\ActiveForm::validateMultiple($models);
             }
 
             //Guardo todos los modelos
@@ -355,5 +346,16 @@ class PazCulturalController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionValidateModel(){
+        $count 	= 1;
+        $models = [];
+        for( $i = 0; $i < $count; $i++ )
+        {
+            $models[] = new PazCultura();
+        }
+        Yii::$app->response->format = 'json';
+        return \yii\widgets\ActiveForm::validateMultiple($models);
     }
 }
