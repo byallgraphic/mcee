@@ -113,16 +113,16 @@ class RomReporteOperativoMisionalController extends Controller
 			$id_reporte = $modelReporteMisional->id;
 			
 			$model = IsaActividadesRom::findOne([
-								'estado' => 1,
+								'estado' 						=> 1,
 								'id_rom_actividad' 				=> $romActividad,
 								'sesion_actividad' 				=> $sesionActividad,
-								'id_reporte_operativo_misional' => $id_reporte,
+								// 'id_reporte_operativo_misional' => $id_reporte,
 								'nro_semana' 					=> $nro_semana,
 							]);
 			
 			if( $model ){
 				// $val = $this->actionUpdate( $model->id_reporte_operativo_misional );
-				$val = $id_reporte;
+				$val = $model->id_reporte_operativo_misional;
 			}
 		}
 		
@@ -290,16 +290,17 @@ class RomReporteOperativoMisionalController extends Controller
 		
 		$id_perfil_persona = $_SESSION['perfilesxpersonas'];
 		
+		// $model = RomReporteOperativoMisional::findOne([
+							// 'estado'			=> 1,
+							// 'id_institucion' 	=> $id_institucion,
+							// 'id_sedes' 			=> $id_sede,
+						// ]);
 		
-		$model = RomReporteOperativoMisional::findOne([
-							'estado'			=> 1,
-							'id_institucion' 	=> $id_institucion,
-							'id_sedes' 			=> $id_sede,
-						]);
+		// if( !$model ){
+			// $model = new RomReporteOperativoMisional();
+		// }
 		
-		if( !$model ){
-			$model = new RomReporteOperativoMisional();
-		}
+		$model = new RomReporteOperativoMisional();
 		
 		$idInstitucion = $_SESSION['instituciones'][0];
 		

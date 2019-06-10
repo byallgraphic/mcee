@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/documentos.js',['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/romReporteOperativoMisional.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 
 $this->registerJs("
 	$( document ).on('click', 'li', function() { 
@@ -125,9 +126,18 @@ $this->registerJs("
 										function( data ){
 											console.log( data );
 											if( data ){
-												$( '#nro_equipo-'+__target ).val( data.equipo_nombre )
-												$( '#perfiles-'+__target ).val( data.perfiles )
+												if( data.equipo_nombre != '' )
+												{
+													$( '#nro_equipo-'+__target ).val( data.equipo_nombre );
+													$( '.nro_equipo-'+__target ).css({display:''});
+												}
+												else
+												{
+													$( '.nro_equipo-'+__target ).css({display:'none'});
+												}
+												
 												$( '#docente_orientador-'+__target ).val( data.docente_orientador )
+												$( '#perfiles-'+__target ).val( data.perfiles )
 											}
 										},
 										'json'

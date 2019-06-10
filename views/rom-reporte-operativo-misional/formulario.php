@@ -45,8 +45,14 @@ $array2 = [];
 if( $actividades_rom->estado_actividad !== 179 ){
 	$array1 = ['readonly' => 'readonly'];
 	$array2 = [ 'readonly' => 'readonly', 'disabled' => 'disabled' ];
+	
+	if( empty( $integrante->justificacion_activiad_no_realizada ) )
+		$integrante->justificacion_activiad_no_realizada = 'No Aplica';
 }
 
+$integrante->fecha_diligencia = date( "Y-m-d" );
+
+$actividades_rom->fecha_hasta = date( "Y-m-d" );
 ?>
 
 <!-- ACTIVIDADES ROM -->
@@ -67,10 +73,10 @@ if( $actividades_rom->estado_actividad !== 179 ){
 							'autoclose' => true,
 							'format'    => 'yyyy-mm-dd',
 					],
-				]); ?>
+				])->label('Fecha'); ?>
 	</div>
 
-	<div class="col-md-6">
+	<div class="col-md-6" style='display:none;'>
 		<?= $form->field($actividades_rom, "[$idActividad]fecha_hasta")->label('Hasta')->widget(
 					DatePicker::className(), [
 						// modify template for custom rendering
@@ -99,15 +105,21 @@ if( $actividades_rom->estado_actividad !== 179 ){
 
 <div class="row">
 		
-	<div class="col-md-6">
+	<div class="col-md-6 nro_equipo-<?=$idActividad ?>" style='display:<?= empty( $datos_adicionales['equipo_nombre'] ) ? 'none;': ';' ?>'>
 		<div class="form-group" style='margin-bottom: 0px;'>
 			<label class="control-label" for="">No. del Equipo o equipos en campo</label>
 		</div>	
 	</div>
 			
-	<div class="col-md-6">
+	<!-- <div class="col-md-6">
 		<div class="form-group" style='margin-bottom: 0px;'>
 			<label class="control-label" for="">Perfiles (Seleccione el perfil y cantidad por perfiles de profesionales en campo)</label>
+		</div>	
+	</div> -->
+	
+	<div class="col-md-6">
+		<div class="form-group" style='margin-bottom: 0px;'>
+			<label class="control-label" for="">Coordinador técnico pedagógico (Nombre del o la profesional)</label>
 		</div>	
 	</div>
 
@@ -115,20 +127,27 @@ if( $actividades_rom->estado_actividad !== 179 ){
 
 <div class="row">
 		
-	<div class="col-md-6">
+	<div class="col-md-6 nro_equipo-<?=$idActividad ?>" style='display:<?= empty( $datos_adicionales['equipo_nombre'] ) ? 'none;': ';' ?>'>
 		<div class="form-group">
 			<input id="nro_equipo-<?=$idActividad ?>" class="form-control" readonly value='<?= $datos_adicionales['equipo_nombre']?>'>
 		</div>	
 	</div>
 			
-	<div class="col-md-6">
+	<!-- <div class="col-md-6">
 		<div class="form-group">
 			<input id="perfiles-<?=$idActividad ?>" class="form-control" readonly value='<?= $datos_adicionales['perfiles']?>'>
+		</div>	
+	</div> -->
+	
+	<div class="col-md-6">
+		<div class="form-group">
+			<input id="docente_orientador-<?=$idActividad ?>" class="form-control" readonly value='<?= $datos_adicionales['docente_orientador']?>'>
 		</div>	
 	</div>
 
 </div>
 
+<!--
 <div class="row">
 		
 	<div class="col-md-6">
@@ -138,8 +157,9 @@ if( $actividades_rom->estado_actividad !== 179 ){
 	</div>
 
 </div>
+-->
 
-<div class="row">
+<!-- <div class="row">
 		
 	<div class="col-md-6">
 		<div class="form-group">
@@ -147,7 +167,7 @@ if( $actividades_rom->estado_actividad !== 179 ){
 		</div>	
 	</div>
 
-</div>
+</div> -->
 
 <!-- --------------------------------------- FIN ACTIVIDADES ROM --------------------------------------------------------------------- -->
 
@@ -259,11 +279,11 @@ if( $actividades_rom->estado_actividad !== 179 ){
 			<?= $form->field($evidencias_rom, "[$idActividad]cantidad")->textInput([ 'value' => 0, 'readonly' => 'readonly' ]) ?>
 		</div>
 		
-		<div class="col-md-4">
+		<div class="col-md-4" style='display:none;'>
 			<?= $form->field($evidencias_rom, "[$idActividad]archivos_enviados_entregados")->textInput([ 'value' => '' ]) ?>
 		</div>
 		
-		<div class="col-md-4">
+		<div class="col-md-4" style='display:none;'>
 			<?= $form->field($evidencias_rom, "[$idActividad]fecha_entrega_envio")->widget(
 				DatePicker::className(), [
 					// modify template for custom rendering
@@ -392,16 +412,7 @@ if( $actividades_rom->estado_actividad !== 179 ){
 <div class="row">
 
 	<div class="col-md-6">
-		<?= $form->field($integrante, "[$idActividad]fecha_diligencia")->label()->widget(
-				DatePicker::className(), [
-							// modify template for custom rendering
-							'template' => '{addon}{input}',
-							'language' => 'es',
-							'clientOptions' => [
-										'autoclose' => true,
-										'format'    => 'yyyy-mm-dd',
-								],
-					]);  ?>
+		<?= $form->field($integrante, "[$idActividad]fecha_diligencia")->textInput( ['readonly' => true] ) ?>
 	</div>
 	
 </div>
