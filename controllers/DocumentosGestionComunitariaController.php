@@ -177,8 +177,6 @@ class DocumentosGestionComunitariaController extends Controller
 		if( Yii::$app->request->post('DocumentosGestionComunitaria') )
 			$data = Yii::$app->request->post('DocumentosGestionComunitaria');
 
-		print_r($data);
-		die();
 		$count 	= count( $data );
 		
 		$models = [];

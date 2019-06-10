@@ -38,7 +38,7 @@ class IsaIntervencionIeo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['perfiles', 'docente_orientador', 'fases', 'nombre_actividad', 'actividad_desarrollar', 'lugares_recorrer', 'tematicas_abordadas', 'objetivos_especificos', 'tiempo_previsto','productos'], 'string'],
+            [['docente_orientador', 'fases', 'nombre_actividad', 'actividad_desarrollar', 'lugares_recorrer', 'tematicas_abordadas', 'objetivos_especificos', 'tiempo_previsto','productos'], 'string'],
             [['num_encuentro', 'id_actividades_isa', 'id_equipo_campos', 'estado'], 'default', 'value' => null],
             [['num_encuentro', 'id_actividades_isa', 'id_equipo_campos', 'estado'], 'integer'],
             [['id_actividades_isa'], 'exist', 'skipOnError' => true, 'targetClass' => IsaActividadesIsa::className(), 'targetAttribute' => ['id_actividades_isa' => 'id']],

@@ -75,7 +75,7 @@ class PazCulturalController extends Controller
         $consecutivo 		= Yii::$app->request->post('consecutivo');
         $categoriaDocumento = Yii::$app->request->post('categoriaDocumento');
 
-        $model = new DocumentosGestionComunitaria();
+        $model = new PazCultura();
 
         $dataInstituciones = Instituciones::find()
             ->where( 'estado=1' )
@@ -203,13 +203,13 @@ class PazCulturalController extends Controller
                     // $persona = Personas::findOne( $model->id_persona );
 
                     //Si no existe la carpeta se crea
-                    $carpeta = "../documentos/DocumentosGestionComunitaria/".$tipo_perfil;
+                    $carpeta = "../documentos/pazcultural/".$tipo_perfil;
                     if (!file_exists($carpeta)) {
                         mkdir($carpeta, 0777, true);
                     }
 
                     //Construyo la ruta completa del archivo a guardar
-                    $rutaFisicaDirectoriaUploads  = "../documentos/DocumentosGestionComunitaria/".$tipo_perfil;
+                    $rutaFisicaDirectoriaUploads  = "../documentos/pazcultural/".$tipo_perfil;
                     $rutaFisicaDirectoriaUploads .= $file->baseName;
                     $rutaFisicaDirectoriaUploads .= date( "_Y_m_d_His" ) . '.' . $file->extension;
 
@@ -302,7 +302,7 @@ class PazCulturalController extends Controller
                     mkdir($carpeta, 0777, true);
                 }
 
-                $rutaFisicaDirectoriaUploads  = "../documentos/documentosInteresDocentes/".$persona->identificacion."/";
+                $rutaFisicaDirectoriaUploads  = "../documentos/pazcultural/".$persona->identificacion."/";
                 $rutaFisicaDirectoriaUploads .= $file->baseName;
                 $rutaFisicaDirectoriaUploads .= date( "_Y_m_d_His" ) . '.' . $file->extension;
 

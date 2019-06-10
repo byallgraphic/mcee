@@ -66,7 +66,7 @@ class IsaActividadesIsa extends \yii\db\ActiveRecord
             'id' => 'ID',
             'id_iniciacion_sencibilizacion_artistica' => 'Id Iniciacion Sencibilizacion Artistica',
             'id_procesos_generales' => 'Id Procesos Generales',
-            'fecha_prevista_desde' => 'Fecha Prevista Desde',
+            'fecha_prevista_desde' => 'Fecha',
             'fecha_prevista_hasta' => 'Fecha Prevista Hasta',
             'num_equipo_campo' => 'Núm. Equipo Campo',
             'docente_orientador' => 'Coordinador técnico pedagógico',

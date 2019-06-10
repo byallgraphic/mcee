@@ -38,6 +38,8 @@ if( strpos($_GET['r'], 'update') > -1)
 	$idintervencion = IsaIntervencionIeo::find()->Where("id_actividades_isa=".key($isa))->all();
 	$idintervencion = ArrayHelper::map($idintervencion,'id','estado');
 	$intervencionIEO = IsaIntervencionIeo::findOne(key($idintervencion));
+	
+	$intervencionIEO->perfiles =  explode(",", $intervencionIEO->perfiles);
 }
 
 
@@ -53,13 +55,13 @@ if( strpos($_GET['r'], 'update') > -1)
 
 </script>
     <h3 style='background-color: #ccc;padding:5px;'>Fecha prevista para realizar la actividad</h3>
-	<div class="row">
-	  <div class="col-md-4">
+
+	  
 	  
 	  <?= $form->field($actividades_isa, "[$idProceso]numero_semana")->hiddenInput(['value'=> 1])->label(false) ?> 
 	  
- 
-	  </div>
+ <div class="row">
+	  
 	  <div class="col-md-4">
 	  <?= $form->field($actividades_isa, "[$idProceso]fecha_prevista_desde")->widget(
         DatePicker::className(), [
@@ -70,8 +72,12 @@ if( strpos($_GET['r'], 'update') > -1)
                 'autoclose' => true,
                 'format'    => 'yyyy-mm-dd',
         ],
-    ]);  ?></div>
-	  <div class="col-md-4"><?= $form->field($actividades_isa, "[$idProceso]fecha_prevista_hasta")->widget(
+    ]);  ?>
+	</div>
+	</div>
+	 
+	  
+	  <?php $form->field($actividades_isa, "[$idProceso]fecha_prevista_hasta")->widget(
         DatePicker::className(), [
             // modify template for custom rendering
             'template' => '{addon}{input}',
@@ -80,8 +86,8 @@ if( strpos($_GET['r'], 'update') > -1)
                 'autoclose' => true,
                 'format'    => 'yyyy-mm-dd',
         ],
-    ]);  ?> </div>
-	</div>
+    ]);  ?> 
+
      
 
 <div class="intervencion" style="border:1px solid #46a3dc;padding:1%;border-radius:1%;margin-bottom:3%" id="intervencion-0">  
@@ -122,7 +128,27 @@ if( strpos($_GET['r'], 'update') > -1)
 	
 	
    <div class="row">
-	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]perfiles")->DropDownList( $perfiles,['prompt' =>'Seleccione...','title'=>'Seleccione el perfil y cantidad por perfiles de profesionales en campo', 'data-toggle'=>'tooltip']) ?></div>
+	  <div class="col-md-6">
+	 
+	   <?php
+			
+echo    $form->field($intervencionIEO, "[$idProceso]perfiles")->widget(
+						Chosen::className(), [
+							'items' => $perfiles,
+							'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
+							'multiple' => true,
+							'clientOptions' => [
+								'search_contains' => true,
+								'single_backstroke_delete' => false,
+								'title'=>'Seleccione el perfil y cantidad por perfiles de profesionales en campo',
+							'data-toggle'=>'tooltip',
+							],
+                            'placeholder' => 'Seleccione..',
+					])?>
+	  </div>
+	  
+	  
+	  
 	  <div class="col-md-6">
 	  
 	  <?= $form->field($intervencionIEO, "[$idProceso]docente_orientador")->widget(
