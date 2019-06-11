@@ -82,13 +82,21 @@ $fileValidator = new FileValidator();
 	<div id=dvTable class=table>
 		
 		<div class=row>
-	
-			<div class=cell>
-				<?= $form->field( $model, 'tabla')->dropDownList( $tablas, [ 'prompt' 	=> 'Seleccione...', 
-																			 'class'	=> 'form-control', 
-																			 'onChange'	=> 'seleccionarTabla(this);', 
-				] ) ?>
-			</div>
+
+            <div class=cell>
+                <?= $form->field( $model, 'schema')->dropDownList( $tablas, [ 'prompt' 	=> 'Seleccione...',
+                    'class'	=> 'form-control',
+                    'id' => 'schema',
+                    'onChange'	=> 'seleccionarSchema(this);',
+                ] ) ?>
+            </div>
+            <br>
+            <div class=cell>
+                <?= $form->field( $model, 'tabla')->dropDownList( [], [ 'prompt' 	=> 'Seleccione...',
+                    'class'	=> 'form-control',
+                    'onChange'	=> 'seleccionarTabla($("#schema").val(),this);',
+                ] ) ?>
+            </div>
 		
 		</div>
 		

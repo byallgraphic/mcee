@@ -1,7 +1,7 @@
-function seleccionarTabla( cmp )
+function seleccionarTabla(schema,cmp )
 {
 	
-	$.get( 'index.php?r=poblar-tabla/columnas-por-tabla&tabla='+$( cmp ).val(), function(data){
+	$.get( 'index.php?r=poblar-tabla/columnas-por-tabla&schema='+schema+'&tabla='+$( cmp ).val(), function(data){
 		
 		$( "#pCsvExample").html("");
 	  
@@ -27,4 +27,15 @@ function seleccionarTabla( cmp )
 		}
 	  
 	}, "json" );
+}
+
+function seleccionarSchema(cmp) {
+    $.get( 'index.php?r=poblar-tabla/tablas&schema='+$( cmp ).val(), function(data){
+        $("#poblartabla-tabla").empty();
+        $('#poblartabla-tabla').append('<option value="">Seleccione...</option>');
+        for(var i=0;i<data.length;i++){
+            $('#poblartabla-tabla').append('<option value="'+data[i]["tablename"]+'">'+data[i]["tablename"]+'</option>')
+        }
+
+    }, "json" );
 }

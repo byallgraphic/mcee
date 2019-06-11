@@ -8,6 +8,7 @@ use yii\validators\FileValidator;
 class PoblarTabla extends Model
 {
     public $tabla;
+    public $schema;
     public $archivo;
 	
 	public function rules()
@@ -25,6 +26,7 @@ class PoblarTabla extends Model
         return [
             'tabla' => 'Tabla',
             'archivo' => 'Archivo',
+            'schema' => 'Esquema'
         ];
     }
 }
