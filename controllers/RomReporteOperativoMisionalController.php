@@ -6,6 +6,19 @@ Desarrollador: Oscar David Lopez Villa
 Descripción: crud orientacion proceseso 
 ---------------------------------------
 Modificaciones:
+Fecha:	10-06-2019
+Persona encargada: Edwin Molina Grisales
+Cambios realizados: Se hacen cambios varios
+					- Campo perfiles ya no va
+					- Campo equipo se muestra si tiene información y si no en blanco (a veces no se selecciona equipo en el 1)
+					- Docente orientador cambiarlo a coordinador técnico pedagógico
+					- Obligar a llenar al menos un tipo y cantidad de población
+					- Nos dicen que evidencias son obligatorias
+					- Archivos enviados, fecha de entrega ya no van
+					- Duración en horas
+					- Fecha diligencia, es la fecha actual
+					- Duración es el promedio de duración de las sesiones
+----------------------------------------
 Fecha:	07-05-2019
 Persona encargada: Edwin Molina Grisales
 Cambios realizados: Se hacen cambios varios
