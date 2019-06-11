@@ -72,16 +72,16 @@ class PoblarTablaController extends Controller
 			$connection = Yii::$app->getDb();
 			
 			$file = UploadedFile::getInstance( $model, "archivo" );
-					
+
 			if( $file )
 			{
 				try
 				{
 					
 					// var_dump( $file );
-					$sql = "COPY ".$model->tabla." FROM '".$file->tempName."' WITH csv DELIMITER '".$delimiter."' ENCODING 'latin1';;";
-					
-					$command = $connection->createCommand($sql);
+                    $sql = "COPY ".$model->schema.'.'.$model->tabla." FROM '".$file->tempName."' DELIMITER '".$delimiter."'";
+
+                    $command = $connection->createCommand($sql);
 					
 					$result = $command->execute();
 					

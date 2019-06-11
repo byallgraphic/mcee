@@ -16,7 +16,7 @@ class PoblarTabla extends Model
 		$fileValidator = new FileValidator();
 		
 		return [
-			[['tabla','archivo'], 'required'],
+			[['tabla','archivo', 'schema'], 'required'],
 			[['archivo'], 'file','maxSize' => $fileValidator->sizeLimit  ],
 		];
 	}
