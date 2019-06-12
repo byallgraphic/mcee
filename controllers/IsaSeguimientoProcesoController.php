@@ -261,7 +261,7 @@ class IsaSeguimientoProcesoController extends Controller
             'model' => $model,
 			'sedes' => $this->obtenerSede(),
 			'instituciones'=> $this->obtenerInstituciones(),
-			'isaIntervencionIeo' => $this->intervencioIEO(),
+		
         ]);
     }
 
@@ -508,19 +508,10 @@ class IsaSeguimientoProcesoController extends Controller
 			'sedes' => $this->obtenerSede(),
 			'instituciones'=> $this->obtenerInstituciones(),
 			'datos'=>$datos,
-			'isaIntervencionIeo' => $this->intervencioIEO(),
+			
         ]);
     }
 
-
-	public function intervencioIEO()
-	{
-		$isaIntervencionIeo = new IsaIntervencionIeo();
-		$isaIntervencionIeo = $isaIntervencionIeo->find()->orderby("id")->all();
-		$isaIntervencionIeo = ArrayHelper::map($isaIntervencionIeo,'id','nombre_actividad');
-		
-		return $isaIntervencionIeo;
-	}
 	
 	
     /**

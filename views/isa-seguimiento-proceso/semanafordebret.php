@@ -22,17 +22,11 @@ $orientacion = new IsaOrientacionMetodologicaVariaciones();
             <div class="ieo-form">
 			
 				<div class="row">
-				  <div class="col-md-6"> <?= $form->field($semanLogros, "[$idIsaForDebRet]semana1")->textarea(['rows' => '3', 'value' => $datos['semanaLogrosfdr'][$idIsaForDebRet]['semana1'] ])?></div>
-				  <div class="col-md-6"><?= $form->field($semanLogros, "[$idIsaForDebRet]semana2")->textarea([ 'rows' => '3', 'value' => $datos['semanaLogrosfdr'][$idIsaForDebRet]['semana2'] ])?></div>
+					<div id="<?= $idIsaForDebRet;?>_logrosVariciones"></div>
 				</div>
-
+				
                 <div class="row">
-				  <div class="col-md-6"><?= $form->field($semanLogros, "[$idIsaForDebRet]semana3")->textarea([ 'rows' => '3', 'value' => $datos['semanaLogrosfdr'][$idIsaForDebRet]['semana3'] ])?> </div>
-				  <div class="col-md-6"><?= $form->field($semanLogros, "[$idIsaForDebRet]semana4")->textarea([ 'rows' => '3', 'value' => $datos['semanaLogrosfdr'][$idIsaForDebRet]['semana4'] ])?></div>
-				</div>   
-                    
-                <div class="row">
-				  <div class="col-md-8"><?= $form->field($orientacion, "[$idIsaForDebRet]descripcion")->textarea(['rows' => '3', 'value' => $datos['OrientacionMetodologicaVariaciones'][$idVariaciones][$idIsaForDebRet]['descripcion'] ])->label("ORIENTACION METODOLÓGICA")?></div>
+				  <div class="col-md-8"><?= $form->field($orientacion, "[$idIsaForDebRet]descripcion")->textarea(['rows' => '3' ])->label("ORIENTACION METODOLÓGICA")?></div>
 				  <div class="col-md-4"></div>
 				</div>  
                     
