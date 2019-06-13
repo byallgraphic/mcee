@@ -12,8 +12,9 @@ $colors = ["#cce5ff", "#d4edda", "#f8d7da", "#fff3cd", "#d1ecf1", "#d6d8d9", "#c
 
 
 
-$logros = IsaLogrosActividades::find()->where( "estado=1 and id_actividades=$idActividad" )->all();
+$logros = IsaLogrosActividades::find()->where( "estado = 1 and id_rom_actividades = $idActividad" )->all();
 $logros = ArrayHelper::map($logros,'id','descripcion');
+
 
 $index = 0; 
  
@@ -27,6 +28,7 @@ foreach ($logros as $idLogros => $dataLogros)
 															'form' => $form,
 															'datos' => $datos,
 															'idActividad' => $idActividad,
+															'dataLogros' => $dataLogros,
 														] 
 											),
 						'headerOptions' => ['class' => 'tab1', 'style' => "background-color: $colors[$index];"],
@@ -37,22 +39,12 @@ foreach ($logros as $idLogros => $dataLogros)
 		$index++;
 }
 
-// $items[] = 	[
-				// 'label' 		=>  "Variaciones en la implementación del proyecto: Describa las situaciones de dificultad, reto  y/o ventaja, surgidos o presentes durante el periodo,  que influyen en el cumplimiento de los objetivos.",
-				// 'content' 		=>  $this->render( 'variacionesactividades', 
-												// [ 
-													// 'idActividad' => $idActividad,
-													// 'form' => $form,
-													// 'datos' => $datos,
-												// ] 
-									// ),
-				// 'contentOptions'=> []
-			// ];
+
 					
 
 
 $index = 0; 
-$variaciones = IsaVariacionesActividades::find()->where( "estado=1 and id_actividades=$idActividad" )->all();
+$variaciones = IsaVariacionesActividades::find()->where( "estado=1 and id_rom_actividades=$idActividad" )->all();
 $variaciones = ArrayHelper::map($variaciones,'id','descripcion');
 
 // echo "<pre>"; print_r($variaciones); echo "</pre>"; 
@@ -72,6 +64,8 @@ foreach ($variaciones as $idVariaciones => $dataVariaciones)
 															'form' => $form,
 															'datos' => $datos,
 															'idVariaciones' => $idVariaciones,
+															'idActividad' => $idActividad,
+															'dataIsaForDebRet' => $dataIsaForDebRet
 														] 
 											),
 						'headerOptions' => ['class' => 'tab1', 'style' => "background-color: $colors[$index];",'title'=>$dataVariaciones],

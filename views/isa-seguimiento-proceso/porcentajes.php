@@ -49,6 +49,8 @@ $data = IsIsaActividadesIsIsa::find()
 foreach( $data as $k => $v ){
 	$avanceSede += $v['porcentaje'];
 }
+
+
 ?>
 
 <div class="container-fluid">

@@ -18,14 +18,17 @@ $orientacion = new IsaOrientacionMetodologicaActividades();
 
 // die;
 
+
 ?>
+
+
 
 <div class="container-fluid">
             <div class="ieo-form">
 			
 				<div class="row">
 					
-					<div id="<?= $idLogros;?>_logros"></div>
+					<div id="<?= $idActividad."_".substr($dataLogros,0,5);?>"> </div>
 				 
 				</div>  
                  

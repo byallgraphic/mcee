@@ -8,6 +8,7 @@ use dosamigos\datepicker\DatePicker;
 /* @var $model app\models\IsaSeguimientoProceso */
 /* @var $form yii\widgets\ActiveForm */
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
+$this->registerJs( file_get_contents( '../web/js/seguimientoProceso.js' ) );
 ?>
 
 <div class="isa-seguimiento-proceso-form">
