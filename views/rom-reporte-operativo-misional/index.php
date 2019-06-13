@@ -12,6 +12,8 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+$this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
+
 $this->title = 'Reporte Operativo Misional';
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -21,17 +23,21 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/romReporteOperativoMision
 
 $this->registerJs("
 	$( document ).on('click', 'li', function() { 
-		var cont = $( this ).attr('href');
-		$( '[id^=content][id!='+cont.substr(1)+']', $(this).parent().parent() ).css({display:'none'}); 
-		$( $( this ).attr('href'), $(this).parent().parent() )
-			.toggle();
-		
-		var conClase = $( this ).hasClass( 'tab-selected' );
-		
-		$( 'li', $( this).parent() ).removeClass( 'tab-selected' );  
-		
-		if( !conClase )
-			$( this, $( this).parent() ).addClass( 'tab-selected' );  
+		try{
+			
+			var cont = $( this ).attr('href');
+			$( '[id^=content][id!='+cont.substr(1)+']', $(this).parent().parent() ).css({display:'none'}); 
+			$( $( this ).attr('href'), $(this).parent().parent() )
+				.toggle();
+			
+			var conClase = $( this ).hasClass( 'tab-selected' );
+			
+			$( 'li', $( this).parent() ).removeClass( 'tab-selected' );  
+			
+			if( !conClase )
+				$( this, $( this).parent() ).addClass( 'tab-selected' );  
+		}
+		catch(e){}
 	});
 	
 	
@@ -178,6 +184,22 @@ if( !$sede ){
 </div>
 </div>
 </div>
+
+
+<div id="modalArchivos" class="fade modal" role="dialog" tabindex="-1" >
+	<div class="modal-dialog modal-md modalemg">
+		<div class="modal-content">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3>Evidencias</h3>
+			</div>
+			<div class="modal-body">
+				<div id='modalArchivosContent'></div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="rom-reporte-operativo-misional-index">
 
    

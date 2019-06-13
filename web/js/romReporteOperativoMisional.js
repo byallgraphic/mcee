@@ -20,7 +20,7 @@
 			case 'isatipocantidadpoblacionrom': 
 			
 				$( "[id^="+_target+"]" ).each(function(){
-					if( $( this ).val()*1 > 0 ){
+					if( $.trim( $( this ).val() ) != '' && $( this ).val()*1 >= 0 ){
 						val = true;
 						return false;
 					}
@@ -34,3 +34,99 @@
 			default: break;
 		}
 	});
+	
+	function removeFile( cmp, evidencia, campo, archivo ){
+		
+		Swal.fire({
+			title: 'Está seguro de que desea borrar el archivo?',
+			text: "Una vez borrado el archivo no podrá recuperarlo",
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Aceptar',
+			cancelButtonText: 'Cancelar',
+		}).then((result) => {
+			if( result.value )
+			{
+				$.post(
+					"index.php?r=rom-reporte-operativo-misional/eliminar-archivo", 
+					{
+						id_evidencia	: evidencia,
+						campo 			: campo,
+						archivo 		: archivo,
+					}, 
+					function(data){
+						
+						if( data.resultado == true ){
+							
+							$( cmp ).parent().parent().css({ display:'none'});
+						}
+						else{
+							Swal.fire({
+								title: 'No se logró borrar el archivo',
+								text: "Inténtelo de nuevo más tarde",
+								type: 'warning',
+								showCancelButton: false,
+								confirmButtonColor: '#3085d6',
+								cancelButtonColor: '#d33',
+								confirmButtonText: 'OK',
+							})
+						}
+					}, 
+					"json" 
+				);
+			}
+		});
+	}
+	
+	function openViewFiles( evidencia ){
+		
+		$.get(
+				"index.php?r=rom-reporte-operativo-misional/archivos-evidencias", 
+				{
+					id_evidencia	: evidencia,
+				}, 
+				function(data){
+					$( "#modalArchivosContent" ).html( data );
+					
+					$( "#modalArchivos" ).modal('show')
+						.find("#modalArchivosContent")
+						.load( $(this).attr('value') );
+					
+				}, 
+				"json" 
+			);
+	}
+	
+	//Click del boton agregar equipo campo y cargar contenido del formulario agregar en el modal
+	// $("#modalEquipo").click(function()
+	// $(".modalEquipo").click(function()
+	$("#modal").on( 'click', '.modalEquipo' , function()
+	{ console.log( $( this).val() )
+		
+		// openViewFiles( $( this).val() )
+	
+		$( '[id^=modalArchivosContent]' ).html('')
+		// num = $(this).attr('id').split("_")[1];
+		
+		$( "#modalArchivos" ).modal('show')
+				.find("#modalArchivosContent")
+				.load( $(this).attr('value') );
+	});
+	
+	// var timepicker = new TimePicker('duracion_actividad', {
+        // lang: 'en',
+        // theme: 'dark'
+    // });
+	
+	// var timepicker = new TimePicker('duracion_sesion', {
+        // lang: 'en',
+        // theme: 'dark'
+    // });
+	
+	// timepicker.on('change', function(evt) {
+        // var value = (evt.hour || '00') + ':' + (evt.minute || '00');
+        // evt.element.value = value;
+
+    // });
