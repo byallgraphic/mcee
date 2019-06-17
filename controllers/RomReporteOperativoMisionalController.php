@@ -105,6 +105,107 @@ class RomReporteOperativoMisionalController extends Controller
         ];
     }
 	
+	public function actionEliminarArchivo()
+	{
+		$val = 	[ 'resultado' => false ];
+		
+		$id 		= Yii::$app->request->post('id_evidencia');
+		$campo 		= Yii::$app->request->post('campo');
+		$eliminar	= Yii::$app->request->post('archivo');		//archivo a elminar
+		
+		$model = IsaEvidenciasRom::findOne( $id );
+		
+		if( $model )
+		{
+			//Todos los archvios están separados por coma (,)
+			$archivos = explode( ",", $model->$campo );
+			
+			$guardar = [];
+			
+			//todo lo que sea diferente al archivo a elminar lo dejo intacto
+			foreach( $archivos as $archivo )
+			{
+				if( $archivo != $eliminar )
+				{
+					$guardar[] = $archivo;
+				}
+			}
+			
+			//Dejo el campo a guardar vació por defecto
+			$model->$campo = "";
+			if( count($guardar) > 0 )
+			{
+				$model->$campo = implode( ",", $guardar );
+			}
+			
+			//Guardo el resultado
+			if( $model->save( false ) )
+			{
+				//Si guardo no hubo problemas marco el resultado como verdadero
+				$val[ 'resultado' ] = true;
+			}
+		}
+		
+		return Json::encode( $val );
+	}
+	
+	public function actionArchivosEvidencias(){
+		
+		$id = Yii::$app->request->get('id_evidencia');
+		
+		$model = IsaEvidenciasRom::findOne( $id );
+		
+		$datos = [];
+		
+		if( $model )
+		{
+			$atributos = [
+							'actas' 				=> 'ACTAS', 
+							'reportes'				=> 'REPORTES', 
+							'listados'				=> 'LISTADOS', 
+							'plan_trabajo'			=> 'PLAN DE TRABAJO', 
+							'formato_seguimiento'	=> 'FORMATOS DE SEGUIMIENTO', 
+							'formato_evaluacion'	=> 'FORMATOS DE EVALUACIÓN', 
+							'fotografias'			=> 'FOTOGRAFÍAS', 
+							'vidoes'				=> 'VIDEOS', 
+							'otros_productos'		=> 'OTROS PRODUCTOS DE LA ACTIVIDAD', 
+						];
+						
+			
+			foreach( $atributos as $key => $value )
+			{
+				if( !empty( $model->$key ) )
+				{
+					$files = explode( ",", $model->$key );
+					
+					$archivos = [];
+					
+					foreach( $files as $file ){
+						
+						$descripcion = explode( "/", $file );
+						$descripcion = end( $descripcion );
+						
+						$archivos[] = 	[ 
+											'archivo'		=> $file,
+											'descripcion'	=> $descripcion,
+										];
+					}
+					
+					$datos[ $key ] = [ 
+											'title' 	=> $value,
+											'campo' 	=> $key,
+											'archivos' 	=> $archivos,
+										];
+				}
+			}
+		}
+		
+		return $this->renderAjax('viewFiles', [
+            'datos' 	=> $datos,
+            'id' 		=> $id,
+        ]);
+	}
+	
 	public function actionConsultarMision()
 	{
 		$id_sede 		= $_SESSION['sede'][0];
@@ -682,6 +783,7 @@ class RomReporteOperativoMisionalController extends Controller
 								'descripcion' 				=> $descripcionActividad,
 								'actividades_rom' 			=> new IsaActividadesRom(),
 								'evidencia'					=> new IsaEvidenciasRom(),
+								'id_evidencia'				=> null,
 								'poblacion'					=> new IsaTipoCantidadPoblacionRom(),
 								'integrante'				=> new IsaActividadesRomXIntegranteGrupo(),
 								'actividadesParticipadas' 	=> $actividadesParticipadas,
@@ -1177,6 +1279,11 @@ class RomReporteOperativoMisionalController extends Controller
 								'descripcion' 				=> IsaRomActividades::findOne( $actividad->id )->descripcion,
 								'actividades_rom'			=> $actividades_rom_upt,
 								'evidencia'					=> new IsaEvidenciasRom(),
+								'id_evidencia'				=> IsaEvidenciasRom::findOne([
+																			'estado' => 1,
+																			'id_rom_actividad' => $actividad->id,
+																			'id_reporte_operativo_misional' => $id,
+																		])->id,
 								'poblacion'					=> IsaTipoCantidadPoblacionRom::findOne([ 
 																	'estado' 						=> 1, 
 																	'id_rom_actividades' 			=> $actividad->id,

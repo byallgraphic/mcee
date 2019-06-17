@@ -1,15 +1,16 @@
 <?php
 
-use app\models\IsaProcesoSeguimiento;
+use app\models\IsaRomProcesos;
 use nex\chosen\Chosen;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\Collapse;
 
 
 
-$procesos = IsaProcesoSeguimiento::find()->where( "estado=1 and id_proyecto=$idProyecto" )->all();
+$procesos = IsaRomProcesos::find()->where( "estado=1 and id_rom_proyectos=$idProyecto" )->all();
 $procesos = ArrayHelper::map($procesos,'id','descripcion');
-       
+  
+  
 foreach ($procesos as $idProceso => $labelProceso)
 {
 		$items[] = 	[

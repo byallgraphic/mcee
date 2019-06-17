@@ -30,13 +30,16 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\Collapse;
 use app\models\Instituciones;
 use app\models\Sedes;
-use app\models\IsaSeguimientoProyectos;
+use app\models\IsaRomProyectos;
 use app\models\IsaPorcentajesActividades;
 use app\models\IsaSemanaLogros;
 use app\models\IsaSemanaLogrosForDebRet;
 use app\models\IsaOrientacionMetodologicaActividades;
 use app\models\IsaOrientacionMetodologicaVariaciones;
 use app\models\IsaIntervencionIeo;
+use app\models\RomReporteOperativoMisional;
+use app\models\IsaActividadesRomXIntegranteGrupo;
+use yii\helpers\Json;
 
 
 /**
@@ -79,9 +82,10 @@ class IsaSeguimientoProcesoController extends Controller
 	public function actionFormulario($model,$form,$datos = 0)
 	{
 		
-		$proyectos = IsaSeguimientoProyectos::find()->where( 'estado=1' )->orderby('id ASC')->all();
+		$proyectos = IsaRomProyectos::find()->where( 'estado=1' )->orderby('id ASC')->all();
 		$proyectos = ArrayHelper::map($proyectos,'id','descripcion');
-		
+	
+
 		foreach ($proyectos as $idProyecto => $label)
 		{
 			
@@ -261,7 +265,7 @@ class IsaSeguimientoProcesoController extends Controller
             'model' => $model,
 			'sedes' => $this->obtenerSede(),
 			'instituciones'=> $this->obtenerInstituciones(),
-			'isaIntervencionIeo' => $this->intervencioIEO(),
+		
         ]);
     }
 
@@ -508,20 +512,68 @@ class IsaSeguimientoProcesoController extends Controller
 			'sedes' => $this->obtenerSede(),
 			'instituciones'=> $this->obtenerInstituciones(),
 			'datos'=>$datos,
-			'isaIntervencionIeo' => $this->intervencioIEO(),
+			
         ]);
     }
 
 
-	public function intervencioIEO()
+	//se obtiene los datos ingresados en el formulario 2 rom-reporte-operativo-misional
+	public function actionLogros($fecha)
 	{
-		$isaIntervencionIeo = new IsaIntervencionIeo();
-		$isaIntervencionIeo = $isaIntervencionIeo->find()->orderby("id")->all();
-		$isaIntervencionIeo = ArrayHelper::map($isaIntervencionIeo,'id','nombre_actividad');
+		$valores = explode('-', $fecha);
+		if(count($valores) == 2 && is_numeric($valores[0]) && is_numeric($valores[1]))
+		{
+			
+			$idInstitucion 	= $_SESSION['instituciones'][0];
+			$idSedes 		= $_SESSION['sede'][0];
+
+			$connection = Yii::$app->getDb();
+			$command = $connection->createCommand("
+				SELECT 
+					ari.id_rom_actividad,
+					concat(pe.nombres,' ',pe.apellidos) as nombres,
+					ari.logros, 
+					ari.alternativas, 
+					ari.articulacion, 
+					ari.observaciones_generales,
+					ari.alarmas,
+					ari.fortalezas, 
+					ari.debilidades, 
+					ari.retos,
+					ari.fecha_diligencia
+				FROM 
+					isa.actividades_rom_x_integrante_grupo as ari, 
+					isa.reporte_operativo_misional as rom, 
+					perfiles_x_personas as pxp,
+					personas as pe
+				WHERE
+					ari.id_reporte_operativo_misional = rom.id
+				AND
+					rom.id_institucion = $idInstitucion
+				AND
+					rom.id_sedes	   = $idSedes
+				AND
+					rom.estado 		   = 1
+				AND
+					pxp.id = ari.diligencia
+				AND
+					pxp.id_personas = pe.id
+			");
+			
+			$result = $command->queryAll();	
+			
+			
+			foreach ($result as $r)
+			{
+				$datos[$r['nombres']][]=$r ;
+			}
+			
+			// echo "<pre>"; print_r($datos); echo "</pre>"; 
+			// echo json_encode( $result );
+			 return Json::encode($datos);
+		}
 		
-		return $isaIntervencionIeo;
 	}
-	
 	
     /**
      * Deletes an existing IsaSeguimientoProceso model.

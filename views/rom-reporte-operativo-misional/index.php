@@ -12,6 +12,8 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+$this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
+
 $this->title = 'Reporte Operativo Misional';
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -21,17 +23,21 @@ $this->registerJsFile(Yii::$app->request->baseUrl.'/js/romReporteOperativoMision
 
 $this->registerJs("
 	$( document ).on('click', 'li', function() { 
-		var cont = $( this ).attr('href');
-		$( '[id^=content][id!='+cont.substr(1)+']', $(this).parent().parent() ).css({display:'none'}); 
-		$( $( this ).attr('href'), $(this).parent().parent() )
-			.toggle();
-		
-		var conClase = $( this ).hasClass( 'tab-selected' );
-		
-		$( 'li', $( this).parent() ).removeClass( 'tab-selected' );  
-		
-		if( !conClase )
-			$( this, $( this).parent() ).addClass( 'tab-selected' );  
+		try{
+			
+			var cont = $( this ).attr('href');
+			$( '[id^=content][id!='+cont.substr(1)+']', $(this).parent().parent() ).css({display:'none'}); 
+			$( $( this ).attr('href'), $(this).parent().parent() )
+				.toggle();
+			
+			var conClase = $( this ).hasClass( 'tab-selected' );
+			
+			$( 'li', $( this).parent() ).removeClass( 'tab-selected' );  
+			
+			if( !conClase )
+				$( this, $( this).parent() ).addClass( 'tab-selected' );  
+		}
+		catch(e){}
 	});
 	
 	
@@ -50,102 +56,6 @@ $this->registerJs("
 			});
 			
 			can.val( total );
-		});
-		
-	$( '#modal' )
-		.on( 'change', '[id$=estado_actividad]', function(){ 
-			
-			var __target = this.id.split( '-' );
-			__target = __target[1];
-			
-			var frep = $( '#isaactividadesromxintegrantegrupo'+'-'+__target+'-fecha_reprogramacion' );
-			var jus = $( '#isaactividadesromxintegrantegrupo'+'-'+__target+'-justificacion_activiad_no_realizada' );
-			
-			if( $(this).val() == 179 )
-			{
-				frep.attr({disabled:true})
-				frep.attr({readonly:true})
-				
-				jus.attr({readonly:true})
-					.val('No Aplica');
-			}
-			else
-			{
-				frep.attr({disabled:false});
-				frep.attr({readonly:false});
-				
-				jus.attr({readonly:false})
-					.val('')
-				
-			}
-		});
-		
-	$( '#modal' )
-		.on( 'change', '[id$=sesion_actividad]', function(){ 
-			
-			var __target = this.id.split( '-' );
-			__target = __target[1];
-			
-			__self = this;
-			
-			if( $( __self ).val() == '' )
-			{
-				$( '#nro_equipo-'+__target ).val( '' )
-				$( '#perfiles-'+__target ).val( '' )
-				$( '#docente_orientador-'+__target ).val( '' )
-			}
-			else
-			{	
-				$.post( 'index.php?r=rom-reporte-operativo-misional/consultar-mision', 
-						{ 
-							rom_actividades	: __target, 
-							sesion_actividad: $( __self ).val() ,
-							nro_semana		: $( '#isaactividadesrom-'+ __target + '-nro_semana' ).val() ,
-						}, 
-						function( data ){
-							if( data != '' ){
-								
-								
-								$.get( 'index.php?r=rom-reporte-operativo-misional/update', 
-										{
-											id: data ,
-										}, 
-										function( data ){
-											$( '#modalContent' ).html( data );
-										}
-								);
-								
-								// $( '#modalContent' ).html( data );
-							}
-							else{
-								
-								$.get( 'index.php?r=rom-reporte-operativo-misional/consultar-intervencion-ieo', 
-										{
-											id: $( __self ).val() ,
-										}, 
-										function( data ){
-											console.log( data );
-											if( data ){
-												if( data.equipo_nombre != '' )
-												{
-													$( '#nro_equipo-'+__target ).val( data.equipo_nombre );
-													$( '.nro_equipo-'+__target ).css({display:''});
-												}
-												else
-												{
-													$( '.nro_equipo-'+__target ).css({display:'none'});
-												}
-												
-												$( '#docente_orientador-'+__target ).val( data.docente_orientador )
-												$( '#perfiles-'+__target ).val( data.perfiles )
-											}
-										},
-										'json'
-								);							
-							}
-						}
-				);
-			}
 		});
 	
 	
@@ -178,6 +88,22 @@ if( !$sede ){
 </div>
 </div>
 </div>
+
+
+<div id="modalArchivos" class="fade modal" role="dialog" tabindex="-1" >
+	<div class="modal-dialog modal-md modalemg">
+		<div class="modal-content">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3>Evidencias</h3>
+			</div>
+			<div class="modal-body">
+				<div id='modalArchivosContent'></div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="rom-reporte-operativo-misional-index">
 
    

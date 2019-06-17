@@ -28,6 +28,7 @@ foreach( $actividades as $idActividad => $v )
 														'actividades_rom'			=> $v['actividades_rom'],
 														'actividadesParticipadas'	=> $v['actividadesParticipadas'],
 														'datos_adicionales'			=> $v['datos_adicionales'],
+														'id_evidencia'				=> $v['id_evidencia'],
 													] 
 										),
 					'headerOptions' => ['class' => 'tab1', 'style' => "background-color: $colors[$idActividad];"],

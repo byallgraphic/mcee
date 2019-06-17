@@ -4,7 +4,7 @@
 use app\models\IsaLogrosActividades;
 use app\models\IsaOrientacionMetodologicaActividades;
 use app\models\IsaVariacionesActividades;
-use app\models\IsaActividadesSeguimiento;
+use app\models\IsaRomActividades;
 use nex\chosen\Chosen;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\Collapse;
@@ -16,8 +16,10 @@ $colors = ["#cce5ff", "#d4edda", "#f8d7da", "#fff3cd", "#d1ecf1", "#d6d8d9", "#c
 
 
 
-$actividadesSeguimiento = IsaActividadesSeguimiento::find()->where( "estado=1 and id_proceso=$idProceso" )->all();
+$actividadesSeguimiento = IsaRomActividades::find()->where( "estado=1 and id_rom_procesos=$idProceso" )->all();
 $actividadesSeguimiento = ArrayHelper::map($actividadesSeguimiento,'id','descripcion');
+
+	
 
 $content = '';       
 foreach ($actividadesSeguimiento as $idActividad => $dataActividad)
@@ -48,18 +50,7 @@ foreach ($actividadesSeguimiento as $idActividad => $dataActividad)
 						[ 'class' => 'list-group-item' ]
 					);
 					
-		// $content .= Html::tag( 
-						// 'div',  
-						// $this->render( 'variacionesactividades', 
-										// [ 
-											// 'idActividad' => $idActividad,
-											// 'form' => $form,
-											// 'datos' => $datos,
-											// 'idProyecto' => $idProyecto,
-										// ] 
-									// ),
-						// [ 'class' => 'list-group-item' ]
-					// );
+	
 	
 		$items[] = 	[
 						'label' 		=>  $dataActividad,

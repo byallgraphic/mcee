@@ -35,7 +35,8 @@ class IsaTipoCantidadPoblacionRom extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['vecinos', 'lideres_comunitarios', 'empresarios_comerciantes', 'organizaciones_locales', 'grupos_comunitarios', 'otos_actores', 'total_participantes', 'estado', 'id_rom_actividades', 'id_reporte_operativo_misional'], 'required'],
+            // [['vecinos', 'lideres_comunitarios', 'empresarios_comerciantes', 'organizaciones_locales', 'grupos_comunitarios', 'otos_actores', 'total_participantes', 'estado', 'id_rom_actividades', 'id_reporte_operativo_misional'], 'required'],
+            [['estado', 'id_rom_actividades', 'id_reporte_operativo_misional'], 'required'],
             [['vecinos', 'lideres_comunitarios', 'empresarios_comerciantes', 'organizaciones_locales', 'grupos_comunitarios', 'otos_actores', 'total_participantes'], 'string'],
             [['estado', 'id_rom_actividades', 'id_reporte_operativo_misional'], 'default', 'value' => null],
             [['estado', 'id_rom_actividades', 'id_reporte_operativo_misional'], 'integer'],

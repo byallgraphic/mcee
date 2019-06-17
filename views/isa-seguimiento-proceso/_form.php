@@ -8,13 +8,13 @@ use dosamigos\datepicker\DatePicker;
 /* @var $model app\models\IsaSeguimientoProceso */
 /* @var $form yii\widgets\ActiveForm */
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
+$this->registerJs( file_get_contents( '../web/js/seguimientoProceso.js' ) );
 ?>
 
 <div class="isa-seguimiento-proceso-form">
 
     <?php $form = ActiveForm::begin(); ?>
 	
-	<label>Actividad</label><?= Html::dropDownList('actividad', null,$isaIntervencionIeo, array('id'=> 'actividad','prompt'=>"Seleccione..")); ?>
 	
 	<div class="row">
 	  <div class="col-md-8"> <?= $form->field($model, 'id_institucion')->dropDownList($instituciones) ?></div>
@@ -35,22 +35,12 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 			'language' 		=> 'es',
 			'clientOptions' => [
 				'autoclose' 	=> true,
-				'format' 		=> 'yyyy-mm-dd'
+				'format' 		=> 'yyyy-mm'
 			],
+			
 		]);  
 	?></div>
-	  <div class="col-md-6"><?= $form->field($model, 'fecha_hasta')->widget(
-			DatePicker::className(), [
-				
-			 // modify template for custom rendering
-			'template' 		=> '{addon}{input}',
-			'language' 		=> 'es',
-			'clientOptions' => [
-				'autoclose' 	=> true,
-				'format' 		=> 'yyyy-mm-dd'
-			],
-		]);  
-	?></div>
+	
 	</div>
 	
 
