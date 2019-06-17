@@ -10,6 +10,9 @@ use nex\chosen\Chosen;
 /* @var $model app\models\GeSeguimientoOperador */
 /* @var $form yii\widgets\ActiveForm */
 
+$this->registerJsFile(Yii::$app->request->baseUrl.'\js\jquery.timepicker.min.js');
+$this->registerCssFile(Yii::$app->request->baseUrl.'\css\jquery.timepicker.min.css');
+
 if( $guardado ){
 
     $this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
@@ -100,8 +103,13 @@ if(Yii::$app->request->get('guardado')){
     <h3 style='background-color:#ccc;padding:5px;'><?= "REPORTE DE ACTIVIDADES"?></h3>
 
     <?php if($reportExist){ ?>
-        <?php foreach ($reportAct AS $key => $report){ ?>
+        <?php $key = 1 ?>
+        <?php foreach ($reportAct AS $report){ ?>
             <div class="objetivo" id="objetivo-<?= $key ?>">
+                <?php if ($key > 1){?>
+                    <div onclick='deleteActividad(<?= $report->id ?>, "objetivo-<?= $key ?>")' class='col text-right delete-area'>x</div>
+                <?php } ?>
+                <div class="title_report">Reporte de actividad <?= $key ?></div>
                 <div id="" class="id_objetivo">
                     <?= $form->field($report, 'objetivo')->textInput(['disabled' => false, 'id' => 'id_objetivo']) ?>
                     <?= $form->field($report, 'actividad')->textInput(['disabled' => false, 'id' => 'id_actividad']) ?>
@@ -111,7 +119,7 @@ if(Yii::$app->request->get('guardado')){
                         <?=  $form->field($report, 'quienes')->textInput(['id' => 'quienes']); ?>
                     </div>
                     <?= $form->field($report, 'num_participantes')->textInput(['type' => 'number', 'id' => 'numero_participantes']) ?>
-                    <?= $form->field($report, 'duracion')->textInput(['id' => 'duracion_actividad']) ?>
+                    <?= $form->field($report, 'duracion')->textInput(['id' => 'duracion_actividad-'.$key, 'name' => 'duracion_actividad-'.$key]) ?>
                     <?= $form->field($report, 'logros')->textarea(['id' => 'logros_alcanzados']) ?>
                     <?= $form->field($report, 'dificultades')->textarea(['id' => 'dificultadades']) ?>
                 </div>
@@ -124,26 +132,17 @@ if(Yii::$app->request->get('guardado')){
                         <?php $files = \app\models\GeSeguimientoFile::find()->where(['id_reporte_actividades' => $report->id ])->asArray()->all(); ?>
                         <ul>
                             <?php foreach($files AS $file){ ?>
-                                <li><a href="..\documentos\seguimientoOperador\<?= $file['file'] ?>" download><?= $file['file'] ?></a></li>
+                                <li id="line_file_<?= $file['id'] ?>" class="line-file-name"><a class="name-file" href="..\documentos\seguimientoOperador\<?= $file['file'] ?>" download><?= $file['file'] ?></a><div onclick='deleteFile("<?= $file['id'] ?>")' class='delete-line'>x</div></li>
                             <?php } ?>
                         </ul>
                     </div>
                 </div>
             </div>
-
-            <script>
-                $("#id_quienes-<?= $key ?>").hide();
-                $('#objetivo-'+ <?= $key ?> + ' #file-upload-'+ <?= $key ?> ).change(function(e){
-                    var files = $(this).prop("files");
-                    var files_length = files.length;
-                    for (var x = 0; x < files_length; x++) {
-                        $(this).parent().parent().find('#nameElement').append('<label>'+files[x].name+'</label><br>')
-                    }
-                });
-            </script>
+            <?php $key++ ?>
         <?php } ?>
     <?php }else{ ?>
-        <div class="objetivo" id="objetivo-0">
+        <div class="objetivo" id="objetivo-1">
+            <div class="title_report">Reporte de actividad 1</div>
             <div id="" class="id_objetivo">
                 <?= $form->field($reportAct, 'objetivo')->textInput(['disabled' => false, 'id' => 'id_objetivo']) ?>
                 <?= $form->field($reportAct, 'actividad')->textInput(['disabled' => false, 'id' => 'id_actividad']) ?>
@@ -153,15 +152,14 @@ if(Yii::$app->request->get('guardado')){
                     <?=  $form->field($reportAct, 'quienes')->hiddenInput(['id' => 'quienes']); ?>
                 </div>
                 <?= $form->field($reportAct, 'num_participantes')->textInput(['type' => 'number', 'id' => 'numero_participantes']) ?>
-                <?= $form->field($reportAct, 'duracion')->textInput(['id' => 'duracion_actividad']) ?>
+                <?= $form->field($reportAct, 'duracion')->textInput(['id' => 'duracion_actividad-1', 'autocomplete' => "off"]) ?>
                 <?= $form->field($reportAct, 'logros')->textarea(['id' => 'logros_alcanzados']) ?>
                 <?= $form->field($reportAct, 'dificultades')->textarea(['id' => 'dificultadades']) ?>
             </div>
-
             <div class="evidencia_actividades">
                 <h3 style='background-color:#ccc;padding:5px;'><?= "Evidencias de soporte"?></h3>
                 <p>Listado de participantes, registro visual, informe de actividades o acta</p>
-                <?= $form->field($model, 'documentFile[]')->fileInput(['multiple' => true, 'id' => "file-upload-0"]) ?>
+                <?= $form->field($model, 'documentFile[]')->fileInput(['multiple' => true, 'id' => "file-upload-1"]) ?>
                 <div id="nameElement">
 
                 </div>
@@ -170,11 +168,11 @@ if(Yii::$app->request->get('guardado')){
 
 
         <script>
-            $('#file-upload-0').change(function(e){
+            $('#file-upload-1').change(function(e){
                 var files = $(this).prop("files");
                 var files_length = files.length;
                 for (var x = 0; x < files_length; x++) {
-                    $(this).parent().parent().find('#nameElement').append('<label>'+files[x].name+'</label><br>')
+                    $(this).parent().parent().find('#nameElement').append('<label class="line-file-name"><span class="name-file">'+files[x].name+'</span><div onclick="$(this).parent().remove()" class=\'delete-line\'>x</div>' + '</label><br>')
                 }
             });
         </script>
@@ -203,18 +201,46 @@ if(Yii::$app->request->get('guardado')){
 
 </div>
 <script>
-    var timepicker = new TimePicker('duracion_actividad', {
-        lang: 'en',
-        theme: 'dark'
-    });
-    timepicker.on('change', function(evt) {
-        var value = (evt.hour || '00') + ':' + (evt.minute || '00');
-        evt.element.value = value;
+    function deleteFile(id) {
+        $.ajax({
+            url: "index.php?r=ge-seguimiento-operador%2Fdfile&id="+id,
+            cache: false,
+            contentType: false,
+            processData: false,
+            async: true,
+            type: 'GET',
+            success: function (res, status) {
+                if (status){
+                    $('#line_file_'+id).remove();
+                }
+            },
+        });
+    }
+    function deleteActividad(id, objetivoId){
+        $.ajax({
+            url: "index.php?r=ge-seguimiento-operador%2Fdactividad&id="+id,
+            cache: false,
+            contentType: false,
+            processData: false,
+            async: true,
+            type: 'GET',
+            success: function (res, status) {
+                if (status){
+                    $('#'+objetivoId).remove();
+                }
+            },
+        });
+    }
 
-    });
-</script>
-<script>
     $( document ).ready(function() {
+        $('#duracion_actividad-1').timepicker({
+            timeFormat: 'H:i',
+            step: (5)
+        });
+
+        $('._jw-tpk-header ._jw-tpk-hour').text('Horas');
+        $('._jw-tpk-header ._jw-tpk-minute').text('Minutos');
+
         //$('#modal-form').modal('show');
         $(".modal-guardado").modal('hide');
 
@@ -257,30 +283,44 @@ if(Yii::$app->request->get('guardado')){
                 return false;
             }
 
-            var id_objetivo = $("#objetivo-0");
-            var valueBtn = parseInt(btnObj.val(), 'number') + 1;
+            var id_objetivo = $("#objetivo-1");
+            var valueBtn = parseInt($('[id*=\'objetivo-\']').length, 'number') + 1;
 
-            $('#objetivo-'+ ($(this).val())).after(
+            $('#objetivo-'+ (valueBtn-1)).after(
                 id_objetivo
                     .clone()
                     .attr('id', 'objetivo-'+ (valueBtn))
                     .prepend( "<div onclick='$(this).parent().remove();' class='col text-right delete-area'>x</div>" )
             );
 
+            $('#objetivo-'+ (valueBtn) + ' .title_report').text('Reporte de actividad '+ valueBtn );
+
             $(this).val(valueBtn);
             $('#objetivo-'+ (valueBtn) + ' input').val('');
-            $('#objetivo-'+ (valueBtn) + ' #file-upload-0').attr('id', 'file-upload-'+ (valueBtn));
-            $('#objetivo-'+ (valueBtn)).find('.field-file-upload-0').find('label').attr('for', 'file-upload-'+ (valueBtn));
+            $('#objetivo-'+ (valueBtn) + ' #file-upload-1').attr('id', 'file-upload-'+ (valueBtn));
+            $('#objetivo-'+ (valueBtn) + ' #duracion_actividad-1').attr('id', 'duracion_actividad-'+ (valueBtn))
+                .attr('name', 'duracion_actividad-'+ (valueBtn));
 
-            $('#objetivo-'+ (valueBtn) + ' #nameElement').empty();
+            $('#duracion_actividad-'+ (valueBtn)).timepicker({
+                timeFormat: 'H:i',
+                step: (5)
+            });
+
+            $('._jw-tpk-header ._jw-tpk-hour').text('Horas');
+            $('._jw-tpk-header ._jw-tpk-minute').text('Minutos');
+
+            $('#objetivo-'+ (valueBtn)).find('.field-file-upload-1').find('label').attr('for', 'file-upload-'+ (valueBtn));
+
+            var elementoFile = $('#objetivo-'+ (valueBtn) + ' #nameElement');
+            elementoFile.empty();
             $('#objetivo-'+ (valueBtn) + ' textarea').val('');
 
-            if ($('#nameElement').find('li').length === 0 ){
+            if (elementoFile.find('li').length === 0 ){
                 $('#objetivo-'+ (valueBtn) + ' #file-upload-'+ (valueBtn)).change(function(e){
                     var files = $(this).prop("files");
                     var files_length = files.length;
                     for (var x = 0; x < files_length; x++) {
-                        $(this).parent().parent().find('#nameElement').append('<label>'+files[x].name+'</label><br>')
+                        $(this).parent().parent().find('#nameElement').append('<label class="line-file-name"><span class="name-file">'+files[x].name+'</span><div onclick="$(this).parent().remove()" class=\'delete-line\'>x</div>' + '</label><br>')
                     }
                 });
             }
@@ -388,6 +428,17 @@ if(Yii::$app->request->get('guardado')){
                 propuesta_dificultades.parent().removeClass('has-error');
 
             reporte_obj.each(function() {
+                var reg = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+
+                var duracion = $(this).find("[id*='duracion_actividad']");
+                if (!reg.test(duracion.val())){
+                    duracion.parent().removeClass('has-success');
+                    duracion.parent().addClass('has-error');
+                    duracion.addClass('has-error');
+                    duracion.parent().find('.help-block').html('Hora no permitida.');
+                    validacion = 0;
+                }
+
                 $(this).find('input[type!="hidden"]').each(function(){
                     if (!$(this).val() && ($(this).attr('id') !== 'quienes') && $('#save_form').text() !== "Actualizar") {
                         $(this).parent().addClass('has-error');
@@ -397,14 +448,6 @@ if(Yii::$app->request->get('guardado')){
                         $(this).parent().removeClass('has-error');
                 });
             });
-
-            var reg = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-            var duracion = $("#duracion_actividad");
-            if (!reg.test(duracion.val())){
-                 duracion.parent().addClass('has-error');
-                 duracion.parent().find('.help-block').html('Hora no permitida.');
-                validacion = 0;
-            }
 
             if (validacion === 0){
                 return false;
@@ -418,9 +461,12 @@ if(Yii::$app->request->get('guardado')){
                     descripcion_actividad: $('#objetivo-'+index+' #descripcion_actividad').val(),
                     id_poblacion: $('#objetivo-'+index+' #poblacion_beneficiaria').val(),
                     numero_participantes: $('#objetivo-'+index+' #numero_participantes').val(),
-                    duracion_actividad: $('#objetivo-'+index+' #duracion_actividad').val(),
+                    duracion_actividad: $('#objetivo-'+index+' [id*=\'duracion_actividad\']').val(),
                     logros_alcanzados: $('#objetivo-'+index+' #logros_alcanzados').val(),
-                    dificultadades: $('#objetivo-'+index+' #dificultadades').val()
+                    dificultadades: $('#objetivo-'+index+' #dificultadades').val(),
+                    files: {
+
+                    }
                 };
             });
 
@@ -441,11 +487,13 @@ if(Yii::$app->request->get('guardado')){
             formData.append("propuesta_dificultades", propuesta_dificultades.val());
             formData.append("reporte_actividades", JSON.stringify(reporte_actividades));
 
-            var files = $('#file-upload-0').prop("files");
-            var files_length = files.length;
-            for (var x = 0; x < files_length; x++) {
-                formData.append("files[]", files[x]);
-            }
+            $('[id*=\'file-upload-\']').each(function( index, value ) {
+                var fileObj = value.files;
+                var files_length = fileObj.length;
+                for (var x = 0; x < files_length; x++) {
+                    formData.append("files-"+index+"[]", fileObj[x]);
+                }
+            });
 
             if ($(this).val() === '1'){
                 $.ajax({
@@ -457,14 +505,15 @@ if(Yii::$app->request->get('guardado')){
                     data: formData,
                     type: 'POST',
                     success: function (res, status) {
-                        if (status == 'success') {
-                            $("#modal-ge").modal('hide');
-                            swal({
-                                text: 'Registro actualizado',
-                                icon: 'success',
-                                button: 'Salir',
-                            });
-                        }
+                        //if (status == 'success') {
+                        //    $("#modal-ge").modal('hide');
+                        //    swal({
+                        //        text: 'Registro actualizado',
+                        //        icon: 'success',
+                        //        button: 'Salir',
+                        //    });
+                        //    location.reload();
+                        //}
                     },
                 });
             }else{
@@ -477,17 +526,15 @@ if(Yii::$app->request->get('guardado')){
                     data: formData,
                     type: 'POST',
                     success: function (res, status) {
-                        if (status == 'success') {
-                            $("#modal-ge").modal('hide');
-                            swal({
-                                text: 'Registro guardado',
-                                icon: 'success',
-                                button: 'Salir',
-                            });
-
-
-                            location.reload();
-                        }
+                        //if (status == 'success') {
+                        //    $("#modal-ge").modal('hide');
+                        //    swal({
+                        //        text: 'Registro guardado',
+                        //        icon: 'success',
+                        //        button: 'Salir',
+                        //    });
+                        //    location.reload();
+                        //}
                     },
                 });
             }

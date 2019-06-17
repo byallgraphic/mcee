@@ -151,14 +151,8 @@ $this->registerCssFile("http://cdn.jsdelivr.net/timepicker.js/latest/timepicker.
 
             [
 			'class' => 'yii\grid\ActionColumn',
-			'template'=>'{view}{update}{delete}',
+			'template'=>'{update}{delete}',
 				'buttons' => [
-				'view' => function ($url, $model) {
-					return Html::a('<span name="detalle" class="glyphicon glyphicon-eye-open" value ="'.$url.'" ></span>', $url, [
-								'title' => Yii::t('app', 'lead-view'),
-					]);
-				},
-
 				'update' => function ($url, $model) {
 					return Html::a('<span name="actualizar" id="spanmodalid'.$model->id.'" class="glyphicon glyphicon-pencil" value ="'.$model->id.'"></span>', $url, [
 								'title' => Yii::t('app', 'lead-update'),

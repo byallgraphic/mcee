@@ -182,7 +182,7 @@ class GeSeguimientoOperadorController extends Controller
         $gs->save(false);
 
 
-        foreach (json_decode($GeSeguimientoOperador['reporte_actividades']) as $RepAct){
+        foreach (json_decode($GeSeguimientoOperador['reporte_actividades']) as $key => $RepAct){
             $ra = new GeReporteActividades();
 
             $ra->id_seguimiento_operador = $gs->id;
@@ -201,13 +201,13 @@ class GeSeguimientoOperadorController extends Controller
                 mkdir($carpeta, 0777, true);
             }
 
-            if (isset($_FILES['files']) && !empty($_FILES['files'])) {
-                $no_files = count($_FILES["files"]['name']);
+            if (isset($_FILES['files-'.$key]) && !empty($_FILES['files-'.$key])) {
+                $no_files = count($_FILES['files-'.$key]['name']);
                 for ($i = 0; $i < $no_files; $i++) {
                     $urlBase  = "../documentos/seguimientoOperador/";
-                    $name = $_FILES["files"]['name'][$i];//'segOperador'.$gs->id.'-'.$ra->id.'.'.substr($_FILES["files"]['name'][$i], strrpos($_FILES["files"]['name'][$i], '.') + 1);
+                    $name = $_FILES['files-'.$key]['name'][$i];//'segOperador'.$gs->id.'-'.$ra->id.'.'.substr($_FILES["files"]['name'][$i], strrpos($_FILES["files"]['name'][$i], '.') + 1);
 
-                    move_uploaded_file($_FILES["files"]["tmp_name"][$i], $urlBase.$name);
+                    move_uploaded_file($_FILES['files-'.$key]["tmp_name"][$i], $urlBase.$name);
 
                     $file_ra = new GeSeguimientoFile();
                     $file_ra->id_reporte_actividades = $ra->id;
@@ -247,36 +247,52 @@ class GeSeguimientoOperadorController extends Controller
         $gs->estado = 1;
         $gs->save(false);
 
-        $ra = GeReporteActividades::find()->where(['id_seguimiento_operador' => $gs->id])->one();
+        foreach (json_decode($GeSeguimientoOperador['reporte_actividades']) as $key => $RepAct) {
+            if ($key !== 0){
+                $ra = GeReporteActividades::find()->where(['id_seguimiento_operador' => $gs->id])
+                    ->andWhere(['objetivo' => $RepAct->objetivo])->one();
+                if (isset($ra)){
+                    $ra->objetivo = $RepAct->objetivo;
+                    $ra->actividad = $RepAct->actividad;
+                    $ra->descripcion = $RepAct->descripcion_actividad;
+                    $ra->num_participantes = $RepAct->numero_participantes;
+                    $ra->duracion = $RepAct->duracion_actividad;
+                    $ra->logros = $RepAct->logros_alcanzados;
+                    $ra->dificultades = $RepAct->dificultadades;
+                    $ra->save(false);
+                }else{
+                    $ra = new GeReporteActividades();
 
-        foreach (json_decode($GeSeguimientoOperador['reporte_actividades']) as $RepAct) {
-            $ra->objetivo = $RepAct->objetivo;
-            $ra->actividad = $RepAct->actividad;
-            $ra->descripcion = $RepAct->descripcion_actividad;
-            $ra->num_participantes = $RepAct->numero_participantes;
-            $ra->duracion = $RepAct->duracion_actividad;
-            $ra->logros = $RepAct->logros_alcanzados;
-            $ra->dificultades = $RepAct->dificultadades;
+                    $ra->id_seguimiento_operador = $gs->id;
+                    $ra->objetivo = $RepAct->objetivo;
+                    $ra->actividad = $RepAct->actividad;
+                    $ra->descripcion = $RepAct->descripcion_actividad;
+                    $ra->num_participantes = $RepAct->numero_participantes;
+                    $ra->duracion = $RepAct->duracion_actividad;
+                    $ra->logros = $RepAct->logros_alcanzados;
+                    $ra->dificultades = $RepAct->dificultadades;
 
-            $ra->save(false);
+                    $ra->save(false);
+                }
 
-            $carpeta = "../documentos/seguimientoOperador/";
-            if (!file_exists($carpeta)) {
-                mkdir($carpeta, 0777, true);
-            }
+                $carpeta = "../documentos/seguimientoOperador/";
+                if (!file_exists($carpeta)) {
+                    mkdir($carpeta, 0777, true);
+                }
 
-            if (isset($_FILES['files']) && !empty($_FILES['files'])) {
-                $no_files = count($_FILES["files"]['name']);
-                for ($i = 0; $i < $no_files; $i++) {
-                    $urlBase = "../documentos/seguimientoOperador/";
-                    $name = 'segOperador' . $gs->id . '-' . $ra->id . '.' . substr($_FILES["files"]['name'][$i], strrpos($_FILES["files"]['name'][$i], '.') + 1);
+                if (isset($_FILES['files-' . $key]) && !empty($_FILES['files-' . $key])) {
+                    $no_files = count($_FILES['files-' . $key]['name']);
+                    for ($i = 0; $i < $no_files; $i++) {
+                        $urlBase = "../documentos/seguimientoOperador/";
+                        $name = $_FILES['files-' . $key]['name'][$i];//'segOperador'.$gs->id.'-'.$ra->id.'.'.substr($_FILES["files"]['name'][$i], strrpos($_FILES["files"]['name'][$i], '.') + 1);
 
-                    move_uploaded_file($_FILES["files"]["tmp_name"][$i], $urlBase . $name);
+                        move_uploaded_file($_FILES['files-' . $key]["tmp_name"][$i], $urlBase . $name);
 
-                    $file_ra = new GeSeguimientoFile();
-                    $file_ra->id_reporte_actividades = $ra->id;
-                    $file_ra->file = $name;
-                    $file_ra->save(false);
+                        $file_ra = new GeSeguimientoFile();
+                        $file_ra->id_reporte_actividades = $ra->id;
+                        $file_ra->file = $name;
+                        $file_ra->save(false);
+                    }
                 }
             }
         }
@@ -296,6 +312,36 @@ class GeSeguimientoOperadorController extends Controller
     {
         $this->findModel($id)->delete();
         return $this->redirect('index.php?r=ge-seguimiento-operador&idTipoSeguimiento=1');
+    }
+
+    /**
+     * Deletes an existing GeSeguimientoOperador model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param string $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDactividad($id)
+    {
+        $actividad = GeReporteActividades::findOne($id);
+        $actividad->delete();
+        return 'ok';
+    }
+
+    /**
+     * Deletes an existing GeSeguimientoOperador model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param string $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDfile($id)
+    {
+        $file = GeSeguimientoFile::find($id)->one();
+        if (isset($file)){
+            $file->delete();
+        }
+        return 'ok';
     }
 
     /**

@@ -234,4 +234,11 @@ class InstitucionesController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionInstituciones()
+    {
+        $instituciones = Instituciones::find()->select('descripcion')->indexBy('id')->column();
+
+        return json_encode($instituciones);
+    }
 }

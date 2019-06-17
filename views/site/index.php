@@ -77,6 +77,8 @@ foreach($result as $r)
 	$datos.= "'$id':'$descripcion'";
 }
 
+$this->registerJs( "datosInstitucion = {".$datos."};" );
+
 
 
 if (!isset($_SESSION['institucionSeleccionada']) || (isset($_GET['institucion']) && $_GET['institucion'])){

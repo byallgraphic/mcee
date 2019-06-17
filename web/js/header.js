@@ -22,50 +22,56 @@ function readCookie(name) {
 
 $( "#cambiarInstitucion" ).click(function() 
 {
-	
-	//que institucion selecciono
-    const {value: institucion} = swal({
-    
-        closeOnConfirm: false, 
-        closeOnCancel: false,
-        allowOutsideClick: false,
-        title: 'Seleccione una Institución',
-        input: 'select',
-        inputOptions: datosInstitucion,
-      inputPlaceholder: 'Seleccione...',
-      inputValidator: (value) => {
-        return new Promise((resolve) => {
-          if (value !== '') 
-          {  
-       
-              //crear variable de session que tenga la institucion que seleciono
-             var Institucion = $.get( "index.php?instituciones="+value, function(data) 
-                {
-                    $("#InstitucionSede").html(" ");
-                
-                    $("#InstitucionSede").append(data.replace('"', ' ').replace('"', ' '));
-                    console.log(data.charAt(0));
-                })
-                  
-             return fetch('index.php?r=sedes/sedes&idInstitucion='+value)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(response.statusText)
-                }
-				else{
-					location.href = location.pathname
-				}
-            })           
-                resolve();
-    
-          }
-          else 
-          {
-            resolve('Debe seleccionar una institucion')
-          }
-        })
-      }
+    var datosInstitucion = [];
+
+    $.get( "index.php?r=instituciones%2Finstituciones", function(data) {
     })
+    .done(function( data ) {
+
+        console.log(data);
+
+        //que institucion selecciono
+        const {value: institucion} = swal({
+
+            closeOnConfirm: false,
+            closeOnCancel: false,
+            allowOutsideClick: false,
+            title: 'Seleccione una Institucióntest',
+            input: 'select',
+            inputOptions: $.parseJSON(data),
+            inputPlaceholder: 'Seleccione...',
+            inputValidator: (value) => {
+                return new Promise((resolve) => {
+                    if (value !== '')
+                    {
+
+                        //crear variable de session que tenga la institucion que seleciono
+                        var Institucion = $.get( "index.php?instituciones="+value, function(data)
+                        {
+                            $("#InstitucionSede").html(" ");
+
+                            $("#InstitucionSede").append(data.replace('"', ' ').replace('"', ' '));
+                            console.log(data.charAt(0));
+                        });
+
+                        return fetch('index.php?r=sedes/sedes&idInstitucion='+value)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(response.statusText)
+                                }
+                                else{
+                                    location.reload();
+                                }
+                            });
+                    }
+                    else
+                    {
+                        resolve('Debe seleccionar una institucion')
+                    }
+                })
+            }
+        })
+    });
 });
 
 
