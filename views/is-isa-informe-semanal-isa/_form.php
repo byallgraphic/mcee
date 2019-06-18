@@ -17,7 +17,7 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
 
 $nroSemana = empty( $_POST['nroSemana'] ) ? '' : $_POST['nroSemana'];
 $fecha_desde 	= empty( $_POST['fecha_desde'] ) ? '' : $_POST['fecha_desde'];
-$fecha_hasta 	= empty( $_POST['fecha_hasta'] ) ? '' : $_POST['fecha_hasta'];
+$fecha_hasta 	= empty( $_POST['fecha_desde'] ) ? '' : date( "Y-m", strtotime( $_POST['fecha_desde'] ) );
 
 $model->desde = $fecha_desde;
 $model->hasta = $fecha_hasta;
@@ -50,11 +50,12 @@ $model->hasta = $fecha_hasta;
             'language' => 'es',
             'clientOptions' => [
                 'autoclose' => true,
-                'format'    => 'yyyy-mm-dd',
+                'format'    => 'yyyy-mm',
+				'minViewMode'=>'months',
         ],
     ]);  ?> 
 		</div>
-		<div class="col-md-6"> <?= $form->field($model, "hasta")->widget(
+		<div class="col-md-6" style='display:none;'> <?= $form->field($model, "hasta")->widget(
 			DatePicker::className(), [
 				// modify template for custom rendering
 				'template' => '{addon}{input}',
