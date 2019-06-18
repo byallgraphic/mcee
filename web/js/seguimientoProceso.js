@@ -4,7 +4,7 @@ $( document ).ready(function() {
 
 });
 
-$('#isaseguimientoproceso-fecha_desde').on('change', function() {
+$('#isaseguimientoproceso-fecha').on('change', function() {
 
 	//validar si tiene tiene alguna fecha
 	valorFecha = $(this).val();
@@ -21,13 +21,8 @@ $('#isaseguimientoproceso-fecha_desde').on('change', function() {
 					{		
 							idActividad = datos.id_rom_actividad;
 							// se llenan los logros	
-							
 							cols = 40;
 							rows = 4;
-							// 
-  // <div class="col-md-6">.col-md-6</div>
-  // <div class="col-md-6">.col-md-6</div>
-// </div>
 							$('#'+idActividad+'_Logro' ).append('<div class="row"><div class="col-md-6"> <label>'+nombre+' - '+ datos.fecha_diligencia+'</label> <textarea rows="4" cols="'+cols+'"> '+ datos.logros+' </textarea> </div></div>' );
 							$('#'+idActividad+'_Alter' ).append('<div class="row"><div class="col-md-6"> <label>'+nombre+' - '+ datos.fecha_diligencia+'</label> <textarea rows="4" cols="'+cols+'"> '+ datos.alternativas+' </textarea> </div></div>' );
 							$('#'+idActividad+'_Artic' ).append('<div class="row"><div class="col-md-6"> <label>'+nombre+' - '+ datos.fecha_diligencia+'</label> <textarea rows="4" cols="'+cols+'"> '+ datos.articulacion+' </textarea> </div></div>' );

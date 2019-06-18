@@ -38,8 +38,11 @@ use yii\helpers\Json;
 //comenzando a calcular datos
 
 $nroSemana 		= empty( $_POST['nroSemana'] ) ? 1 : $_POST['nroSemana'];
-$fecha_desde 	= empty( $_POST['fecha_desde'] ) ? date( "Y-m-d" ) : $_POST['fecha_desde'];
-$fecha_hasta 	= empty( $_POST['fecha_hasta'] ) ? date( "Y-m-d" ) : $_POST['fecha_hasta'];
+// $fecha_desde 	= empty( $_POST['fecha_desde'] ) ? date( "Y-m-d" ) : $_POST['fecha_desde'];
+// $fecha_hasta 	= empty( $_POST['fecha_hasta'] ) ? date( "Y-m-d" ) : $_POST['fecha_hasta'];
+
+$fecha_desde 	= empty( $_POST['fecha_desde'] ) ? '' : $_POST['fecha_desde']."-01";
+$fecha_hasta 	= empty( $_POST['fecha_desde'] ) ? '' : date( "Y-m-t", strtotime( $_POST['fecha_desde'] ) );
 
 $coordinadoresTecnico = [];
 
@@ -88,180 +91,184 @@ $porcetaje_actividades		= 0;
 	$id_sede 		= $_SESSION['sede'][0];
 
 
-	$rom = IsaReporteOperativoMisional::findOne([
-						'estado'			=> 1,
-						'id_institucion' 	=> $idInstitucion,
-						'id_sedes' 			=> $id_sede,
-					]);
 
-	if( $rom ){
-
-		$id = $rom->id;
-
-		$proyectos = new IsaRomProyectos();
-		$proyectos = $proyectos->find()
-							->alias( 'py' )
-							->innerJoin( 'isa.rom_procesos p', 'p.id_rom_proyectos=py.id' )
-							->innerJoin( 'isa.rom_actividades a', 'a.id_rom_procesos=p.id' )
-							->innerJoin( 'isa.evidencias_rom er', 'er.id_rom_actividad = a.id' )
-							->where('py.estado=1')
-							->andWhere('a.estado=1')
-							->andWhere('p.estado=1')
-							->andWhere( 'er.id_reporte_operativo_misional='.$id )
-							->groupby("py.id")
-							->orderby("py.id")
-							->all();
-		$proyectos = ArrayHelper::map($proyectos,'id','descripcion');
-		
-		$dataParametros = Parametro::find()
-							// ->where( "id_tipo_parametro=$idTipoParametro" )
-							->where( 'estado=1' )
-							->orderby( 'id' )
-							->all();
-							
-		$parametros		= ArrayHelper::map( $dataParametros, 'id', 'descripcion' );
-		
-		$datos = [];
-		
-		foreach( $proyectos as $idProyecto => $descripcionProyecto )
+	if( !empty($fecha_desde) && !empty($fecha_hasta) )
+	{
+		$rom = IsaReporteOperativoMisional::findOne([
+							'estado'			=> 1,
+							'id_institucion' 	=> $idInstitucion,
+							'id_sedes' 			=> $id_sede,
+						]);
+						
+		if( $rom )
 		{
-			// $proy = [
-						// 'id' 				=> $idProyecto,
-						// 'descripcion' 		=> $descripcionProyecto,
-						// 'actividades_rom2'	=> IsaActividadesRom::findOne([ 
-																	// 'id_reporte_operativo_misional' => $id,
-																	// 'estado' 						=> 1,
-																	// 'nro_semana' 					=> $nroSemana,
-																	// 'id_rom_actividad' 				=> $index,
-																// ]),
-						// 'procesos'			=> [],
-					// ];
-			
-			$dataProcesos = IsaRomProcesos::find()
-								->alias( 'p' )
+			$id = $rom->id;
+
+			$proyectos = new IsaRomProyectos();
+			$proyectos = $proyectos->find()
+								->alias( 'py' )
+								->innerJoin( 'isa.rom_procesos p', 'p.id_rom_proyectos=py.id' )
 								->innerJoin( 'isa.rom_actividades a', 'a.id_rom_procesos=p.id' )
 								->innerJoin( 'isa.evidencias_rom er', 'er.id_rom_actividad = a.id' )
-								->where( "p.id_rom_proyectos=".$idProyecto )
+								->where('py.estado=1')
 								->andWhere('a.estado=1')
 								->andWhere('p.estado=1')
 								->andWhere( 'er.id_reporte_operativo_misional='.$id )
-								->andWhere( 'er.id_rom_actividad='.$index )
-								->groupby("p.id")
+								->groupby("py.id")
+								->orderby("py.id")
+								->all();
+			$proyectos = ArrayHelper::map($proyectos,'id','descripcion');
+			
+			$dataParametros = Parametro::find()
+								// ->where( "id_tipo_parametro=$idTipoParametro" )
+								->where( 'estado=1' )
+								->orderby( 'id' )
 								->all();
 								
-			$procesos = ArrayHelper::map($dataProcesos,'id','descripcion');
+			$parametros		= ArrayHelper::map( $dataParametros, 'id', 'descripcion' );
 			
-			foreach( $procesos as $idProceso => $descripcionProceso )
+			$datos = [];
+			
+			foreach( $proyectos as $idProyecto => $descripcionProyecto )
 			{
-				$procs = 	[
-								'id' 			=> $idProceso,
-								'descripcion' 	=> $descripcionProceso,
-								'actividades'	=> [],
-							];
-							
-				$evidencias = IsaEvidenciasRom::find()
-										->alias('er')
-										->innerJoin( 'isa.rom_actividades a', 'a.id=er.id_rom_actividad' )
-										->where('er.estado=1')
-										->andWhere('a.estado=1')
-										->andWhere('a.id_rom_procesos='.$idProceso)
-										->andWhere( 'er.id_reporte_operativo_misional='.$id )
-										->andWhere( 'a.id='.$index )
-										->all();
-				// $evidencias = ArrayHelper::map($evidencias,'id','descripcion');
+				// $proy = [
+							// 'id' 				=> $idProyecto,
+							// 'descripcion' 		=> $descripcionProyecto,
+							// 'actividades_rom2'	=> IsaActividadesRom::findOne([ 
+																		// 'id_reporte_operativo_misional' => $id,
+																		// 'estado' 						=> 1,
+																		// 'nro_semana' 					=> $nroSemana,
+																		// 'id_rom_actividad' 				=> $index,
+																	// ]),
+							// 'procesos'			=> [],
+						// ];
 				
-				foreach( $evidencias as $evidencia )
-				{
-					$propiedades = array( "actas", "reportes", "listados", "plan_trabajo", "formato_seguimiento", "formato_evaluacion", "fotografias", "vidoes", "otros_productos");
-						$actas 				+= empty( $evidencia->actas ) ? 0 : count( explode( ',', $evidencia->actas ) );
-						$reportes 			+= empty( $evidencia->reportes ) ? 0 : count( explode( ',', $evidencia->reportes ) );
-						$listados 			+= empty( $evidencia->listados ) ? 0 : count( explode( ',', $evidencia->listados ) );
-						$plan_trabajo 		+= empty( $evidencia->plan_trabajo ) ? 0 : count( explode( ',', $evidencia->plan_trabajo ) );
-						$formato_seguimiento+= empty( $evidencia->formato_seguimiento ) ? 0 : count( explode( ',', $evidencia->formato_seguimiento ) );
-						$formato_evaluacion += empty( $evidencia->formato_evaluacion ) ? 0 : count( explode( ',', $evidencia->formato_evaluacion ) );
-						$fotografias 		+= empty( $evidencia->fotografias ) ? 0 : count( explode( ',', $evidencia->fotografias ) );
-						$vidoes 			+= empty( $evidencia->vidoes ) ? 0 : count( explode( ',', $evidencia->vidoes ) );
-						$otros_productos 	+= empty( $evidencia->otros_productos ) ? 0 : count( explode( ',', $evidencia->otros_productos ) );
-				}
-													
-				$actividades_rom_upts = IsaActividadesRom::find()
-											->where( 'id_reporte_operativo_misional='.$id )
-											->andWhere( 'id_rom_actividad='.$index )
-											->andWhere( 'estado=1' )
-											// ->andWhere( 'nro_semana='.$nroSemana )
-											->andWhere( "fecha_desde BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' OR fecha_hasta BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' " )
-											// ->andWhere( 'nro_semana=1' )
-											->all();
-				
-				// if( $actividades_rom_upt )
-				foreach( $actividades_rom_upts as $actividades_rom_upt )
-				{
-					$dataActividadesParticipadas= IsaIntervencionIeo::findOne( $actividades_rom_upt->sesion_actividad );
-										
-					$actividadesParticipadas 	= [ $dataActividadesParticipadas->id => $dataActividadesParticipadas->nombre_actividad ];
-					
-					/***************************************************************************************************************************************
-					 * Calculando
-					 *
-					 * ============================++++++++++++++++++++++??????????????++++++++++++++++
-					 ***************************************************************************************************************************************/
-					
-					$perfilXPesonaInstitucion 	= PerfilesXPersonasInstitucion::findOne( $dataActividadesParticipadas->docente_orientador );
-					$perfilXPesona			  	= PerfilesXPersonas::findOne( $perfilXPesonaInstitucion->id_perfiles_x_persona );
-					$coordinadoresTecnico[]   	= Personas::findOne( $perfilXPesona->id_personas );
-					$equipos[] 					= IsaEquiposCampo::findOne( $dataActividadesParticipadas->id_equipo_campos );
-					 
-					$sesiones_realizadas 	+= $actividades_rom_upt->estado_actividad == 179;
-					$sesiones_aplazadas 	+= $actividades_rom_upt->estado_actividad == 180;
-					$sesiones_canceladas 	+= $actividades_rom_upt->estado_actividad == 181;
-					$total_actividades++;
-					
-					$porcetaje_actividades = $sesiones_realizadas/$total_actividades;
-					
-					
-					/****************************************************************************************************************************************/
-				
-				}
-				
-				$modelIntegrante 			= IsaActividadesRomXIntegranteGrupo::find()
-															->where( 'estado=1' )
-															// ->andWhere( 'diligencia=$id_perfil_persona' )
-															->andWhere( 'id_rom_actividad='.$index /*$evidencia->id_rom_actividad*/ )
-															->andWhere( 'id_reporte_operativo_misional='.$id )
-															->all();
-				
-				foreach( $modelIntegrante as $key => $integrante ){
-						
-					$fortalezas[] 				= $integrante->fortalezas;
-					$debilidades[] 				= $integrante->debilidades;
-					$alternativas[] 			= $integrante->alternativas;
-					$retos[] 					= $integrante->retos;
-					$articulacion[] 			= $integrante->articulacion;
-					$evaluacion[] 				= $integrante->evaluacion;
-					$observaciones_generales[] 	= $integrante->observaciones_generales;
-					$alarmas[] 					= $integrante->alarmas;
-					$logros[] 					= $integrante->logros;
-					$duracion					+=$integrante->duracion_sesion;
-					$totalSesiones++;
-				}
-				
-				$poblaciones = IsaTipoCantidadPoblacionRom::find()
-									->where('estado=1')
-									->andWhere( 'id_rom_actividades='.$index )
-									->andWhere( 'id_reporte_operativo_misional='.$id )
+				$dataProcesos = IsaRomProcesos::find()
+									->alias( 'p' )
+									->innerJoin( 'isa.rom_actividades a', 'a.id_rom_procesos=p.id' )
+									->innerJoin( 'isa.evidencias_rom er', 'er.id_rom_actividad = a.id' )
+									->where( "p.id_rom_proyectos=".$idProyecto )
+									->andWhere('a.estado=1')
+									->andWhere('p.estado=1')
+									->andWhere( 'er.id_reporte_operativo_misional='.$id )
+									->andWhere( 'er.id_rom_actividad='.$index )
+									->groupby("p.id")
 									->all();
+									
+				$procesos = ArrayHelper::map($dataProcesos,'id','descripcion');
 				
-				foreach( $poblaciones as $poblacion ){
-					$total += $vecinos 					+= $poblacion->vecinos;
-					$total += $lideres_comunitarios 	+= $poblacion->lideres_comunitarios;
-					$total += $empresarios_comerciantes	+= $poblacion->empresarios_comerciantes;
-					$total += $organizaciones_locales 	+= $poblacion->organizaciones_locales;
-					$total += $grupos_comunitarios 		+= $poblacion->grupos_comunitarios;
-					$total += $otos_actores 			+= $poblacion->otos_actores;
+				foreach( $procesos as $idProceso => $descripcionProceso )
+				{
+					$procs = 	[
+									'id' 			=> $idProceso,
+									'descripcion' 	=> $descripcionProceso,
+									'actividades'	=> [],
+								];
+								
+					$evidencias = IsaEvidenciasRom::find()
+											->alias('er')
+											->innerJoin( 'isa.rom_actividades a', 'a.id=er.id_rom_actividad' )
+											->where('er.estado=1')
+											->andWhere('a.estado=1')
+											->andWhere('a.id_rom_procesos='.$idProceso)
+											->andWhere( 'er.id_reporte_operativo_misional='.$id )
+											->andWhere( 'a.id='.$index )
+											->all();
+					// $evidencias = ArrayHelper::map($evidencias,'id','descripcion');
+					
+					foreach( $evidencias as $evidencia )
+					{
+						$propiedades = array( "actas", "reportes", "listados", "plan_trabajo", "formato_seguimiento", "formato_evaluacion", "fotografias", "vidoes", "otros_productos");
+							$actas 				+= empty( $evidencia->actas ) ? 0 : count( explode( ',', $evidencia->actas ) );
+							$reportes 			+= empty( $evidencia->reportes ) ? 0 : count( explode( ',', $evidencia->reportes ) );
+							$listados 			+= empty( $evidencia->listados ) ? 0 : count( explode( ',', $evidencia->listados ) );
+							$plan_trabajo 		+= empty( $evidencia->plan_trabajo ) ? 0 : count( explode( ',', $evidencia->plan_trabajo ) );
+							$formato_seguimiento+= empty( $evidencia->formato_seguimiento ) ? 0 : count( explode( ',', $evidencia->formato_seguimiento ) );
+							$formato_evaluacion += empty( $evidencia->formato_evaluacion ) ? 0 : count( explode( ',', $evidencia->formato_evaluacion ) );
+							$fotografias 		+= empty( $evidencia->fotografias ) ? 0 : count( explode( ',', $evidencia->fotografias ) );
+							$vidoes 			+= empty( $evidencia->vidoes ) ? 0 : count( explode( ',', $evidencia->vidoes ) );
+							$otros_productos 	+= empty( $evidencia->otros_productos ) ? 0 : count( explode( ',', $evidencia->otros_productos ) );
+					}
+														
+					$actividades_rom_upts = IsaActividadesRom::find()
+												->where( 'id_reporte_operativo_misional='.$id )
+												->andWhere( 'id_rom_actividad='.$index )
+												->andWhere( 'estado=1' )
+												// ->andWhere( 'nro_semana='.$nroSemana )
+												->andWhere( "fecha_desde BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' OR fecha_hasta BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' " )
+												// ->andWhere( 'nro_semana=1' )
+												->all();
+					
+					// if( $actividades_rom_upt )
+					foreach( $actividades_rom_upts as $actividades_rom_upt )
+					{
+						$dataActividadesParticipadas= IsaIntervencionIeo::findOne( $actividades_rom_upt->sesion_actividad );
+											
+						$actividadesParticipadas 	= [ $dataActividadesParticipadas->id => $dataActividadesParticipadas->nombre_actividad ];
+						
+						/***************************************************************************************************************************************
+						 * Calculando
+						 *
+						 * ============================++++++++++++++++++++++??????????????++++++++++++++++
+						 ***************************************************************************************************************************************/
+						
+						$perfilXPesonaInstitucion 	= PerfilesXPersonasInstitucion::findOne( $dataActividadesParticipadas->docente_orientador );
+						$perfilXPesona			  	= PerfilesXPersonas::findOne( $perfilXPesonaInstitucion->id_perfiles_x_persona );
+						$coordinadoresTecnico[]   	= Personas::findOne( $perfilXPesona->id_personas );
+						$equipos[] 					= IsaEquiposCampo::findOne( $dataActividadesParticipadas->id_equipo_campos );
+						 
+						$sesiones_realizadas 	+= $actividades_rom_upt->estado_actividad == 179;
+						$sesiones_aplazadas 	+= $actividades_rom_upt->estado_actividad == 180;
+						$sesiones_canceladas 	+= $actividades_rom_upt->estado_actividad == 181;
+						$total_actividades++;
+						
+						$porcetaje_actividades = $sesiones_realizadas/$total_actividades;
+						
+						
+						/****************************************************************************************************************************************/
+					
+					}
+					
+					$modelIntegrante 			= IsaActividadesRomXIntegranteGrupo::find()
+																->where( 'estado=1' )
+																// ->andWhere( 'diligencia=$id_perfil_persona' )
+																->andWhere( 'id_rom_actividad='.$index /*$evidencia->id_rom_actividad*/ )
+																->andWhere( 'id_reporte_operativo_misional='.$id )
+																->all();
+					
+					foreach( $modelIntegrante as $key => $integrante ){
+							
+						$fortalezas[] 				= $integrante->fortalezas;
+						$debilidades[] 				= $integrante->debilidades;
+						$alternativas[] 			= $integrante->alternativas;
+						$retos[] 					= $integrante->retos;
+						$articulacion[] 			= $integrante->articulacion;
+						$evaluacion[] 				= $integrante->evaluacion;
+						$observaciones_generales[] 	= $integrante->observaciones_generales;
+						$alarmas[] 					= $integrante->alarmas;
+						$logros[] 					= $integrante->logros;
+						$duracion					+= strtotime( $integrante->duracion_sesion." UTC"  );
+						$totalSesiones++;
+					}
+					
+					$poblaciones = IsaTipoCantidadPoblacionRom::find()
+										->where('estado=1')
+										->andWhere( 'id_rom_actividades='.$index )
+										->andWhere( 'id_reporte_operativo_misional='.$id )
+										->all();
+					
+					foreach( $poblaciones as $poblacion ){
+						$total += $vecinos 					+= $poblacion->vecinos;
+						$total += $lideres_comunitarios 	+= $poblacion->lideres_comunitarios;
+						$total += $empresarios_comerciantes	+= $poblacion->empresarios_comerciantes;
+						$total += $organizaciones_locales 	+= $poblacion->organizaciones_locales;
+						$total += $grupos_comunitarios 		+= $poblacion->grupos_comunitarios;
+						$total += $otos_actores 			+= $poblacion->otos_actores;
+					}
 				}
+				
+				// $datos[] = $proy;
 			}
-			
-			// $datos[] = $proy;
 		}
 	}
 
@@ -311,7 +318,7 @@ $porcetaje_actividades		= 0;
     <?= $form->field($actividade_is_isa, "[$index]estado")->hiddenInput(['value'=> 1])->label(false); ?>
 	
 	<div class="row">
-		<div class="col-md-4"><?= $form->field($actividades_is_isa, "[$index]duracion")->textInput([ 'value' =>  $totalSesiones ? $duracion/$totalSesiones : 0 ]) ?></div>
+		<div class="col-md-4"><?= $form->field($actividades_is_isa, "[$index]duracion")->textInput([ 'value' => $totalSesiones ? gmdate( "H:i:s", $duracion/$totalSesiones ) : 0 ]) ?></div>
 		<div class="col-md-4">
 			<label>Coordinador técnico pedagógico</label>
 			<?php 

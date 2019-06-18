@@ -27,7 +27,7 @@ $this->registerJs( file_get_contents( '../web/js/seguimientoProceso.js' ) );
 	</div>
 	
 	<div class="row">
-	  <div class="col-md-6"><?= $form->field($model, 'fecha_desde')->widget(
+	  <div class="col-md-6"><?= $form->field($model, 'fecha')->widget(
 			DatePicker::className(), [
 				
 			 // modify template for custom rendering
@@ -46,7 +46,7 @@ $this->registerJs( file_get_contents( '../web/js/seguimientoProceso.js' ) );
 
     <?= $form->field($model, 'estado')->hiddenInput( [ 'value' => '1' ] )->label(false ) ?>
 	
-	<?= $this->context->actionFormulario($model,$form,$datos)   ?>
+	<?= $this->context->actionFormulario($model,$form)   ?>
 	
 
     <div class="form-group">

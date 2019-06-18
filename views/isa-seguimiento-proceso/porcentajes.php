@@ -67,7 +67,7 @@ foreach( $data as $k => $v ){
 			  <div class="col-md-6"><?= $form->field($porcentajes, "[$idActividad]evaluacion_actividades")->textInput([ 'value' => $datos['PorcentajesActividades'][$idActividad]['evaluacion_actividades'] ])?></div>
 			</div>			 
                       
-					<?= $form->field($porcentajes, "[$idActividad]id_actividades_seguimiento")->hiddenInput( [ 'value' => $idActividad ] )->label(false ) ?>
+					<?= $form->field($porcentajes, "[$idActividad]id_rom_actividades")->hiddenInput( [ 'value' => $idActividad ] )->label(false ) ?>
                     <?= $form->field($porcentajes, "[$idActividad]estado")->hiddenInput( [ 'value' => '1' ] )->label(false ) ?>
             </div>
 </div>

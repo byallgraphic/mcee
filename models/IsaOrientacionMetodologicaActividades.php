@@ -12,6 +12,7 @@ use Yii;
  * @property string $id_actividades
  * @property string $estado
  * @property string $id_seguimiento_proceso
+ * @property string $id_logros
  */
 class IsaOrientacionMetodologicaActividades extends \yii\db\ActiveRecord
 {
@@ -29,13 +30,11 @@ class IsaOrientacionMetodologicaActividades extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'descripcion', 'id_actividades', 'estado', 'id_seguimiento_proceso'], 'required'],
-            [['id', 'id_actividades', 'estado', 'id_seguimiento_proceso'], 'default', 'value' => null],
-            [['id', 'id_actividades', 'estado', 'id_seguimiento_proceso','id_logros'], 'integer'],
             [['descripcion'], 'string'],
-            [['id'], 'unique'],
-            [['id_actividades'], 'exist', 'skipOnError' => true, 'targetClass' => IsaActividadesSeguimiento::className(), 'targetAttribute' => ['id_actividades' => 'id']],
-            [['id_seguimiento_proceso'], 'exist', 'skipOnError' => true, 'targetClass' => IsaSeguimientoProceso::className(), 'targetAttribute' => ['id_seguimiento_proceso' => 'id']],
+            [['id_actividades', 'estado', 'id_seguimiento_proceso'], 'required'],
+            [['id_actividades', 'estado', 'id_seguimiento_proceso', 'id_logros'], 'default', 'value' => null],
+            [['id_actividades', 'estado', 'id_seguimiento_proceso', 'id_logros'], 'integer'],
+            [['id_actividades'], 'exist', 'skipOnError' => true, 'targetClass' => IsaRomActividades::className(), 'targetAttribute' => ['id_actividades' => 'id']],
         ];
     }
 
@@ -50,7 +49,7 @@ class IsaOrientacionMetodologicaActividades extends \yii\db\ActiveRecord
             'id_actividades' => 'Id Actividades',
             'estado' => 'Estado',
             'id_seguimiento_proceso' => 'Id Seguimiento Proceso',
-            'id_logros' => 'Logros',
+            'id_logros' => 'Id Logros',
         ];
     }
 }

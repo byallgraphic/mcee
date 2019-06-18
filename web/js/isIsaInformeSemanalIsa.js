@@ -1,6 +1,7 @@
 	$( "#modalContent" ).on( "change", "#isisainformesemanalisa-nro_semana,#isisainformesemanalisa-desde,#isisainformesemanalisa-hasta", function(){
 		
-		if( $( "#isisainformesemanalisa-desde" ).val() != '' && $( "#isisainformesemanalisa-hasta" ).val() != '' )
+		// if( $( "#isisainformesemanalisa-desde" ).val() != '' && $( "#isisainformesemanalisa-hasta" ).val() != '' )
+		if( $( "#isisainformesemanalisa-desde" ).val() != '' )
 		{
 			$.post( "index.php?r=is-isa-informe-semanal-isa/create",
 				{

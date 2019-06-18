@@ -30,9 +30,7 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'seguimiento_proceso',
-            'fecha_desde',
-            'fecha_hasta',
+            'fecha',
             
 			[
 				'attribute' => 'id_institucion',
