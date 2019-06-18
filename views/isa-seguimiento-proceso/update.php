@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\IsaSeguimientoProceso */
 
-$this->title = 'Actualizar';
+$this->title = 'Actualizar Seguimiento Proceso';
 $this->params['breadcrumbs'][] = ['label' => 'Isa Seguimiento Procesos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = "Actualizar";
@@ -18,7 +18,6 @@ $this->params['breadcrumbs'][] = "Actualizar";
 		'model' => $model,
 		'sedes' => $sedes,
 		'instituciones'=> $instituciones,
-		'datos' => $datos,
 		
     ]) ?>
 

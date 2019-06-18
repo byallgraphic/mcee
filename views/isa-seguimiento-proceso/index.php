@@ -82,9 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             
-            'seguimiento_proceso',
-            'fecha_desde',
-            'fecha_hasta',
+            'fecha',
             // 'id_institucion',
             //'id_sede',
             //'estado',

@@ -17,11 +17,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'seguimiento_proceso') ?>
-
-    <?= $form->field($model, 'fecha_desde') ?>
-
-    <?= $form->field($model, 'fecha_hasta') ?>
+    <?= $form->field($model, 'fecha') ?>
 
     <?= $form->field($model, 'id_institucion') ?>
 

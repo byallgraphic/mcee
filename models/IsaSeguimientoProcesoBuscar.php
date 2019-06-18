@@ -19,7 +19,7 @@ class IsaSeguimientoProcesoBuscar extends IsaSeguimientoProceso
     {
         return [
             [['id', 'id_institucion', 'id_sede', 'estado'], 'integer'],
-            [['seguimiento_proceso', 'fecha_desde', 'fecha_hasta'], 'safe'],
+            [[ 'fecha', ], 'safe'],
         ];
     }
 
@@ -60,14 +60,13 @@ class IsaSeguimientoProcesoBuscar extends IsaSeguimientoProceso
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'fecha_desde' => $this->fecha_desde,
-            'fecha_hasta' => $this->fecha_hasta,
+            'fecha' => $this->fecha,
             'id_institucion' => $this->id_institucion,
             'id_sede' => $this->id_sede,
             'estado' => $this->estado,
         ]);
 
-        $query->andFilterWhere(['ilike', 'seguimiento_proceso', $this->seguimiento_proceso]);
+        $query->andFilterWhere(['ilike', 'fecha', $this->fecha]);
 
         return $dataProvider;
     }

@@ -6,22 +6,24 @@
 
 use app\models\EcAvances;
 use yii\widgets\ActiveForm;
-use app\models\IsaSemanaLogros;
 use app\models\IsaOrientacionMetodologicaActividades;
-
-
-$semanLogros = new IsaSemanaLogros();
-
+use yii\helpers\ArrayHelper;
 $orientacion = new IsaOrientacionMetodologicaActividades();
 
-// echo "<pre>"; print_r($datos); echo "</pre>"; 
-
-// die;
-
-
+//saber que se esta editando
+if( strpos($_GET['r'], 'update') > -1)
+{
+	
+	$id = $_GET['id'];
+	// traer el id de la tabla IsaOrientacionMetodologicaActividades para luego traer el modelo con los datos correspondintes
+	$oma = new IsaOrientacionMetodologicaActividades();
+	$oma = $oma->find()->where("id_logros = $idLogros and id_seguimiento_proceso =". $id)->all();
+	$oma = ArrayHelper::getColumn($oma,'id');
+	
+	// traer el modelo con los datos de cada actividad
+	$orientacion = IsaOrientacionMetodologicaActividades::findOne($oma[0]);
+}
 ?>
-
-
 
 <div class="container-fluid">
             <div class="ieo-form">
@@ -33,12 +35,9 @@ $orientacion = new IsaOrientacionMetodologicaActividades();
 				</div>  
                  
                 <div class="row">
-				  <div class="col-md-8"><?= $form->field($orientacion, "[$idLogros]descripcion")->textarea(['rows' => '3', 'value' => $datos['OrientacionMetodologicaActividades'][$idActividad][$idLogros]['descripcion'] ])->label("ORIENTACION METODOLÓGICA")?></div>
+				  <div class="col-md-8"><?= $form->field($orientacion, "[$idLogros]descripcion")->textarea(['rows' => '3' ])->label("ORIENTACION METODOLÓGICA")?></div>
 				  <div class="col-md-4"></div>
 				</div> 
-
-					<?= $form->field($semanLogros, "[$idLogros]id_logros_actividades")->hiddenInput( [ 'value' => $idLogros ] )->label(false ) ?>
-                    <?= $form->field($semanLogros, "[$idLogros]estado")->hiddenInput( [ 'value' => '1' ] )->label(false ) ?>
 					<?= $form->field($orientacion, "[$idLogros]id_actividades")->hiddenInput( [ 'value' => $idActividad ] )->label(false ) ?>
 					<?= $form->field($orientacion, "[$idLogros]id_logros")->hiddenInput( [ 'value' => $idLogros ] )->label(false ) ?>
 					
