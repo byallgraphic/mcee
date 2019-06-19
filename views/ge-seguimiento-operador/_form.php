@@ -114,9 +114,9 @@ if(Yii::$app->request->get('guardado')){
                     <?= $form->field($report, 'objetivo')->textInput(['disabled' => false, 'id' => 'id_objetivo']) ?>
                     <?= $form->field($report, 'actividad')->textInput(['disabled' => false, 'id' => 'id_actividad']) ?>
                     <?= $form->field($report, 'descripcion')->textInput(['id' => 'descripcion_actividad']) ?>
-                    <?= $form->field($report, 'poblacion_beneficiaria')->dropDownList(['Docentes', 'Estudiantes', 'Directivos', 'Otros'], ['prompt' => 'Seleccione una opción', 'id' => 'poblacion_beneficiaria-'.$key]); ?>
+                    <?= $form->field($report, 'poblacion_beneficiaria')->dropDownList(['Docentes', 'Estudiantes', 'Directivos', 'Otros'], ['prompt' => 'Seleccione una opción', 'id' => 'poblacion_beneficiaria-'.$key, 'onchange' => 'poblacionBeneficiada('.$key.')']); ?>
                     <div id="id_quienes-<?= $key ?>">
-                        <?=  $form->field($report, 'quienes')->textInput(['id' => 'quienes']); ?>
+                        <?=  $form->field($report, 'quienes')->textInput(['id' => 'quienes-'.$key]); ?>
                     </div>
                     <?= $form->field($report, 'num_participantes')->textInput(['type' => 'number', 'id' => 'numero_participantes']) ?>
                     <?= $form->field($report, 'duracion')->textInput(['id' => 'duracion_actividad-'.$key, 'name' => 'duracion_actividad-'.$key]) ?>
@@ -158,9 +158,9 @@ if(Yii::$app->request->get('guardado')){
                 <?= $form->field($reportAct, 'objetivo')->textInput(['disabled' => false, 'id' => 'id_objetivo']) ?>
                 <?= $form->field($reportAct, 'actividad')->textInput(['disabled' => false, 'id' => 'id_actividad']) ?>
                 <?= $form->field($reportAct, 'descripcion')->textInput(['id' => 'descripcion_actividad']) ?>
-                <?= $form->field($reportAct, 'poblacion_beneficiaria')->dropDownList(['Docentes', 'Estudiantes', 'Directivos', 'Otros'], ['prompt' => 'Seleccione una opción', 'id' => 'poblacion_beneficiaria-1']); ?>
-                <div id="id_quienes">
-                    <?=  $form->field($reportAct, 'quienes')->hiddenInput(['id' => 'quienes']); ?>
+                <?= $form->field($reportAct, 'poblacion_beneficiaria')->dropDownList(['Docentes', 'Estudiantes', 'Directivos', 'Otros'], ['prompt' => 'Seleccione una opción', 'id' => 'poblacion_beneficiaria-1', 'onchange' => 'poblacionBeneficiada(1)']); ?>
+                <div id="id_quienes-1">
+                    <?=  $form->field($reportAct, 'quienes')->textInput(['id' => 'quienes-1']); ?>
                 </div>
                 <?= $form->field($reportAct, 'num_participantes')->textInput(['type' => 'number', 'id' => 'numero_participantes']) ?>
                 <?= $form->field($reportAct, 'duracion')->textInput(['id' => 'duracion_actividad-1', 'autocomplete' => "off"]) ?>
@@ -242,8 +242,17 @@ if(Yii::$app->request->get('guardado')){
             },
         });
     }
+    function poblacionBeneficiada(id){
+        if ($("#poblacion_beneficiaria-"+id).val() === '3'){
+            $("#id_quienes-"+id).show();
+        }else{
+            $("#id_quienes-"+id).hide();
+        }
+    }
 
     $( document ).ready(function() {
+        $('[id*=\'id_quienes-\']').hide();
+
         var btnObj = $( "#btnAgregarObj" );
         btnObj.val(parseInt($('[id*=\'objetivo-\']').length, 'number'));
         $('#duracion_actividad-1').timepicker({
@@ -258,21 +267,12 @@ if(Yii::$app->request->get('guardado')){
         $(".modal-guardado").modal('hide');
 
         $("#id_cual").hide();
-        $("#id_quienes").hide();
 
         $('#id_operador input').on('change', function() {
             if ($(this).val() === '144'){
                 $("#id_cual").show();
             }else{
                 $("#id_cual").hide();
-            }
-        });
-
-        $('#id_poblacion').on('change', function() {
-            if ($(this).val() === '3'){
-                $("#id_quienes").show();
-            }else{
-                $("#id_quienes").hide();
             }
         });
 
@@ -312,6 +312,8 @@ if(Yii::$app->request->get('guardado')){
             $('#objetivo-'+ (valueBtn) + ' #file-upload-1').attr('id', 'file-upload-'+ (valueBtn));
             $('#objetivo-'+ (valueBtn) + ' #duracion_actividad-1').attr('id', 'duracion_actividad-'+ (valueBtn))
                 .attr('name', 'duracion_actividad-'+ (valueBtn));
+            $('#objetivo-'+ (valueBtn) + ' #poblacion_beneficiaria-1').attr('id', 'poblacion_beneficiaria-'+ (valueBtn));
+            $('#objetivo-'+ (valueBtn) + ' #quienes-1').attr('id', 'quienes-'+ (valueBtn));
 
             $('#duracion_actividad-'+ (valueBtn)).timepicker({
                 timeFormat: 'H:i',
