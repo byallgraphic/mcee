@@ -64,19 +64,19 @@
 				});
 				
 				//2-: No es obligatorio si ninguno del mismo indice está seleccionado
-				if( obligatorio ){
+				if( obligatorio )
+				{
 					if( $.trim( $( "#"+attribute.id ).val() ) == '' )
-					{	
-						var i = 3;
+					{
+						var i = campos.length;
 						$( campos ).each(function(){
 							var cmp = this;
-							$( "[id^=isaactividadesrom-"+index+"-"+cmp+"]" ).each(function(){
-								if( $.trim( $( this ).val() ) != '' ){
-									i--;
-								}
-							});
+							
+							if( $.trim( $( "#isaactividadesrom-"+index+"-"+cmp ).val() ) == '' ){
+								i--;
+							}
 						});
-						obligatorio = i > 0 ? true : false;
+						obligatorio = i == 0 ? false : true;
 					}
 					else{
 						obligatorio = false;
