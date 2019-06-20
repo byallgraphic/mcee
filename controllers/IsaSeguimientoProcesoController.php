@@ -300,7 +300,7 @@ class IsaSeguimientoProcesoController extends Controller
 			}
 			
 			
-			die;
+			// die;
 			
 			
             return $this->redirect(['index']);
