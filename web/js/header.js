@@ -36,7 +36,7 @@ $( "#cambiarInstitucion" ).click(function()
             closeOnConfirm: false,
             closeOnCancel: false,
             allowOutsideClick: false,
-            title: 'Seleccione una Institucióntest',
+            title: 'Seleccione una Institución',
             input: 'select',
             inputOptions: $.parseJSON(data),
             inputPlaceholder: 'Seleccione...',

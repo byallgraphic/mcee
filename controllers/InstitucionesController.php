@@ -237,7 +237,14 @@ class InstitucionesController extends Controller
 
     public function actionInstituciones()
     {
-        $instituciones = Instituciones::find()->select('descripcion')->indexBy('id')->column();
+        foreach($_SESSION['instituciones'] as $i)
+        {
+            $idInstituciones[]=$i;
+        }
+
+        $idInstituciones= implode(",",$idInstituciones);
+
+        $instituciones = Instituciones::find()->where(['in', 'id', $idInstituciones])->select('descripcion')->indexBy('id')->column();
 
         return json_encode($instituciones);
     }
