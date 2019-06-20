@@ -8,12 +8,25 @@ use app\models\EcAvances;
 use yii\widgets\ActiveForm;
 use app\models\IsaSemanaLogrosForDebRet;
 use app\models\IsaOrientacionMetodologicaVariaciones;
-
+use yii\helpers\ArrayHelper;
 
 $semanLogros = new IsaSemanaLogrosForDebRet();
 $orientacion = new IsaOrientacionMetodologicaVariaciones();
-
+//saber que se esta editando
+if( strpos($_GET['r'], 'update') > -1)
+{
+	
+	$id = $_GET['id'];
+	// traer el id de la tabla IsaOrientacionMetodologicaVariaciones para luego traer el modelo con los datos correspondintes
+	$oma = new IsaOrientacionMetodologicaVariaciones();
+	$oma = $oma->find()->where("id_variaciones_actividades = $idIsaForDebRet and id_seguimiento_proceso =". $id)->all();
+	$oma = ArrayHelper::getColumn($oma,'id');
+	
+	// traer el modelo con los datos de cada actividad
+	$orientacion = IsaOrientacionMetodologicaVariaciones::findOne($oma[0]);
+}
 ?>
+
 
 <div class="container-fluid">
             <div class="ieo-form">
@@ -29,7 +42,7 @@ $orientacion = new IsaOrientacionMetodologicaVariaciones();
 				  <div class="col-md-4"></div>
 				</div>  
 				
-					<?= $form->field($orientacion, "[$idIsaForDebRet]id_variaciones_actividades")->hiddenInput( [ 'value' => $idVariaciones ] )->label(false ) ?>
-					<?= $form->field($orientacion, "[$idIsaForDebRet]id_for_deb_ret")->hiddenInput( [ 'value' => $idIsaForDebRet ] )->label(false ) ?>
+					<?= $form->field($orientacion, "[$idIsaForDebRet]id_variaciones_actividades")->hiddenInput( [ 'value' => $idIsaForDebRet ] )->label(false ) ?>
+					<?= $form->field($orientacion, "[$idIsaForDebRet]estado")->hiddenInput( [ 'value' => 1 ] )->label(false ) ?>
             </div>
 </div>
