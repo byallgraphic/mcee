@@ -112,7 +112,7 @@
 				if( hayEncuentroEstado ){
 					// var campos = ['actas', 'reportes', 'listados', 'plan_trabajo', 'formato_seguimiento', 'formato_evaluacion', 'fotografias', 'vidoes', 'otros_productos'];
 					
-					if( $( "#"+attribute.id )[0].files.length == 0 ){
+					if( $( "#"+attribute.id )[0].files && $( "#"+attribute.id )[0].files.length == 0 ){
 						messages.push('Debe subir al menos un archivo');
 					}
 				}
