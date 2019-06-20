@@ -41,6 +41,54 @@
 		
 		switch( opcion ){
 			
+			case 'isaactividadesrom': 
+			
+				/**
+				 * 1-: Si no se ha seleccionado ningun Fecha de realización, ni encuentro ni estado de la actividad
+				 *   todo es obligatorio
+				 * 2-: Si hay por lo menos una fecha o un encuentro o un estado seleccionado, la actividad rom de su mismo grupo es obligatorio
+				 *   Pero las demás no
+				 */
+				//Solo requiero validar estos campos
+				var campos = ['fecha_desde', 'estado_actividad', 'sesion_actividad']
+				 
+				//Validación 1-:
+				var obligatorio = false;
+				$( campos ).each(function(){
+					var cmp = this;
+					$( "[id^=isaactividadesrom][id$="+cmp+"]" ).each(function(){
+						if( $.trim( $( this ).val() ) != '' ){
+							obligatorio = true;
+						}
+					});
+				});
+				
+				//2-: No es obligatorio si ninguno del mismo indice está seleccionado
+				if( obligatorio ){
+					if( $.trim( $( "#"+attribute.id ).val() ) == '' )
+					{	
+						var i = 3;
+						$( campos ).each(function(){
+							var cmp = this;
+							$( "[id^=isaactividadesrom-"+index+"-"+cmp+"]" ).each(function(){
+								if( $.trim( $( this ).val() ) != '' ){
+									i--;
+								}
+							});
+						});
+						obligatorio = i > 0 ? true : false;
+					}
+					else{
+						obligatorio = false;
+					}
+				}
+					
+					
+				if( obligatorio )
+					messages.push('No puede estar vacio');
+			
+			break;
+			
 			case 'isatipocantidadpoblacionrom': 
 			
 				if( hayEncuentroEstado ){
@@ -161,7 +209,7 @@
 	// $("#modalEquipo").click(function()
 	// $(".modalEquipo").click(function()
 	$("#modal").on( 'click', '.modalEquipo' , function()
-	{ console.log( $( this).val() )
+	{
 		
 		// openViewFiles( $( this).val() )
 	
