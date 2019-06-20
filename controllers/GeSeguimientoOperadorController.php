@@ -100,6 +100,7 @@ class GeSeguimientoOperadorController extends Controller
 
         if (Yii::$app->request->get('id')){
             $model = GeSeguimientoOperador::findOne(Yii::$app->request->get('id'));
+
             $reportAct = GeReporteActividades::find()->where(['id_seguimiento_operador' => Yii::$app->request->get('id')])->all();
             $reportExist = true;
         }
@@ -162,7 +163,6 @@ class GeSeguimientoOperadorController extends Controller
     public function actionStore(){
 
         $GeSeguimientoOperador = Yii::$app->request->post();
-
         $gs = new GeSeguimientoOperador();
         $gs->id_tipo_seguimiento = $GeSeguimientoOperador['id_tipo_seguimiento'];
         $gs->email = $GeSeguimientoOperador['email'];
@@ -187,6 +187,7 @@ class GeSeguimientoOperadorController extends Controller
             $ra->id_seguimiento_operador = $gs->id;
             $ra->objetivo = $RepAct->objetivo;
             $ra->actividad = $RepAct->actividad;
+            $ra->poblacion_beneficiaria = $RepAct->id_poblacion;
             $ra->descripcion = $RepAct->descripcion_actividad;
             $ra->num_participantes = $RepAct->numero_participantes;
             $ra->duracion = $RepAct->duracion_actividad;
@@ -252,6 +253,7 @@ class GeSeguimientoOperadorController extends Controller
             if (isset($ra)){
                 $ra->objetivo = $RepAct->objetivo;
                 $ra->actividad = $RepAct->actividad;
+                $ra->poblacion_beneficiaria = $RepAct->id_poblacion;
                 $ra->descripcion = $RepAct->descripcion_actividad;
                 $ra->num_participantes = $RepAct->numero_participantes;
                 $ra->duracion = $RepAct->duracion_actividad;
@@ -264,6 +266,7 @@ class GeSeguimientoOperadorController extends Controller
                 $ra->id_seguimiento_operador = $gs->id;
                 $ra->objetivo = $RepAct->objetivo;
                 $ra->actividad = $RepAct->actividad;
+                $ra->poblacion_beneficiaria = $RepAct->id_poblacion;
                 $ra->descripcion = $RepAct->descripcion_actividad;
                 $ra->num_participantes = $RepAct->numero_participantes;
                 $ra->duracion = $RepAct->duracion_actividad;

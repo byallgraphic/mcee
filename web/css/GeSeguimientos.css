@@ -66,17 +66,23 @@ input[type=file]{
     color: #4aa5dd;
 }
 .line-file-name{
-    display: grid;
-    grid-template-areas: "a b";
-    width: 50%;
+    display: flex;
+    padding-bottom: 1%;
 }
 .name-file{
     text-align: center;
-    font-size: 20px;
+    padding: 1%;
+    border: 1px solid;
+    border-radius: 5px;
 }
 .delete-line{
     color: red;
-    font-size: 20px;
+    margin: 0 3px;
+    height: 100%;
     cursor: pointer;
     text-align: initial;
+    border: 1px solid;
+    padding: 0 4px;
+    border-radius: 20px;
+    font-size: 16px;
 }

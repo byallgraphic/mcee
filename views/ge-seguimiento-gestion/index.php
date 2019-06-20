@@ -12,7 +12,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\GeSeguimientoGestionBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$title = 'Seguimiento gestión';
+$title = 'Seguimiento a la gestión escolar';
 if(Yii::$app->request->get( 'idTipoSeguimiento' ) == 2){
     $title = 'Seguimiento institucional';
 }
@@ -126,7 +126,7 @@ if( Yii::$app->request->get( 'guardado' ) ){
 
             [
 			'class' => 'yii\grid\ActionColumn',
-			'template'=>'{view}{update}{delete}',
+			'template'=>'{update}{delete}',
 				'buttons' => [
 				'view' => function ($url, $model) {
 					return Html::a('<span name="detalle" class="glyphicon glyphicon-eye-open" value ="'.Url::to(['create']).'" ></span>', Url::to(['create']), [

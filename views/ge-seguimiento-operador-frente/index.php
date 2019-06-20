@@ -12,7 +12,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\GeSeguimientoOperadorFrenteBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Seguimiento Operador Frentes';
+$this->title = 'Gestores por frente';
 $this->params['breadcrumbs'][] = $this->title;
 
 
@@ -122,7 +122,7 @@ if( Yii::$app->request->get( 'guardado' ) ){
 
             [
 			'class' => 'yii\grid\ActionColumn',
-			'template'=>'{view}{update}{delete}',
+			'template'=>'{update}{delete}',
 				'buttons' => [
 				'view' => function ($url, $model) {
 					return Html::a('<span name="detalle" class="glyphicon glyphicon-eye-open" value ="'.$url.'" ></span>', $url, [
