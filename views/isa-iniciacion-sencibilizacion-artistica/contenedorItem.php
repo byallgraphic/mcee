@@ -313,7 +313,6 @@ echo    $form->field($intervencionIEO, "[$idProceso]perfiles")->widget(
   <div class="row">
 	  <div class="col-md-6"><?= $form->field($actividades_isa, "[$idProceso]fecha")->widget(
         DatePicker::className(), [
-            // modify template for custom rendering
             'template' => '{addon}{input}',
             'language' => 'es',
             'clientOptions' => [

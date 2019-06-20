@@ -352,14 +352,17 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 			{
 				//se llena los perfiles separados por comas //se pasa de selecion unica a mutiple
 				$postIEO = Yii::$app->request->post()['IsaIntervencionIeo'];
+				// echo "<pre>"; print_r($postIEO); echo "</pre>"; 
+				
+				
 				foreach ($intervencionModel as $key => $intervencion) 
 				{
-					$intervencion->perfiles = implode(",",$postIEO[$key]['perfiles']); 
+					$intervencion->perfiles = @implode(",",$postIEO[$key]['perfiles']); 
 					$intervencion->id_actividades_isa = $idActividades[$key];
 					$intervencion->save(false);
 				}
 			}
-			
+			// die;
 			if (@Yii::$app->request->post()['requerimientos'])
 			{
 				//guardar los Requerimientos Técnicos 

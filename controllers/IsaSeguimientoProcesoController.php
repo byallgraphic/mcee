@@ -48,7 +48,7 @@ use app\models\IsaOrientacionMetodologicaVariaciones;
 use app\models\IsaIntervencionIeo;
 use app\models\RomReporteOperativoMisional;
 use app\models\IsaActividadesRomXIntegranteGrupo;
-
+use yii\base\Model;
 
 
 
@@ -240,13 +240,73 @@ class IsaSeguimientoProcesoController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save() ) 
 		{
+			
+			
+			if($postPorcentajesActividades =  Yii::$app->request->post()['IsaPorcentajesActividades'])
+			{
+				$porcentajeActividades = IsaPorcentajesActividades::find()->indexBy('id')->andWhere("id_seguimiento_proceso = $id")->all();
 				
+				//id del Yii::$app->request->post() e id de actividades deben ser iguales
+				$actividadPorcentaje = [];
+				foreach($porcentajeActividades as $key => $Pactividad)
+				{
+					$actividadPorcentaje[key($postPorcentajesActividades)] = $Pactividad;
+					unset($postPorcentajesActividades[ key($postPorcentajesActividades) ]);
+				}
+				
+				if (Model::loadMultiple($actividadPorcentaje, Yii::$app->request->post()) && Model::validateMultiple($actividadPorcentaje) ) 
+				{
+					foreach ($actividadPorcentaje as $actividad) 
+					{
+						$actividad->save(false);
+					}
+				}
+				
+			}
+			
+		
+			if($postOrientcacionMetodologica  =   Yii::$app->request->post()['IsaOrientacionMetodologicaActividades'])
+			{
+				$orientacionMetodologica = IsaOrientacionMetodologicaActividades::find()->indexBy('id')->andWhere("id_seguimiento_proceso = $id")->all();
+				
+				// id del Yii::$app->request->post() e id de actividades deben ser iguales
+				$orientacionM = [];
+				foreach($orientacionMetodologica as $key => $orientacionMeto)
+				{
+					$orientacionM[key($postOrientcacionMetodologica)] = $orientacionMeto;
+					unset($postOrientcacionMetodologica[ key($postOrientcacionMetodologica) ]);
+				}
+				if (Model::loadMultiple($orientacionM, Yii::$app->request->post()) && Model::validateMultiple($orientacionM) ) 
+				{
+					foreach ($orientacionM as $orientacion) 
+					{
+						$orientacion->save(false);
+					}
+				}
+				
+				
+			}
+			
+			//se guardan los datos de la tabla IsaOrientacionMetodologicaVariaciones
+			if($postIsaOrientacionMetodologicaVariaciones  =   Yii::$app->request->post()['IsaOrientacionMetodologicaVariaciones'])
+			{
+				$orientacionMetodologicaV = IsaOrientacionMetodologicaVariaciones::find()->indexBy('id')->andWhere("id_seguimiento_proceso = $id")->all();
+				
+				foreach($orientacionMetodologicaV as $key => $ori)
+				{
+					$ori->descripcion = $postIsaOrientacionMetodologicaVariaciones[$ori->id_variaciones_actividades]['descripcion'];	
+					$ori->save(false); 	
+				}
+			}
+			
+			
+			// die;
+			
 			
             return $this->redirect(['index']);
         }
 		
 		
-		// fin -- se llenan los datos del formulario desde la base de datos
         return $this->renderAjax('update', [
             'model' => $model,
 			'sedes' => $this->obtenerSede(),
