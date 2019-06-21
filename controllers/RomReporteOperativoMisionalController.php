@@ -781,6 +781,8 @@ class RomReporteOperativoMisionalController extends Controller
 										->innerJoin('isa.procesos_generales pg', 'pg.id=ai.id_procesos_generales')
 										->where( 'i.estado=1' )
 										->andWhere( 'pg.estado=1' )
+										->andWhere( "i.nombre_actividad != ''" )
+										->andWhere( "'".$_SESSION['id']."' = ANY(string_to_array( i.perfiles, ',' ) )" )
 										// ->andWhere('i.id_equipo_campos IS NULL')
 										->andWhere( 'pg.id='.$idActividad )
 										->all();
