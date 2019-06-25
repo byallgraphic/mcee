@@ -168,7 +168,6 @@ $(".modalEquipo").click(function()
 	  <div class="col-md-6"><?= $form->field($model, 'caracterizacion_nombre')->textInput() ?></div>
 	  <div class="col-md-6"><?= $form->field($model, 'caracterizacion_fecha')->widget(
         DatePicker::className(), [
-            // modify template for custom rendering
             'template' => '{addon}{input}',
             'language' => 'es',
             'clientOptions' => [

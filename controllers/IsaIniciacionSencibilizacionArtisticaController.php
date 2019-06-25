@@ -37,6 +37,8 @@ use app\models\IsaEquiposCampo;
 use app\models\IsaIntervencionIeo;
 use app\models\IsaRequerimientosTecnicos;
 use app\models\IsaRequerimientosLogisticos;
+use app\models\RomReporteOperativoMisional;
+use app\models\IsaActividadesRom;
 use app\models\PerfilesXPersonas;
 use app\models\Perfiles;
 use yii\base\Model;
@@ -322,7 +324,38 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
         $model = new IsaIniciacionSencibilizacionArtistica();
 		//
         if ($model->load(Yii::$app->request->post()) && $model->save() ) 
+        // if ($model->load(Yii::$app->request->post())  ) 
 		{
+			// echo "<pre>"; print_r(Yii::$app->request->post()); echo "</pre>"; 
+			// die;
+
+			
+			//se crear el 2.Reporte Operativo Misional
+			
+			// foreach (Yii::$app->request->post()['IsaIntervencionIeo'] as $intervencionIEo )
+			// {
+				
+				// if (@$intervencionIEo['perfiles'])
+				// {
+					
+					// $reporteOperativo = new RomReporteOperativoMisional();
+					// $reporteOperativo->id_institucion 	=  $model->id_institucion;
+					// $reporteOperativo->id_sedes			=  $model->id_sede;
+					// // $reporteOperativo->save(false);
+					
+					// // $PerfilesXPersonas = PerfilesXPersonas::findOne($_SESSION['perfilesxpersonas']);
+					// // $perfil = Perfiles::findOne($PerfilesXPersonas->id_perfiles);
+					// // $rol[$perfil->id]  = $perfil->descripcion;
+					
+					
+					// $actividadesRom = new IsaActividadesRom();
+					// // $actividadesRom-> 
+				// }
+			// }
+			
+			
+			
+			// die;
 			
 			//guardar en la tabla isa.actividades_isa
 			
@@ -401,6 +434,11 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 					}
 				}
 			}
+			
+			
+			
+			
+			
             return $this->redirect(['index', 'guardado' => 1]);
         }
 		

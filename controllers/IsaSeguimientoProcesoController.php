@@ -45,6 +45,7 @@ use app\models\IsaSemanaLogros;
 use app\models\IsaSemanaLogrosForDebRet;
 use app\models\IsaOrientacionMetodologicaActividades;
 use app\models\IsaOrientacionMetodologicaVariaciones;
+use app\models\IsaActividadesRom;
 use app\models\IsaIntervencionIeo;
 use app\models\RomReporteOperativoMisional;
 use app\models\IsaActividadesRomXIntegranteGrupo;
@@ -389,6 +390,88 @@ class IsaSeguimientoProcesoController extends Controller
 		
 		return $this->redirect(['index']);	
     }
+	
+	public function actionDatos($fecha)
+	{
+		$idInstitucion 	= $_SESSION['instituciones'][0];
+		$idSedes 		= $_SESSION['sede'][0];
+		$connection = Yii::$app->getDb();
+		$command = $connection->createCommand("
+			SELECT 
+				rom.id_sedes, count(rom.id_sedes),ar.estado_actividad
+			FROM 
+				isa.reporte_operativo_misional as rom,
+				isa.actividades_rom as ar
+			WHERE 
+				ar.id_reporte_operativo_misional = rom.id
+			AND 
+				rom.id_institucion = $idInstitucion
+			AND 
+				rom.estado = 1
+			AND 
+				ar.fecha_desde BETWEEN '$fecha-01' AND '".date( "Y-m-t", strtotime( $fecha ) )."'
+			GROUP BY 
+				rom.id_sedes,ar.estado_actividad
+			
+		");
+		// GROUP BY rom.id_sedes
+		$actividadesRom = $command->queryAll();
+		
+		$totalSesiones = 0;
+		// $totalSesiones = count($actividadesRom) > 0 ? count($actividadesRom) : 0 ;
+		$totalRealizadoSede =0;
+		//se crea un array con indice el id de la sede y valor la cantidad (count)
+		$totalesSedes = [];
+		foreach($actividadesRom as $ar)
+		{
+			@$totalesSedes[$ar['id_sedes']][$ar['estado_actividad'] ] += $ar['count'] ;
+			
+			if($ar['id_sedes'] == $idSedes)
+			{
+				$totalSesiones +=$ar['count'];
+					if($ar['estado_actividad'] == 179)
+						$totalRealizadoSede += $ar['count'];
+			}
+		}
+		
+
+		//sedes de la instituciones actual
+		$sedesIeo = Sedes::find()									  
+				  ->where( "id_instituciones=$idInstitucion" )
+				  ->andwhere("estado=1")
+				  ->all();
+		$asignaturas = ArrayHelper::map( $sedesIeo, 'id', 'descripcion' );
+		
+		if ($totalRealizadoSede > 0)
+			$porcentajeSede = $totalRealizadoSede / $totalSesiones;
+		else		
+			$porcentajeSede = 0;
+		
+		
+		$sesiones_realizadas = 0;
+		$sesiones_aplazadas  = 0;
+		$sesiones_canceladas =0;
+		
+		$porcetaje_actividades = [];
+		
+		foreach ($totalesSedes as $key => $ttSedes)
+		{
+			@$sesiones_realizadas = $ttSedes[179];
+			@$sesiones_aplazadas  = $ttSedes[180];
+			@$sesiones_canceladas = $ttSedes[181];
+			
+			$porcetaje_actividades[$key] = $sesiones_realizadas  / ($sesiones_realizadas+$sesiones_aplazadas+$sesiones_canceladas);
+		}
+		
+		$totalIEO = 0;
+		$porcetaje_actividadesSedes = 0;
+		foreach ($porcetaje_actividades as $pa)
+			$porcetaje_actividadesSedes+= $pa;
+		
+		$totalIEO = $porcetaje_actividadesSedes / count($sedesIeo);
+		
+		// return $result;
+	}
 
     /**
      * Finds the IsaSeguimientoProceso model based on its primary key value.
@@ -397,6 +480,8 @@ class IsaSeguimientoProcesoController extends Controller
      * @return IsaSeguimientoProceso the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+	 
+	 
     protected function findModel($id)
     {
         if (($model = IsaSeguimientoProceso::findOne($id)) !== null) {
