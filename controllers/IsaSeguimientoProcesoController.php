@@ -391,7 +391,7 @@ class IsaSeguimientoProcesoController extends Controller
 		return $this->redirect(['index']);	
     }
 	
-	public function actionDatos($fecha)
+	public function actionDatosAvances($fecha)
 	{
 		$idInstitucion 	= $_SESSION['instituciones'][0];
 		$idSedes 		= $_SESSION['sede'][0];
@@ -417,7 +417,7 @@ class IsaSeguimientoProcesoController extends Controller
 		// GROUP BY rom.id_sedes
 		$actividadesRom = $command->queryAll();
 		
-		$totalSesiones = 0;
+		$totalSesionesSede = 0;
 		// $totalSesiones = count($actividadesRom) > 0 ? count($actividadesRom) : 0 ;
 		$totalRealizadoSede =0;
 		//se crea un array con indice el id de la sede y valor la cantidad (count)
@@ -428,12 +428,11 @@ class IsaSeguimientoProcesoController extends Controller
 			
 			if($ar['id_sedes'] == $idSedes)
 			{
-				$totalSesiones +=$ar['count'];
+				$totalSesionesSede +=$ar['count'];
 					if($ar['estado_actividad'] == 179)
 						$totalRealizadoSede += $ar['count'];
 			}
 		}
-		
 
 		//sedes de la instituciones actual
 		$sedesIeo = Sedes::find()									  
@@ -443,7 +442,7 @@ class IsaSeguimientoProcesoController extends Controller
 		$asignaturas = ArrayHelper::map( $sedesIeo, 'id', 'descripcion' );
 		
 		if ($totalRealizadoSede > 0)
-			$porcentajeSede = $totalRealizadoSede / $totalSesiones;
+			$porcentajeSede = $totalRealizadoSede / $totalSesionesSede;
 		else		
 			$porcentajeSede = 0;
 		
@@ -451,7 +450,7 @@ class IsaSeguimientoProcesoController extends Controller
 		$sesiones_realizadas = 0;
 		$sesiones_aplazadas  = 0;
 		$sesiones_canceladas =0;
-		
+		$totalSesionesIEO = 0;
 		$porcetaje_actividades = [];
 		
 		foreach ($totalesSedes as $key => $ttSedes)
@@ -460,17 +459,24 @@ class IsaSeguimientoProcesoController extends Controller
 			@$sesiones_aplazadas  = $ttSedes[180];
 			@$sesiones_canceladas = $ttSedes[181];
 			
+			$totalSesionesIEO += $sesiones_realizadas+$sesiones_aplazadas+$sesiones_canceladas;
 			$porcetaje_actividades[$key] = $sesiones_realizadas  / ($sesiones_realizadas+$sesiones_aplazadas+$sesiones_canceladas);
 		}
 		
-		$totalIEO = 0;
+		$avanceIEO = 0;
 		$porcetaje_actividadesSedes = 0;
 		foreach ($porcetaje_actividades as $pa)
 			$porcetaje_actividadesSedes+= $pa;
 		
-		$totalIEO = $porcetaje_actividadesSedes / count($sedesIeo);
+		$avanceIEO = $porcetaje_actividadesSedes / count($sedesIeo);
 		
-		// return $result;
+		$arrayDatos = [];
+		
+		$arrayDatos[] = $totalSesionesIEO;
+		$arrayDatos[] = $porcentajeSede;
+		$arrayDatos[] = $avanceIEO ;
+		
+		return json_encode($arrayDatos);
 	}
 
     /**
