@@ -105,6 +105,76 @@ class RomReporteOperativoMisionalController extends Controller
         ];
     }
 	
+	public function crearReporteOperativoMisional( $id_planeacion )
+	{	
+		$respuesta = [ 'error' => false, 'msg' => '' ];
+		
+		$intervencion = IsaIntervencionIeo::findOne( $id_planeacion );
+		
+		if( $intervencion )
+		{
+			$romisional = new RomReporteOperativoMisional();
+			$romisional->id_institucion = $_SESSION['instituciones'][0];
+			$romisional->id_sedes		= $_SESSION['sede'][0];
+			$romisional->estado			= 1;
+			$romisional->save( false );
+			
+			$id_rom = $romisional->id;
+			
+			if( $id_rom )
+			{
+				$actividad = IsaActividadesIsa::findOne( $intervencion->id_actividades_isa );
+				
+				if( $actividad )
+				{	
+					$actividades_rom 								= new IsaActividadesRom();
+					$actividades_rom->id_reporte_operativo_misional = $id_rom;
+					$actividades_rom->id_rom_actividad 				= $actividad->id_procesos_generales;
+					$actividades_rom->estado 						= 1; 
+					$actividades_rom->nro_semana 					= 1;
+					$actividades_rom->fecha_desde 					= date( "Y-m-d", 0 );
+					$actividades_rom->fecha_hasta 					= date( "Y-m-d", 0 );
+					$actividades_rom->estado_actividad 				= 1;
+					$actividades_rom->sesion_actividad 				= $intervencion->id;
+					$res_actividades_rom 							= $actividades_rom->save( false );
+					
+					
+					$evidencias 								= new IsaEvidenciasRom();
+					$evidencias->id_rom_actividad 				= $actividad->id_procesos_generales;
+					$evidencias->cantidad						= 0;
+					$evidencias->estado							= 1;
+					$evidencias->id_reporte_operativo_misional 	= $id_rom;
+					$evidencias->fecha_entrega_envio			= date( "Y-m-d" );
+					$evidencias->archivos_enviados_entregados	= 0;
+					$res_evidencias 							= $evidencias->save( false );
+					
+					$tipo =  new IsaTipoCantidadPoblacionRom();
+					$tipo->estado							= 1;
+					$tipo->id_rom_actividades 				= $actividad->id_procesos_generales;
+					$tipo->id_reporte_operativo_misional	= $id_rom;
+					$tipo->vecinos							= '';
+					$tipo->lideres_comunitarios				= '';
+					$tipo->empresarios_comerciantes			= '';
+					$tipo->organizaciones_locales			= '';
+					$tipo->grupos_comunitarios				= '';
+					$tipo->otos_actores						= '';
+					$tipo->total_participantes				= '';
+					$res_tipo 								= $tipo->save( false );
+				}
+			}
+			else
+			{
+				$respuesta = [ 'error' => true, 'msg' => 'No se creó: '.$id_planeacion ];
+			}
+		}
+		else
+		{
+			$respuesta = [ 'error' => true, 'msg' => 'No se encuentra intervención con id: '.$id_planeacion ];
+		}
+		
+		return $respuesta;
+	}
+	
 	public function actionEliminarArchivo()
 	{
 		$val = 	[ 'resultado' => false ];
@@ -268,6 +338,8 @@ class RomReporteOperativoMisionalController extends Controller
      */
     public function actionIndex()
     {
+		// $this->crearReporteOperativoMisional(10);
+		
 		$id_sede 		= $_SESSION['sede'][0];
 		$id_institucion	= $_SESSION['instituciones'][0];
 		
@@ -310,6 +382,8 @@ class RomReporteOperativoMisionalController extends Controller
 		
 		$index = 0;
 		
+		$contenedores = [];
+		
 		//acordeon de los proyecto 
 		foreach ($datos as $idProyecto => $v)
 		{
@@ -335,9 +409,12 @@ class RomReporteOperativoMisionalController extends Controller
 	
 		}
 		
-		 echo Collapse::widget([
-			'items' => $contenedores,
-		]);
+		if( count($contenedores) > 0 )
+		{	
+			echo Collapse::widget([
+				'items' => $contenedores,
+			]);
+		}
 		
 		
 		// $proyectos = new IsaRomProyectos();

@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use app\models\Instituciones;
+use app\controller\RomReporteOperativoMisional;
 use app\models\Sedes;
 
 use fedemotta\datatables\DataTables;
@@ -109,7 +110,7 @@ if( !$sede ){
    
 
     <p>
-        <?=  Html::button('Agregar',['value'=>Url::to(['create']),'class'=>'btn btn-success','id'=>'modalButton']) ?>
+        <!-- <?=  Html::button('Agregar',['value'=>Url::to(['create']),'class'=>'btn btn-success','id'=>'modalButton']) ?> -->
 		<?= Html::a('Volver',['sensibilizacion-artistica/index',],['class' => 'btn btn-info']) ?>
 		
     </p>

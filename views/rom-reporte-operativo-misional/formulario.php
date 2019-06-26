@@ -53,6 +53,9 @@ if( $actividades_rom->estado_actividad !== 179 ){
 $integrante->fecha_diligencia = date( "Y-m-d" );
 
 $actividades_rom->fecha_hasta = date( "Y-m-d" );
+
+if( $actividades_rom->fecha_desde == "1970-01-01" )
+	$actividades_rom->fecha_desde = '';
 ?>
 
 <!-- ACTIVIDADES ROM -->
