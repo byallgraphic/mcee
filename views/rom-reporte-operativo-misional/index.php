@@ -7,6 +7,21 @@ use app\models\Instituciones;
 use app\controller\RomReporteOperativoMisional;
 use app\models\Sedes;
 
+
+use app\models\Parametro;
+use app\models\IsaRomProyectos;
+use app\models\IsaActividadesRom;
+use app\models\IsaTipoCantidadPoblacionRom;
+use app\models\IsaEvidenciasRom;
+use app\models\RomActividadesRom;
+use app\models\RomTipoCantidadPoblacionRom;
+use app\models\IsaRomProcesos;
+use app\models\IsaRomActividades;
+use app\models\IsaActividadesIsa;
+use app\models\IsaActividadesRomXIntegranteGrupo;
+use app\models\IsaIntervencionIeo;
+use app\models\IsaEquiposCampo;
+
 use fedemotta\datatables\DataTables;
 use yii\grid\GridView;
 
@@ -155,22 +170,37 @@ if( !$sede ){
 
             //'id',
             [
-			'attribute'=>'id_institucion',
-			'value' => function( $model )
+				'attribute'=>'id_institucion',
+				'value' => function( $model )
 				{
 					$nombreInstituciones = Instituciones::findOne($model->id_institucion);
 					return $nombreInstituciones ? $nombreInstituciones->descripcion : '';  
 				}, //para buscar por el nombre
 			],
 			[
-			'attribute'=>'id_sedes',
-			'value' => function( $model )
+				'attribute'=>'id_sedes',
+				'value' => function( $model )
 				{
 					$nombreSedes = Sedes::findOne($model->id_sedes);
 					return $nombreSedes ? $nombreSedes->descripcion : '';  
 				}, //para buscar por el nombre
 			],
             //'estado',
+			[
+				'attribute'=>'Encuentro',
+				'value' => function( $model )
+				{
+					$rom = IsaActividadesRom::findOne([ 
+											'id_reporte_operativo_misional' => $model->id ,
+											'estado'						=> 1,
+										]);
+										
+					$iieo = IsaIntervencionIeo::findOne( $rom->sesion_actividad );
+										
+					
+					return $iieo ? $iieo->nombre_actividad : '';  
+				}, //para buscar por el nombre
+			],
 
             [
 			'class' => 'yii\grid\ActionColumn',
