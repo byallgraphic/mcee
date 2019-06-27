@@ -11,7 +11,7 @@ use dosamigos\datepicker\DatePicker;
 /* @var $model app\models\GeSeguimientoOperadorFrente */
 /* @var $form yii\widgets\ActiveForm */
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
-
+$this->registerCssFile('@web/css/GeSeguimientos.css');
 
 if( !$sede ){
     $this->registerJs( "$( cambiarSede ).click()" );
@@ -22,7 +22,7 @@ if( !$sede ){
 
 <div class="ge-seguimiento-operador-frente-form">
 
-    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'id' => 'form_frente']]); ?>
 
     <?php /*$form->field($model, 'id_tipo_seguimiento')->textInput()*/ ?>
     <input name="idTipoSeguimiento" type="hidden" value="<?= $idTipoSeguimiento ?>">
@@ -84,17 +84,35 @@ if( !$sede ){
     <?= $form->field($model, 'logros')->textarea(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'dificultades')->textarea(['maxlength' => true]) ?>
-	
-	<?= $form->field($model, 'documentFile')->fileInput(['multiple' => true]) ?>
+
+    <?php if (isset($model->id)){?>
+        <div class="evidencia_actividades">
+            <?= $form->field($model, 'documentFile[]')->fileInput(['multiple' => true, 'id' => "file-upload-1"]) ?>
+            <div id="nameElement">
+                <?php $files = \app\models\GeSeguimientoFile::find()->where(['id_seguimiento_frente' => $model->id ])->asArray()->all(); ?>
+                <ul>
+                    <?php foreach($files AS $file){ ?>
+                        <li id="line_file_<?= $file['id'] ?>" class="line-file-name"><a class="name-file" href="..\documentos\seguimientoOperador\<?= $file['file'] ?>" download><?= $file['file'] ?></a><div onclick='deleteFile("<?= $file['id'] ?>")' class='delete-line'>x</div></li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </div>
+    <?php }else{ ?>
+        <div class="evidencia_actividades">
+            <div id="nameElement">
+                <ul></ul>
+            </div>
+        </div>
+    <?php } ?>
 
     <?php /* $form->field($model, 'estado')->textInput() */ ?>
 
     <div class="form-group">
 	
 		<?php if ( !$guardado ) : ?>
-		
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
-		
+
+            <?= Html::button('Guardar', ['class' => 'btn btn-success',  'id' => 'save_form', 'value' => 0]) ?>
+
 		<?php endif ?>
 		
     </div>
@@ -105,3 +123,53 @@ if( !$sede ){
 <?php
     $this->registerJs( "$('#modalContent .main-footer').hide()" );
 ?>
+
+
+
+<script>
+    $('#file-upload-1').change(function(e){
+        var files = $(this).prop("files");
+        var files_length = files.length;
+        for (var x = 0; x < files_length; x++) {
+            $(this).parent().parent().find('#nameElement').find('ul').append('<li class="line-file-name"><span class="name-file">'+files[x].name+'</span><div onclick="$(this).parent().remove()" class=\'delete-line\'>x</div>' + '</li>')
+        }
+    });
+
+
+    function deleteFile(id) {
+        $.ajax({
+            url: "index.php?r=ge-seguimiento-operador%2Fdfile&id="+id,
+            cache: false,
+            contentType: false,
+            processData: false,
+            async: true,
+            type: 'GET',
+            success: function (res, status) {
+                if (status){
+                    $('#line_file_'+id).remove();
+                }
+            },
+        });
+    }
+
+    $('#save_form').click(function(e) {
+        e.preventDefault();
+        var validacion = 1;
+
+        $('[id*=\'file-upload-\']').each(function () {
+            console.log($(this));
+            if ($(this).parent().parent().find('li').length === 0) {
+                $(this).parent().addClass('has-error');
+                $(this).parent().find('.help-block').html('Este campo es requerido.');
+                validacion = 0;
+            }
+        });
+
+
+        if (validacion === 0) {
+            return false;
+        }else {
+            $( "#form_frente" ).submit();
+        }
+    });
+</script>

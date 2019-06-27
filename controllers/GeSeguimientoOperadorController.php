@@ -338,7 +338,7 @@ class GeSeguimientoOperadorController extends Controller
      */
     public function actionDfile($id)
     {
-        $file = GeSeguimientoFile::find($id)->one();
+        $file = GeSeguimientoFile::find()->where(['id' => $id])->one();
         if (isset($file)){
             $file->delete();
         }

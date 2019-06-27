@@ -57,10 +57,8 @@ class GeSeguimientoOperadorFrente extends \yii\db\ActiveRecord
 				'aportes_reuniones',
 				'logros',
 				'dificultades',
-				'estado',
-				'documentFile',
+				'estado'
 			], 'required'],
-			[['documentFile'], 'file', 'skipOnEmpty' => false],
             [['id_tipo_seguimiento', 'id_persona_diligencia', 'id_gestor_a_evaluar', 'compromisos_establecidos', 'cuantas_reuniones', 'estado'], 'default', 'value' => null],
             [['id_tipo_seguimiento', 'id_persona_diligencia', 'id_gestor_a_evaluar', 'compromisos_establecidos', 'cuantas_reuniones', 'estado'], 'integer'],
             [['fecha_corte'], 'safe'],
