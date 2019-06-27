@@ -35,7 +35,8 @@ $this->registerJs( file_get_contents( '../web/js/seguimientoProceso.js' ) );
 			'language' 		=> 'es',
 			'clientOptions' => [
 				'autoclose' 	=> true,
-				'format' 		=> 'yyyy-mm'
+				'format' 		=> 'yyyy-mm',
+				'minViewMode'=>'months',
 			],
 			
 		]);  
