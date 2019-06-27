@@ -89,10 +89,7 @@ class IsaEquiposCampoController extends Controller
 			//asi funciona //extraer la informacion del post
 			foreach($request->post() as $datos)
 			{}
-			// echo "<pre>"; print_r($datos['nombre']); echo "</pre>"; 
-			// echo "<pre>"; print_r($datos['integrantes']); echo "</pre>"; 
 			
-			// die;
 			$model->nombre 		= $datos['nombre'];
 			$model->descripcion = $datos['descripcion'];
 			$model->cantidad 	= 1;
