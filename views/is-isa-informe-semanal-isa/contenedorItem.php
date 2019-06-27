@@ -94,15 +94,21 @@ $porcetaje_actividades		= 0;
 
 	if( !empty($fecha_desde) && !empty($fecha_hasta) )
 	{
-		$rom = IsaReporteOperativoMisional::findOne([
-							'estado'			=> 1,
-							'id_institucion' 	=> $idInstitucion,
-							'id_sedes' 			=> $id_sede,
-						]);
+		// $rom = IsaReporteOperativoMisional::findOne([
+							// 'estado'			=> 1,
+							// 'id_institucion' 	=> $idInstitucion,
+							// 'id_sedes' 			=> $id_sede,
+						// ]);
 						
-		if( $rom )
+		$roms = IsaActividadesRom::find()
+						->where( 'id_rom_actividad='.$index )
+						->andWhere( 'estado=1' )
+						->andWhere( "fecha_desde BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' OR fecha_hasta BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' " )
+						->all();
+						
+		foreach( $roms as $rom )
 		{
-			$id = $rom->id;
+			$id = $rom->id_reporte_operativo_misional;
 
 			$proyectos = new IsaRomProyectos();
 			$proyectos = $proyectos->find()
@@ -258,12 +264,23 @@ $porcetaje_actividades		= 0;
 										->all();
 					
 					foreach( $poblaciones as $poblacion ){
-						$total += $vecinos 					+= $poblacion->vecinos;
-						$total += $lideres_comunitarios 	+= $poblacion->lideres_comunitarios;
-						$total += $empresarios_comerciantes	+= $poblacion->empresarios_comerciantes;
-						$total += $organizaciones_locales 	+= $poblacion->organizaciones_locales;
-						$total += $grupos_comunitarios 		+= $poblacion->grupos_comunitarios;
-						$total += $otos_actores 			+= $poblacion->otos_actores;
+						if( !empty($poblacion->vecinos ) )
+							$total += $vecinos 					+= $poblacion->vecinos;
+						
+						if( !empty($poblacion->lideres_comunitarios ) )
+							$total += $lideres_comunitarios 	+= $poblacion->lideres_comunitarios;
+						
+						if( !empty($poblacion->empresarios_comerciantes ) )
+							$total += $empresarios_comerciantes	+= $poblacion->empresarios_comerciantes;
+						
+						if( !empty($poblacion->organizaciones_locales ) )
+							$total += $organizaciones_locales 	+= $poblacion->organizaciones_locales;
+							
+						if( !empty($poblacion->grupos_comunitarios ) )
+							$total += $grupos_comunitarios 		+= $poblacion->grupos_comunitarios;
+							
+						if( !empty($poblacion->otos_actores ) )
+							$total += $otos_actores 			+= $poblacion->otos_actores;
 					}
 				}
 				

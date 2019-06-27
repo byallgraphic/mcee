@@ -105,7 +105,7 @@ class RomReporteOperativoMisionalController extends Controller
         ];
     }
 	
-	public function crearReporteOperativoMisional( $id_planeacion )
+	public static function crearReporteOperativoMisional( $id_planeacion )
 	{	
 		$respuesta = [ 'error' => false, 'msg' => '' ];
 		
