@@ -82,9 +82,23 @@ class IsaEquiposCampoController extends Controller
 		$modelIntegrantesEquipo = new IsaIntegrantesXEquipo();
 		//solo guarda sin redireccion
 		
-		if ($model->load(Yii::$app->request->post()) && $model->save()) 
+		$request = Yii::$app->request;
+		//se hace de esta forma, la forma natural de yii2 por alguna razon no funciona
+		if (@$request->post() != null) 
 		{
-			foreach (Yii::$app->request->post()['IsaEquiposCampo']['integrantes'] as $integrantes)
+			//asi funciona //extraer la informacion del post
+			foreach($request->post() as $datos)
+			{}
+			// echo "<pre>"; print_r($datos['nombre']); echo "</pre>"; 
+			// echo "<pre>"; print_r($datos['integrantes']); echo "</pre>"; 
+			
+			// die;
+			$model->nombre 		= $datos['nombre'];
+			$model->descripcion = $datos['descripcion'];
+			$model->cantidad 	= 1;
+			$model->save(false);
+			
+			foreach ($datos['integrantes'] as $integrantes)
 			{
 				$integranteEquipo = new IsaIntegrantesXEquipo();
 				$integranteEquipo->id_equipo_campo 	= $model->id;
