@@ -13,6 +13,7 @@ else
 	die;
 }
 
+use app\models\GeSeguimientoFile;
 use Yii;
 use app\models\GeSeguimientoOperadorFrente;
 use app\models\GeSeguimientoOperadorFrenteBuscar;
@@ -102,31 +103,40 @@ class GeSeguimientoOperadorFrenteController extends Controller
 			
 			$model->id_tipo_seguimiento = Yii::$app->request->post('idTipoSeguimiento');
 			$model->estado = 1;
-			
-			$model->documentFile = UploadedFile::getInstance( $model, 'documentFile' );
-			
-			if( $model->documentFile ) {
 				
-				//Si no existe la carpeta se crea
-				$carpeta = "../documentos/seguimientoOperadorFrente/";
-				if (!file_exists($carpeta)) {
-					mkdir($carpeta, 0777, true);
-				}
-				
-				//Construyo la ruta completa del archivo a guardar
-				$rutaFisicaDirectoriaUploads  = "../documentos/seguimientoOperadorFrente/";
-				$rutaFisicaDirectoriaUploads .= $model->documentFile->baseName;
-				$rutaFisicaDirectoriaUploads .= date( "_Y_m_d_His" ) . '.' . $model->documentFile->extension;
-				
-				$save = $model->documentFile->saveAs( $rutaFisicaDirectoriaUploads );//$file->baseName puede ser cambiado por el nombre que quieran darle al archivo en el servidor.
-				
-				$model->ruta_archivo = $rutaFisicaDirectoriaUploads;
-				
-				if( $model->save(false) )
-				{	
-					$guardado = true;
-					// return $this->redirect(['index']);
-				}
+            //Si no existe la carpeta se crea
+            $carpeta = "../documentos/seguimientoOperadorFrente/";
+            if (!file_exists($carpeta)) {
+                mkdir($carpeta, 0777, true);
+            }
+
+
+            if( $model->save(false) )
+            {
+                $guardado = true;
+                // return $this->redirect(['index']);
+            }
+
+
+            $carpeta = "../documentos/seguimientoFrente/";
+            if (!file_exists($carpeta)) {
+                mkdir($carpeta, 0777, true);
+            }
+
+            $files = $_FILES['GeSeguimientoOperadorFrente'];
+            if (isset($files['name']['documentFile']) && !empty($files['name']['documentFile']) && $files['name']['documentFile'][0] !== "") {
+                $no_files = count($files['name']['documentFile']);
+                for ($i = 0; $i < $no_files; $i++) {
+                    $urlBase = "../documentos/seguimientoFrente/";
+                    $name = $files['name']['documentFile'][$i];
+
+                    move_uploaded_file($files['name']['documentFile'][$i], $urlBase . $name);
+
+                    $file_ra = new GeSeguimientoFile();
+                    $file_ra->id_seguimiento_frente = $model->id;
+                    $file_ra->file = $name;
+                    $file_ra->save(false);
+                }
 			}
         }
 		
