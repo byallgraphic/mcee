@@ -108,7 +108,7 @@ $porcetaje_actividades		= 0;
 						->all();
 						
 		foreach( $roms as $rom )
-		{ echo "<br>---$index";
+		{
 			$id = $rom->id_reporte_operativo_misional;
 
 			$proyectos = new IsaRomProyectos();
