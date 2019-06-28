@@ -338,7 +338,7 @@ class RomReporteOperativoMisionalController extends Controller
      */
     public function actionIndex()
     {
-		// $this->crearReporteOperativoMisional(10);
+		// self::crearReporteOperativoMisional(5);
 		
 		$id_sede 		= $_SESSION['sede'][0];
 		$id_institucion	= $_SESSION['instituciones'][0];

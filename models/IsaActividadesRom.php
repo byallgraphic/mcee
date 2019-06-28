@@ -33,7 +33,7 @@ class IsaActividadesRom extends \yii\db\ActiveRecord
         return [
             // [['fecha_desde', 'fecha_hasta', 'estado_actividad', 'estado', 'id_reporte_operativo_misional','sesion_actividad','id_rom_actividad','nro_semana'], 'required'],
             [['estado', 'id_reporte_operativo_misional','id_rom_actividad','nro_semana'], 'required'],
-            [['fecha_desde', 'fecha_hasta'], 'safe'],
+            [['fecha_desde', 'fecha_hasta'], 'string'],
             [['estado_actividad'], 'string'],
             [['estado', 'id_reporte_operativo_misional','id_rom_actividad'], 'default', 'value' => null],
             [['estado', 'id_reporte_operativo_misional','sesion_actividad','id_rom_actividad','nro_semana'], 'integer'],

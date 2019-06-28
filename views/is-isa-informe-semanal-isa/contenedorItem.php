@@ -69,7 +69,7 @@ $vidoes 			= 0;
 $otros_productos 	= 0;
 
 
-$equipos 				= [];
+$equipos 					= [];
 $fortalezas 				= [];
 $debilidades 				= [];
 $alternativas 				= [];
@@ -103,11 +103,12 @@ $porcetaje_actividades		= 0;
 		$roms = IsaActividadesRom::find()
 						->where( 'id_rom_actividad='.$index )
 						->andWhere( 'estado=1' )
-						->andWhere( "fecha_desde BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' OR fecha_hasta BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' " )
+						// ->andWhere( "fecha_desde BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' OR fecha_hasta BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' " )
+						->andWhere( "fecha_desde BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."'" )
 						->all();
 						
 		foreach( $roms as $rom )
-		{
+		{ echo "<br>---$index";
 			$id = $rom->id_reporte_operativo_misional;
 
 			$proyectos = new IsaRomProyectos();
@@ -221,7 +222,9 @@ $porcetaje_actividades		= 0;
 						$perfilXPesonaInstitucion 	= PerfilesXPersonasInstitucion::findOne( $dataActividadesParticipadas->docente_orientador );
 						$perfilXPesona			  	= PerfilesXPersonas::findOne( $perfilXPesonaInstitucion->id_perfiles_x_persona );
 						$coordinadoresTecnico[]   	= Personas::findOne( $perfilXPesona->id_personas );
-						$equipos[] 					= IsaEquiposCampo::findOne( $dataActividadesParticipadas->id_equipo_campos );
+						$eq 						= IsaEquiposCampo::findOne( $dataActividadesParticipadas->id_equipo_campos );
+						if( $eq )
+							$equipos[] 				= $eq;
 						 
 						$sesiones_realizadas 	+= $actividades_rom_upt->estado_actividad == 179;
 						$sesiones_aplazadas 	+= $actividades_rom_upt->estado_actividad == 180;
