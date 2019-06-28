@@ -220,8 +220,11 @@ $porcetaje_actividades		= 0;
 						 ***************************************************************************************************************************************/
 						
 						$perfilXPesonaInstitucion 	= PerfilesXPersonasInstitucion::findOne( $dataActividadesParticipadas->docente_orientador );
-						$perfilXPesona			  	= PerfilesXPersonas::findOne( $perfilXPesonaInstitucion->id_perfiles_x_persona );
-						$coordinadoresTecnico[]   	= Personas::findOne( $perfilXPesona->id_personas );
+						if( $perfilXPesonaInstitucion )
+						{	
+							$perfilXPesona			  	= PerfilesXPersonas::findOne( $perfilXPesonaInstitucion->id_perfiles_x_persona );
+							$coordinadoresTecnico[]   	= Personas::findOne( $perfilXPesona->id_personas );
+						}
 						$eq 						= IsaEquiposCampo::findOne( $dataActividadesParticipadas->id_equipo_campos );
 						if( $eq )
 							$equipos[] 				= $eq;
