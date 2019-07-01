@@ -538,15 +538,15 @@ if(Yii::$app->request->get('guardado')){
                     data: formData,
                     type: 'POST',
                     success: function (res, status) {
-                        //if (status == 'success') {
-                        //    $("#modal-ge").modal('hide');
-                        //    swal({
-                        //        text: 'Registro actualizado',
-                        //        icon: 'success',
-                        //        button: 'Salir',
-                        //    });
-                        //    location.reload();
-                        //}
+                        if (status == 'success') {
+                            $("#modal-ge").modal('hide');
+                            swal({
+                                text: 'Registro actualizado',
+                                icon: 'success',
+                                button: 'Salir',
+                            });
+                            location.reload();
+                        }
                     },
                 });
             }else{
@@ -559,15 +559,15 @@ if(Yii::$app->request->get('guardado')){
                     data: formData,
                     type: 'POST',
                     success: function (res, status) {
-                        //if (status == 'success') {
-                        //    $("#modal-ge").modal('hide');
-                        //    swal({
-                        //        text: 'Registro guardado',
-                        //        icon: 'success',
-                        //        button: 'Salir',
-                        //    });
-                        //    location.reload();
-                        //}
+                        if (status == 'success') {
+                            $("#modal-ge").modal('hide');
+                            swal({
+                                text: 'Registro guardado',
+                                icon: 'success',
+                                button: 'Salir',
+                            });
+                            location.reload();
+                        }
                     },
                 });
             }
