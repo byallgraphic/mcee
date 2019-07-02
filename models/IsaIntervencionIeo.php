@@ -62,7 +62,7 @@ class IsaIntervencionIeo extends \yii\db\ActiveRecord
             'lugares_recorrer' => 'Lugares Recorrer',
             'tematicas_abordadas' => 'Temáticas Abordadas',
             'objetivos_especificos' => 'Objetivos Específicos',
-            'tiempo_previsto' => 'Tiempo Previsto (en minutos)',
+            'tiempo_previsto' => 'Tiempo Previsto',
             'id_actividades_isa' => 'Id Actividades Isa',
             'id_equipo_campos' => 'Id Equipo Campos',
             'estado' => 'Estado',

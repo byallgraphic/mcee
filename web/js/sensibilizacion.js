@@ -1,6 +1,6 @@
 $( document ).ready(function() 
 {
-
+ 
 	// se ocultan de entrada
   //caracterizacion caracterizacion_justificacion
 	$( ".field-isainiciacionsencibilizacionartistica-caracterizacion_justificacion" ).toggle();
@@ -8,8 +8,22 @@ $( document ).ready(function()
 	for(i=1;i<=4;i++)
 	{
 		$( ".field-isaactividadesisa-"+i+"-contenido_justificacion" ).toggle();
+		
+		tiempoPrevisto = $("#isaintervencionieo-"+i+"-tiempo_previsto");
+		
+		tiempoPrevisto.timepicker({
+            timeFormat: 'H:i',
+            step: (5)
+        });
+		
+		 tiempoPrevisto.keypress(function(tecla) {
+        if(tecla.charCode >= 8) return false;
+		
+    });
 	}
  
+
+
 });
 
 $("#isainiciacionsencibilizacionartistica-caracterizacion_si_no").change(function() 

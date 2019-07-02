@@ -326,58 +326,60 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
         // if ($model->load(Yii::$app->request->post()) && $model->save() ) 
         if ($model->load(Yii::$app->request->post())  ) 
 		{
-			// $contador = 0;
-			// foreach( Yii::$app->request->post()['IsaIntervencionIeo'] as $interIEO)
-			// {
-				// if(@$interIEO['perfiles'] != null && @$interIEO['nombre_activida'] != "")
-				// {
-					// $contador = 1;
-				// }
-			// }
-			
-			// if($contador != 0 )
-			// {
-			$model->save();
-			//guardar en la tabla isa.actividades_isa
-			
-				$actividadesModel[1] = new IsaActividadesIsa();
-				$actividadesModel[2] = new IsaActividadesIsa();
-				$actividadesModel[4] = new IsaActividadesIsa();
-			
-			
-			if (IsaActividadesIsa::loadMultiple($actividadesModel, Yii::$app->request->post())) 
+			$contador = [];
+			foreach( Yii::$app->request->post()['IsaIntervencionIeo'] as $key =>  $interIEO)
 			{
-				foreach ($actividadesModel as $key => $actividad) 
+				if(@$interIEO['perfiles'] != null && @$interIEO['nombre_actividad'] != "")
 				{
-					$actividad->id_iniciacion_sencibilizacion_artistica = $model->id;
-					$actividad->requerimientos_tecnicos = null;
-					$actividad->save(false);
+					$contador[] = $key;
+				}
+			}
+			
 					
-					$idActividades[$key] = $actividad->id;
-				}
-			}
-			
-				$intervencionModel[1] = new IsaIntervencionIeo();
-				$intervencionModel[2] = new IsaIntervencionIeo();
-				$intervencionModel[4] = new IsaIntervencionIeo();
-			
-
-			if (IsaIntervencionIeo::loadMultiple($intervencionModel, Yii::$app->request->post())) 
+			if(count($contador) > 0 )
 			{
-				//se llena los perfiles separados por comas //se pasa de selecion unica a mutiple
-				$postIEO = Yii::$app->request->post()['IsaIntervencionIeo'];
-				
-				foreach ($intervencionModel as $key => $intervencion) 
+				$model->save();
+				foreach ($contador as $cont)
 				{
-					if(@$postIEO[$key]['perfiles'] != null && $intervencion->nombre_actividad != "" )
+				
+					//guardar en la tabla isa.actividades_isa
+				
+					$actividadesModel[$cont] = new IsaActividadesIsa();
+			
+					if (IsaActividadesIsa::loadMultiple($actividadesModel, Yii::$app->request->post())) 
 					{
-						$intervencion->perfiles = implode(",",$postIEO[$key]['perfiles']); 
-						$intervencion->id_actividades_isa = $idActividades[$key];
-						$intervencion->save(false);
-						$controller = RomReporteOperativoMisionalController::crearReporteOperativoMisional($intervencion->id);
+						foreach ($actividadesModel as $key => $actividad) 
+						{
+							$actividad->id_iniciacion_sencibilizacion_artistica = $model->id;
+							$actividad->requerimientos_tecnicos = null;
+							$actividad->save(false);
+							
+							$idActividades[$key] = $actividad->id;
+						}
 					}
+				
+				
+					$intervencionModel[$cont] = new IsaIntervencionIeo();
+					
+					if (IsaIntervencionIeo::loadMultiple($intervencionModel, Yii::$app->request->post())) 
+					{
+						//se llena los perfiles separados por comas //se pasa de selecion unica a mutiple
+						$postIEO = Yii::$app->request->post()['IsaIntervencionIeo'];
+						
+						foreach ($intervencionModel as $key => $intervencion) 
+						{
+							if(@$postIEO[$key]['perfiles'] != null && $intervencion->nombre_actividad != "" )
+							{
+								$intervencion->perfiles = implode(",",$postIEO[$key]['perfiles']); 
+								$intervencion->id_actividades_isa = $idActividades[$key];
+								$intervencion->save(false);
+								$controller = RomReporteOperativoMisionalController::crearReporteOperativoMisional($intervencion->id);
+							}
+						}
+					}
+			
 				}
-			}
+				
 			if (@Yii::$app->request->post()['requerimientos'])
 			{
 				//guardar los Requerimientos Técnicos 
@@ -397,7 +399,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 					}
 				}
 			}
-			if (@Yii::$app->request->post()['reqLogisticos'])
+			if (@Yii::$app->request->post()['reqLogisticos'][$key])
 			{
 				
 				foreach(Yii::$app->request->post()['reqLogisticos'] as $requerimientosL )
@@ -416,14 +418,14 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 					}
 				}
 			}
-
 			
-				return $this->redirect(['index', 'guardado' => 1]);
-			// }
-			// else
-			// {
-				// echo "index";
-			// }
+			return $this->redirect(['index', 'guardado' => 1]);
+			
+			}
+			else
+			{
+				return $this->redirect(['index', 'error1' => 1]);
+			}
         }
 		
 		

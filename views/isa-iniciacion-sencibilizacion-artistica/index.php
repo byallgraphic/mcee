@@ -22,12 +22,30 @@ if( @$_GET['guardado'])
 {
 	
 	$this->registerJs( "
-	  swal({
+	  swal.fire({
 			text: 'Registro guardado',
-			icon: 'success',
-			button: 'Salir',
-		});" 
-	);
+			type: 'success',
+			confirmButtonText: 'Salir',
+		});
+	
+		
+	");
+}
+
+if( @$_GET['error1'])
+{
+	
+	$this->registerJs( "
+	  
+	
+	
+	 swal.fire({
+			text: 'Debe llenar los datos de una(s) actividad(des)',
+			type: 'error',
+			confirmButtonText: 'OK'
+		});
+		
+	");
 }
 
 

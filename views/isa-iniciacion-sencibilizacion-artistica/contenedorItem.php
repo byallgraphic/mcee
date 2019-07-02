@@ -30,16 +30,25 @@ if( strpos($_GET['r'], 'update') > -1)
 	$isa = $isa->find()->where("id_procesos_generales = $idProceso and id_iniciacion_sencibilizacion_artistica=". $model->id)->all();
 	$isa = ArrayHelper::map($isa,'id','id_procesos_generales');
 	
-	//traer el modelo con los datos de cada actividad
-	$actividades_isa = IsaActividadesIsa::findOne(key($isa));
 	
-	//trae la informacion del modelo IsaIntervencionIeo (esto es temporal mientras se adecua para hacerlo multiple)
+	if (key($isa) >0)
+	{
 	
-	$idintervencion = IsaIntervencionIeo::find()->Where("id_actividades_isa=".key($isa))->all();
-	$idintervencion = ArrayHelper::map($idintervencion,'id','estado');
-	$intervencionIEO = IsaIntervencionIeo::findOne(key($idintervencion));
-	
-	$intervencionIEO->perfiles =  explode(",", $intervencionIEO->perfiles);
+		//traer el modelo con los datos de cada actividad
+		$actividades_isa = IsaActividadesIsa::findOne(key($isa));
+		
+		
+		//trae la informacion del modelo IsaIntervencionIeo (esto es temporal mientras se adecua para hacerlo multiple)
+		
+		$idintervencion = IsaIntervencionIeo::find()->Where("id_actividades_isa=".key($isa))->all();
+		$idintervencion = ArrayHelper::map($idintervencion,'id','estado');
+		
+		if(key($idintervencion) > 0)
+		{
+			$intervencionIEO = IsaIntervencionIeo::findOne(key($idintervencion));
+			$intervencionIEO->perfiles =  explode(",", $intervencionIEO->perfiles);
+		}
+	}
 }
 
 
@@ -182,7 +191,7 @@ echo    $form->field($intervencionIEO, "[$idProceso]perfiles")->widget(
   
 	<div class="row">
 	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]objetivos_especificos")->textArea(['title'=>'Especifique cómo se espera lograr, con cada una de las actividades, sensibilizar a la comunidad sobre la importancia del arte y la cultura a través de la oferta cultural del municipio para fortalecer el vínculo comunidad-escuela mediante el mejoramiento de la oferta en artes y cultura desde las instituciones educativas oficiales para la ocupación del tiempo libre en las comunas y corregimientos de Santiago de Cali.', 'data-toggle'=>'tooltip']) ?></div>
-	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]tiempo_previsto")->textInput([ 'type' => 'number']) ?></div>
+	  <div class="col-md-6"><?= $form->field($intervencionIEO, "[$idProceso]tiempo_previsto")->textInput(["readonly" => false]) ?></div>
 	</div>
 	
     <div class="row">
