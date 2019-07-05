@@ -325,6 +325,13 @@
 		});
 		
 		
+	$('#modalArchivos').on('hidden.bs.modal', function (e) {
+		$( ".modal" ).css({ 
+					overflowX: "hidden", 
+					overflowY: "auto",
+				});
+	});
+
 		
 	// var timepicker = new TimePicker('duracion_actividad', {
         // lang: 'en',
