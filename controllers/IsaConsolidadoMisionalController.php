@@ -155,7 +155,7 @@ class IsaConsolidadoMisionalController extends Controller
 				}
 			}
 			
-            return $this->redirect(['index']);
+            return $this->redirect(['index','guardado' => 1]);
         }
 
         return $this->renderAjax('create', [
@@ -180,7 +180,6 @@ class IsaConsolidadoMisionalController extends Controller
 		{
 			
 			$personas = IsaPersonasComunidad::find()->indexBy('id')->andWhere("id_consolidado_misional = $id")->all();
-			 
 			$per = [];
 			foreach($personas as  $persona)
 			{
@@ -196,14 +195,8 @@ class IsaConsolidadoMisionalController extends Controller
 				}
 			}
 
-	
-			
 			
 			$estadoActual = IsaEstadoActualMisional::find()->indexBy('id')->andWhere("id_consolidado_misional = $id")->all();
-			 
-			 echo "<pre>"; print_r( Yii::$app->request->post()['IsaEstadoActualMisional']); echo "</pre>"; 
-			
-
 			$estadoActualModel = [];
 			foreach($estadoActual as $estado)
 			{
@@ -213,7 +206,6 @@ class IsaConsolidadoMisionalController extends Controller
 			
 			if (Model::loadMultiple($estadoActualModel, Yii::$app->request->post())  ) 
 			{
-				echo "entro";
 				foreach ($estadoActualModel as $est) 
 				{
 					$est->save(false);
@@ -221,7 +213,7 @@ class IsaConsolidadoMisionalController extends Controller
 			}
 		
 
-            return $this->redirect(['index']);
+            return $this->redirect(['index','guardado' => 1]);
         }
 
         return $this->renderAjax('update', [

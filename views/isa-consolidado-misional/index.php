@@ -7,13 +7,29 @@ use yii\helpers\Url;
 
 use fedemotta\datatables\DataTables;
 use yii\grid\GridView;
-
+use app\models\Instituciones;
+use app\models\Sedes;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\IsaConsolidadoMisionalBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = '5.Consolidado Por Mes Misional';
 $this->params['breadcrumbs'][] = $this->title;
+
+if( @$_GET['guardado'])
+{
+	
+	$this->registerJs( "
+	  swal.fire({
+			text: 'Registro guardado',
+			type: 'success',
+			confirmButtonText: 'Salir',
+		});
+	
+		
+	");
+}
+
 ?> 
 
 <h1></h1>
@@ -39,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?=  Html::button('Agregar',['value'=>Url::to(['create']),'class'=>'btn btn-success','id'=>'modalButton']) ?>
-		
+		<?= Html::a('Volver',['sensibilizacion-artistica/index',],['class' => 'btn btn-info']) ?>
     </p>
 
     <?= DataTables::widget([
@@ -79,13 +95,30 @@ $this->params['breadcrumbs'][] = $this->title;
 	],
            'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'id_institucion',
-            'id_sede',
+			[
+				'attribute' => 'id_institucion',
+				'value' => function( $model )
+				{
+					$institucion = Instituciones::findOne( $model->id_institucion );
+					return $institucion ? $institucion->descripcion: '' ;
+				},
+			],
+
+			[
+				'attribute'=>'id_sede',
+				'value' => function( $model )
+				{
+					$nombreSedes = Sedes::findOne($model->id_sede);
+					return $nombreSedes ? $nombreSedes->descripcion : '';  
+				}, //para buscar por el nombre
+			],
+
             'fecha',
+			
 
             [
 			'class' => 'yii\grid\ActionColumn',
-			'template'=>'{view}{update}{delete}',
+			'template'=>'{update}{delete}',
 				'buttons' => [
 				'view' => function ($url, $model) {
 					return Html::a('<span name="detalle" class="glyphicon glyphicon-eye-open" value ="'.$url.'" ></span>', $url, [

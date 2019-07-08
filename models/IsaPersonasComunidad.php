@@ -44,14 +44,15 @@ class IsaPersonasComunidad extends \yii\db\ActiveRecord
      */
     public function attributeLabels()
     {
-        return [
+       return [
             'id' => 'ID',
-            'mision' => 'Mision',
-            'descripcion' => 'Descripcion',
+            'mision' => 'Misión',
+            'descripcion' => 'Descripción',
             'hallazgos' => 'Hallazgos',
             'id_consolidado_misional' => 'Id Consolidado Misional',
             'id_actividades_consolidado' => 'Id Actividades Consolidado',
             'estado' => 'Estado',
         ];
+
     }
 }
