@@ -58,6 +58,7 @@ class GeSeguimientoOperadorFrenteController extends Controller
     {
         $searchModel = new GeSeguimientoOperadorFrenteBuscar();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['id_admin' => $_SESSION["id"]])->andWhere(['id_tipo_seguimiento' => Yii::$app->request->get('idTipoSeguimiento')]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -103,6 +104,7 @@ class GeSeguimientoOperadorFrenteController extends Controller
 			
 			$model->id_tipo_seguimiento = Yii::$app->request->post('idTipoSeguimiento');
 			$model->estado = 1;
+            $model->id_admin = $_SESSION["id"];
 				
             //Si no existe la carpeta se crea
             $carpeta = "../documentos/seguimientoOperadorFrente/";

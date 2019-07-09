@@ -23,6 +23,7 @@ use Yii;
  * @property string $dificultades
  * @property string $estado
  * @property GeTipoSeguimiento $tipo_seguimiento
+ * @property int $id_admin
  */
 class GeSeguimientoOperadorFrente extends \yii\db\ActiveRecord
 {

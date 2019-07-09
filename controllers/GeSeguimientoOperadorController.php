@@ -63,7 +63,7 @@ class GeSeguimientoOperadorController extends Controller
     {
         $searchModel = new GeSeguimientoOperadorBuscar();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere(['id_tipo_seguimiento' => Yii::$app->request->get('idTipoSeguimiento')]);
+        $dataProvider->query->andWhere(['id_admin' => $_SESSION["id"]])->andWhere(['id_tipo_seguimiento' => Yii::$app->request->get('idTipoSeguimiento')]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -164,7 +164,8 @@ class GeSeguimientoOperadorController extends Controller
 
         $GeSeguimientoOperador = Yii::$app->request->post();
         $gs = new GeSeguimientoOperador();
-        $gs->id_tipo_seguimiento = $GeSeguimientoOperador['id_tipo_seguimiento'];
+        $gs->id_tipo_seguimiento = 1;
+        $gs->id_admin = $_SESSION["id"];
         $gs->email = $GeSeguimientoOperador['email'];
         $gs->id_operador = $GeSeguimientoOperador['id_operador'];
         $gs->cual_operador = isset($GeSeguimientoOperador['cual_operador']) ? $GeSeguimientoOperador['cual_operador'] : '';
@@ -232,6 +233,7 @@ class GeSeguimientoOperadorController extends Controller
     {
         $GeSeguimientoOperador = Yii::$app->request->post();
         $gs = GeSeguimientoOperador::findOne(Yii::$app->request->post('id'));
+        $gs->email = $GeSeguimientoOperador['email'];
         $gs->id_operador = $GeSeguimientoOperador['id_operador'];
         $gs->cual_operador = isset($GeSeguimientoOperador['cual_operador']) ? $GeSeguimientoOperador['cual_operador'] : '';
         $gs->proyecto_reportar = $GeSeguimientoOperador['proyecto_reportar'];

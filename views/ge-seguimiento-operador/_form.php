@@ -53,7 +53,7 @@ if(Yii::$app->request->get('guardado')){
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => ['store']]); ?>
 
-    <input type="hidden" id="id_tipo_seguimiento" value="<?= Yii::$app->request->get('idTipoSeguimiento') ?>">
+    <input type="hidden" id="id_tipo_seguimiento" value="1">
 
     <?= $form->field($model, 'email')->textInput(['enableAjaxValidation' => true]) ?>
 

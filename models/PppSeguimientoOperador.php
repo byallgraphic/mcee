@@ -32,6 +32,7 @@ use Yii;
  * @property string $id_operador
  * @property string $id_objetivo
  * @property string $id_actividad
+ * @property int $id_admin
  *
  * @property GeTipoSeguimiento $tipo_seguimiento
  */

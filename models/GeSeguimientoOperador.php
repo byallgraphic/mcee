@@ -30,6 +30,7 @@ use Yii;
  * @property string $id_operador
  * @property string $indicador
  * @property string $dificultades
+ * @property int $id_admin
  *
  * @property GeTipoSeguimiento $tipo_seguimiento
  */
@@ -71,6 +72,7 @@ class GeSeguimientoOperador extends \yii\db\ActiveRecord
 				'propuesta_dificultades',
 				'estado',
 				'indicador',
+                'id_admin'
 			], 'required' ],
             [['id_tipo_seguimiento', 'id_ie', 'id_persona_responsable', 'numero_participantes', 'estado', 'id_operador'], 'default', 'value' => null],
             [['id_tipo_seguimiento', 'id_ie', 'id_persona_responsable', 'numero_participantes', 'estado', 'id_operador'], 'integer'],
@@ -109,7 +111,7 @@ class GeSeguimientoOperador extends \yii\db\ActiveRecord
             'logros_alcanzados' 				=> 'Logros alcanzados',
             'dificultadades' 					=> 'Dificultades presentadas',
             'avances_cumplimiento_cuantitativos'=> '8. Describa los avances para el cumplimiento del indicador seleccionado en terminos cuantitativos',
-            'avances_cumplimiento_cualitativos' => '9. Describa los avances para el cumplimiento del inidcador seleccionado en terminos cualitativos Avances Cumplimiento Cualitativos',
+            'avances_cumplimiento_cualitativos' => '9. Describa los avances para el cumplimiento del indicador seleccionado en terminos cualitativos Avances Cumplimiento Cualitativos',
             'dificultades' 						=> '10. Mencione las dificultades para el cumplimiento de los indicadores si las hay',
             'propuesta_dificultades' 			=> '11. Qué propuesta(s) plantea para superar esas dificultades presentadas',
             'estado' 							=> 'Estado',
