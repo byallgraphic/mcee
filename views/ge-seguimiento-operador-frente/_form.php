@@ -85,25 +85,25 @@ if( !$sede ){
 
     <?= $form->field($model, 'dificultades')->textarea(['maxlength' => true]) ?>
 
-    <?php if (isset($model->id)){?>
-        <div class="evidencia_actividades">
-            <?= $form->field($model, 'documentFile[]')->fileInput(['multiple' => true, 'id' => "file-upload-1"]) ?>
-            <div id="nameElement">
-                <?php $files = \app\models\GeSeguimientoFile::find()->where(['id_seguimiento_frente' => $model->id ])->asArray()->all(); ?>
-                <ul>
-                    <?php foreach($files AS $file){ ?>
-                        <li id="line_file_<?= $file['id'] ?>" class="line-file-name"><a class="name-file" href="..\documentos\seguimientoOperador\<?= $file['file'] ?>" download><?= $file['file'] ?></a><div onclick='deleteFile("<?= $file['id'] ?>")' class='delete-line'>x</div></li>
-                    <?php } ?>
-                </ul>
+    <div class="evidencia_actividades">
+        <?= $form->field($model, 'documentFile[]')->fileInput(['multiple' => true, 'id' => "file-upload-1"]) ?>
+        <?php if (isset($model->id)){?>
+                <div id="nameElement">
+                    <?php $files = \app\models\GeSeguimientoFile::find()->where(['id_seguimiento_frente' => $model->id ])->asArray()->all(); ?>
+                    <ul>
+                        <?php foreach($files AS $file){ ?>
+                            <li id="line_file_<?= $file['id'] ?>" class="line-file-name"><a class="name-file" href="..\documentos\seguimientoOperador\<?= $file['file'] ?>" download><?= $file['file'] ?></a><div onclick='deleteFile("<?= $file['id'] ?>")' class='delete-line'>x</div></li>
+                        <?php } ?>
+                    </ul>
+                </div>
+        <?php }else{ ?>
+            <div class="evidencia_actividades">
+                <div id="nameElement">
+                    <ul></ul>
+                </div>
             </div>
-        </div>
-    <?php }else{ ?>
-        <div class="evidencia_actividades">
-            <div id="nameElement">
-                <ul></ul>
-            </div>
-        </div>
-    <?php } ?>
+        <?php } ?>
+    </div>
 
     <?php /* $form->field($model, 'estado')->textInput() */ ?>
 

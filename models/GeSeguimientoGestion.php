@@ -27,6 +27,7 @@ use Yii;
  * @property string $calificacion_nivel
  * @property string $descripcion_calificacion
  * @property string $estado
+ * @property int $id_admin
  *
  * @property GeTipoSeguimiento $tipo_seguimiento
  */
@@ -67,6 +68,7 @@ class GeSeguimientoGestion extends \yii\db\ActiveRecord
 					'calificacion_nivel',
 					'descripcion_calificacion',
 					'estado',
+                    'id_admin'
 				], 'required'],
             [['id_tipo_seguimiento', 'id_ie', 'id_cargo', 'id_nombre', 'id_persona_gestor', 'numero_visitas', 'estado'], 'default', 'value' => null],
             [['id_tipo_seguimiento', 'id_ie', 'id_cargo', 'id_nombre', 'id_persona_gestor', 'numero_visitas', 'estado'], 'integer'],

@@ -30,6 +30,7 @@ $this->params['breadcrumbs'][] = "Agregar";
         'personas' 			=> $personas,
         'institucion' 		=> $institucion,
         'sede'				=> $sede,
+        'idTipoSeguimiento' => Yii::$app->request->get( 'idTipoSeguimiento' ),
         'indicadores' 		=> $indicadores,
         'actividades' 		=> $actividades,
         'guardado' 			=> $guardado,

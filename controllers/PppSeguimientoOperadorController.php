@@ -70,8 +70,7 @@ class PppSeguimientoOperadorController extends Controller
     {
         $searchModel = new PppSeguimientoOperadorBuscar();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere(['estado' => 1]);
-
+        $dataProvider->query->andWhere(['estado' => 1])->andWhere(['id_admin' => $_SESSION["id"]])->andWhere(['id_tipo_seguimiento' => Yii::$app->request->get('idTipoSeguimiento')]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -175,6 +174,7 @@ class PppSeguimientoOperadorController extends Controller
         $gs = new PppSeguimientoOperador();
         $gs->id_tipo_seguimiento = $GeSeguimientoOperador['id_tipo_seguimiento'];
         $gs->email = $GeSeguimientoOperador['email'];
+        $gs->id_admin = $_SESSION["id"];
         $gs->id_operador = $GeSeguimientoOperador['id_operador'];
         $gs->cual_operador = isset($GeSeguimientoOperador['cual_operador']) ? $GeSeguimientoOperador['cual_operador'] : '';
         $gs->proyecto_reportar = $GeSeguimientoOperador['proyecto_reportar'];

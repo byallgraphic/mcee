@@ -154,7 +154,7 @@ $this->registerCssFile("http://cdn.jsdelivr.net/timepicker.js/latest/timepicker.
 			'template'=>'{update}{delete}',
 				'buttons' => [
 				'update' => function ($url, $model) {
-					return Html::a('<span name="actualizar" id="spanmodalid'.$model->id.'" class="glyphicon glyphicon-pencil" value ="'.$model->id.'"></span>', $url, [
+					return Html::a('<span name="actualizar" id="spanmodalid'.$model->id.'" class="glyphicon glyphicon-pencil" value ="'.$model->id.'"></span>', '', [
 								'title' => Yii::t('app', 'lead-update'),
                                 'id' => $model->id,
                                 'onclick' => '
