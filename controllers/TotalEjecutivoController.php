@@ -196,7 +196,9 @@ class TotalEjecutivoController extends Controller
 			
 		if(isset($sesionesXsedeXactividad[1]))
 		{
-			$datosActividad1[] = "0%";
+			@$porcentaAvancesIEO = (number_format($sesionesXsedeXactividad[1][179]['sesiones']*1 / $totalPlaneadas[1]*1,2)  + @number_format($sesionesXsedeXactividad[2][179]['sesiones']*1 / $totalPlaneadas[2]*1,2))/2*1;
+			
+			$datosActividad1[] = @$porcentaAvancesIEO . "%";
 			$datosActividad1[] = @number_format($sesionesXsedeXactividad[1][179]['sesiones']*1 / $totalPlaneadas[1]*1,2) . "%";
 			$datosActividad1[] = @$sesionesXsedeXactividad[1][179]['poblacion']*1;
 			$datosActividad1[] = @$sesionesXsedeXactividad[1][179]['sesiones']*1;//realizadas
@@ -211,7 +213,7 @@ class TotalEjecutivoController extends Controller
 		
 		if(isset($sesionesXsedeXactividad[2]))
 		{
-			$datosActividad2[] = 0;
+			$datosActividad2[] = @$porcentaAvancesIEO . "%";
 			$datosActividad2[] = @number_format($sesionesXsedeXactividad[2][179]['sesiones']*1 / $totalPlaneadas[2]*1,2) . "%";
 			$datosActividad2[] = @$sesionesXsedeXactividad[2][179]['poblacion']*1;
 			$datosActividad2[] = @$sesionesXsedeXactividad[2][179]['sesiones']*1;//realizadas

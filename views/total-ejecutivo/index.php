@@ -32,7 +32,7 @@ use fedemotta\datatables\DataTables;
 
 
 
-$this->title = "Total Ejecutivo";
+$this->title = "5.Consolidado por mes - Total Ejecutivo";
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -80,8 +80,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
            
             'actividad',
-			'porcentajeieo',
-            'porcentajeactividad',
+			[
+				'attribute' => 'porcentajeieo',
+				'label'		=> "Porcentaje avance objetivos por IEO"
+			],
+			[
+				'attribute' => 'porcentajeactividad',
+				'label'		=> "Porcentaje avance actividades por IEO"
+			],
             'benficiarios',
             'realizadas',
             'aplazadas',
