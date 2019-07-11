@@ -126,7 +126,12 @@ $this->params['breadcrumbs'][] = $this->title;
 										['class' => 'btn btn-success']) ?>
 										
 										
-			
+			<?= Html::a('5.Consolidado por mes - Total Ejecutivo', 
+										[
+											'total-ejecutivo/index',
+											// 'idReporte'		=> 5,
+										], 
+										['class' => 'btn btn-success']) ?>
 										
 
 
