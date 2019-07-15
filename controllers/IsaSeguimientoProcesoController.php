@@ -472,9 +472,9 @@ class IsaSeguimientoProcesoController extends Controller
 		
 		$arrayDatos = [];
 		
-		$arrayDatos[] = $totalSesionesIEO;
-		$arrayDatos[] = $porcentajeSede;
-		$arrayDatos[] = $avanceIEO ;
+		$arrayDatos[] = $totalSesionesIEO * 100;
+		$arrayDatos[] = $porcentajeSede * 100;
+		$arrayDatos[] = $avanceIEO * 100 ;
 		
 		return json_encode($arrayDatos);
 	}
