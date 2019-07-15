@@ -228,36 +228,33 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		
 		foreach( $proyectos as $idProyecto => $titulo )
 		{
-			$items[] = 	[
-							'label' 		=>  $titulo,
-							'content' 		=>  $this->renderAjax( 'faseItem', 
-															[  
-																'form' => $form,
-																"model" => $model,
-																'idProyecto' => $idProyecto,
-																'actividades_isa' => $actividades_isa,
-																'arraySiNo' => $this->arraySiNo,
-																'equiposCampo' => $this->obtenerEquiposCampo(),
-																'docenteOrientador' => $this->obtenerDocenteOrientador(),
-																'intervencionIEO' => $intervencionIEO,
-																'ciclos' => $ciclos,
-																'perfiles' => $this->obtenerPefiles(),
-																'reqTecnicos' => $reqTecnicos,
-																'nombreDiligencia'=> $nombreDiligencia,
-																'rol'			  => $rol,
-																'reqLogisticos'  => $reqLogisticos,
-																
-															] 
-												),
-							'contentOptions'=> [],
+			$items[] = 	
+			[
+				'label' 		=>  $titulo,
+				'content' 		=>  $this->renderAjax( 'faseItem', 
+									[  
+										'form' => $form,
+										"model" => $model,
+										'idProyecto' => $idProyecto,
+										'actividades_isa' => $actividades_isa,
+										'arraySiNo' => $this->arraySiNo,
+										'equiposCampo' => $this->obtenerEquiposCampo(),
+										'docenteOrientador' => $this->obtenerDocenteOrientador(),
+										'intervencionIEO' => $intervencionIEO,
+										'ciclos' => $ciclos,
+										'perfiles' => $this->obtenerPefiles(),
+										'reqTecnicos' => $reqTecnicos,
+										'nombreDiligencia'=> $nombreDiligencia,
+										'rol'			  => $rol,
+										'reqLogisticos'  => $reqLogisticos,
+										
+									] 
+									),
+				'contentOptions'=> [],
 							
-						];	
+			];	
 			
 		}
-		// echo tabs::widget([
-			// 'items' => $items,
-		// ]);
-		
 		
 		echo Collapse::widget([
 			'items' => $items,
@@ -274,21 +271,12 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		//variable con la conexion a la base de datos 
 		$connection = Yii::$app->getDb();
 		$command = $connection->createCommand("
-			SELECT pe.id, concat(pe.nombres,' ',pe.apellidos) as nombres, identificacion 
+			SELECT pe.id, 
+			concat(pe.nombres,' ',pe.apellidos) as nombres, 
+			identificacion 
 			FROM personas as pe
-			
 			ORDER BY id ASC LIMIT 160
 		");
-		
-		// SELECT ppi.id, concat(pe.nombres,' ',pe.apellidos) as nombres
-			// FROM perfiles_x_personas as pp, 
-			// personas as pe,
-			// perfiles_x_personas_institucion ppi
-			// WHERE pp.id_personas = pe.id
-			// AND pp.id_perfiles = 11
-			// AND ppi.id_perfiles_x_persona = pp.id
-			// AND ppi.id_institucion = $idInstitucion
-		
 		
 		$result = $command->queryAll();
 		$nombresPerfil = array();
@@ -323,7 +311,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
     {
         $model = new IsaIniciacionSencibilizacionArtistica();
 		
-        // if ($model->load(Yii::$app->request->post()) && $model->save() ) 
         if ($model->load(Yii::$app->request->post())  ) 
 		{
 			$contador = [];
