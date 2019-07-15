@@ -4,13 +4,13 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\CbacReporteCompetenciasBasicasAc */
+/* @var $model app\models\RomReporteOperativoMisional */
 
-$this->title = 'Nuevo Reporte Competencias Básicas Arte y Cultura';
-$this->params['breadcrumbs'][] = ['label' => 'Reporte Competencias Basicas Arte y Cultura', 'url' => ['index']];
+$this->title = 'Agregar Reporte Operativo Misional';
+$this->params['breadcrumbs'][] = ['label' => 'Rom Reporte Operativo Misionals', 'url' => ['index']];
 $this->params['breadcrumbs'][] = "Agregar";
 ?>
-<div class="cbac-reporte-competencias-basicas-ac-create">
+<div class="rom-reporte-operativo-misional-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -18,6 +18,8 @@ $this->params['breadcrumbs'][] = "Agregar";
         'model' => $model,
         'sedes' => $sedes,
         'institucion' => $institucion,
+		'datos' => $datos,
+		'actividadesParticipadas' => $actividadesParticipadas,
     ]) ?>
 
 </div>

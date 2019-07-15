@@ -5,21 +5,20 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "cbac.equipos_campo".
+ * This is the model class for table "cbac.rom_proyectos".
  *
  * @property string $id
- * @property string $nombre
  * @property string $descripcion
  * @property string $estado
  */
-class CbacEquiposCampo extends \yii\db\ActiveRecord
+class CbacRomProyectos extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'cbac.equipos_campo';
+        return 'cbac.rom_proyectos';
     }
 
     /**
@@ -28,8 +27,10 @@ class CbacEquiposCampo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'descripcion', 'cantidad'], 'required'],
-            [['nombre', 'descripcion', 'cantidad'], 'string'],
+            [['descripcion'], 'required'],
+            [['descripcion'], 'string'],
+            [['estado'], 'default', 'value' => null],
+            [['estado'], 'integer'],
         ];
     }
 
@@ -40,10 +41,8 @@ class CbacEquiposCampo extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'nombre' => 'Nombre',
-            'descripcion' => 'Descripción',
-            'cantidad' => 'Cantidad',
-			'integrantes' => 'Integrantes'
+            'descripcion' => 'Descripcion',
+            'estado' => 'Estado',
         ];
     }
 }
