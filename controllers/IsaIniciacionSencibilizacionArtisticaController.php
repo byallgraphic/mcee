@@ -493,8 +493,8 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 						$IRT = new IsaRequerimientosLogisticos();
 						$IRT->id_requerimiento	= $idReqL;
 						$IRT->cantidad 			= $datos[0];
-						$IRT->dir_origen 		= $datos[0];
-						$IRT->dir_destino 		= $datos[0];
+						$IRT->dir_origen 		= @$datos[1];
+						$IRT->dir_destino 		= @$datos[2];
 						$IRT->id_actividad 		= $idActividadReqL;
 						$IRT->id_iniciacion_sencibilizacion_artistica = $id;
 						$IRT->save(false);
