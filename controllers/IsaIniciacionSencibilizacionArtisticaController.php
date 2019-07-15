@@ -440,11 +440,6 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()  ) 
 		{	
 			
-			$requerimientos = new IsaRequerimientosTecnicos();
-			$requerimientos = $requerimientos->find()->orderby("id")->andWhere("id_iniciacion_sencibilizacion_artistica = $id")->all();
-			$requerimientos = ArrayHelper::map($requerimientos,'id_requerimiento','cantidad','id_actividad');
-		
-			
 			$arrayRequerimientos = [];
 			if (@Yii::$app->request->post()['requerimientos'])
 			{
