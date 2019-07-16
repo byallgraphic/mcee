@@ -51,6 +51,7 @@ $index = 0;
 														'reqTecnicos' => $reqTecnicos,
 														'equiposCampo' => $equiposCampo,
 														'intervencionIeo' => $intervencionIeo,
+														'perfiles' => $perfiles,
 													] 
 										),
 					'contentOptions'=> [],

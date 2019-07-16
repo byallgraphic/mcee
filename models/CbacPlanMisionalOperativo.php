@@ -36,7 +36,6 @@ class CbacPlanMisionalOperativo extends \yii\db\ActiveRecord
             [['id_institucion', 'id_sede', 'estado'], 'default', 'value' => null],
             [['id_institucion', 'id_sede', 'estado'], 'integer'],
             [['caracterizacion_diagnostico', 'nombre_caracterizacion', 'caracterizacion_no_justificacion'], 'string'],
-            // [['caracterizacion_diagnostico', 'nombre_caracterizacion', 'fecha_caracterizacion_', 'id_sede'], 'required'],
             [['fecha_caracterizacion_'], 'safe'],
             [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Estados::className(), 'targetAttribute' => ['estado' => 'id']],
             [['id_institucion'], 'exist', 'skipOnError' => true, 'targetClass' => Instituciones::className(), 'targetAttribute' => ['id_institucion' => 'id']],

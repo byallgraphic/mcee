@@ -39,7 +39,7 @@ class CbacIntervencionIeo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['perfiles', 'docente_orientador', 'fases', 'nombre_actividad', 'actividad_desarrollar', 'lugares_recorrer', 'tematicas_abordadas', 'objetivos_especificos', 'tiempo_previsto', 'productos'], 'string'],
+            [['docente_orientador', 'fases', 'nombre_actividad', 'actividad_desarrollar', 'lugares_recorrer', 'tematicas_abordadas', 'objetivos_especificos', 'tiempo_previsto', 'productos'], 'string'],
             [['num_encuentro', 'id_pmo_actividades', 'id_equipo_campos', 'estado'], 'default', 'value' => null],
             [['num_encuentro', 'id_pmo_actividades', 'id_equipo_campos', 'estado'], 'integer'],
             [['id_equipo_campos'], 'exist', 'skipOnError' => true, 'targetClass' => CbacEquiposCampo::className(), 'targetAttribute' => ['id_equipo_campos' => 'id']],
@@ -65,7 +65,7 @@ class CbacIntervencionIeo extends \yii\db\ActiveRecord
             'objetivos_especificos' => 'Objetivos Especificos',
             'tiempo_previsto' => 'Tiempo Previsto',
             'id_pmo_actividades' => 'Id Pmo Actividades',
-            'id_equipo_campos' => 'Id Equipo Campos',
+            'id_equipo_campos' => 'Equipos Campo',
             'productos' => 'Productos',
             'estado' => 'Estado',
         ];

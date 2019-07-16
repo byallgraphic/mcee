@@ -4,19 +4,16 @@ use yii\helpers\Html;
 $items = [];
 $index = 0;
 
-foreach( $fases as $keyFase => $fase ){
+foreach( $proyectos as $key => $proyecto ){
 	
-	/*$sesiones = Sesiones::find()
-					->andWhere( 'id_fase='.$fase->id )
-					->all();*/
 
 	$items[] = 	[
-					'label' 		=>  $fase,
+					'label' 		=>  $proyecto,
 					'content' 		=>  $this->render( 'faseItem', 
 													[  
 														'form' => $form,
                                                         "model" => $model,
-                                                        'idproyecto' => $keyFase,
+                                                        'idproyecto' => $key,
 														'actividades_pom' => $actividades_pom,
 														'arraySiNo' => $arraySiNo,
 														'rol'			  => $rol,
@@ -24,6 +21,7 @@ foreach( $fases as $keyFase => $fase ){
 														'reqTecnicos' => $reqTecnicos,
 														'equiposCampo' => $equiposCampo,
 														'intervencionIeo' =>  $intervencionIeo,
+														'perfiles' => $perfiles,
 													] 
 										),
 					'contentOptions'=> []

@@ -13,6 +13,8 @@ use Yii;
  * @property string $id_plan_misional_operativo
  * @property string $id_actividad
  * @property string $estado
+ * @property string $dir_origen
+ * @property string $dir_destino
  */
 class CbacRequerimientosLogisticos extends \yii\db\ActiveRecord
 {
@@ -32,6 +34,7 @@ class CbacRequerimientosLogisticos extends \yii\db\ActiveRecord
         return [
             [['id_requerimiento', 'cantidad', 'id_plan_misional_operativo', 'id_actividad', 'estado'], 'default', 'value' => null],
             [['id_requerimiento', 'cantidad', 'id_plan_misional_operativo', 'id_actividad', 'estado'], 'integer'],
+            [['dir_origen', 'dir_destino'], 'string'],
             [['id_plan_misional_operativo'], 'exist', 'skipOnError' => true, 'targetClass' => CbacPlanMisionalOperativo::className(), 'targetAttribute' => ['id_plan_misional_operativo' => 'id']],
         ];
     }
@@ -48,6 +51,8 @@ class CbacRequerimientosLogisticos extends \yii\db\ActiveRecord
             'id_plan_misional_operativo' => 'Id Plan Misional Operativo',
             'id_actividad' => 'Id Actividad',
             'estado' => 'Estado',
+            'dir_origen' => 'Dir Origen',
+            'dir_destino' => 'Dir Destino',
         ];
     }
 }

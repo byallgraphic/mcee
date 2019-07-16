@@ -22,6 +22,7 @@ use app\models\PerfilesXPersonas;
 use app\models\CbacIntervencionIeo;
 use app\models\CbacEquiposCampo;
 use app\models\Perfiles;
+use app\models\CbacProyectosCbac;
 use app\models\CbacRequerimientosLogisticos;
 use app\models\CbacRequerimientosTecnicos;	
 use yii\web\UploadedFile;
@@ -91,11 +92,10 @@ class CbacPlanMisionalOperativoController extends Controller
         $actividades_pom = new CbacPmoActividades();
         $intervencionIeo = new CbacIntervencionIeo();
         
-        $proyectos = [ 
-            1 => "Desarrollar herramientas en docentes y directivos docentes de las IEO que implementen componentes artísticos y culturales.",
-            2 => "Fortalecer la oferta de programas culturales para estudiantes en el proceso formativo de competencias básicas dentro y fuera del aula.",
-            // 3 => "Promover el acompañamiento de padres de familia desde el arte y la cultura en el proceso de fortalecimiento de competencias básicas de estudiantes de las IEO.",
-        ];
+		
+		$proyectos = new CbacProyectosCbac();
+		$proyectos = $proyectos->find()->orderby("id")->all();
+		$proyectos = ArrayHelper::map($proyectos,'id','descripcion');
 		
 		$ciclos = 
 		[
@@ -209,7 +209,7 @@ class CbacPlanMisionalOperativoController extends Controller
 		
 		
 		return $this->renderAjax('fases', [
-            'fases' => $proyectos,
+            'proyectos' => $proyectos,
             'form' => $form,
             "model" => $model,
             'actividades_pom' => $actividades_pom,
@@ -219,6 +219,7 @@ class CbacPlanMisionalOperativoController extends Controller
 			'reqTecnicos' => $reqTecnicos,
 			'equiposCampo' => $this->obtenerEquiposCampo(),
 			'intervencionIeo' =>  $intervencionIeo,
+			'perfiles' => $this->obtenerPefiles(),
 																
         ]);
 		
@@ -235,75 +236,123 @@ class CbacPlanMisionalOperativoController extends Controller
         $idInstitucion = $_SESSION['instituciones'][0];
         $institucion = Instituciones::findOne($idInstitucion);
 
+		
         if ($model->load(Yii::$app->request->post())) 
 		{
             
-            $model->id_institucion = $idInstitucion;
-            if($model->save())
+			$contador = [];
+			foreach( Yii::$app->request->post()['CbacIntervencionIeo'] as $key =>  $interIEO)
 			{
-
-                if (Yii::$app->request->post('CbacPmoActividades'))
+				if(@$interIEO['perfiles'] != null && @$interIEO['nombre_actividad'] != "")
 				{
-                    $data = Yii::$app->request->post('CbacPmoActividades');
-                    $count 	= count($data);
-                    $modelActividades = [];
-
-                    for( $i = 1; $i <= 6; $i++ )
-                        $modelActividades[$i] = new CbacPmoActividades();
-                    
-
-                    if (CbacPmoActividades::loadMultiple($modelActividades, Yii::$app->request->post() )) 
-					{
-                        foreach( $modelActividades as $key => $modelActividad) 
-						{
-							$modelActividad->id_pmo = $model->id;
-                            $modelActividad->save(false);
-                        }
-                    }
-                }
-				
-				if (@Yii::$app->request->post()['requerimientos'])
-				{
-					//guardar los Requerimientos Técnicos 
-					foreach(Yii::$app->request->post()['requerimientos'] as $requerimientos )
-					{
-						foreach ($requerimientos as $idActividad => $requerimiento)
-						{
-							$idRequerimiento = key($requerimiento);
-							$cantidaRequerimiento = $requerimiento[$idRequerimiento];
-							
-							$RT = new CbacRequerimientosTecnicos();
-							$RT->id_requerimiento	= $idRequerimiento;
-							$RT->cantidad 			= $cantidaRequerimiento;
-							$RT->id_actividad 		= $idActividad;
-							$RT->id_plan_misional_operativo = $model->id;
-							$RT->save(false);
-						}
-					}
+					$contador[] = $key;
 				}
-				
-				if (@Yii::$app->request->post()['reqLogisticos'])
-				{
-					foreach(Yii::$app->request->post()['reqLogisticos'] as $requerimientosL )
-					{
-						foreach ($requerimientosL as $idActividad => $requerimiento)
-						{
-							$idRequerimiento = key($requerimiento);
-							$cantidaRequerimiento = $requerimiento[$idRequerimiento];
-							
-							$RL = new CbacRequerimientosLogisticos();
-							$RL->id_requerimiento	= $idRequerimiento;
-							$RL->cantidad 			= $cantidaRequerimiento;
-							$RL->id_actividad 		= $idActividad;
-							$RL->id_plan_misional_operativo = $model->id;
-							$RL->save(false);
-						}
-					}
-				}
+			}
 			
-            }
-            return $this->redirect(['index', 'guardado' => 1 ]);
-        }
+			if(count($contador) > 0 )
+			{
+				$model->id_institucion = $idInstitucion;
+				if($model->save())
+				{
+					foreach ($contador as $cont)
+					{
+						if (Yii::$app->request->post('CbacPmoActividades'))
+						{
+							$data = Yii::$app->request->post('CbacPmoActividades');
+							$count 	= count($data);
+							$modelActividades = [];
+							
+							$modelActividades[$cont] = new CbacPmoActividades();
+							
+							if (CbacPmoActividades::loadMultiple($modelActividades, Yii::$app->request->post() )) 
+							{
+								foreach( $modelActividades as $key => $modelActividad) 
+								{
+									$modelActividad->id_pmo = $model->id;
+									$modelActividad->save(false);
+									$idActividades[$key] = $modelActividad->id;
+								}
+							}
+						}
+						
+						$intervencionModel[$cont] = new CbacIntervencionIeo();
+					
+						if (CbacIntervencionIeo::loadMultiple($intervencionModel, Yii::$app->request->post())) 
+						{
+							//se llena los perfiles separados por comas //se pasa de selecion unica a mutiple
+							$postIEO = Yii::$app->request->post()['CbacIntervencionIeo'];
+							
+							foreach ($intervencionModel as $key => $intervencion) 
+							{
+								if(@$postIEO[$key]['perfiles'] != null && $intervencion->nombre_actividad != "" )
+								{
+									$intervencion->perfiles = implode(",",$postIEO[$key]['perfiles']); 
+									$intervencion->id_pmo_actividades = $idActividades[$key];
+									$intervencion->save(false);
+									// $controller = RomReporteOperativoMisionalController::crearReporteOperativoMisional($intervencion->id);
+								}
+							}
+						}
+						
+						
+					}
+					
+					if (@Yii::$app->request->post()['requerimientos'])
+					{
+						//guardar los Requerimientos Técnicos 
+						foreach(Yii::$app->request->post()['requerimientos'] as $requerimientos )
+						{
+							foreach ($requerimientos as $idActividad => $requerimiento)
+							{
+								$idRequerimiento = key($requerimiento);
+								$cantidaRequerimiento = $requerimiento[$idRequerimiento];
+								
+								$RT = new CbacRequerimientosTecnicos();
+								$RT->id_requerimiento	= $idRequerimiento;
+								$RT->cantidad 			= $cantidaRequerimiento;
+								$RT->id_actividad 		= $idActividad;
+								$RT->id_plan_misional_operativo = $model->id;
+								$RT->save(false);
+							}
+						}
+					}
+						
+					if (@Yii::$app->request->post()['reqLogisticos'])
+					{
+						$requerimientoLogisticos =[]; 
+						foreach(Yii::$app->request->post()['reqLogisticos'] as $key => $requerimientosL )
+						{
+							foreach ($requerimientosL as $idActividad => $requerimiento)
+							{
+								$requerimientoLogisticos[$idActividad][key($requerimiento)][] =  $requerimiento[key($requerimiento)];
+							}
+						}
+					
+					
+						foreach ($requerimientoLogisticos as $idActividad => $requerimientoLogistico)
+						{
+							foreach($requerimientoLogistico as $idRequerimiento => $requelog)
+							{	
+								$RL = new CbacRequerimientosLogisticos();
+								$RL->id_requerimiento	= $idRequerimiento;
+								$RL->cantidad 			= $requelog[0];
+								$RL->id_actividad 		= $idActividad;
+								$RL->dir_origen 		= @$requelog[1];
+								$RL->dir_destino 		= @$requelog[2];
+								$RL->id_plan_misional_operativo = $model->id;
+								$RL->save(false);
+							}
+							
+						}
+					}
+					return $this->redirect(['index', 'guardado' => 1 ]);
+				}
+				else
+				{
+					return $this->redirect(['index', 'error1' => 1]);
+				}
+			}
+		}
 
         $Sedes  = Sedes::find()->where( "id_instituciones = $idInstitucion" )->all();
         $sedes	= ArrayHelper::map( $Sedes, 'id', 'descripcion' );
@@ -326,11 +375,137 @@ class CbacPlanMisionalOperativoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) 
 		{
             
+			
+			$arrayRequerimientos = [];
+			if (@Yii::$app->request->post()['requerimientos'])
+			{
+				foreach(Yii::$app->request->post()['requerimientos'] as $req )
+				{
+					//agrupa la informacion de los requerimintos con el id de la actividad 
+					$arrayRequerimientos[key($req)][key($req[key($req)])]= $req[key($req)][key($req[key($req)])];
+				}	
+			
+			
+				//se borran los registros y luego se insertan nuevamente
+				$models = CbacRequerimientosTecnicos::find()->where("id_plan_misional_operativo = $id")->all();
+							foreach ($models as $model) {
+								$model->delete();
+							}
+				foreach ($arrayRequerimientos as $idActividadReq => $arrayReq)
+				{
+					foreach ($arrayReq as $idReq => $cantidad)
+					{
+						$IRT = new CbacRequerimientosTecnicos();
+						$IRT->id_requerimiento	= $idReq;
+						$IRT->cantidad 			= $cantidad;
+						$IRT->id_actividad 		= $idActividadReq;
+						$IRT->id_plan_misional_operativo = $id;
+						$IRT->save(false);
+					}
+				}
+			}
+			$arrayRequerimientosL = [];
+			
+			
+			if (@Yii::$app->request->post()['reqLogisticos'])
+			{
+				foreach(Yii::$app->request->post()['reqLogisticos'] as $req )
+				{
+					//agrupa la informacion de los requerimintos con el id de la actividad 
+					$arrayRequerimientosL[key($req)][key($req[key($req)])][]= $req[key($req)][key($req[key($req)])];
+				}	
+		
+				//se borran los registros y luego se insertan nuevamente
+				$models = CbacRequerimientosLogisticos::find()->where("id_plan_misional_operativo = $id")->all();
+				
+							foreach ($models as $model) {
+								$model->delete();
+							}
+				foreach ($arrayRequerimientosL as $idActividadReqL => $arrayReq)
+				{	
+					foreach ($arrayReq as $idReqL => $datos)
+					{
+						
+						$IRT = new CbacRequerimientosLogisticos();
+						$IRT->id_requerimiento	= $idReqL;
+						$IRT->cantidad 			= $datos[0];
+						$IRT->dir_origen 		= @$datos[1];
+						$IRT->dir_destino 		= @$datos[2];
+						$IRT->id_actividad 		= $idActividadReqL;
+						$IRT->id_plan_misional_operativo = $id;
+						$IRT->save(false);
+					}
+				}
+			
+			}
+			$actividades = IsaActividadesIsa::find()->indexBy('id')->andWhere("id_plan_misional_operativo = $id")->all();
+			
+			//id del Yii::$app->request->post() e id de actividades deben ser iguales
+			$cont = 1;
+			foreach($actividades as $key => $actividad)
+			{
+				$idActividades[] = $key;
+				$actividadIsa[$cont] = $actividad;
+				
+				if ($cont == 2)
+					$cont++;
+				
+				$cont++;
+			}
+			
+			if (Model::loadMultiple($actividadIsa, Yii::$app->request->post()) && Model::validateMultiple($actividadIsa) ) 
+			{
+				foreach ($actividadIsa as $activIsa) 
+				{
+					$activIsa->requerimientos_tecnicos = null;
+					$activIsa->save(false);
+				}
+			}
+			
+			$idActividades = implode(",",$idActividades); 
+			$intervencionIeo = IsaIntervencionIeo::find()->indexBy('id')->andWhere("id_actividades_isa in ( $idActividades )")->all();
+			
+			//id del Yii::$app->request->post() e id de intervencionIeo deben ser iguales
+			$cont = 1;
+			foreach($intervencionIeo as $intervencion)
+			{
+				$intervencionIsa[$cont] = $intervencion;
+				// actividades 1 2 4
+				if ($cont == 2)
+					$cont++;
+				
+				$cont++;
+			}
+			
+			$postIEO = Yii::$app->request->post()['IsaIntervencionIeo'];
+			
+			foreach ($postIEO as $key => $inter )
+			{
+				if (isset($postIEO[$key]['perfiles']))
+				{
+					$perfiles[ $key ] =  implode(",",$postIEO[$key]['perfiles']);
+				}
+				else
+				{
+					$perfiles[ $key ] = "";
+				}
+			}
+			 
+			if (Model::loadMultiple($intervencionIsa, Yii::$app->request->post()) && Model::validateMultiple($intervencionIsa) ) 
+			{
+				foreach ($intervencionIsa as  $key => $interIsa) 
+				{
+					$interIsa->perfiles = $perfiles[$key];
+					$interIsa->save(false);
+				}	
+			}	
+			
+			
+			
+			
             return $this->redirect(['index']);
         }
 
@@ -345,7 +520,32 @@ class CbacPlanMisionalOperativoController extends Controller
         ]);
     }
 
-
+	public function obtenerPefiles()
+	{
+		$idInstitucion 	= $_SESSION['instituciones'][0];
+		/**
+		* Llenar nombre de los cooordinadores-eje
+		*/
+		//variable con la conexion a la base de datos 
+		$connection = Yii::$app->getDb();
+		$command = $connection->createCommand("
+			SELECT pe.id, concat(pe.nombres,' ',pe.apellidos) as nombres, identificacion 
+			FROM personas as pe
+			ORDER BY id ASC LIMIT 160
+		");
+		
+		
+		$result = $command->queryAll();
+		$nombresPerfil = array();
+		foreach ($result as $r)
+		{
+			$nombresPerfil[$r['id']]= $r['nombres']." - ". $r['identificacion'] ;
+		}
+		
+		return $nombresPerfil;
+	}
+	
+	
 	public function obtenerEquiposCampo()
 	{
 		$equiposCampo = new CbacEquiposCampo();

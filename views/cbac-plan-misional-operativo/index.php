@@ -17,8 +17,32 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
 $this->registerJsFile(Yii::$app->request->baseUrl.'/js/documentos.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 
-if( isset($guardado) && $guardado == 1 ){
-	echo Html::hiddenInput( 'guardadoFormulario', '1' );
+if( @$_GET['guardado'])
+{
+	
+	$this->registerJs( "
+	  swal.fire({
+			text: 'Registro guardado',
+			type: 'success',
+			confirmButtonText: 'Salir',
+		});
+	
+		
+	");
+}
+
+if( @$_GET['error1'])
+{
+	
+	$this->registerJs( "
+	  
+	 swal.fire({
+			text: 'Debe llenar los datos de una(s) actividad(des)',
+			type: 'error',
+			confirmButtonText: 'OK'
+		});
+		
+	");
 }
 ?> 
 

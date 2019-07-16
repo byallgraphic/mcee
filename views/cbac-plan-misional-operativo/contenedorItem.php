@@ -18,6 +18,7 @@ use yii\bootstrap\ActiveForm;
 use dosamigos\datepicker\DatePicker;
 use nex\chosen\Chosen;
 use app\models\CbacPmoActividades;
+use app\models\CbacIntervencionIeo;
 use yii\helpers\ArrayHelper;
 
 //saber que se esta editando
@@ -27,10 +28,29 @@ if( strpos($_GET['r'], 'update') > -1)
 	$pmo = new CbacPmoActividades();
 	$pmo = $pmo->find()->where("id_actividad = $index and id_pmo =". $model->id)->all();
 	$pmo = ArrayHelper::getColumn($pmo,'id');
+	echo "aaaaa";
+	echo "<pre>"; print_r($pmo); echo "</pre>"; 
+	
+	
+	// echo $pmo[key($pmo)];
+	// die;
 	
 	// traer el modelo con los datos de cada actividad
-	$actividades_pom = CbacPmoActividades::findOne($pmo[0]);
+	$actividades_pom = CbacPmoActividades::findOne($pmo[key($pmo)]);
+	//traer el modelo con los datos de cada actividad
 	
+	// $actividades_isa = IsaActividadesIsa::findOne(key($isa));
+	
+	
+	$intervencionIeo = CbacIntervencionIeo::find()->Where("id_pmo_actividades=".$pmo[key($pmo)])->all();
+	$intervencionIeo = ArrayHelper::map($intervencionIeo,'id','estado');
+	
+	
+	// echo "<pre>"; print_r($intervencionIeo); echo "</pre>"; 
+	
+
+	$intervencionIeo = CbacIntervencionIeo::findOne(key($intervencionIeo));
+	$intervencionIeo->perfiles =  explode(",", $intervencionIeo->perfiles);
 }
 ?>
 
@@ -43,7 +63,7 @@ if( strpos($_GET['r'], 'update') > -1)
 	
     <h3 style='background-color: #ccc;padding:5px;'>Fecha prevista para realizar la actividad</h3>
     <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]desde")->widget(
+	  <div class="col-md-4"><?= $form->field($actividades_pom, "[$index]desde")->widget(
         DatePicker::className(), [
             // modify template for custom rendering
             
@@ -54,16 +74,7 @@ if( strpos($_GET['r'], 'update') > -1)
                 'format'    => 'yyyy-mm-dd',
         ],
     ]);  ?> </div>
-	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]hasta")->widget(
-        DatePicker::className(), [
-            // modify template for custom rendering
-            'template' => '{addon}{input}',
-            'language' => 'es',
-            'clientOptions' => [
-                'autoclose' => true,
-                'format'    => 'yyyy-mm-dd',
-        ],
-    ]);  ?></div>
+	  
 	</div>
 	
     	<div id="modalCampo_<?=$index;?>" class="fade modal" role="dialog" tabindex="-1" >
@@ -109,7 +120,30 @@ if( strpos($_GET['r'], 'update') > -1)
 		  
 	  
 	<div class="row">
-	  <div class="col-md-6"><?= $form->field($intervencionIeo, "[$index]perfiles")->textInput( ['title'=>'Seleccione el perfil y cantidad por perfiles de profesionales en campo', 'data-toggle'=>'tooltip']) ?> </div>
+	  <div class="col-md-6">
+	  
+	  <?= 
+	  
+	  
+	   $form->field($intervencionIeo, "[$index]perfiles")->widget(
+						Chosen::className(), [
+							'items' => $perfiles,
+							'disableSearch' => 5, // Search input will be disabled while there are fewer than 5 items
+							'multiple' => true,
+							'clientOptions' => [
+								'search_contains' => true,
+								'single_backstroke_delete' => false,
+								'title'=>'Seleccione el perfil y cantidad por perfiles de profesionales en campo',
+							'data-toggle'=>'tooltip',
+							],
+                            'placeholder' => 'Seleccione..',
+					])?>
+	  
+	  </div>
+	  
+	  
+	  
+	  
 	  <div class="col-md-6"><?= $form->field($intervencionIeo, "[$index]docente_orientador")->textInput([ 'value' => isset($datos[$index]['docentes']) ? $datos[$index]['docentes'] : '' ]) ?></div>
 	</div>
 	<div class="row">
@@ -142,7 +176,7 @@ if( strpos($_GET['r'], 'update') > -1)
 	</div>
 
     <div class="row">
-	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]tiempo_previsto")->textInput([ 'type' => 'number']) ?></div>
+	  <div class="col-md-6"><?= $form->field($actividades_pom, "[$index]tiempo_previsto")->textInput() ?></div>
 	  <div class="col-md-6"></div>
 	</div>
         </div>
