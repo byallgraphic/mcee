@@ -242,9 +242,7 @@ class InstitucionesController extends Controller
             $idInstituciones[]=$i;
         }
 
-        $idInstituciones= implode(",",$idInstituciones);
-
-        $instituciones = Instituciones::find()->where(['in', 'id', $idInstituciones])->select('descripcion')->indexBy('id')->column();
+        $instituciones = Instituciones::find()->where(['id' => $idInstituciones])->select('descripcion')->indexBy('id')->column();
 
         return json_encode($instituciones);
     }
