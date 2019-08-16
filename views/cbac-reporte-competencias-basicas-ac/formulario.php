@@ -300,7 +300,7 @@ if( $actividades_rom->fecha_desde == "1970-01-01" )
 					</div>
 					
 					<div class="col-md-4" style='display: <?= !$id_evidencia ? 'none' : ''?>' >
-						<?=  Html::button('Ver archivos',['value' => "index.php?r=rom-reporte-operativo-misional/archivos-evidencias&id_evidencia=".$id_evidencia ,'data-evidencia'=> "$id_evidencia" ,'class'=>'btn btn-success modalEquipo']) ?>
+						<?=  Html::button('Ver archivos',['value' => "index.php?r=cbac-reporte-competencias-basicas-ac/archivos-evidencias&id_evidencia=".$id_evidencia ,'data-evidencia'=> "$id_evidencia" ,'class'=>'btn btn-success modalEquipo']) ?>
 					</div>
 				
 				</div>

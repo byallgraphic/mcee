@@ -43,9 +43,10 @@ class CbacReporteOperativoMisional extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'id_institucion' => 'Id Institucion',
-            'id_sedes' => 'Id Sedes',
+            'id_institucion' => 'Institución',
+            'id_sedes' => 'Sedes',
             'estado' => 'Estado',
+            'nombre_institucion' => 'Nombre institución',
         ];
     }
 }

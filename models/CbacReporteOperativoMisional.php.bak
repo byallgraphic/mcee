@@ -30,9 +30,9 @@ class CbacReporteOperativoMisional extends \yii\db\ActiveRecord
         return [
             [['id_institucion', 'id_sedes', 'estado'], 'default', 'value' => null],
             [['id_institucion', 'id_sedes', 'estado'], 'integer'],
-            [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Public1Estados::className(), 'targetAttribute' => ['estado' => 'id']],
-            [['id_institucion'], 'exist', 'skipOnError' => true, 'targetClass' => Public1Instituciones::className(), 'targetAttribute' => ['id_institucion' => 'id']],
-            [['id_sedes'], 'exist', 'skipOnError' => true, 'targetClass' => Public1Sedes::className(), 'targetAttribute' => ['id_sedes' => 'id']],
+            [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Estados::className(), 'targetAttribute' => ['estado' => 'id']],
+            [['id_institucion'], 'exist', 'skipOnError' => true, 'targetClass' => Instituciones::className(), 'targetAttribute' => ['id_institucion' => 'id']],
+            [['id_sedes'], 'exist', 'skipOnError' => true, 'targetClass' => Sedes::className(), 'targetAttribute' => ['id_sedes' => 'id']],
         ];
     }
 

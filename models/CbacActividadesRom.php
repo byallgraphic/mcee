@@ -58,8 +58,8 @@ class CbacActividadesRom extends \yii\db\ActiveRecord
             'id_rom_actividad' => 'Id Rom Actividad',
             'estado' => 'Estado',
             'id_reporte_operativo_misional' => 'Id Reporte Operativo Misional',
-            'sesion_actividad' => 'Nombre o título de la actividad o encuentro',
-            'nro_semana' => 'Número de semana',
+            'sesion_actividad' => 'Nombre o tÃ­tulo de la actividad o encuentro',
+            'nro_semana' => 'NÃºmero de semana',
         ];
     }
 }
