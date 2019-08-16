@@ -29,22 +29,22 @@ else
 }
 
 use Yii;
-use app\models\IsaIniciacionSencibilizacionArtistica;
+use app\models\CbacIniciacionSencibilizacionArtistica;
 use app\models\Sedes;
 use app\models\Instituciones;
-use app\models\IsaProyectosGenerales;
-use app\models\IsaEquiposCampo;
-use app\models\IsaIntervencionIeo;
-use app\models\IsaRequerimientosTecnicos;
-use app\models\IsaRequerimientosLogisticos;
-use app\models\RomReporteOperativoMisional;
-use app\models\IsaActividadesRom;
+use app\models\CbacProyectosGenerales;
+use app\models\CbacEquiposCampo;
+use app\models\CbacIntervencionIeo;
+use app\models\CbacRequerimientosTecnicos;
+use app\models\CbacRequerimientosLogisticos;
+use app\models\CbacReporteOperativoMisional;
+use app\models\CbacActividadesRom;
 use app\models\PerfilesXPersonas;
 use app\models\Perfiles;
 use yii\base\Model;
 
 use yii\helpers\ArrayHelper;
-use app\models\IsaActividadesIsa;
+use app\models\CbacActividadesIsa;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -54,9 +54,9 @@ use yii\bootstrap\Tabs;
 
 
 /**
- * IsaIniciacionSencibilizacionArtisticaController implements the CRUD actions for IsaIniciacionSencibilizacionArtistica model.
+ * CbacIniciacionSencibilizacionArtisticaController implements the CRUD actions for CbacIniciacionSencibilizacionArtistica model.
  */
-class IsaIniciacionSencibilizacionArtisticaController extends Controller
+class CbacIniciacionSencibilizacionArtisticaController extends Controller
 {
 	
 	public $arraySiNo = 
@@ -80,7 +80,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
     }
 
     /**
-     * Lists all IsaIniciacionSencibilizacionArtistica models.
+     * Lists all CbacIniciacionSencibilizacionArtistica models.
      * @return mixed
      */
     public function actionIndex()
@@ -89,7 +89,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 		$id_sede 		= $_SESSION['sede'][0];
 		$sede 		 = Sedes::findOne($id_sede);
         $dataProvider = new ActiveDataProvider([
-            'query' => IsaIniciacionSencibilizacionArtistica::find()->andWhere("estado =1")->orderby("id"),
+            'query' => CbacIniciacionSencibilizacionArtistica::find()->andWhere("estado =1")->orderby("id"),
         ]);
 
         return $this->render('index', [
@@ -101,9 +101,9 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
     function actionViewFases($model, $form)
 	{
        
-        $proyectos = new IsaProyectosGenerales();
-        $actividades_isa = new IsaActividadesIsa();
-        $intervencionIEO = new IsaIntervencionIeo();
+        $proyectos = new CbacProyectosGenerales();
+        $actividades_isa = new CbacActividadesIsa();
+        $intervencionIEO = new CbacIntervencionIeo();
 		
 		$ciclos = 
 		[
@@ -290,7 +290,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 	
 
     /**
-     * Displays a single IsaIniciacionSencibilizacionArtistica model.
+     * Displays a single CbacIniciacionSencibilizacionArtistica model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -303,18 +303,18 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
     }
 
     /**
-     * Creates a new IsaIniciacionSencibilizacionArtistica model.
+     * Creates a new CbacIniciacionSencibilizacionArtistica model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new IsaIniciacionSencibilizacionArtistica();
+        $model = new CbacIniciacionSencibilizacionArtistica();
 		
         if ($model->load(Yii::$app->request->post())  ) 
 		{
 			$contador = [];
-			foreach( Yii::$app->request->post()['IsaIntervencionIeo'] as $key =>  $interIEO)
+			foreach( Yii::$app->request->post()['CbacIntervencionIeo'] as $key =>  $interIEO)
 			{
 				if(@$interIEO['perfiles'] != null && @$interIEO['nombre_actividad'] != "")
 				{
@@ -331,9 +331,9 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 				
 					//guardar en la tabla isa.actividades_isa
 				
-					$actividadesModel[$cont] = new IsaActividadesIsa();
+					$actividadesModel[$cont] = new CbacActividadesIsa();
 			
-					if (IsaActividadesIsa::loadMultiple($actividadesModel, Yii::$app->request->post())) 
+					if (CbacActividadesIsa::loadMultiple($actividadesModel, Yii::$app->request->post())) 
 					{
 						foreach ($actividadesModel as $key => $actividad) 
 						{
@@ -346,12 +346,12 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 					}
 				
 				
-					$intervencionModel[$cont] = new IsaIntervencionIeo();
+					$intervencionModel[$cont] = new CbacIntervencionIeo();
 					
-					if (IsaIntervencionIeo::loadMultiple($intervencionModel, Yii::$app->request->post())) 
+					if (CbacIntervencionIeo::loadMultiple($intervencionModel, Yii::$app->request->post())) 
 					{
 						//se llena los perfiles separados por comas //se pasa de selecion unica a mutiple
-						$postIEO = Yii::$app->request->post()['IsaIntervencionIeo'];
+						$postIEO = Yii::$app->request->post()['CbacIntervencionIeo'];
 						
 						foreach ($intervencionModel as $key => $intervencion) 
 						{
@@ -360,7 +360,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 								$intervencion->perfiles = implode(",",$postIEO[$key]['perfiles']); 
 								$intervencion->id_actividades_isa = $idActividades[$key];
 								$intervencion->save(false);
-								$controller = RomReporteOperativoMisionalController::crearReporteOperativoMisional($intervencion->id);
+								$controller = CbacReporteCompetenciasBasicasAcController::crearReporteOperativoMisional($intervencion->id);
 							}
 						}
 					}
@@ -377,7 +377,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 						$idRequerimiento = key($requerimiento);
 						$cantidaRequerimiento = $requerimiento[$idRequerimiento];
 						
-						$RT = new IsaRequerimientosTecnicos();
+						$RT = new CbacRequerimientosTecnicos();
 						$RT->id_requerimiento	= $idRequerimiento;
 						$RT->cantidad 			= $cantidaRequerimiento;
 						$RT->id_actividad 		= $idActividad;
@@ -396,7 +396,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 						$idRequerimiento = key($requerimiento);
 						$cantidaRequerimiento = $requerimiento[$idRequerimiento];
 						
-						$RL = new IsaRequerimientosLogisticos();
+						$RL = new CbacRequerimientosLogisticos();
 						$RL->id_requerimiento	= $idRequerimiento;
 						$RL->cantidad 			= $cantidaRequerimiento;
 						$RL->id_actividad 		= $idActividad;
@@ -427,7 +427,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 	
 
     /**
-     * Updates an existing IsaIniciacionSencibilizacionArtistica model.
+     * Updates an existing CbacIniciacionSencibilizacionArtistica model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -451,7 +451,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 			
 			
 				//se borran los registros y luego se insertan nuevamente
-				$models = IsaRequerimientosTecnicos::find()->where("id_iniciacion_sencibilizacion_artistica = $id")->all();
+				$models = CbacRequerimientosTecnicos::find()->where("id_iniciacion_sencibilizacion_artistica = $id")->all();
 							foreach ($models as $model) {
 								$model->delete();
 							}
@@ -459,7 +459,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 				{
 					foreach ($arrayReq as $idReq => $cantidad)
 					{
-						$IRT = new IsaRequerimientosTecnicos();
+						$IRT = new CbacRequerimientosTecnicos();
 						$IRT->id_requerimiento	= $idReq;
 						$IRT->cantidad 			= $cantidad;
 						$IRT->id_actividad 		= $idActividadReq;
@@ -480,7 +480,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 				}	
 		
 				//se borran los registros y luego se insertan nuevamente
-				$models = IsaRequerimientosLogisticos::find()->where("id_iniciacion_sencibilizacion_artistica = $id")->all();
+				$models = CbacRequerimientosLogisticos::find()->where("id_iniciacion_sencibilizacion_artistica = $id")->all();
 				
 							foreach ($models as $model) {
 								$model->delete();
@@ -490,7 +490,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 					foreach ($arrayReq as $idReqL => $datos)
 					{
 						
-						$IRT = new IsaRequerimientosLogisticos();
+						$IRT = new CbacRequerimientosLogisticos();
 						$IRT->id_requerimiento	= $idReqL;
 						$IRT->cantidad 			= $datos[0];
 						$IRT->dir_origen 		= @$datos[1];
@@ -502,7 +502,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 				}
 			
 			}
-			$actividades = IsaActividadesIsa::find()->indexBy('id')->andWhere("id_iniciacion_sencibilizacion_artistica = $id")->all();
+			$actividades = CbacActividadesIsa::find()->indexBy('id')->andWhere("id_iniciacion_sencibilizacion_artistica = $id")->all();
 			
 			//id del Yii::$app->request->post() e id de actividades deben ser iguales
 			$cont = 1;
@@ -529,23 +529,23 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 			}
 			
 			$idActividades = implode(",",$idActividades); 
-			$intervencionIeo = IsaIntervencionIeo::find()->indexBy('id')->andWhere("id_actividades_isa in ( $idActividades )")->all();
+			$intervencionIeo = CbacIntervencionIeo::find()->indexBy('id')->andWhere("id_actividades_isa in ( $idActividades )")->all();
 			
 			//id del Yii::$app->request->post() e id de intervencionIeo deben ser iguales
 			// $cont = 1;
 			foreach($contadorIntervencionIEO as $idProceso => $idActividadisa )
 			{
 				// $intervencionIsa[$idProceso] = $intervencion;
-				$intervencionIsa[$idProceso] = IsaIntervencionIeo::find()->where("id_actividades_isa=$idActividadisa")->one();
+				$intervencionIsa[$idProceso] = CbacIntervencionIeo::find()->where("id_actividades_isa=$idActividadisa")->one();
 				// actividades 1 2 4
 				// if ($cont == 2)
 					// $cont++;
 				
 				// $cont++;
 			}
-			// echo "<pre>"; var_dump( $intervencionIsa ); echo "<pre>"; exit("<br>-----------555");
-			// exit("<br>----555");
-			$postIEO = Yii::$app->request->post()['IsaIntervencionIeo'];
+
+			
+			$postIEO = Yii::$app->request->post()['CbacIntervencionIeo'];
 			
 			foreach ($postIEO as $key => $inter )
 			{
@@ -567,6 +567,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 					$interIsa->save(false);
 				}	
 			}	
+
 			return $this->redirect(['index','guardado' => 1]);
 		}
             
@@ -605,7 +606,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 	
 	public function obtenerEquiposCampo()
 	{
-		$equiposCampo = new IsaEquiposCampo();
+		$equiposCampo = new CbacEquiposCampo();
 		$equiposCampo = $equiposCampo->find()->orderby("id")->andWhere("estado = 1")->all();
 		$equiposCampo = ArrayHelper::map($equiposCampo,'id','nombre');
 		return $equiposCampo;
@@ -613,7 +614,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 	
 	// public function obtenerEquiposCampo()
 	// {
-		// $equiposCampo = new IsaEquiposCampo();
+		// $equiposCampo = new CbacEquiposCampo();
 		// $equiposCampo = $equiposCampo->find()->orderby("id")->andWhere("estado = 1")->all();
 		// $equiposCampo = ArrayHelper::map($equiposCampo,'id','nombre');
 		// return $equiposCampo;
@@ -622,7 +623,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 	
 	public function actionRequerimientos($id)
 	{
-		$requerimientos = new IsaRequerimientosTecnicos();
+		$requerimientos = new CbacRequerimientosTecnicos();
 		$requerimientos = $requerimientos->find()->orderby("id")->andWhere("id_iniciacion_sencibilizacion_artistica = $id")->all();
 		$requerimientos = ArrayHelper::map($requerimientos,'id_requerimiento','cantidad','id_actividad');
 		
@@ -634,7 +635,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 	
 	public function actionRequerimientosLogisticos($id)
 	{
-		$requerimientosL = new IsaRequerimientosLogisticos();
+		$requerimientosL = new CbacRequerimientosLogisticos();
 		$requerimientosL = $requerimientosL->find()->orderby("id")->andWhere("id_iniciacion_sencibilizacion_artistica = $id")->all();
 		$requerimientosL = ArrayHelper::toArray($requerimientosL);
 			
@@ -676,7 +677,7 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 	
 	
     /**
-     * Deletes an existing IsaIniciacionSencibilizacionArtistica model.
+     * Deletes an existing CbacIniciacionSencibilizacionArtistica model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -692,15 +693,15 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
     }
 
     /**
-     * Finds the IsaIniciacionSencibilizacionArtistica model based on its primary key value.
+     * Finds the CbacIniciacionSencibilizacionArtistica model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return IsaIniciacionSencibilizacionArtistica the loaded model
+     * @return CbacIniciacionSencibilizacionArtistica the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = IsaIniciacionSencibilizacionArtistica::findOne($id)) !== null) {
+        if (($model = CbacIniciacionSencibilizacionArtistica::findOne($id)) !== null) {
             return $model;
         }
 

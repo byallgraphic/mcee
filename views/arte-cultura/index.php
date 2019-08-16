@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<div class="form-group">
 		   <?= Html::a('1. Planeación', 
 									[
-										'cbac-plan-misional-operativo/index',
+										'cbac-iniciacion-sencibilizacion-artistica/index',
 										// 'idReporte'	=> 1,
 									], 
 									['class' => 'btn btn-success'

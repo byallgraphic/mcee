@@ -2,9 +2,9 @@
 	function habilitarEdicionRegistro( index ){	
 	
 		//Si se ha seleccionado una actividad y un estado
-		var val = 	$( "#isaactividadesrom-"+index+"-sesion_actividad" ).val() != '' 
-				 // && $( "#isaactividadesrom-"+index+"-estado_actividad" ).val() != '' 
-				 && $( "#isaactividadesrom-"+index+"-estado_actividad" ).val() == '179';
+		var val = 	$( "#cbacactividadesrom-"+index+"-sesion_actividad" ).val() != '' 
+				 // && $( "#cbacactividadesrom-"+index+"-estado_actividad" ).val() != '' 
+				 && $( "#cbacactividadesrom-"+index+"-estado_actividad" ).val() == '179';
 		
 		if( val )
 			$( "#datos_rom_"+index ).css({display:''})
@@ -36,12 +36,12 @@
 		_target = _target[0]+'-'+_target[1];
 		
 		//Si se ha selecciona un encuentro y un estado
-		var hayEncuentroEstado = 	$( "#isaactividadesrom-"+index+"-sesion_actividad" ).val() != '' 
-								 && $( "#isaactividadesrom-"+index+"-estado_actividad" ).val() == '179';
+		var hayEncuentroEstado = 	$( "#cbacactividadesrom-"+index+"-sesion_actividad" ).val() != '' 
+								 && $( "#cbacactividadesrom-"+index+"-estado_actividad" ).val() == '179';
 		
 		switch( opcion ){
 			
-			case 'isaactividadesrom': 
+			case 'cbacactividadesrom': 
 			
 				/**
 				 * 1-: Si no se ha seleccionado ningun Fecha de realización, ni encuentro ni estado de la actividad
@@ -56,7 +56,7 @@
 				var obligatorio = false;
 				$( campos ).each(function(){
 					var cmp = this;
-					$( "[id^=isaactividadesrom][id$="+cmp+"]" ).each(function(){
+					$( "[id^=cbacactividadesrom][id$="+cmp+"]" ).each(function(){
 						if( $.trim( $( this ).val() ) != '' ){
 							obligatorio = true;
 						}
@@ -72,7 +72,7 @@
 						$( campos ).each(function(){
 							var cmp = this;
 							
-							if( $.trim( $( "#isaactividadesrom-"+index+"-"+cmp ).val() ) == '' ){
+							if( $.trim( $( "#cbacactividadesrom-"+index+"-"+cmp ).val() ) == '' ){
 								i--;
 							}
 						});
@@ -89,7 +89,7 @@
 			
 			break;
 			
-			case 'isatipocantidadpoblacionrom': 
+			case 'cbactipocantidadpoblacionrom': 
 			
 				if( hayEncuentroEstado ){
 			
@@ -106,7 +106,7 @@
 			
 			break;
 			
-			case 'isaevidenciasrom':
+			case 'cbacevidenciasrom':
 			
 				//Si entra por aquí los campos son obligatorios
 				if( hayEncuentroEstado ){
@@ -119,7 +119,7 @@
 			
 			break
 			
-			case 'isaactividadesromxintegrantegrupo':
+			case 'cbacactividadesromxintegrantegrupo':
 				
 				if( hayEncuentroEstado ){
 					
@@ -230,8 +230,8 @@
 			var __target = this.id.split( '-' );
 			__target = __target[1];
 			
-			var frep = $( '#isaactividadesromxintegrantegrupo'+'-'+__target+'-fecha_reprogramacion' );
-			var jus = $( '#isaactividadesromxintegrantegrupo'+'-'+__target+'-justificacion_activiad_no_realizada' );
+			var frep = $( '#cbacactividadesromxintegrantegrupo'+'-'+__target+'-fecha_reprogramacion' );
+			var jus = $( '#cbacactividadesromxintegrantegrupo'+'-'+__target+'-justificacion_activiad_no_realizada' );
 			
 			if( $(this).val() == 179 )
 			{
@@ -274,7 +274,7 @@
 						{ 
 							rom_actividades	: __target, 
 							sesion_actividad: $( __self ).val() ,
-							nro_semana		: $( '#isaactividadesrom-'+ __target + '-nro_semana' ).val() ,
+							nro_semana		: $( '#cbacactividadesrom-'+ __target + '-nro_semana' ).val() ,
 						}, 
 						function( data ){
 							if( data != '' ){
