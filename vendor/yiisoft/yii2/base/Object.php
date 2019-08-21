@@ -65,6 +65,8 @@ SELECT p.*, pp.id as perfilesxpersonas
 ");
 $result = $command->queryAll();
 
+// print_r($result); die();
+
 //si no trae datos se redireciona nuevamente al login 
 if (count($result)==0)
 {
@@ -107,37 +109,37 @@ else
 		$_SESSION['instituciones']=$idInstitucion;
 		header('Location: index.php');	
 	}
-	// else 
-	// {
-		// //session_destroy(); 
-		// session_start();
-		// //se crean los datos de sesion con los datos del usuario
-		// foreach($result[0] as $r => $valor)
-		// {
-			// $_SESSION[$r]=$valor;
+	else 
+	{
+		//session_destroy(); 
+		session_start();
+		//se crean los datos de sesion con los datos del usuario
+		foreach($result[0] as $r => $valor)
+		{
+			$_SESSION[$r]=$valor;
 
-		// }
+		}
 		
-		// $_SESSION['sesion']="si";
-		// $_SESSION['perfil']=$perfil;
+		$_SESSION['sesion']="si";
+		$_SESSION['perfil']=$perfil;
 		
-		// //ids de las instituciones a la que pertenece la personas
-		// $command = $connection->createCommand("
-		// SELECT ppi.id_institucion
-		// FROM perfiles_x_personas_institucion as ppi, perfiles_x_personas as pp
-		// where pp.id_personas = ".$_SESSION['id']."
-		// AND ppi.id_perfiles_x_persona = pp.id");
-		// $idsInstituciones = $command->queryAll();
+		//ids de las instituciones a la que pertenece la personas
+		$command = $connection->createCommand("
+		SELECT ppi.id_institucion
+		FROM perfiles_x_personas_institucion as ppi, perfiles_x_personas as pp
+		where pp.id_personas = ".$_SESSION['id']."
+		AND ppi.id_perfiles_x_persona = pp.id");
+		$idsInstituciones = $command->queryAll();
 		
-		// foreach($idsInstituciones as $i)
-		// {
-			// $idInstitucion[] = $i['id_institucion'];
-		// }
+		foreach($idsInstituciones as $i)
+		{
+			$idInstitucion[] = $i['id_institucion'];
+		}
 			
-		// //Id de las instituciones a la pertenece la persona
-		// $_SESSION['instituciones']=$idInstitucion;
-		// header('Location: index.php');	
-	// }
+		//Id de las instituciones a la pertenece la persona
+		$_SESSION['instituciones']=$idInstitucion;
+		header('Location: index.php');	
+	}
 	 
 }
 
