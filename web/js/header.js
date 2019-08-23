@@ -28,7 +28,7 @@ $( "#cambiarInstitucion" ).click(function()
     })
     .done(function( data ) {
 
-        console.log(data);
+       
 
         //que institucion selecciono
         const {value: institucion} = swal({
@@ -51,7 +51,7 @@ $( "#cambiarInstitucion" ).click(function()
                             $("#InstitucionSede").html(" ");
 
                             $("#InstitucionSede").append(data.replace('"', ' ').replace('"', ' '));
-                            console.log(data.charAt(0));
+                            
                         });
 
                         return fetch('index.php?r=sedes/sedes&idInstitucion='+value)
