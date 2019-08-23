@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			
 			<?= Html::a('4. Orientación del proceso - Seguimiento', 
 									[
-										'cbac-orientacion-proceso-cbac/index',
+										'cbac-seguimiento-proceso/index',
 										// 'idReporte'		=> 4,
 									], 
 									['class' => 'btn btn-success'

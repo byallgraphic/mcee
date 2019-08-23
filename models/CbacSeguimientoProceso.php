@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "isa.seguimiento_proceso".
+ * This is the model class for table "cbac.seguimiento_proceso".
  *
  * @property string $id
  * @property string $id_institucion
@@ -13,14 +13,14 @@ use Yii;
  * @property string $estado
  * @property string $fecha
  */
-class IsaSeguimientoProceso extends \yii\db\ActiveRecord
+class CbacSeguimientoProceso extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'isa.seguimiento_proceso';
+        return 'cbac.seguimiento_proceso';
     }
 
     /**
