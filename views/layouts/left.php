@@ -334,7 +334,7 @@
 															'icon' => 'arrow-right',
 															'url' => '#',
 															'items' => [
-																		['label' => 'Paz y cultura ciudadana', 'icon' => 'circle-o','url' => 'index.php?r=paz-cultural%2Findex',],
+																		['label' => 'Paz y cultura ciudadana', 'icon' => 'circle-o','url' => 'index.php?r=paz-cultural%2Findex','options' => ['id'=>'idModulo' . ( ++$numero ) .''],],
 																		['label' => 'Formación a formadores culturales', 'icon' => 'circle-o','url' => '#','options' => ['id'=>'idModulo' . ( ++$numero ) .''],],
 																		['label' => 'Formación a formadores deportivos', 'icon' => 'circle-o','url' => '#','options' => ['id'=>'idModulo' . ( ++$numero ) .''],],
 																],		
