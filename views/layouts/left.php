@@ -349,7 +349,7 @@
 												'url' => '#',
 												'items' => [
 																	['label' => 'Sensibilización artistica', 'icon' => 'arrow-right','url' => ['sensibilizacion-artistica/index'],'options' => ['id'=>'idModulo' . ( ++$numero ) .''],],
-																	['label' => 'Competencias lúdicas', 'icon' => 'arrow-right','url' => '#','options' => ['id'=>'idModulo' . ( $numero+9 ) .''],],
+																	['label' => 'Competencias lúdicas', 'icon' => 'arrow-right','url' => '#','options' => ['id'=>'idModulo' . ( $numero+=9 ) .''],],
 																	['label' => 'Primera infancia', 'icon' => 'arrow-right','url' => '#','options' => ['id'=>'idModulo' . ( ++$numero ) .''],],
 															],
 												],
