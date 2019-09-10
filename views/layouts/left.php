@@ -1,4 +1,7 @@
+<?php
 
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/left.js',['depends' => [\yii\web\JqueryAsset::className()]]);
+?>
 <aside class="main-sidebar">
 
     <section class="sidebar">
@@ -27,8 +30,7 @@
 
         <?php
 		
-			if($_SESSION['perfil'] == 15)
-			{
+			
 			$numero= 17;
 			echo  dmstr\widgets\Menu::widget(
             [
@@ -479,180 +481,8 @@
 		]
         ) ;
 		
-			}
-			else
-			{
-				$numero= 17;
-			echo  dmstr\widgets\Menu::widget(
-            [
-                'options' => ['id'=>'menuLeft','class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
-                'items' => [
-					['label' => 'Inicio', 'url' => Yii::$app->homeUrl,'icon' => 'home',],
-					//menu mcee
-					[					
-						'label' => 'Hoja de Vida',
-						'icon' => 'building-o',
-						'url' => '#',
-						'options' => ['id'=>'idModulo' .  $numero++  .''],
-						'items' => 
-						[
-							
-							[
-								'label' => 'Información General',
-								'icon' => 'folder',
-								'url' => '#',
-								'options' => ['id'=>'idModulo' . ( $numero++ ) .''],
-								'items' => 
-								[
-										
-										['label' => 'Resumen IEO','icon' => 'circle-o', 'url' => ['instituciones/resumen'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Instituciones','icon' => 'circle-o','url' => ['instituciones/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										// ['label' => 'Documentos Institucionales','icon' => 'circle-o','url' => ['documentos-oficiales/index'],],
-										// ['label' => 'Instancias','icon' => 'circle-o','url' => ['documentos-instancias-institucionales/index'],],
-										['label' => 'Sedes','icon' => 'circle-o','url' => ['sedes/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Aulas','icon' => 'circle-o','url' => ['aulas/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Jornadas','icon' => 'circle-o','url' => ['jornadas/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Sedes - Jornadas','icon' => 'circle-o','url' => ['sedes-jornadas/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Sedes - Niveles','icon' => 'circle-o','url' => ['sedes-niveles/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Periodos','icon' => 'circle-o','url' => ['periodos/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Asignaturas','icon' => 'circle-o','url' =>  ['asignaturas/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Especialidades','icon' => 'circle-o','url' => ['sedes-areas-ensenanza/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Niveles','icon' => 'circle-o','url' => ['niveles/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Bloques por sede','icon' => 'circle-o','url' => ['sedes-bloques/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Grupos por nivel','icon' => 'circle-o','url' => ['paralelos/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Distribución académica', 'icon' => '', 'url' => ['distribuciones-academicas/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Asignatura niveles', 'icon' => '', 'url' => ['asignaturas-niveles-sedes/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Director de grupo', 'icon' => '', 'url' => ['director-paralelo/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Carga Masiva', 'icon' => '', 'url' => ['poblar-tabla/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										
-										['label' => 'Matricular Estudiante', 'icon' => 'circle-o', 'url' => ['estudiantes/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										
-										['label' => 'Infraestructura Educativa','icon' => 'circle-o','url' => ['infraestructura-educativa/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Rangos calificación','icon' => 'circle-o','url' => ['rangos-calificacion/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Ponderación resultados','icon' => 'circle-o','url' => ['ponderacion-resultados/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-									
-										['label' => 'Reportes-Estadisticas', 'icon' => '', 'url' =>  ['reportes/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Recursos', 
-										'icon' => 'circle-o',
-										'options' => ['id'=>'idModulo' . ( $numero++ ) .''],
-										'url' => '#',
-										'items' => [
-														 ['label' => 'Humanos', 'icon' => '', 'url' =>  ['perfiles-personas-institucion/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-														 ['label' => 'Infraestructra física', 'icon' => 'circle-o', 'url' => ['recursos-infraestructura-fisica/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-														 ['label' => 'Infraestructra pedagógica', 'icon' => 'circle-o', 'url' => ['recurso-infraestructura-pedagogica/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-														
-													],
-										
-										],
-										['label' => 'Cobertura', 'icon' => '', 'url' =>  ['cobertura/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Soporte Académico', 'icon' => '', 'url' =>  ['grupos-soporte/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										
-										['label' => 'Docentes-Institución', 'icon' => '', 'url' =>  ['docente-institucion/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Resultados', 
-										'icon' => 'circle-o',
-										'options' => ['id'=>'idModulo' . ( $numero++ ) .''],
-										'url' => '#',
-										'items' => [
-														['label' => 'Institución', 'icon' => '', 'url' =>  ['resultados-pruebas-saber-ie/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-														['label' => 'Cali', 'icon' => '', 'url' =>  ['resultados-pruebas-saber-cali/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-														['label' => 'PMI', 'icon' => '', 'url' =>  ['pmi/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-														['label' => 'Sem', 'icon' => '', 'url' =>  ['resultados-sem/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-														['label' => 'Evaluación Docente', 'icon' => '', 'url' =>  ['resultados-evaluacion/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-														['label' => 'Pruebas externas', 'icon' => '', 'url' =>  ['resultados-pruebas-externas/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-														['label' => 'Resultados', 'icon' => '', 'url' =>  ['resultados/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-														
-													],
-										
-										],
-										
-								],//
-							],
-							[
-								'label' => 'Gestión Directiva',
-								'icon' => 'sitemap',
-								'options' => ['id'=>'idModulo' . ( $numero++ ) .''],
-								'url' => '#',
-								 'items' => [
-									['label' => 'Documentos Institucionales','icon' => 'circle-o','url' => ['documentos-oficiales/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-									['label' => 'Instancias','icon' => 'circle-o','url' => ['documentos-instancias-institucionales/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-									['label' => 'Proyectos',
-									'options' => ['id'=>'idModulo' . ( $numero++ ) .''],
-									'icon' => 'circle-o',
-									'url' => '#',
-										'items' => [
-											['label' => 'Por institución', 'icon' => 'circle-o', 'url' => ['participacion-proyectos-i-e/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-											['label' => 'Por maestro o directivo', 'icon' => 'circle-o', 'url' => ['participacion-proyectos-maestro/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-											['label' => 'Proyectos jornada complementaria', 'icon' => 'circle-o', 'url' => ['participacion-proyectos-jornada/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-											// ['label' => 'Proyectos-pedagagógicos', 'icon' => '', 'url' =>  ['proyectos-pedagogicos-transversales/index'],],
-											],
-									],
-								],
-							],
-							[
-								'label' => 'Gestión Académica',
-								'options' => ['id'=>'idModulo' . ( $numero++ ) .''],
-								'icon' => 'mortar-board',
-								'url' => '#',
-								 'items' => [
-									['label' => 'Curriculum de la IEO','icon' => 'circle-o','url' => ['documentos-curriculum-ieo/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-									['label' => 'Modelo Pegagógico','icon' => 'circle-o','url' => ['modelo-pedagogico/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-									['label' => 'Plan de estudios','icon' => 'circle-o','url' => ['plan-estudios/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-									['label' => 'Plan de área','icon' => 'circle-o','url' => ['plan-de-area/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-									['label' => 'Intensidad horaria','icon' => 'circle-o','url' => ['intensidad-horaria-semanal/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-									['label' => 'Prueba Evaluación','icon' => 'circle-o','url' => ['plan-evaluacion/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-									['label' => 'Materiales Educativos','icon' => 'circle-o','url' => ['materiales-educativos/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-									['label' => 'Seguimiento Egresados','icon' => 'circle-o','url' => ['seguimiento-egresados/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										
-										
-								],//
-							],
-							[
-								'label' => 'Gestión Administrativa',
-								'options' => ['id'=>'idModulo' . ( $numero++ ) .''],
-								'icon' => 'institution',
-								'url' => '#',
-								'items' => [
-									['label' => 'Matrícula', 'icon' => 'circle-o', 'url' => '#','options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-									['label' => 'Talento Humano',
-									'options' => ['id'=>'idModulo' . ( $numero++ ) .''],
-									'icon' => 'circle-o',
-									'url' => '#',
-									'items' => [
-											['label' => 'Evaluación', 'icon' => 'circle-o', 'url' => ['evaluacion/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-											['label' => 'Programas', 'icon' => 'circle-o', 'url' => ['programas/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-											['label' => 'Estimulos', 'icon' => 'circle-o', 'url' => ['estimulos/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										],
-									],
-									['label' => 'Presupuesto', 'icon' => 'circle-o', 'url' => ['documentos-presupuesto/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-									['label' => 'Infraestructra', 'icon' => 'circle-o', 'url' => '#','options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-									['label' => 'Estrategia Adecuación', 'icon' => 'circle-o', 'url' => '#','options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-									['label' => 'Seguimiento', 'icon' => 'circle-o', 'url' => ['estrategia-embellecimiento-espacios/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-									['label' => 'Permisos módulos', 'icon' => 'circle-o', 'url' => ['permisos/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-								],
-							],
-							['label' => 'Gestión Comunitaria',
-							'options' => ['id'=>'idModulo' . ( $numero++ ) .''],
-							'icon' => 'users',
-							'url' => '#',
-							'items' => [
-								['label' => 'Documentos', 'icon' => 'circle-o', 'url' => ['documentos-gestion-comunitaria/index', 'tipo_documento'=>'Gestion Comunitaria'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-								['label' => 'Aliados', 'icon' => 'circle-o', 'url' => ['documentos-aliados/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										// ['label' => 'Comité Gestión Riesgo', 'icon' => 'circle-o', 'url' => '#'],
-										// ['label' => 'PGIR', 'icon' => 'circle-o', 'url' => '#'],
-										// ['label' => 'Aliados', 'icon' => 'circle-o', 'url' => '#'],
-										['label' => 'Actividades Vinulación', 'icon' => 'circle-o', 'url' => ['documentos-actividades-vinculacion/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										['label' => 'Relaciones Sector', 'icon' => 'circle-o', 'url' => ['documentos-relaciones-sector/index'],'options' => ['id'=>'idModulo' . ( $numero++ ) .''],],
-										
-										],
-							],
-						],// Hoja de vida
-                                   
-                    ],
-					
-            ],
-		]
-        ) ;
-			}
+			
+			
 		
 		?>
 
