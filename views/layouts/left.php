@@ -1,4 +1,7 @@
+<?php
 
+$this->registerJsFile(Yii::$app->request->baseUrl.'/js/left.js',['depends' => [\yii\web\JqueryAsset::className()]]);
+?>
 <aside class="main-sidebar">
 
     <section class="sidebar">
@@ -216,7 +219,7 @@
 														'url' => ['ge-seguimiento-gestion/','idTipoSeguimiento'=> 4],
 														'options' => ['id'=>'idModulo' . ( $numero+=4 ) .''],
 														],  //se agrega el index
-														['label' => 'Comunicación para la gestión', 'icon' => 'arrow-right','url' => '#','options' => ['id'=>'idModulo' . ( $numero++ ) .''],], //se agrega el index
+														['label' => 'Comunicación para la gestión', 'icon' => 'arrow-right','url' => '#','options' => ['id'=>'idModulo' . ( ++$numero ) .''],], //se agrega el index
 														['label' => 'Clima escolar y convivencia',
 														'options' => ['id'=>'idModulo' . ( ++$numero ) .''],
 														'icon' => 'arrow-right', 
@@ -478,6 +481,8 @@
 		]
         ) ;
 		
+			
+			
 		
 		?>
 

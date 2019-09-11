@@ -124,6 +124,24 @@ class PermisosController extends Controller
         ]);
     }
 
+
+	public function actionObtenerPermisos()
+	{
+		//perfil del usuario actual
+		$perfil = $_SESSION['perfil'];
+		
+		$permiso = Permisos::find()->andWhere("id_perfiles = $perfil and estado = 1" )->orderby("id")->all();
+		$permiso = ArrayHelper::toArray($permiso);
+		
+		
+		if (count($permiso) == 0)
+			$permiso = "vacio";
+		
+		echo json_encode($permiso);
+		
+	}
+
+
     /**
      * Deletes an existing Permisos model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
