@@ -7,12 +7,11 @@ use Yii;
 /**
  * This is the model class for table "cbac.consolidado_misional".
  *
- * @property int $id
- * @property int $id_institucion
- * @property int $id_sede
- * @property string $desde
- * @property string $hasta
- * @property int $estado
+ * @property string $id
+ * @property string $id_institucion
+ * @property string $id_sede
+ * @property string $estado
+ * @property string $fecha
  */
 class CbacConsolidadoMisional extends \yii\db\ActiveRecord
 {
@@ -32,9 +31,8 @@ class CbacConsolidadoMisional extends \yii\db\ActiveRecord
         return [
             [['id_institucion', 'id_sede', 'estado'], 'default', 'value' => null],
             [['id_institucion', 'id_sede', 'estado'], 'integer'],
-            [['desde', 'hasta'], 'safe'],
-            [['id_sede', 'desde', 'hasta'],'required'],
-            [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Estados::className(), 'targetAttribute' => ['estado' => 'id']],
+            [['fecha'], 'string'],
+            [['fecha'], 'required'],
             [['id_institucion'], 'exist', 'skipOnError' => true, 'targetClass' => Instituciones::className(), 'targetAttribute' => ['id_institucion' => 'id']],
             [['id_sede'], 'exist', 'skipOnError' => true, 'targetClass' => Sedes::className(), 'targetAttribute' => ['id_sede' => 'id']],
         ];
@@ -46,13 +44,11 @@ class CbacConsolidadoMisional extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'nombre_institucion' => 'Institución',
             'id' => 'ID',
             'id_institucion' => 'Institución',
             'id_sede' => 'Sede',
-            'desde' => 'Desde',
-            'hasta' => 'Hasta',
             'estado' => 'Estado',
+            'fecha' => 'Fecha',
         ];
     }
 }
