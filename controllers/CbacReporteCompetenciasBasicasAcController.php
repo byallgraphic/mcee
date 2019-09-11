@@ -526,12 +526,12 @@ class CbacReporteCompetenciasBasicasAcController extends Controller
 						}
 					}
 					
-					//guarda la informa en la tabla isa.actividades segun como vienen los datos en el post
+					//guarda la informa en la tabla cbac.actividades segun como vienen los datos en el post
 					$columnNameArrayActividades=['nro_semana','fecha_desde','fecha_hasta','sesion_actividad','estado_actividad','id_reporte_operativo_misional','estado','id_rom_actividad'];
 					// $columnNameArrayActividades=['fecha_desde','fecha_hasta','sesion_actividad','estado_actividad','id_reporte_operativo_misional','estado'];
 					// inserta todos los datos que trae el array arrayDatosActividades
 					$insertCount = Yii::$app->db->createCommand()
-					   ->batchInsert('isa.actividades_rom', $columnNameArrayActividades, $arrayDatosActividades2) ->execute();
+					   ->batchInsert('cbac.actividades_rom', $columnNameArrayActividades, $arrayDatosActividades2) ->execute();
 				}
 				
 				//guarda todos los archivos en el servidor y la url en la base de datos
@@ -563,7 +563,7 @@ class CbacReporteCompetenciasBasicasAcController extends Controller
 							mkdir($carpeta, 0777, true);
 						}
 						
-						//array con los nombres de los campos de la tabla isa.evidencias_rom
+						//array con los nombres de los campos de la tabla cbac.evidencias_rom
 						$propiedades = array( "actas", "reportes", "listados", "plan_trabajo", "formato_seguimiento", "formato_evaluacion", "fotografias", "vidoes", "otros_productos");
 						
 						//recorre el array $modeloEvidencias con cada modelo creado dinamicamente
@@ -764,8 +764,8 @@ class CbacReporteCompetenciasBasicasAcController extends Controller
 		
 		// $dataActividadesParticipadas = CbacActividadesIsa::find()
 										// ->alias('a')
-										// ->innerJoin('isa.equipos_campo ec', 'ec.id=a.num_equipo_campo')
-										// ->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
+										// ->innerJoin('cbac.equipos_campo ec', 'ec.id=a.num_equipo_campo')
+										// ->innerJoin('cbac.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
 										// ->where( 'a.estado=1' )
 										// ->andWhere( 'ie.estado=1' )
 										// ->andWhere( 'ec.estado=1' )
@@ -774,9 +774,9 @@ class CbacReporteCompetenciasBasicasAcController extends Controller
 										
 		// $dataActividadesParticipadas = CbacIntervencionIeo::find()
 										// ->alias('i')
-										// ->innerJoin('isa.actividades_isa a', 'a.id=i.id_actividades_isa')
-										// ->innerJoin('isa.equipos_campo ec', 'ec.id=a.num_equipo_campo')
-										// ->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
+										// ->innerJoin('cbac.actividades_isa a', 'a.id=i.id_actividades_isa')
+										// ->innerJoin('cbac.equipos_campo ec', 'ec.id=a.num_equipo_campo')
+										// ->innerJoin('cbac.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
 										// ->where( 'a.estado=1' )
 										// ->andWhere( 'ie.estado=1' )
 										// ->andWhere( 'ec.estado=1' )
@@ -785,8 +785,8 @@ class CbacReporteCompetenciasBasicasAcController extends Controller
 										
 		// $dataActividadesParticipadas = CbacIntervencionIeo::find()
 										// ->alias('i')
-										// ->innerJoin('isa.equipos_campo ec', 'ec.id=i.id_equipo_campos')
-										// ->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
+										// ->innerJoin('cbac.equipos_campo ec', 'ec.id=i.id_equipo_campos')
+										// ->innerJoin('cbac.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
 										// ->where( 'ie.estado=1' )
 										// ->andWhere( 'ec.estado=1' )
 										// ->andWhere( 'ie.id_perfil_persona_institucion='.$_SESSION['id'] )
@@ -828,10 +828,10 @@ class CbacReporteCompetenciasBasicasAcController extends Controller
 				{
 					// $dataActividadesParticipadas = CbacIntervencionIeo::find()
 										// ->alias('i')
-										// ->innerJoin('isa.equipos_campo ec', 'ec.id=i.id_equipo_campos')
-										// ->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
-										// ->innerJoin('isa.actividades_isa ai', 'ai.id=i.id_actividades_isa')
-										// ->innerJoin('isa.procesos_generales pg', 'pg.id=ai.id_procesos_generales')
+										// ->innerJoin('cbac.equipos_campo ec', 'ec.id=i.id_equipo_campos')
+										// ->innerJoin('cbac.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
+										// ->innerJoin('cbac.actividades_isa ai', 'ai.id=i.id_actividades_isa')
+										// ->innerJoin('cbac.procesos_generales pg', 'pg.id=ai.id_procesos_generales')
 										// ->where( 'ie.estado=1' )
 										// ->andWhere( 'ec.estado=1' )
 										// ->andWhere( 'ie.id_perfil_persona_institucion='.$_SESSION['id'] )
@@ -842,8 +842,8 @@ class CbacReporteCompetenciasBasicasAcController extends Controller
 					
 					// $dataActividadesParticipadas = CbacIntervencionIeo::find()
 										// ->alias('i')
-										// ->innerJoin('isa.actividades_isa ai', 'ai.id=i.id_actividades_isa')
-										// ->innerJoin('isa.procesos_generales pg', 'pg.id=ai.id_procesos_generales')
+										// ->innerJoin('cbac.actividades_isa ai', 'ai.id=i.id_actividades_isa')
+										// ->innerJoin('cbac.procesos_generales pg', 'pg.id=ai.id_procesos_generales')
 										// ->where( 'i.estado=1' )
 										// ->andWhere( 'pg.estado=1' )
 										// ->andWhere('i.id_equipo_campos IS NULL')
@@ -854,8 +854,8 @@ class CbacReporteCompetenciasBasicasAcController extends Controller
 					
 					$dataActividadesParticipadas = CbacIntervencionIeo::find()
 										->alias('i')
-										->innerJoin('isa.actividades_isa ai', 'ai.id=i.id_actividades_isa')
-										->innerJoin('isa.procesos_generales pg', 'pg.id=ai.id_procesos_generales')
+										->innerJoin('cbac.actividades_isa ai', 'ai.id=i.id_actividades_isa')
+										->innerJoin('cbac.procesos_generales pg', 'pg.id=ai.id_procesos_generales')
 										->where( 'i.estado=1' )
 										->andWhere( 'pg.estado=1' )
 										->andWhere( "i.nombre_actividad != ''" )
@@ -977,12 +977,12 @@ class CbacReporteCompetenciasBasicasAcController extends Controller
 						// // $arrayDatosActividades[$datos]['id_rom_actividad']= $datos;
 					// }
 					
-					// //guarda la informa en la tabla isa.actividades segun como vienen los datos en el post
+					// //guarda la informa en la tabla cbac.actividades segun como vienen los datos en el post
 					// // $columnNameArrayActividades=['fecha_desde','fecha_hasta','sesion_actividad','estado_actividad','id_reporte_operativo_misional','estado','id_rom_actividad'];
 					// $columnNameArrayActividades=['fecha_desde','fecha_hasta','sesion_actividad','estado_actividad','id_reporte_operativo_misional','estado'];
 					// // inserta todos los datos que trae el array arrayDatosActividades
 					// $insertCount = Yii::$app->db->createCommand()
-					   // ->batchInsert('isa.actividades_rom', $columnNameArrayActividades, $arrayDatosActividades) ->execute();
+					   // ->batchInsert('cbac.actividades_rom', $columnNameArrayActividades, $arrayDatosActividades) ->execute();
 				}
 				
 				// if($arrayDatosPoblacion = Yii::$app->request->post('CbacTipoCantidadPoblacionRom'))
@@ -994,11 +994,11 @@ class CbacReporteCompetenciasBasicasAcController extends Controller
 						// $arrayDatosPoblacion[$datos]['id_reporte_operativo_misional'] = $rom_id;
 					// }
 					
-					// //guarda la informa en la tabla isa.tipo_cantidad_poblacion_rom segun como vienen los datos en el post
+					// //guarda la informa en la tabla cbac.tipo_cantidad_poblacion_rom segun como vienen los datos en el post
 					// $columnNameArrayPoblacion=['vecinos','lideres_comunitarios','empresarios_comerciantes','organizaciones_locales','grupos_comunitarios','otos_actores','total_participantes','id_rom_actividades','id_reporte_operativo_misional'];
 					// // inserta todos los datos que trae el array arrayDatosActividades
 					// $insertCount = Yii::$app->db->createCommand()
-					   // ->batchInsert('isa.tipo_cantidad_poblacion_rom', $columnNameArrayPoblacion, $arrayDatosPoblacion)->execute(); 
+					   // ->batchInsert('cbac.tipo_cantidad_poblacion_rom', $columnNameArrayPoblacion, $arrayDatosPoblacion)->execute(); 
 				// }
 				
 				//guarda todos los archivos en el servidor y la url en la base de datos
@@ -1042,7 +1042,7 @@ class CbacReporteCompetenciasBasicasAcController extends Controller
 							mkdir($carpeta, 0777, true);
 						}
 						
-						//array con los nombres de los campos de la tabla isa.evidencias_rom
+						//array con los nombres de los campos de la tabla cbac.evidencias_rom
 						$propiedades = array( "actas", "reportes", "listados", "plan_trabajo", "formato_seguimiento", "formato_evaluacion", "fotografias", "vidoes", "otros_productos");
 						
 						//recorre el array $modeloEvidencias con cada modelo creado dinamicamente
@@ -1288,9 +1288,9 @@ class CbacReporteCompetenciasBasicasAcController extends Controller
 		$proyectos = new CbacRomProyectos();
 		$proyectos = $proyectos->find()
 							->alias( 'py' )
-							->innerJoin( 'isa.rom_procesos p', 'p.id_rom_proyectos=py.id' )
-							->innerJoin( 'isa.rom_actividades a', 'a.id_rom_procesos=p.id' )
-							->innerJoin( 'isa.evidencias_rom er', 'er.id_rom_actividad = a.id' )
+							->innerJoin( 'cbac.rom_procesos p', 'p.id_rom_proyectos=py.id' )
+							->innerJoin( 'cbac.rom_actividades a', 'a.id_rom_procesos=p.id' )
+							->innerJoin( 'cbac.evidencias_rom er', 'er.id_rom_actividad = a.id' )
 							->where('py.estado=1')
 							->andWhere('a.estado=1')
 							->andWhere('p.estado=1')
@@ -1318,8 +1318,8 @@ class CbacReporteCompetenciasBasicasAcController extends Controller
 			
 			$dataProcesos = CbacRomProcesos::find()
 								->alias( 'p' )
-								->innerJoin( 'isa.rom_actividades a', 'a.id_rom_procesos=p.id' )
-								->innerJoin( 'isa.evidencias_rom er', 'er.id_rom_actividad = a.id' )
+								->innerJoin( 'cbac.rom_actividades a', 'a.id_rom_procesos=p.id' )
+								->innerJoin( 'cbac.evidencias_rom er', 'er.id_rom_actividad = a.id' )
 								->where( "p.id_rom_proyectos=".$idProyecto )
 								->andWhere('a.estado=1')
 								->andWhere('p.estado=1')
@@ -1339,7 +1339,7 @@ class CbacReporteCompetenciasBasicasAcController extends Controller
 							
 				$evidencias = CbacEvidenciasRom::find()
 										->alias('er')
-										->innerJoin( 'isa.rom_actividades a', 'a.id=er.id_rom_actividad' )
+										->innerJoin( 'cbac.rom_actividades a', 'a.id=er.id_rom_actividad' )
 										->where('er.estado=1')
 										->andWhere('a.estado=1')
 										->andWhere('a.id_rom_procesos='.$idProceso)
@@ -1416,8 +1416,8 @@ class CbacReporteCompetenciasBasicasAcController extends Controller
 		
 		// $dataActividadesParticipadas = CbacActividadesIsa::find()
 											// ->alias('a')
-											// ->innerJoin('isa.equipos_campo ec', 'ec.id=a.num_equipo_campo')
-											// ->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
+											// ->innerJoin('cbac.equipos_campo ec', 'ec.id=a.num_equipo_campo')
+											// ->innerJoin('cbac.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
 											// ->where( 'a.estado=1' )
 											// ->andWhere( 'ie.estado=1' )
 											// ->andWhere( 'ec.estado=1' )
@@ -1428,9 +1428,9 @@ class CbacReporteCompetenciasBasicasAcController extends Controller
 		
 		$dataActividadesParticipadas = CbacIntervencionIeo::find()
 										->alias('i')
-										->innerJoin('isa.actividades_isa a', 'a.id=i.id_actividades_isa')
-										->innerJoin('isa.equipos_campo ec', 'ec.id=a.num_equipo_campo')
-										->innerJoin('isa.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
+										->innerJoin('cbac.actividades_isa a', 'a.id=i.id_actividades_isa')
+										->innerJoin('cbac.equipos_campo ec', 'ec.id=a.num_equipo_campo')
+										->innerJoin('cbac.integrantes_x_equipo ie', 'ie.id_equipo_campo=ec.id')
 										->where( 'a.estado=1' )
 										->andWhere( 'ie.estado=1' )
 										->andWhere( 'ec.estado=1' )
