@@ -69,21 +69,22 @@ AND id in($idInstituciones)
 ");
 $result = $command->queryAll();
 
-$datos="";
+$datos =[];
 foreach($result as $r)
 {
 	$id=$r['id'];
 	$descripcion = $r['descripcion'];
-	$datos.= "'$id':'$descripcion'";
+	// $datos.= "'$id':'$descripcion'";
+	$datos[$id] = $descripcion;
 }
 
-$this->registerJs( "datosInstitucion = {".$datos."};" );
+$this->registerJs( "datosInstitucion = ".json_encode($datos).";" );
 
 
 
 if (!isset($_SESSION['institucionSeleccionada']) || (isset($_GET['institucion']) && $_GET['institucion'])){
 	
-	$this->registerJs( "datosInstitucion = {".$datos."};" );
+	$this->registerJs( "datosInstitucion = ".json_encode( $datos ).";" );
 	$this->registerJs( "$( cambiarInstitucion ).click();" );
    
 }
