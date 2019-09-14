@@ -52,7 +52,7 @@ class CbacActividadesRomXIntegranteGrupo extends \yii\db\ActiveRecord
             [['id_rom_actividad', 'estado', 'id_reporte_operativo_misional'], 'integer'],
             [['id_reporte_operativo_misional'], 'exist', 'skipOnError' => true, 'targetClass' => CbacReporteOperativoMisional::className(), 'targetAttribute' => ['id_reporte_operativo_misional' => 'id']],
             [['id_rom_actividad'], 'exist', 'skipOnError' => true, 'targetClass' => CbacRomActividades::className(), 'targetAttribute' => ['id_rom_actividad' => 'id']],
-            [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Public1Parametro::className(), 'targetAttribute' => ['estado' => 'id']],
+            [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Parametro::className(), 'targetAttribute' => ['estado' => 'id']],
         ];
     }
 

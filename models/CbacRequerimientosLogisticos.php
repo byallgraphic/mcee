@@ -32,10 +32,9 @@ class CbacRequerimientosLogisticos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_requerimiento', 'cantidad', 'id_plan_misional_operativo', 'id_actividad', 'estado'], 'default', 'value' => null],
-            [['id_requerimiento', 'cantidad', 'id_plan_misional_operativo', 'id_actividad', 'estado'], 'integer'],
+            [['id_requerimiento', 'cantidad', 'id_iniciacion_sencibilizacion_artistica', 'id_actividad', 'estado'], 'default', 'value' => null],
+            [['id_requerimiento', 'cantidad', 'id_iniciacion_sencibilizacion_artistica', 'id_actividad', 'estado'], 'integer'],
             [['dir_origen', 'dir_destino'], 'string'],
-            [['id_plan_misional_operativo'], 'exist', 'skipOnError' => true, 'targetClass' => CbacPlanMisionalOperativo::className(), 'targetAttribute' => ['id_plan_misional_operativo' => 'id']],
         ];
     }
 
@@ -48,7 +47,7 @@ class CbacRequerimientosLogisticos extends \yii\db\ActiveRecord
             'id' => 'ID',
             'id_requerimiento' => 'Id Requerimiento',
             'cantidad' => 'Cantidad',
-            'id_plan_misional_operativo' => 'Id Plan Misional Operativo',
+            'id_iniciacion_sencibilizacion_artistica' => 'Id Iniciacion Sencibilizacion Artistica',
             'id_actividad' => 'Id Actividad',
             'estado' => 'Estado',
             'dir_origen' => 'Dir Origen',

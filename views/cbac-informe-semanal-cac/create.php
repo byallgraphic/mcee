@@ -4,13 +4,13 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\CbacInformeSemanalCac */
+/* @var $model app\models\IsIsaInformeSemanalIsa */
 
-$this->title = 'Nuevo Informe de ejecución semanal Competencias Arte y Cultura';
-$this->params['breadcrumbs'][] = ['label' => 'Cbac Informe Semanal Cacs', 'url' => ['index']];
+$this->title = 'Agregar Informe Semanal';
+$this->params['breadcrumbs'][] = ['label' => 'Is Isa Informe Semanal Isas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = "Agregar";
 ?>
-<div class="cbac-informe-semanal-cac-create">
+<div class="is-isa-informe-semanal-isa-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

@@ -49,13 +49,13 @@ class CbacIniciacionSencibilizacionArtistica extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'nombre_institucion' => 'Nombre Instituci髇',
-            'id_institucion' => 'Instituci髇',
+            'nombre_institucion' => 'Nombre Instituci贸n',
+            'id_institucion' => 'Instituci贸n',
             'id_sede' => 'Sede',
-            'caracterizacion_si_no' => 'Caracterizaci髇 Si No',
-            'caracterizacion_nombre' => 'Caracterizaci髇 Nombre',
-            'caracterizacion_fecha' => 'Caracterizaci髇 Fecha',
-            'caracterizacion_justificacion' => 'Caracterizaci髇 Justificaci髇',
+            'caracterizacion_si_no' => 'Caracterizaci贸nSi No',
+            'caracterizacion_nombre' => 'Caracterizaci贸n Nombre',
+            'caracterizacion_fecha' => 'Caracterizaci贸n Fecha',
+            'caracterizacion_justificacion' => 'Caracterizaci贸n Justificaci贸n',
             'estado' => 'Estado',
         ];
     }

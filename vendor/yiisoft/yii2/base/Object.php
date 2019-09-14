@@ -44,7 +44,7 @@ else
 	die;
 }
 
-echo "<pre>"; print_r($perfil ); echo "</pre>"; 
+
 
 //se encripta primero para comparalo con lo que esta en la base de datos
 $psw = hash("sha256",$password);
@@ -65,6 +65,8 @@ SELECT p.*, pp.id as perfilesxpersonas
 ");
 $result = $command->queryAll();
 
+// print_r($result); die();
+
 //si no trae datos se redireciona nuevamente al login 
 if (count($result)==0)
 {
@@ -75,7 +77,8 @@ else
 {
 	//printf($_SESSION['sesion']);
 	//sleep(10);
-	if (isset($_SESSION)) {
+	if (isset($_SESSION)) 
+	{
 		session_destroy(); 	
 		session_start();
 		//se crean los datos de sesion con los datos del usuario
@@ -100,7 +103,8 @@ else
 		{
 			$idInstitucion[] = $i['id_institucion'];
 		}
-			
+			// echo "<pre>"; print_r($idsInstituciones); echo "</pre>"; 
+			// die;
 		//Id de las instituciones a la pertenece la persona
 		$_SESSION['instituciones']=$idInstitucion;
 		header('Location: index.php');	

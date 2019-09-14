@@ -22,10 +22,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 if( Yii::$app->request->get( 'guardado' ) ){
 
-    $this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
+    // $this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
 
     $this->registerJs( "
-	  swal({
+	  swal.fire({
 			text: 'Registro guardado',
 			icon: 'success',
 			button: 'Salir',

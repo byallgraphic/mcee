@@ -3,23 +3,33 @@
 use yii\helpers\Html;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
-use app\models\Instituciones;
-use app\models\Sedes;
+
 
 use fedemotta\datatables\DataTables;
 use yii\grid\GridView;
-
+use app\models\Instituciones;
+use app\models\Sedes;
 /* @var $this yii\web\View */
+/* @var $searchModel app\models\IsaConsolidadoMisionalBuscar */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '5 Consolidado por mes Competencias Básicas Arte y Cultura Misional';
+$this->title = '5.Consolidado Por Mes Misional';
 $this->params['breadcrumbs'][] = $this->title;
-$this->registerJsFile("https://unpkg.com/sweetalert/dist/sweetalert.min.js");
-$this->registerJsFile(Yii::$app->request->baseUrl.'/js/documentos.js',['depends' => [\yii\web\JqueryAsset::className()]]);
 
-if( isset($guardado) && $guardado == 1 ){
-	echo Html::hiddenInput( 'guardadoFormulario', '1' );
+if( @$_GET['guardado'])
+{
+	
+	$this->registerJs( "
+	  swal.fire({
+			text: 'Registro guardado',
+			type: 'success',
+			confirmButtonText: 'Salir',
+		});
+	
+		
+	");
 }
+
 ?> 
 
 <h1></h1>
@@ -29,7 +39,7 @@ if( isset($guardado) && $guardado == 1 ){
 <div class="modal-content">
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-<h3>5 Consolidado por mes Competencias Básicas Arte y Cultura Misional</h3>
+<h3>5.Consolidado Por Mes Misional </h3>
 </div>
 <div class="modal-body">
 <div id='modalContent'></div>
@@ -38,13 +48,14 @@ if( isset($guardado) && $guardado == 1 ){
 </div>
 </div>
 </div>
-<div class="cbac-consolidado-misional-index">
+<div class="isa-consolidado-misional-index">
 
    
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?=  Html::button('Agregar',['value'=>Url::to(['create']),'class'=>'btn btn-success','id'=>'modalButton']) ?>
-		
+		<?= Html::a('Volver',['sensibilizacion-artistica/index',],['class' => 'btn btn-info']) ?>
     </p>
 
     <?= DataTables::widget([
@@ -82,33 +93,32 @@ if( isset($guardado) && $guardado == 1 ){
 				],
 			],
 	],
-        'columns' => [
+           'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            //'id',
-            [
-			'attribute'=>'id_institucion',
-			'value' => function( $model )
+			[
+				'attribute' => 'id_institucion',
+				'value' => function( $model )
 				{
-					$nombreInstituciones = Instituciones::findOne($model->id_institucion);
-					return $nombreInstituciones ? $nombreInstituciones->descripcion : '';  
-				}, //para buscar por el nombre
+					$institucion = Instituciones::findOne( $model->id_institucion );
+					return $institucion ? $institucion->descripcion: '' ;
+				},
 			],
-            [
-			'attribute'=>'id_sede',
-			'value' => function( $model )
+
+			[
+				'attribute'=>'id_sede',
+				'value' => function( $model )
 				{
 					$nombreSedes = Sedes::findOne($model->id_sede);
 					return $nombreSedes ? $nombreSedes->descripcion : '';  
 				}, //para buscar por el nombre
 			],
-            'desde',
-            'hasta',
-            //'estado',
+
+            'fecha',
+			
 
             [
 			'class' => 'yii\grid\ActionColumn',
-			'template'=>'{view}{update}{delete}',
+			'template'=>'{update}{delete}',
 				'buttons' => [
 				'view' => function ($url, $model) {
 					return Html::a('<span name="detalle" class="glyphicon glyphicon-eye-open" value ="'.$url.'" ></span>', $url, [

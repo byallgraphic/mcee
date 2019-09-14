@@ -39,10 +39,10 @@ class CbacIntervencionIeo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['docente_orientador', 'fases', 'nombre_actividad', 'actividad_desarrollar', 'lugares_recorrer', 'tematicas_abordadas', 'objetivos_especificos', 'tiempo_previsto', 'productos'], 'string'],
-            [['num_encuentro', 'id_pmo_actividades', 'id_equipo_campos', 'estado'], 'default', 'value' => null],
-            [['num_encuentro', 'id_pmo_actividades', 'id_equipo_campos', 'estado'], 'integer'],
-            [['id_equipo_campos'], 'exist', 'skipOnError' => true, 'targetClass' => CbacEquiposCampo::className(), 'targetAttribute' => ['id_equipo_campos' => 'id']],
+            [['docente_orientador', 'fases', 'nombre_actividad', 'actividad_desarrollar', 'lugares_recorrer', 'tematicas_abordadas', 'objetivos_especificos', 'tiempo_previsto','productos'], 'string'],
+            [['num_encuentro', 'id_actividades_isa', 'id_equipo_campos', 'estado'], 'default', 'value' => null],
+            [['num_encuentro', 'id_actividades_isa', 'id_equipo_campos', 'estado'], 'integer'],
+            [['id_actividades_isa'], 'exist', 'skipOnError' => true, 'targetClass' => CbacActividadesIsa::className(), 'targetAttribute' => ['id_actividades_isa' => 'id']],
             [['id_equipo_campos'], 'exist', 'skipOnError' => true, 'targetClass' => CbacEquiposCampo::className(), 'targetAttribute' => ['id_equipo_campos' => 'id']],
         ];
     }
@@ -55,19 +55,20 @@ class CbacIntervencionIeo extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'perfiles' => 'Perfiles',
-            'docente_orientador' => 'Docente Orientador',
-            'fases' => 'Fases',
+            'docente_orientador' => 'Líder técnico pedagógico',
+            'fases' => 'Ciclos',
             'num_encuentro' => 'Num Encuentro',
             'nombre_actividad' => 'Nombre Actividad',
             'actividad_desarrollar' => 'Actividad Desarrollar',
             'lugares_recorrer' => 'Lugares Recorrer',
-            'tematicas_abordadas' => 'Tematicas Abordadas',
-            'objetivos_especificos' => 'Objetivos Especificos',
+            'tematicas_abordadas' => 'Temáticas Abordadas',
+            'objetivos_especificos' => 'Objetivos Específicos',
             'tiempo_previsto' => 'Tiempo Previsto',
-            'id_pmo_actividades' => 'Id Pmo Actividades',
-            'id_equipo_campos' => 'Equipos Campo',
-            'productos' => 'Productos',
+            'id_actividades_isa' => 'Id Actividades Isa',
+            'id_equipo_campos' => 'Id Equipo Campos',
             'estado' => 'Estado',
+            'productos' => 'Productos',
         ];
     }
+
 }

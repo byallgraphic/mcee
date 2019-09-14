@@ -54,7 +54,7 @@ class CbacTipoCantidadPoblacionRom extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'vecinos' => 'Vecinos',
-            'lideres_comunitarios' => 'Líderes Comunitarios',
+            'lideres_comunitarios' => 'LÃ­deres Comunitarios',
             'empresarios_comerciantes' => 'Empresarios Comerciantes',
             'organizaciones_locales' => 'Organizaciones Locales',
             'grupos_comunitarios' => 'Grupos Comunitarios',

@@ -2,17 +2,16 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use app\models\Instituciones;
-use app\models\Sedes;
+
 /* @var $this yii\web\View */
-/* @var $model app\models\CbacInformeSemanalCac */
+/* @var $model app\models\IsIsaInformeSemanalIsa */
 
 $this->title = "Detalles";
-$this->params['breadcrumbs'][] = ['label' => 'Cbac Informe Semanal Cacs', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Is Isa Informe Semanal Isas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\BootstrapAsset::className()]]);
 ?>
-<div class="cbac-informe-semanal-cac-view">
+<div class="is-isa-informe-semanal-isa-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -30,26 +29,12 @@ $this->registerCssFile("@web/css/modal.css", ['depends' => [\yii\bootstrap\Boots
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            //'id',
-            [
-            'attribute'=>'id_institucion',
-            'value' => function( $model )
-                {
-                    $nombreInstituciones = Instituciones::findOne($model->id_institucion);
-                    return $nombreInstituciones ? $nombreInstituciones->descripcion : '';  
-                }, //para buscar por el nombre
-            ],
-            [
-            'attribute'=>'id_sede',
-            'value' => function( $model )
-                {
-                    $nombreSedes = Sedes::findOne($model->id_sede);
-                    return $nombreSedes ? $nombreSedes->descripcion : '';  
-                }, //para buscar por el nombre
-            ],
+            'id',
+            'id_institucion',
+            'id_sede',
             'desde',
             'hasta',
-            //'estado',
+            'estado',
         ],
     ]) ?>
 

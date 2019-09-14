@@ -1,7 +1,7 @@
 <?php
 
 
-use app\models\IsaRomActividades;
+use app\models\CbacRomActividades;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\Collapse;
 use yii\bootstrap\Tabs;

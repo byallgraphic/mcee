@@ -126,7 +126,7 @@ if( !$sede ){
 
     <p>
         <!-- <?=  Html::button('Agregar',['value'=>Url::to(['create']),'class'=>'btn btn-success','id'=>'modalButton']) ?> -->
-		<?= Html::a('Volver',['sensibilizacion-artistica/index',],['class' => 'btn btn-info']) ?>
+		<?= Html::a('Volver',['arte-cultura/index',],['class' => 'btn btn-info']) ?>
 		
     </p>
 

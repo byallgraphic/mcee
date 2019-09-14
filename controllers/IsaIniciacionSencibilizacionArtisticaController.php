@@ -506,17 +506,19 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 			
 			//id del Yii::$app->request->post() e id de actividades deben ser iguales
 			$cont = 1;
+			$contadorIntervencionIEO = [];
 			foreach($actividades as $key => $actividad)
 			{
+				$contadorIntervencionIEO[$actividad->id_procesos_generales] = $actividad->id;
 				$idActividades[] = $key;
-				$actividadIsa[$cont] = $actividad;
+				$actividadIsa[$actividad->id_procesos_generales] = $actividad;
 				
 				if ($cont == 2)
 					$cont++;
 				
 				$cont++;
 			}
-			
+			// echo "<pre>"; var_dump( $contadorIntervencionIEO ); echo "<pre>"; exit("<br>-----------");
 			if (Model::loadMultiple($actividadIsa, Yii::$app->request->post()) && Model::validateMultiple($actividadIsa) ) 
 			{
 				foreach ($actividadIsa as $activIsa) 
@@ -530,17 +532,19 @@ class IsaIniciacionSencibilizacionArtisticaController extends Controller
 			$intervencionIeo = IsaIntervencionIeo::find()->indexBy('id')->andWhere("id_actividades_isa in ( $idActividades )")->all();
 			
 			//id del Yii::$app->request->post() e id de intervencionIeo deben ser iguales
-			$cont = 1;
-			foreach($intervencionIeo as $intervencion)
+			// $cont = 1;
+			foreach($contadorIntervencionIEO as $idProceso => $idActividadisa )
 			{
-				$intervencionIsa[$cont] = $intervencion;
+				// $intervencionIsa[$idProceso] = $intervencion;
+				$intervencionIsa[$idProceso] = IsaIntervencionIeo::find()->where("id_actividades_isa=$idActividadisa")->one();
 				// actividades 1 2 4
-				if ($cont == 2)
-					$cont++;
+				// if ($cont == 2)
+					// $cont++;
 				
-				$cont++;
+				// $cont++;
 			}
-			
+			// echo "<pre>"; var_dump( $intervencionIsa ); echo "<pre>"; exit("<br>-----------555");
+			// exit("<br>----555");
 			$postIEO = Yii::$app->request->post()['IsaIntervencionIeo'];
 			
 			foreach ($postIEO as $key => $inter )

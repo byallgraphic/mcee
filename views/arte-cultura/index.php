@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<div class="form-group">
 		   <?= Html::a('1. Planeación', 
 									[
-										'cbac-plan-misional-operativo/index',
+										'cbac-iniciacion-sencibilizacion-artistica/index',
 										// 'idReporte'	=> 1,
 									], 
 									['class' => 'btn btn-success'
@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			
 			<?= Html::a('4. Orientación del proceso - Seguimiento', 
 									[
-										'cbac-orientacion-proceso-cbac/index',
+										'cbac-seguimiento-proceso/index',
 										// 'idReporte'		=> 4,
 									], 
 									['class' => 'btn btn-success'
@@ -113,7 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			
 			<?= Html::a('5. Consolidado por mes - Operativo', 
 										[
-											'cbac-consolidado-mes-cbac/index',
+											'cbac-arte-cultura-consolidado/index',
 											// 'idReporte'		=> 5,
 										], 
 										['class' => 'btn btn-success']) ?>

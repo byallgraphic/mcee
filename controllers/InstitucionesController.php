@@ -92,8 +92,10 @@ class InstitucionesController extends Controller
      */
     public function actionIndex()
     {
+		$idInstitucion = $_SESSION['instituciones'][0];
 		$searchModel = new InstitucionesBuscar();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+		$dataProvider ->query->andWhere( 'id='.$idInstitucion );
 		$dataProvider ->query->andWhere('estado=1');
 		
         // $dataProvider = new ActiveDataProvider([
@@ -242,9 +244,7 @@ class InstitucionesController extends Controller
             $idInstituciones[]=$i;
         }
 
-        $idInstituciones= implode(",",$idInstituciones);
-
-        $instituciones = Instituciones::find()->where(['in', 'id', $idInstituciones])->select('descripcion')->indexBy('id')->column();
+        $instituciones = Instituciones::find()->where(['id' => $idInstituciones])->select('descripcion')->indexBy('id')->column();
 
         return json_encode($instituciones);
     }
