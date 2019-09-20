@@ -425,7 +425,7 @@ class ImplementacionIeoController extends Controller
 
         $idPerfilesXpersonas	= PerfilesXPersonasInstitucion::find()->where( "id_institucion = $idInstitucion" )->all();
 		$perfiles_x_persona 	= PerfilesXPersonas::findOne($idPerfilesXpersonas)->id_personas;		
-        $nombres1 				= Personas::find($perfiles_x_persona)->all();
+        $nombres1 				= Personas::findOne($perfiles_x_persona);
         $nombres				 = ArrayHelper::map( $nombres1, 'id', 'nombres');
      
 
