@@ -62,38 +62,44 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
 		'clientOptions' => [
-		'language'=>[
-                'url' => '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json',
-            ],
-		"lengthMenu"=> [[20,-1], [20,Yii::t('app',"All")]],
-		"info"=>false,
-		"responsive"=>true,
-		 "dom"=> 'lfTrtip',
-		 "tableTools"=>[
-			 "aButtons"=> [  
-				// [
-				// "sExtends"=> "copy",
-				// "sButtonText"=> Yii::t('app',"Copiar")
-				// ],
-				// [
-				// "sExtends"=> "csv",
-				// "sButtonText"=> Yii::t('app',"CSV")
-				// ],
-				[
-				"sExtends"=> "xls",
-				"oSelectorOpts"=> ["page"=> 'current']
+			'language'=>[
+					'url' => '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json',
 				],
-				[
-				"sExtends"=> "pdf",
-				"oSelectorOpts"=> ["page"=> 'current']
+			"lengthMenu"=> [[20,-1], [20,Yii::t('app',"All")]],
+			"info"=>false,
+			"responsive"=>true,
+			 "dom"=> 'lfTrtip',
+			 "tableTools"=>[
+				 "aButtons"=> [  
+					// [
+					// "sExtends"=> "copy",
+					// "sButtonText"=> Yii::t('app',"Copiar")
+					// ],
+					// [
+					// "sExtends"=> "csv",
+					// "sButtonText"=> Yii::t('app',"CSV")
+					// ],
+					[
+					"sExtends"=> "xls",
+					"oSelectorOpts"=> ["page"=> 'current']
+					],
+					[
+					"sExtends"=> "pdf",
+					"oSelectorOpts"=> ["page"=> 'current']
+					],
+					// [
+					// "sExtends"=> "print",
+					// "sButtonText"=> Yii::t('app',"Imprimir")
+					// ],
 				],
-				// [
-				// "sExtends"=> "print",
-				// "sButtonText"=> Yii::t('app',"Imprimir")
-				// ],
 			],
-		 ],
-	],
+			"ajax" => [
+				"url"	=> Yii::$app->getUrlManager()->createUrl('personas/consultar-personas'),
+				"type"	=> "GET",
+			],
+			"processing" => true,
+			"serverSide"=> true,
+		],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -130,7 +136,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'estado',
 
             ['class' => 'yii\grid\ActionColumn',
-			'template'=>'{view}{update}{delete}',
+				'template'=>'{view}{update}{delete}',
 				'buttons' => [
 				'view' => function ($url, $model) {
 					return Html::a('<span name="detalle" class="glyphicon glyphicon-eye-open" value ="'.$url.'" ></span>', $url, [

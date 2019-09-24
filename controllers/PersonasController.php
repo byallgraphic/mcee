@@ -1,6 +1,11 @@
 <?php
 /**********
 Versión: 001
+Fecha: 2019-09-24
+Desarrollador: Edwin Molina G
+Descripción: Los datos del index que se muestran con datatables, se cambian por consultas al BD por medio de ajax
+---------------------------------------
+Versión: 001
 Fecha: Fecha en formato (09-03-2018)
 Desarrollador: Viviana Rodas
 Descripción: Controlador de personas
@@ -44,6 +49,12 @@ use app\models\PerfilesXPersonas;
 
 use yii\helpers\ArrayHelper;
 
+use yii\helpers\Html;
+
+use yii\helpers\Url;
+
+use yii\grid\ActionColumn;
+
 /**
  * PersonasController implements the CRUD actions for Personas model.
  */
@@ -63,6 +74,47 @@ class PersonasController extends Controller
             ],
         ];
     }
+	
+	public function actionConsultarPersonas(){
+		
+		$start 	= $_GET['start'];
+		$len 	= $_GET['length'];
+		$search	= $_GET['search']['value'];
+		
+		$searchModel = new PersonasBuscar();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+		// $datas = $dataProvider->query->andWhere('estado=1'); 
+		
+		if( !empty($search) ){
+			$dataProvider->query
+				->orWhere("nombres ILIKE '%".$search."%'" )
+				->orWhere("apellidos ILIKE '%".$search."%'" )
+				->orWhere("identificacion ILIKE '%".$search."%'")
+				->orWhere("correo ILIKE '%".$search."%'" );
+		}
+		
+		$datas = $dataProvider->query->andWhere('estado=1')->limit($len)->offset($start)->all(); 
+		
+		$data = [];
+		
+		$i = $start;
+		foreach( $datas as $d ){
+			
+			$a = new ActionColumn();
+			$url = $a->renderDataCell( $d, $d->id, $i );
+
+			$data[] = [
+					'0'	=> ++$i,
+					'1'	=> $d->identificacion,
+					'2' => $d->nombres,
+					'3' => $d->apellidos,
+					'4' => $d->correo,
+					'5' => $url,
+				];
+		}
+		
+		echo json_encode( [ 'data' => $data ] );
+	}
 
     /**
      * Lists all Personas models.
@@ -124,7 +176,7 @@ class PersonasController extends Controller
     {
         $searchModel = new PersonasBuscar();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-		$dataProvider ->query->andWhere('estado=1'); 
+		$dataProvider ->query->andWhere('estado=1')->limit(20); 
 
         return $this->render('index', [
             'searchModel' => $searchModel,
