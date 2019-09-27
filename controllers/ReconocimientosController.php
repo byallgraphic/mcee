@@ -1,6 +1,11 @@
 <?php
 /**********
 Versión: 001
+---------------------------------------
+Fecha: 2019-09-26
+Desarrollador: Edwin MG
+Descripción: Se corrigen queries con personas para que se muestren los datos y en la vista create se busca las personas por medio de ajax
+---------------------------------------
 Fecha: Fecha en formato (12-03-2018)
 Desarrollador: Viviana Rodas
 Descripción: Controlador de Reconocimientos
@@ -50,6 +55,24 @@ class ReconocimientosController extends Controller
             ],
         ];
     }
+	
+	
+	function actionConsultarPersonas(){
+		
+		$search = $_GET['search'];
+		
+		 //se crea una instancia del modelo personas
+		$personasTable 		 	= new Personas();
+		$dataPersonas		 	= $personasTable->find()->select(["id, CONCAT(nombres, ' ', apellidos) AS nombres"])
+										->where('estado=1')
+										->andWhere( "CONCAT(nombres, ' ', apellidos) ILIKE '%".$search."%'" )
+										->all();										  
+		
+		//se guardan los datos en un array
+		$personas	 	 	 	= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
+		
+		return json_encode( $personas );
+	}
 
     /**
      * Lists all Reconocimientos models.
@@ -88,13 +111,13 @@ class ReconocimientosController extends Controller
      */
     public function actionCreate()
     {
-        //se crea una instancia del modelo personas
-		$personasTable 		 	= new Personas();
-		//se traen los datos de personas
-		// $dataPersonas		 	= $personasTable->find()->where(['concat(nombre,apellidos) as name'])->all();										  
-		$dataPersonas		 	= $personasTable->find()->select(["id, CONCAT(nombres, ' ', apellidos) AS nombres"])->where('estado=1')->all();										  
-		//se guardan los datos en un array
-		$personas	 	 	 	= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
+        // //se crea una instancia del modelo personas
+		// $personasTable 		 	= new Personas();
+		// //se traen los datos de personas
+		// // $dataPersonas		 	= $personasTable->find()->where(['concat(nombre,apellidos) as name'])->all();										  
+		// $dataPersonas		 	= $personasTable->find()->select(["id, CONCAT(nombres, ' ', apellidos) AS nombres"])->where('estado=1')->all();										  
+		// //se guardan los datos en un array
+		// $personas	 	 	 	= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
 		
 		//se crea una instancia del modelo estados
 		$estadosTable 		 	= new Estados();
@@ -112,7 +135,7 @@ class ReconocimientosController extends Controller
 
         return $this->renderAjax('create', [
             'model' => $model,
-			'personas' => $personas,
+			'personas' =>[],
             'estados' => $estados,
         ]);
     }
@@ -126,11 +149,18 @@ class ReconocimientosController extends Controller
      */
     public function actionUpdate($id)
     {
-         //se crea una instancia del modelo personas
+		$model = $this->findModel($id);
+		
+        //se crea una instancia del modelo personas
 		$personasTable 		 	= new Personas();
 		//se traen los datos de personas
 		// $dataPersonas		 	= $personasTable->find()->where(['concat(nombre,apellidos) as name'])->all();										  
-		$dataPersonas		 	= $personasTable->find()->select(["id, CONCAT(nombres, ' ', apellidos) AS nombres"])->where('estado=1')->all();										  
+		$dataPersonas		 	= $personasTable->find()
+										->select(["id, CONCAT(nombres, ' ', apellidos) AS nombres"])
+										->where('estado=1')
+										->andWhere('id='.$model->id_personas )
+										->all();
+										
 		//se guardan los datos en un array
 		$personas	 	 	 	= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
 		
@@ -140,10 +170,6 @@ class ReconocimientosController extends Controller
 		$dataEstados		 	= $estadosTable->find()->all();										  
 		//se guardan los datos en un array
 		$estados	 	 	 	= ArrayHelper::map( $dataEstados, 'id', 'descripcion' );
-		
-		
-		
-		$model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);

@@ -34,6 +34,11 @@ $this->registerJs(<<<JS
 	$( document ).ready(function(){
 	
 		var intervalo = undefined;
+		
+		$( "#personasformaciones-id_personas" ).on( 'chosen:showing_dropdown', function(){ 
+			$( "#personasformaciones_id_personas_chosen" ).removeClass( 'chosen-container-single-nosearch' );
+			$( "#personasformaciones_id_personas_chosen .chosen-search > input" ).attr({readOnly:false});
+		})
 
 		$( "#personasformaciones_id_personas_chosen .chosen-search > input" ).on( 'keyup', function(){ 
 

@@ -35,6 +35,11 @@ $this->registerJs(<<<JS
 	$( document ).ready(function(){
 	
 		var intervalo = undefined;
+		
+		$( "#personasdiscapacidades-id_personas" ).on( 'chosen:showing_dropdown', function(){ 
+			$( "#personasdiscapacidades_id_personas_chosen" ).removeClass( 'chosen-container-single-nosearch' );
+			$( "#personasdiscapacidades_id_personas_chosen .chosen-search > input" ).attr({readOnly:false});
+		})
 
 		$( "#personasdiscapacidades_id_personas_chosen .chosen-search > input" ).on( 'keyup', function(){ 
 

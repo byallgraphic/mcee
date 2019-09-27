@@ -110,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					$personas = Personas::findOne($model->id_personas);
 					return $personas ? $personas->nombres : '';
 				}, //para buscar por el nombre
-				'filter' 	=> ArrayHelper::map(Personas::find()->all(), 'id', 'nombres' ),
+				// 'filter' 	=> ArrayHelper::map(Personas::find()->all(), 'id', 'nombres' ),
 				
 			],
             'descripcion',
