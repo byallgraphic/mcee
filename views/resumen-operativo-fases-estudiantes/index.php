@@ -98,6 +98,21 @@ $this->registerJsFile(
     .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
     .tg .tg-uys7{border-color:inherit;text-align:center}
 </style>
+
+ <?php  
+ if (isset($mayorSesion)){ ?>
+	<table id="showExcel" class="tg">
+		<thead>
+			<tr>
+				<th class="tg-c3ow" colspan="4" rowspan="2">No se encontraron datos para mostrar</th>
+			</tr>
+		</thead>
+	</table>
+<?php   }
+ else{
+ 
+ ?>
+
 <table id="showExcel" class="tg">
     <thead>
         <tr>
@@ -215,3 +230,7 @@ $this->registerJsFile(
         <?php } ?>
     </tbody>
 </table>
+
+<?php   }
+ 
+ ?>
