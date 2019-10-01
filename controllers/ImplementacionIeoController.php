@@ -1,4 +1,14 @@
 <?php
+/**********
+Versión: 001
+---------------------------------------
+Modificaciones:
+Fecha: 2019-09-30
+Persona encargada: Edwin Molina grisales
+Cambios realizados: Se cambia el isset(($_GET['idTipoInforme'])) por isset($_GET['idTipoInforme'])
+----------------------------------------
+**********/
+
 
 namespace app\controllers;
 
@@ -77,7 +87,7 @@ class ImplementacionIeoController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' =>$query,
         ]);
-        $_SESSION["tipo_informe"] = isset(($_GET['idTipoInforme'])) ? intval($_GET['idTipoInforme']) : $_SESSION["tipo_informe"]; 
+        $_SESSION["tipo_informe"] = isset($_GET['idTipoInforme']) ? intval($_GET['idTipoInforme']) : $_SESSION["tipo_informe"]; 
 
 
         return $this->render('index', [
