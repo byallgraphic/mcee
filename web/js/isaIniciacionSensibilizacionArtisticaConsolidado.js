@@ -1,3 +1,44 @@
+	//Click del boton agregar equipo campo y cargar contenido del formulario agregar en el modal
+	// $("#modalEquipo").click(function()
+	// $(".modalEquipo").click(function()
+	$("#modal").on( 'click', '.modalEquipo' , function()
+	{
+		
+		// openViewFiles( $( this).val() )
+	
+		$( '[id^=modalArchivosContent]' ).html('')
+		// num = $(this).attr('id').split("_")[1];
+		
+		$( "#modalArchivos" ).modal('show')
+				.find("#modalArchivosContent")
+				.load( $(this).attr('value') );
+	});
+	
+	
+	$('#modalArchivos').on('hidden.bs.modal', function (e) {
+		$( ".modal" ).css({ 
+					overflowX: "hidden", 
+					overflowY: "auto",
+				});
+	});
+
+
+	$( "#modalContent" ).on( "change", "#isaencabezadoiniciacionartisticaconsolidado-fecha", function(){
+		
+		// if( $( "#isisainformesemanalisa-desde" ).val() != '' && $( "#isisainformesemanalisa-hasta" ).val() != '' )
+		if( $( "#isaencabezadoiniciacionartisticaconsolidado-desde" ).val() != '' )
+		{
+			$.post( "index.php?r=isa-iniciacion-sensibilizacion-artistica-consolidado/create",
+				{
+					fecha_desde : $( "#isaencabezadoiniciacionartisticaconsolidado-fecha" ).val(),
+				},
+				function(data){
+					$( "#modalContent" ).html( data );
+				}
+			);
+		}
+	});
+
 		
 	function actualizar_total_participantes( index ){
 		

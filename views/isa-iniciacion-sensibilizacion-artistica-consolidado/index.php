@@ -59,6 +59,21 @@ if( $guardado )
 </div>
 </div>
 </div>
+
+<div id="modalArchivos" class="fade modal" role="dialog" tabindex="-1" >
+	<div class="modal-dialog modal-md modalemg">
+		<div class="modal-content">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3>Evidencias</h3>
+			</div>
+			<div class="modal-body">
+				<div id='modalArchivosContent'></div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="isa-iniciacion-sensibilizacion-artistica-consolidado-index">
 
    

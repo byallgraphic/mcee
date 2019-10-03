@@ -37,6 +37,9 @@ if( !$sede ){
 	exit( "<div class='btn-danger' style='font-size:20pt;text-align:center;width:100%;'>Por favor seleccione una sede</div>" );
 }
 
+$fecha_desde 	= empty( $_POST['fecha_desde'] ) ? '' : $_POST['fecha_desde'];
+$modelEncabezado->fecha = $fecha_desde;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\IsaIniciacionSensibilizacionArtisticaConsolidado */
 /* @var $form yii\widgets\ActiveForm */
@@ -75,10 +78,11 @@ foreach( $actividades as $keySesion => $actividad )
             'language' => 'es',
             'clientOptions' => [
                 'autoclose' => true,
-                'format'    => 'yyyy-mm-dd',
+                'format'    => 'yyyy-mm',
+				'minViewMode'=>'months',
         ],
     ]); ?></div>
-	  <div class="col-md-6"><?= $form->field($modelEncabezado, 'periodo')->textInput([ 'type' => 'number']) ?></div>
+	 <!-- <div class="col-md-6"><?= $form->field($modelEncabezado, 'periodo')->textInput([ 'type' => 'number']) ?></div> -->
 	</div>
     
 	<?= Html::activeHiddenInput($modelEncabezado, 'id') ?>
@@ -118,9 +122,7 @@ foreach( $actividades as $keySesion => $actividad )
 				] ) ?></div>
 	</div>
 	
-    <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
-    </div>
+    
 
     <?php ActiveForm::end(); ?>
 

@@ -1,4 +1,10 @@
 <?php
+/**
+Modificaciones:
+Fecha: 2019-10-02
+Persona Encargada: Edwin Molina Grisales
+Descripción: Se hacen cambios varios para mostrar los datos consolidados por mes y mostrar los archivos que se han subido al sistema
+*/
 
 namespace app\controllers;
 
@@ -25,6 +31,7 @@ use app\models\Sedes;
 use app\models\IsaActividadesArtisticas;
 use app\models\IsaEncabezadoIniciacionArtisticaConsolidado;
 use app\models\IsaEncabezadoIniciacionArtisticaConsolidadoBuscar;
+use app\models\IsaEvidenciasRom;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -46,6 +53,69 @@ class IsaIniciacionSensibilizacionArtisticaConsolidadoController extends Control
             ],
         ];
     }
+	
+	public function actionArchivosEvidencias(){
+		
+		$ids = Yii::$app->request->get('id_evidencia');
+		
+		$ids = explode( ",", $ids );
+		
+		$models = IsaEvidenciasRom::find()->where([ 'in', 'id', $ids ])->all();
+		
+		$datos = [];
+		
+		if( count($models) > 0 ){
+			
+			// if( $model )
+			foreach( $models as $model )
+			{
+				$atributos = [
+								'actas' 				=> 'ACTAS', 
+								'reportes'				=> 'REPORTES', 
+								'listados'				=> 'LISTADOS', 
+								'plan_trabajo'			=> 'PLAN DE TRABAJO', 
+								'formato_seguimiento'	=> 'FORMATOS DE SEGUIMIENTO', 
+								'formato_evaluacion'	=> 'FORMATOS DE EVALUACIÓN', 
+								'fotografias'			=> 'FOTOGRAFÍAS', 
+								'vidoes'				=> 'VIDEOS', 
+								'otros_productos'		=> 'OTROS PRODUCTOS DE LA ACTIVIDAD', 
+							];
+							
+				
+				foreach( $atributos as $key => $value )
+				{
+					if( !empty( $model->$key ) )
+					{
+						$files = explode( ",", $model->$key );
+						
+						$archivos = [];
+						
+						foreach( $files as $file ){
+							
+							$descripcion = explode( "/", $file );
+							$descripcion = end( $descripcion );
+							
+							$archivos[] = 	[ 
+												'archivo'		=> $file,
+												'descripcion'	=> $descripcion,
+											];
+						}
+						
+						$datos[ $key ] = [ 
+												'title' 	=> $value,
+												'campo' 	=> $key,
+												'archivos' 	=> $archivos,
+											];
+					}
+				}
+			}
+		}
+		
+		return $this->renderAjax('viewFiles', [
+            'datos' 	=> $datos,
+            'id' 		=> $ids,
+        ]);
+	}
 
     /**
      * Lists all IsaIniciacionSensibilizacionArtisticaConsolidado models.
