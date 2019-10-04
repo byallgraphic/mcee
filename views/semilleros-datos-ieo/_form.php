@@ -62,15 +62,6 @@ if( $guardado ){
 }
 
 
-$this->registerJs(<<<JS
-	
-	$( document ).ready(function(){
-	
-		
-	});
-JS
-);
-
 
 /* @var $this yii\web\View */
 /* @var $model app\models\SemillerosDatosIeo */
