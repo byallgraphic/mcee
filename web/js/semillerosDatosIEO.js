@@ -45,11 +45,98 @@ var arrayTitles = [
 
 $( document ).ready(function(){
 	
-	
 	/************************************************************************************************************************************************
 	 * Validando datos extras
 	 ************************************************************************************************************************************************/
 	 setTimeout(function(){
+		 
+		var intervalo = undefined;
+		
+		$( "#semillerosdatosieo-personal_a" ).on( 'chosen:showing_dropdown', function(){ 
+			$( "#semillerosdatosieo_personal_a_chosen" ).removeClass( 'chosen-container-single-nosearch' );
+			$( "#semillerosdatosieo_personal_a_chosen input" ).attr({readOnly:false});
+			
+		})
+
+		$( "#semillerosdatosieo_personal_a_chosen input" ).on( 'keyup', function(){ 
+
+			var slOriginal = $( "#semillerosdatosieo-personal_a" );
+
+			var search = $( this );
+			var value_search = search.val();
+
+			if( value_search.length >= 3 )
+			{
+				clearTimeout( intervalo );
+				intervalo = setTimeout( function(){
+									$( "option:not(:selected)", slOriginal ).remove();
+									search.attr({readOnly:true});
+									
+									clearTimeout( intervalo );
+									
+									$.get( "index?r=semilleros-datos-ieo/consultar-docentes&search="+value_search, function( data ) {
+										
+										
+										for( var x in data ){
+											slOriginal.append( "<option value='"+x+"'>"+data[x]+"</option>" );
+										}
+										
+										slOriginal.trigger( 'chosen:updated' );
+										search.val( value_search );
+										search.css({readOnly:false});
+										
+									}, 'json' );
+								}, 1000 );
+			}
+		}); 
+		
+		
+		
+		
+		
+		var intervalo2 = undefined;
+		
+		$( "#semillerosdatosieo-docente_aliado" ).on( 'chosen:showing_dropdown', function(){ 
+			$( "#semillerosdatosieo_docente_aliado_chosen" ).removeClass( 'chosen-container-single-nosearch' );
+			$( "#semillerosdatosieo_docente_aliado_chosen input" ).attr({readOnly:false});
+			
+		})
+
+		$( "#semillerosdatosieo_docente_aliado_chosen input" ).on( 'keyup', function(){ 
+
+			var slOriginal = $( "#semillerosdatosieo-docente_aliado" );
+
+			var search = $( this );
+			var value_search = search.val();
+
+			if( value_search.length >= 3 )
+			{
+				clearTimeout( intervalo2 );
+				intervalo2 = setTimeout( function(){
+									$( "option:not(:selected)", slOriginal ).remove();
+									search.attr({readOnly:true});
+									
+									clearTimeout( intervalo2 );
+									
+									$.get( "index?r=semilleros-datos-ieo/consultar-docentes&search="+value_search, function( data ) {
+										
+										
+										for( var x in data ){
+											slOriginal.append( "<option value='"+x+"'>"+data[x]+"</option>" );
+										}
+										
+										slOriginal.trigger( 'chosen:updated' );
+										search.val( value_search );
+										search.css({readOnly:false});
+										
+									}, 'json' );
+								}, 1000 );
+			}
+		}); 
+		 
+		 
+		 
+		 
 		 
 		$( "#semillerosdatosieo-docente_aliado" ).each(function(x){
 			
@@ -71,10 +158,12 @@ $( document ).ready(function(){
 	
 	$( "#semillerosdatosieo-personal_a" ).change(function(){
 		
-		$( "#list_docente_aliado option" ).attr({disabled:true});
-		
-		$( "#list_docente_aliado option["+this.value+"]" ).attr({disabled:false});
-		
+		try{
+			$( "#list_docente_aliado option" ).attr({disabled:true});
+			
+			$( "#list_docente_aliado option["+this.value+"]" ).attr({disabled:false});
+		}
+		catch(e){}
 	});
 	
 	//Todos los campos que terminan ralizan el calculo  del campo total docentes
@@ -211,6 +300,8 @@ $( document ).ready(function(){
 				
 				$( "select", filaClonada ).each(function(){
 					
+					var __self = this;
+					
 					$( this ).chosen({
 							"search_contains"			:true,
 							"single_backstroke_delete"	:false,
@@ -219,6 +310,47 @@ $( document ).ready(function(){
 							"placeholder_text_multiple"	:"Seleccione...",
 							"no_results_text"			:"Sin resultados",
 						});
+						
+						
+					var intervalo2 = undefined;
+		
+					$( __self ).on( 'chosen:showing_dropdown', function(){ 
+						$( "div", $( __self ).parent() ).removeClass( 'chosen-container-single-nosearch' );
+						$( "div input", $( __self ).parent() ).attr({readOnly:false});
+						
+					})
+
+					$( "div input", $( __self ).parent() ).on( 'keyup', function(){ 
+
+						var slOriginal = $( __self );
+
+						var search = $( this );
+						var value_search = search.val();
+
+						if( value_search.length >= 3 )
+						{
+							clearTimeout( intervalo2 );
+							intervalo2 = setTimeout( function(){
+												$( "option:not(:selected)", slOriginal ).remove();
+												search.attr({readOnly:true});
+												
+												clearTimeout( intervalo2 );
+												
+												$.get( "index?r=semilleros-datos-ieo/consultar-docentes&search="+value_search, function( data ) {
+													
+													
+													for( var x in data ){
+														slOriginal.append( "<option value='"+x+"'>"+data[x]+"</option>" );
+													}
+													
+													slOriginal.trigger( 'chosen:updated' );
+													search.val( value_search );
+													search.css({readOnly:false});
+													
+												}, 'json' );
+											}, 1000 );
+						}
+					}); 
 				});
 				
 				//Todos los campos que terminan ralizan el calculo  del campo total docentes

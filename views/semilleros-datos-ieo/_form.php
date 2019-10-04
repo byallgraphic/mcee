@@ -62,6 +62,16 @@ if( $guardado ){
 }
 
 
+$this->registerJs(<<<JS
+	
+	$( document ).ready(function(){
+	
+		
+	});
+JS
+);
+
+
 /* @var $this yii\web\View */
 /* @var $model app\models\SemillerosDatosIeo */
 /* @var $form yii\widgets\ActiveForm */
@@ -152,9 +162,12 @@ if( $guardado ){
 
 </div>
 <script>
+try{
+	
     $( document ).ready(function() {
         $('[id^="btnAgregar"]').click(function () {
             $('[id^="acuerdosinstitucionalesestudiantes_"]').find('input').attr("placeholder", "Seleccione algunas opciones");
         })
     });
+}catch(e){}
 </script>

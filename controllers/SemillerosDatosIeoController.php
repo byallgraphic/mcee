@@ -79,6 +79,41 @@ class SemillerosDatosIeoController extends Controller
         ];
     }
 	
+	
+	function actionConsultarDocentes(){
+		
+		$search = $_GET['search'];
+		
+		$id_institucion	= $_SESSION['instituciones'][0];
+		
+		 //se crea una instancia del modelo personas
+		$personasTable 		 	= new Personas();
+		$dataPersonas		 	= $personasTable->find()->select(["id, CONCAT(nombres, ' ', apellidos) AS nombres"])
+										->where('estado=1')
+										->andWhere( "CONCAT(nombres, ' ', apellidos) ILIKE '%".$search."%'" )
+										->all();										  
+		
+		//se guardan los datos en un array
+		$docentes	 	 	 	= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
+		
+		
+		// $dataPersonas 		= Personas::find()
+								// ->select( "( nombres || ' ' || apellidos ) as nombres, personas.id" )
+								// ->innerJoin( 'perfiles_x_personas pp', 'pp.id_personas=personas.id' )
+								// ->innerJoin( 'docentes d', 'd.id_perfiles_x_personas=pp.id' )
+								// ->innerJoin( 'perfiles_x_personas_institucion ppi', 'ppi.id_perfiles_x_persona=pp.id' )
+								// ->where( 'personas.estado=1' )
+								// ->andWhere( 'id_institucion='.$id_institucion )
+								// ->andWhere( "CONCAT(nombres, ' ', apellidos) ILIKE '%".$search."%'" )
+								// ->all();
+		
+		// $docentes		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
+		
+		return json_encode( $docentes );
+	}
+	
+	
+	
 	public function actionCiclos()
 	{
 		$id_ciclo = false;
