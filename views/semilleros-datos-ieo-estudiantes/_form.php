@@ -50,6 +50,11 @@ if( $guardado ){
 	);
 }
 
+if( !$sede ){
+	$this->registerJs( "$( cambiarSede ).click()" );
+	return;
+}
+
 /* @var $this yii\web\View */
 /* @var $model app\models\SemillerosDatosIeoEstudiantes */
 /* @var $form yii\widgets\ActiveForm */
