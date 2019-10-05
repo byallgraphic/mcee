@@ -14,6 +14,56 @@ Cambios realizados: Se cambia los campo input de cada sección por textarea, y s
 ---------------------------------------
 **********/
 
+$( document ).ready(function(){
+	
+	$( "#datosieoprofesional-id_profesional_a" ).chosen({
+			"no_results_text"			:"Sin resultados",
+		});
+	
+	
+	
+	var intervalo2 = undefined;
+		
+	$( "#datosieoprofesional-id_profesional_a" ).on( 'chosen:showing_dropdown', function(){ 
+		$( "div", $( "#datosieoprofesional-id_profesional_a" ).parent() ).removeClass( 'chosen-container-single-nosearch' );
+		$( "div input", $( "#datosieoprofesional-id_profesional_a" ).parent() ).attr({readOnly:false});
+		
+	})
+
+	$( "div input", $( "#datosieoprofesional-id_profesional_a" ).parent() ).on( 'keyup', function(){ 
+
+		var slOriginal = $( "#datosieoprofesional-id_profesional_a" );
+
+		var search = $( this );
+		var value_search = search.val();
+
+		if( value_search.length >= 3 )
+		{
+			clearTimeout( intervalo2 );
+			intervalo2 = setTimeout( function(){
+								$( "option:not(:selected)", slOriginal ).remove();
+								search.attr({readOnly:true});
+								
+								clearTimeout( intervalo2 );
+								
+								$.get( "index?r=semilleros-datos-ieo/consultar-docentes&search="+value_search, function( data ) {
+									
+									
+									for( var x in data ){
+										slOriginal.append( "<option value='"+x+"'>"+data[x]+"</option>" );
+									}
+									
+									slOriginal.trigger( 'chosen:updated' );
+									search.val( value_search );
+									search.css({readOnly:false});
+									
+								}, 'json' );
+							}, 1000 );
+		}
+	}); 
+	
+})
+
 
 	//Copio los titulos y los dejo como arrary para que se más fácil usarlos en los popups
 	var arrayTitles = [
@@ -448,6 +498,8 @@ Cambios realizados: Se cambia los campo input de cada sección por textarea, y s
 
 			$( "select", filaNueva ).each(function(x){
 				
+				var __self = this;
+				
 				$( this ).chosen({
 							"search_contains"			:true,
 							"single_backstroke_delete"	:false,
@@ -456,6 +508,47 @@ Cambios realizados: Se cambia los campo input de cada sección por textarea, y s
 							"placeholder_text_multiple"	:"Seleccione",
 							"no_results_text"			:"No results match",
 						});
+						
+						
+				var intervalo2 = undefined;
+		
+				$( __self ).on( 'chosen:showing_dropdown', function(){ 
+					$( "div", $( __self ).parent() ).removeClass( 'chosen-container-single-nosearch' );
+					$( "div input", $( __self ).parent() ).attr({readOnly:false});
+					
+				})
+
+				$( "div input", $( __self ).parent() ).on( 'keyup', function(){ 
+
+					var slOriginal = $( __self );
+
+					var search = $( this );
+					var value_search = search.val();
+
+					if( value_search.length >= 3 )
+					{
+						clearTimeout( intervalo2 );
+						intervalo2 = setTimeout( function(){
+											$( "option:not(:selected)", slOriginal ).remove();
+											search.attr({readOnly:true});
+											
+											clearTimeout( intervalo2 );
+											
+											$.get( "index?r=semilleros-datos-ieo/consultar-docentes&search="+value_search, function( data ) {
+												
+												
+												for( var x in data ){
+													slOriginal.append( "<option value='"+x+"'>"+data[x]+"</option>" );
+												}
+												
+												slOriginal.trigger( 'chosen:updated' );
+												search.val( value_search );
+												search.css({readOnly:false});
+												
+											}, 'json' );
+										}, 1000 );
+					}
+				}); 
 			});
 			
 			
