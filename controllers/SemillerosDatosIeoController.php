@@ -87,14 +87,14 @@ class SemillerosDatosIeoController extends Controller
 		$id_institucion	= $_SESSION['instituciones'][0];
 		
 		 //se crea una instancia del modelo personas
-		$personasTable 		 	= new Personas();
-		$dataPersonas		 	= $personasTable->find()->select(["id, CONCAT(nombres, ' ', apellidos) AS nombres"])
-										->where('estado=1')
-										->andWhere( "CONCAT(nombres, ' ', apellidos) ILIKE '%".$search."%'" )
-										->all();										  
+		// $personasTable 		 	= new Personas();
+		// $dataPersonas		 	= $personasTable->find()->select(["id, CONCAT(nombres, ' ', apellidos) AS nombres"])
+										// ->where('estado=1')
+										// ->andWhere( "CONCAT(nombres, ' ', apellidos) ILIKE '%".$search."%'" )
+										// ->all();										  
 		
-		//se guardan los datos en un array
-		$docentes	 	 	 	= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
+		// //se guardan los datos en un array
+		// $docentes	 	 	 	= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
 		
 		
 		// $dataPersonas 		= Personas::find()
@@ -108,6 +108,18 @@ class SemillerosDatosIeoController extends Controller
 								// ->all();
 		
 		// $docentes		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
+		
+		
+		$dataPersonas 		= Personas::find()
+								->select( "( nombres || ' ' || apellidos ) as nombres, personas.id" )
+								->innerJoin( 'perfiles_x_personas pp', 'pp.id_personas=personas.id' )
+								->innerJoin( 'perfiles p', 'p.id = pp.id_perfiles' )
+								->where( 'personas.estado=1' )
+								->andWhere( 'p.id=10')
+								->andWhere( "CONCAT(nombres, ' ', apellidos) ILIKE '%".$search."%'" )
+								->all();
+		
+		$docentes		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
 		
 		return json_encode( $docentes );
 	}

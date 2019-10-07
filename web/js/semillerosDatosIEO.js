@@ -58,14 +58,14 @@ $( document ).ready(function(){
 			
 		})
 
-		$( "#semillerosdatosieo_personal_a_chosen input" ).on( 'keyup', function(){ 
+		$( "#semillerosdatosieo_personal_a_chosen input" ).on( 'keyup', function(e){ 
 
 			var slOriginal = $( "#semillerosdatosieo-personal_a" );
 
 			var search = $( this );
 			var value_search = search.val();
 
-			if( value_search.length >= 3 )
+			if( value_search.length >= 3 && e.which == 13 )
 			{
 				clearTimeout( intervalo );
 				intervalo = setTimeout( function(){
@@ -102,14 +102,14 @@ $( document ).ready(function(){
 			
 		})
 
-		$( "#semillerosdatosieo_docente_aliado_chosen input" ).on( 'keyup', function(){ 
+		$( "#semillerosdatosieo_docente_aliado_chosen input" ).on( 'keyup', function(e){ 
 
 			var slOriginal = $( "#semillerosdatosieo-docente_aliado" );
 
 			var search = $( this );
 			var value_search = search.val();
 
-			if( value_search.length >= 3 )
+			if( value_search.length >= 3  && e.which == 13)
 			{
 				clearTimeout( intervalo2 );
 				intervalo2 = setTimeout( function(){

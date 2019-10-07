@@ -27,14 +27,14 @@ $( document ).ready(function(){
 		
 	})
 
-	$( "div input", $( "#datosieoprofesional-id_profesional_a" ).parent() ).on( 'keyup', function(){ 
+	$( "div input", $( "#datosieoprofesional-id_profesional_a" ).parent() ).on( 'keyup', function(e){ 
 
 		var slOriginal = $( "#datosieoprofesional-id_profesional_a" );
 
 		var search = $( this );
 		var value_search = search.val();
 
-		if( value_search.length >= 3 )
+		if( value_search.length >= 3  && e.which == 13 )
 		{
 			clearTimeout( intervalo2 );
 			intervalo2 = setTimeout( function(){
@@ -414,14 +414,14 @@ $( document ).ready(function(){
 					
 				})
 
-				$( "div input", $( __self ).parent() ).on( 'keyup', function(){ 
+				$( "div input", $( __self ).parent() ).on( 'keyup', function(e){ 
 
 					var slOriginal = $( __self );
 
 					var search = $( this );
 					var value_search = search.val();
 
-					if( value_search.length >= 3 )
+					if( value_search.length >= 3  && e.which == 13 )
 					{
 						clearTimeout( intervalo2 );
 						intervalo2 = setTimeout( function(){
