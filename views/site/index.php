@@ -29,7 +29,7 @@ if (@$_GET['instituciones'])
 {
 	$idInstitucion = $_GET['instituciones'];
 	$_SESSION['institucionSeleccionada'][0]=$idInstitucion;
-	$_SESSION['instituciones'][0]=$idInstitucion;
+	// $_SESSION['instituciones'][0]=$idInstitucion;
 	?>
 	<script>  document.cookie = 'institucionJs=" <?php echo $idInstitucion; ?>"'; </script>
 	
