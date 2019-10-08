@@ -20,9 +20,9 @@ $idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $m
 	
     <?= $form->field($model, 'id_persona')->DropDownList($persona) ?>
 
-    <?= $form->field($model, 'id_coordinador')->DropDownList($coordinador,['prompt'=>"Seleccione..."]) ?>
+    <?= $form->field($model, 'id_coordinador')->textInput() ?>
 	
-    <?= $form->field($model, 'id_secretaria')->DropDownList($secretario,['prompt'=>"Seleccione..."]) ?>
+    <?= $form->field($model, 'id_secretaria')->textInput() ?>
 
     <?= $form->field($model, 'mision')->textArea(['placeholder' => "Ingrese el texto 300 caracteres máximo ",'maxlength' => 300, 'rows' => 6, 'cols' => 50] )?>
 

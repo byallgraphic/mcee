@@ -160,6 +160,7 @@ $idTipoInforme = $_GET['idTipoInforme'];
 				},
 
 				'update' => function ($url, $model) {
+					$url ='index.php?r=ec-informe-avance-ejecucion-misional/update&idTipoInforme='.$model->id_tipo_informe.'&id='.$model->id;
 					return Html::a('<span name="actualizar" class="glyphicon glyphicon-pencil" value ="'.$url.'"></span>', $url, [
 								'title' => Yii::t('app', 'lead-update'),
 					]);

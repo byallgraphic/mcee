@@ -227,17 +227,19 @@ class EcInformeEjecutivoEstadoController extends Controller
 		$nombrePersona 		= Personas::findOne($idPersona);
 		$nombrePersona 		= $nombrePersona->nombres." ".$nombrePersona->apellidos ;
 		
-		$idPerfilesXpersonasCoordinador	= PerfilesXPersonasInstitucion::findOne($model->id_coordinador)->id_perfiles_x_persona;
-		$perfiles_x_personaCoordinador 	= PerfilesXPersonas::findOne($idPerfilesXpersonasCoordinador)->id_personas;		
-		$coordinador 					= Personas::findOne($perfiles_x_personaCoordinador);
-		$coordinador					= $coordinador->nombres." ".$coordinador->apellidos;
+		// $idPerfilesXpersonasCoordinador	= PerfilesXPersonasInstitucion::findOne($model->id_coordinador)->id_perfiles_x_persona;
+		// $perfiles_x_personaCoordinador 	= PerfilesXPersonas::findOne($idPerfilesXpersonasCoordinador)->id_personas;		
+		// $coordinador 					= Personas::findOne($perfiles_x_personaCoordinador);
+		// $coordinador					= $coordinador->nombres." ".$coordinador->apellidos;
+		$coordinador					= $model->id_coordinador;
 		
 		
 		
-		$idPerfilesXpersonasSecretaria	= PerfilesXPersonasInstitucion::findOne($model->id_secretaria)->id_perfiles_x_persona;
-		$perfiles_x_personaSecretaria 	= PerfilesXPersonas::findOne($idPerfilesXpersonasSecretaria)->id_personas;		
-		$secretaria 					= Personas::findOne($perfiles_x_personaSecretaria);
-		$secretaria 					= $secretaria->nombres." ".$secretaria->apellidos;
+		// $idPerfilesXpersonasSecretaria	= PerfilesXPersonasInstitucion::findOne($model->id_secretaria)->id_perfiles_x_persona;
+		// $perfiles_x_personaSecretaria 	= PerfilesXPersonas::findOne($idPerfilesXpersonasSecretaria)->id_personas;		
+		// $secretaria 					= Personas::findOne($perfiles_x_personaSecretaria);
+		// $secretaria 					= $secretaria->nombres." ".$secretaria->apellidos;
+		$secretaria 					= $model->id_secretaria;
 		
 		
 		$mision			= $model->mision;

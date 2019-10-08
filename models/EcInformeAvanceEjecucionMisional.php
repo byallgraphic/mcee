@@ -41,15 +41,15 @@ class EcInformeAvanceEjecucionMisional extends \yii\db\ActiveRecord
         return [
             [['id_institucion', 'id_eje', 'id_coordinador', 'id_secretaria', 'descripcion', 'presentacion', 'productos', 'presentacion_retos', 'alarmas', 'consolidad_avance', 'estado', 'id_coor_proyecto_uni', 'id_coor_proyecto_sec'], 'required'],
             [['id_institucion', 'id_eje', 'id_coordinador', 'id_secretaria', 'estado', 'id_coor_proyecto_uni', 'id_coor_proyecto_sec'], 'default', 'value' => null],
-            [['id_institucion', 'id_eje', 'id_coordinador', 'id_secretaria', 'estado', 'id_coor_proyecto_uni', 'id_coor_proyecto_sec','id_tipo_informe'], 'integer'],
+            [['id_institucion', 'id_eje', 'estado','id_tipo_informe'], 'integer'],
             [['descripcion', 'presentacion', 'productos', 'presentacion_retos', 'alarmas', 'consolidad_avance'], 'string'],
             [['fecha_creacion'], 'safe'],
             [['id_institucion'], 'exist', 'skipOnError' => true, 'targetClass' => Instituciones::className(), 'targetAttribute' => ['id_institucion' => 'id']],
             
-            [['id_coordinador'], 'exist', 'skipOnError' => true, 'targetClass' => PerfilesXPersonasInstitucion::className(), 'targetAttribute' => ['id_coordinador' => 'id']],
-            [['id_secretaria'], 'exist', 'skipOnError' => true, 'targetClass' => PerfilesXPersonasInstitucion::className(), 'targetAttribute' => ['id_secretaria' => 'id']],
-            [['id_coor_proyecto_uni'], 'exist', 'skipOnError' => true, 'targetClass' => PerfilesXPersonasInstitucion::className(), 'targetAttribute' => ['id_coor_proyecto_uni' => 'id']],
-            [['id_coor_proyecto_sec'], 'exist', 'skipOnError' => true, 'targetClass' => PerfilesXPersonasInstitucion::className(), 'targetAttribute' => ['id_coor_proyecto_sec' => 'id']],
+            // [['id_coordinador'], 'exist', 'skipOnError' => true, 'targetClass' => PerfilesXPersonasInstitucion::className(), 'targetAttribute' => ['id_coordinador' => 'id']],
+            // [['id_secretaria'], 'exist', 'skipOnError' => true, 'targetClass' => PerfilesXPersonasInstitucion::className(), 'targetAttribute' => ['id_secretaria' => 'id']],
+            // [['id_coor_proyecto_uni'], 'exist', 'skipOnError' => true, 'targetClass' => PerfilesXPersonasInstitucion::className(), 'targetAttribute' => ['id_coor_proyecto_uni' => 'id']],
+            // [['id_coor_proyecto_sec'], 'exist', 'skipOnError' => true, 'targetClass' => PerfilesXPersonasInstitucion::className(), 'targetAttribute' => ['id_coor_proyecto_sec' => 'id']],
         ];
     }
 

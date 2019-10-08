@@ -177,9 +177,19 @@ class ImplementacionIeoController extends Controller
 	{
 		$idInstitucion = $_SESSION['instituciones'][0];
 		$idZonaEducativa = Instituciones::findOne( $idInstitucion )->id_zona_educativa;
-		$zonaEducativa  = ZonasEducativas::find()->where(" estado=1 and id = $idZonaEducativa " )->all();
-        $zonaEducativa  = ArrayHelper::map( $zonaEducativa, 'id', 'descripcion' );
 		
+		if (isset($idZonaEducativa))
+		{
+			$zonaEducativa  = ZonasEducativas::find()->where(" estado=1 and id = $idZonaEducativa " )->all();
+			$zonaEducativa  = ArrayHelper::map( $zonaEducativa, 'id', 'descripcion' );
+	
+		}
+		else
+		{
+			$zonaEducativa = array();
+		}
+		
+		// echo "<pre>"; print_r($zonaEducativa); echo "</pre>"; 
 		return $zonaEducativa;
 	}
 	
@@ -197,8 +207,7 @@ class ImplementacionIeoController extends Controller
         if ($ieo_model->load(Yii::$app->request->post())) 
 		{
 			$ieo_model->estado =1;
-			echo "<pre>"; print_r(Yii::$app->request->post()); echo "</pre>"; 
-			die;
+			
             if($ieo_model->save())
 			{
                 $ieo_id = $ieo_model->id;
@@ -419,25 +428,12 @@ class ImplementacionIeoController extends Controller
 								
 						}
 					}
-				}
-				// die;
-				
-				
-				
-				
+				}				
                 return $this->redirect(['index', 'guardado' => true ]);
 			
 			}//fin update post
         }
             
-            
-        
-
-        $idPerfilesXpersonas	= PerfilesXPersonasInstitucion::find()->where( "id_institucion = $idInstitucion" )->all();
-		$perfiles_x_persona 	= PerfilesXPersonas::findOne($idPerfilesXpersonas)->id_personas;		
-        $nombres1 				= Personas::findOne($perfiles_x_persona);
-        $nombres				 = ArrayHelper::map( $nombres1, 'id', 'nombres');
-     
 
         $comunas  = ComunasCorregimientos::find()->where( 'estado=1' )->all();
         $comunas	 = ArrayHelper::map( $comunas, 'id', 'descripcion' );
@@ -445,7 +441,7 @@ class ImplementacionIeoController extends Controller
         return $this->renderAjax('create', [
             'model' => $ieo_model,
             'zonasEducativas' => $this->obtenerZonaEducativa(),
-            "nombres" => $nombres,
+            "nombres" => $this->profesional(),
             'comunas' => $comunas,
 			'institucion'=>$this->obtenerInstitucion(),
 			'sede'=>$this->obtenerSede(),
@@ -479,6 +475,41 @@ class ImplementacionIeoController extends Controller
         //echo "<option>-</option>";
 
     }
+	
+	public function profesional()
+	{
+		$idInstitucion 	= $_SESSION['instituciones'][0];
+		/**
+		* Llenar nombre de los cooordinadores-eje
+		*/
+		//variable con la conexion a la base de datos 
+		$connection = Yii::$app->getDb();
+		$command = $connection->createCommand("
+			SELECT 
+				ppi.id,
+				concat(pe.nombres,' ',pe.apellidos) as nombres
+			FROM 
+				perfiles_x_personas as pp, 
+				personas as pe,
+				perfiles_x_personas_institucion ppi
+			WHERE 
+				pp.id_personas = pe.id
+			AND 
+				ppi.id_perfiles_x_persona = pp.id
+			AND 
+				ppi.id_institucion = $idInstitucion
+			AND
+				pp.id_perfiles IN (30,38)
+		");
+		$result = $command->queryAll();
+		$nombresPerfil = array();
+		foreach ($result as $r)
+		{
+			$nombresPerfil[$r['id']]= $r['nombres'];
+		}
+		
+		return $nombresPerfil;
+	}
 
     /**
      * Updates an existing ImplementacionIeo model.
@@ -795,7 +826,7 @@ class ImplementacionIeoController extends Controller
 			'institucion'=>$this->obtenerInstitucion(),
 			'sede'=>$this->obtenerSede(),
 			'comunas' => $comunas,
-			'nombres' => $nombres,
+			'nombres' => $this->profesional(),
 			
         ]);
     }

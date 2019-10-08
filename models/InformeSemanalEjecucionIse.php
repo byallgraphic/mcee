@@ -61,8 +61,8 @@ class InformeSemanalEjecucionIse extends \yii\db\ActiveRecord
             'id_tipo_informe' => 'Id Tipo Informe',
             'fecha_fin' => 'Fecha fin',
             'fecha_inicio' => 'Fecha inicio',
-            'id_comuna' => 'Id Comuna',
-            'id_barrio' => 'Id Barrio',
+            'id_comuna' => 'Comuna',
+            'id_barrio' => 'Barrio',
             'id_sede' => 'Sede'
         ];
     }

@@ -30,10 +30,12 @@ $idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $m
 <?php 
 //triger de la comuna cuando se este actualizando
 if( strpos($_GET['r'], 'update') > -1)
+{
 	echo "<script> 
 			var barrio = ". $model->barrio .";
 		$('#ecinformeplaneacionieo-comuna').trigger('change'); 	
 </script>";
+}
 ?>
 
   <?=  Html::button('Porcentajes de avance',['value'=>Url::to(['create']),'class'=>'btn btn-success','id'=>'porcentajes']) ?>
@@ -63,10 +65,11 @@ if( strpos($_GET['r'], 'update') > -1)
 setTimeout(function(){ 
 $("#ecinformeplaneacionieo-barrio" ).val( barrio); }, 800);
 
-idSedes = <?php echo $_SESSION['sede'][0]; ?>
 
+
+idProyecto = $("#idProyecto").val();
 $("#divPorcentajes").hide();
-$.get( "index.php?r=ecinformeplaneacionieo/info-porcentajes",
+$.get( "index.php?r=ecinformeplaneacionieo/info-porcentajes&idProyecto="+idProyecto,
 			function( data )
 			{
 				// alert(data);

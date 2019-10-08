@@ -202,7 +202,7 @@ class EcInformeAvanceEjecucionMisionalController extends Controller
         $model = new EcInformeAvanceEjecucionMisional();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index','guardado'=> 1]);
+            return $this->redirect(['index','idTipoInforme'=>$model->id_tipo_informe,'guardado'=> 1]);
         }
 
         return $this->renderAjax('create', [
@@ -228,7 +228,7 @@ class EcInformeAvanceEjecucionMisionalController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-             return $this->redirect(['index','guardado'=> 1]);
+             return $this->redirect(['index','idTipoInforme'=>$model->id_tipo_informe,'guardado'=> 1]);
         }
 
         return $this->renderAjax('update', [
@@ -263,12 +263,16 @@ class EcInformeAvanceEjecucionMisionalController extends Controller
 		$ejeNombre  		= EcProyectos::findOne($model->id_eje)->descripcion;
 		
 		
+		// $coordinador	= $this->nombrePerfilesXPersonas($model->id_coordinador);
+		// $secretaria 	= $this->nombrePerfilesXPersonas($model->id_secretaria);
+		// $id_coor_proyecto_uni = $this->nombrePerfilesXPersonas($model->id_coor_proyecto_uni);
+		// $id_coor_proyecto_sec = $this->nombrePerfilesXPersonas($model->id_coor_proyecto_sec);
 		
 		
-		$coordinador	= $this->nombrePerfilesXPersonas($model->id_coordinador);
-		$secretaria 	= $this->nombrePerfilesXPersonas($model->id_secretaria);
-		$id_coor_proyecto_uni = $this->nombrePerfilesXPersonas($model->id_coor_proyecto_uni);
-		$id_coor_proyecto_sec = $this->nombrePerfilesXPersonas($model->id_coor_proyecto_sec);
+		$coordinador	= $model->id_coordinador;
+		$secretaria 	= $model->id_secretaria;
+		$id_coor_proyecto_uni = $model->id_coor_proyecto_uni;
+		$id_coor_proyecto_sec = $model->id_coor_proyecto_sec;
 		
 		$descripcion			= $model->descripcion;
 		$presentacion			= $model->presentacion;
