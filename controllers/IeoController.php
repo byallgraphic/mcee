@@ -1302,6 +1302,8 @@ class IeoController extends Controller
 				ppi.id_perfiles_x_persona = pp.id
 			AND
 				pp.id_perfiles IN (30,38)
+			AND
+				ppi.id_institucion = $idInstitucion 
 		");
 		$result = $command->queryAll();
 		$nombresPerfil = array();

@@ -348,6 +348,7 @@ class EcDatosBasicosController extends Controller
 								->innerJoin( 'perfiles_x_personas_institucion ppi', 'ppi.id_perfiles_x_persona=pp.id' )
 								->where( 'personas.estado=1' )
 								->andWhere( 'pp.id_perfiles in (30,38) ')
+								->andWhere( 'id_institucion='.$id_institucion )
 								->all();
 		
 		$profesional		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
