@@ -16,14 +16,14 @@ $idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $m
 
 	<?= $form->field($model, 'id_institucion')->DropDownList($instituciones) ?>
 
-    <?= $form->field($model, 'id_eje')->DropDownList($ejes,['prompt'=>"Seleccione..."]) ?>
+    <?= $form->field($model, 'id_eje')->DropDownList($ejes) ?>
 
 	
 	<?php	$items1[] = 	[
 					'label' 		=> "COORDINADORES DE EJE" ,
 					'content' 		=>  
-					$form->field($model, 'id_coordinador')->DropDownList($coordinador,['prompt'=>"Seleccione..."]).
-					$form->field($model, 'id_secretaria')->DropDownList($secretario,['prompt'=>"Seleccione..."]),
+					$form->field($model, 'id_coordinador')->textInput().
+					$form->field($model, 'id_secretaria')->textInput(),
 					
 					'contentOptions'=> ['class' => 'in'],
 					'options' => ['class' => 'panel-success']
@@ -38,8 +38,8 @@ $idTipoInforme = (isset($_GET['idTipoInforme'])) ?  $_GET['idTipoInforme'] :  $m
 	<?php	$items2[] = 	[
 					'label' 		=> "COORDINADOR DE PROYECTO" ,
 					'content' 		=>  
-					$form->field($model, 'id_coor_proyecto_uni')->DropDownList($coordinadorProyecto,['prompt'=>"Seleccione..."]).
-					$form->field($model, 'id_coor_proyecto_sec')->DropDownList($secretario,['prompt'=>"Seleccione..."]),
+					$form->field($model, 'id_coor_proyecto_uni')->textInput().
+					$form->field($model, 'id_coor_proyecto_sec')->textInput(),
 					
 					'contentOptions'=> ['class' => 'in'],
 					'options' => ['class' => 'panel-danger']

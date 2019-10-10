@@ -345,9 +345,9 @@ class EcDatosBasicosController extends Controller
 		$dataPersonas 		= Personas::find()
 								->select( "( nombres || ' ' || apellidos ) as nombres, personas.id" )
 								->innerJoin( 'perfiles_x_personas pp', 'pp.id_personas=personas.id' )
-								->innerJoin( 'docentes d', 'd.id_perfiles_x_personas=pp.id' )
 								->innerJoin( 'perfiles_x_personas_institucion ppi', 'ppi.id_perfiles_x_persona=pp.id' )
 								->where( 'personas.estado=1' )
+								->andWhere( 'pp.id_perfiles in (30,38) ')
 								->andWhere( 'id_institucion='.$id_institucion )
 								->all();
 		
@@ -548,13 +548,12 @@ class EcDatosBasicosController extends Controller
 									
 		$tiposVerificacion = ArrayHelper::map( $dataTiposVerificacion, 'id', 'descripcion' );
 		
-		$dataPersonas 		= Personas::find()
+		$$dataPersonas 		= Personas::find()
 								->select( "( nombres || ' ' || apellidos ) as nombres, personas.id" )
 								->innerJoin( 'perfiles_x_personas pp', 'pp.id_personas=personas.id' )
-								->innerJoin( 'docentes d', 'd.id_perfiles_x_personas=pp.id' )
 								->innerJoin( 'perfiles_x_personas_institucion ppi', 'ppi.id_perfiles_x_persona=pp.id' )
 								->where( 'personas.estado=1' )
-								->andWhere( 'id_institucion='.$id_institucion )
+								->andWhere( 'pp.id_perfiles in (30,38) ')
 								->all();
 		
 		$profesional		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );

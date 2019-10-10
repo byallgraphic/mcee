@@ -165,7 +165,20 @@ class EcInformeSemanalTotalEjecutivoController extends Controller
 		");
 		$result = $command->queryAll();
 		
+		if (!isset($result))
+		{
+			
+		
+		
+	
+		
+		$avanceSede = [];
+		$avanceIEO = [];
+		$activiadad1 = [];
+		
+			
 		$arrayIdActividad = array();
+		$datos = [];
 		foreach ($result as $r)
 		{	
 			$datos[$r['fecha_inicio']. " A " .$r['fecha_fin']][$r['institucion_id']][$r['sede_id']][$r['id_tipo_informe']]['avance_sede'] = $r['avance_sede'];
@@ -175,11 +188,6 @@ class EcInformeSemanalTotalEjecutivoController extends Controller
 			$arrayIdActividad[] = $r['id_actividad_ise'];
 		}
 		
-	
-		
-		$avanceSede = [];
-		$avanceIEO = [];
-		$activiadad1 = [];
 		foreach($datos as $key => $valor)
 		{
 			foreach($valor as $ieo)
@@ -497,6 +505,45 @@ class EcInformeSemanalTotalEjecutivoController extends Controller
             
         </tfoot>";
 		  
+		
+		}
+		else
+		{
+			
+			$reporte='	<table id="example" class="display" style="width:100%">
+				<thead>
+				<tr>
+					<th>Fecha</th>
+					<th>Eje</th>
+					<th>Cnt. I.E.O sobre avance esperado</th>
+					<th>Cnt. De sedes sobre avance esperadoe</th>
+					<th>Porcentaje de I.E.O</th>
+					<th>Porcentaje sobre sedes</th>
+					<th>Porcentaje sobre actividad 1</th>
+					<th>Porcentaje sobre actividad 2</th>
+					<th>Porcentaje sobre actividad 3</th>
+					<th>Población Beneficiada Directamente</th>
+					<th>Población beneficiada de manera indirecta</th>
+				</tr>
+			</thead>
+				<tbody>
+					<tr>
+						<td>Sin Datos</td>
+						<td>Sin Datos</td>
+						<td>Sin Datos</td>
+						<td>Sin Datos</td>
+						<td>Sin Datos</td>
+						<td>Sin Datos</td>
+						<td>Sin Datos</td>
+						<td>Sin Datos</td>
+						<td>Sin Datos</td>
+						<td>Sin Datos</td>
+						<td>Sin Datos</td>
+					</tr>
+				</tbody>
+			</table>';
+		}
+		
 		return json_encode($reporte);
 	}
 	

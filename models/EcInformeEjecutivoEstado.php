@@ -39,12 +39,12 @@ class EcInformeEjecutivoEstado extends \yii\db\ActiveRecord
         return [
             [['id_institucion', 'id_eje', 'id_persona', 'id_coordinador', 'id_secretaria', 'mision', 'descripcion', 'avance_producto', 'hallazgos', 'logros', 'estado'], 'required'],
             [['id_institucion', 'id_eje', 'id_persona', 'id_coordinador', 'id_secretaria', 'estado'], 'default', 'value' => null],
-            [['id_institucion', 'id_eje', 'id_persona', 'id_coordinador', 'id_secretaria', 'estado','id_tipo_informe'], 'integer'],
+            [['id_institucion', 'id_eje', 'id_persona', 'estado','id_tipo_informe'], 'integer'],
             [['mision', 'descripcion', 'avance_producto', 'hallazgos', 'logros'], 'string'],
-            [['id_institucion'], 'exist', 'skipOnError' => true, 'targetClass' => Instituciones::className(), 'targetAttribute' => ['id_institucion' => 'id']],
-            [['id_persona'], 'exist', 'skipOnError' => true, 'targetClass' => PerfilesXPersonas::className(), 'targetAttribute' => ['id_persona' => 'id']],
-            [['id_coordinador'], 'exist', 'skipOnError' => true, 'targetClass' => PerfilesXPersonasInstitucion::className(), 'targetAttribute' => ['id_coordinador' => 'id']],
-            [['id_secretaria'], 'exist', 'skipOnError' => true, 'targetClass' => PerfilesXPersonasInstitucion::className(), 'targetAttribute' => ['id_secretaria' => 'id']],
+            // [['id_institucion'], 'exist', 'skipOnError' => true, 'targetClass' => Instituciones::className(), 'targetAttribute' => ['id_institucion' => 'id']],
+            // [['id_persona'], 'exist', 'skipOnError' => true, 'targetClass' => PerfilesXPersonas::className(), 'targetAttribute' => ['id_persona' => 'id']],
+            // [['id_coordinador'], 'exist', 'skipOnError' => true, 'targetClass' => PerfilesXPersonasInstitucion::className(), 'targetAttribute' => ['id_coordinador' => 'id']],
+            // [['id_secretaria'], 'exist', 'skipOnError' => true, 'targetClass' => PerfilesXPersonasInstitucion::className(), 'targetAttribute' => ['id_secretaria' => 'id']],
         ];
     }
 

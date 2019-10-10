@@ -14,6 +14,10 @@ $this->params['breadcrumbs'][] = "";
 <div class="ec-informe-semanal-total-ejecutivo-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
+	
+	<?= Html::a('Volver', ['ec-competencias-basicas-proyectos/index',], ['class' => 'btn btn-info']) ?>
+	
+	<br />
     <h5 style = "background-color: pink;" class="col-md-4" ><?= Html::encode("Filtrar por fecha para mostrar el promedio exacto") ?></h5>
 
     <?= $this->render('_form', [

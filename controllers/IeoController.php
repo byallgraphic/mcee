@@ -84,11 +84,20 @@ class IeoController extends Controller
 		$idInstitucion = $_SESSION['instituciones'][0];
 
         $idPerfilesXpersonas	= PerfilesXPersonasInstitucion::find()->where( "id_institucion = $idInstitucion" )->all();
-		$perfiles_x_persona 	= PerfilesXPersonas::findOne($idPerfilesXpersonas)->id_personas;		
-        // $nombres1 				= Personas::find($perfiles_x_persona)->all();
-		$nombres1 				= Personas::findOne($perfiles_x_persona);
-        $nombres	 = ArrayHelper::map( $nombres1, 'id', 'nombres');
-        
+		
+		if(!isset($idPerfilesXpersonas))
+		{
+			
+			$perfiles_x_persona 	= PerfilesXPersonas::findOne($idPerfilesXpersonas)->id_personas;		
+			$nombres1 				= Personas::findOne($perfiles_x_persona);
+			$nombres	 			= ArrayHelper::map( $nombres1, 'id', 'nombres');
+		}
+		else
+		{
+			$nombres = Array();
+		}
+		
+
 		$connection = Yii::$app->getDb();
 		$command = $connection->createCommand(
 		"
@@ -201,7 +210,6 @@ class IeoController extends Controller
          * Se realiza registro del modelo base IEO
          * Obtenemos el id de iserción para usarlo como llave foranea en los demas modelos 
          */
-        
         $idInstitucion = $_SESSION['instituciones'][0];
         $data = [];
         $institucion = Instituciones::findOne( $idInstitucion );
@@ -1292,8 +1300,10 @@ class IeoController extends Controller
 				pp.id_personas = pe.id
 			AND 
 				ppi.id_perfiles_x_persona = pp.id
-			AND 
-				ppi.id_institucion = $idInstitucion
+			AND
+				pp.id_perfiles IN (30,38)
+			AND
+				ppi.id_institucion = $idInstitucion 
 		");
 		$result = $command->queryAll();
 		$nombresPerfil = array();

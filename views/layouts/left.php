@@ -430,63 +430,7 @@ use yii\helpers\ArrayHelper;
 
 							'template' => '<a href="{url}" target="_blank"  class="">{label}</a>',
 						],
-					],  //mcee
-					// ['label' => 'Poblaciones',
-						// 'options' => ['id'=>'idModulo' . ( ++$numero ) .'',],
-						// 'icon' => 'user-circle',
-						// 'visible' =>@$permiso[numero]? true : false,'url' => '#',
-						// 'items' => [
-										// [
-											// 'label' => 'Personas',
-											// 'options' => ['id'=>'idModulo' . ( ++$numero ) .'',],
-											// 'icon' => 'user-circle-o',
-											// 'visible' =>@$permiso[numero]? true : false,'url' => '#',
-											// 'items' => [
-												// ['label' => 'Datos generales', 'icon' => 'circle-o', 'visible' =>@$permiso[numero]? true : false,'url' => ['personas/index'],'options' => ['id'=>'idModulo' . ( ++$numero ) .'',],],
-												// ['label' => 'Formaciones', 'icon' => 'circle-o', 'visible' =>@$permiso[numero]? true : false,'url' => ['personas-formaciones/index'],'options' => ['id'=>'idModulo' . ( ++$numero ) .'',],],
-												// ['label' => 'Discapacidades', 'icon' => 'circle-o', 'visible' =>@$permiso[numero]? true : false,'url' => ['personas-discapacidades/index'],'options' => ['id'=>'idModulo' . ( ++$numero ) .'',],],
-												// ['label' => 'Escolaridades', 'icon' => 'circle-o', 'visible' =>@$permiso[numero]? true : false,'url' => ['personas-escolaridades/index'],'options' => ['id'=>'idModulo' . ( ++$numero ) .'',],],
-												// ['label' => 'Reconocimientos', 'icon' => 'circle-o', 'visible' =>@$permiso[numero]? true : false,'url' => ['reconocimientos/index'],'options' => ['id'=>'idModulo' . ( ++$numero ) .'',],],
-											// ],
-										// ],
-										// ['label' => 'Docentes',
-										// 'options' => ['id'=>'idModulo' . ( ++$numero ) .'',],
-										// 'icon' => 'vcard-o',
-										// 'visible' =>@$permiso[numero]? true : false,'url' => '#',
-										 // 'items' => [
-														// ['label' => 'Docentes', 'icon' => 'circle-o', 'visible' =>@$permiso[numero]? true : false,'url' => ['docentes/index'],'options' => ['id'=>'idModulo' . ( ++$numero ) .'',],],
-														// ['label' => 'Docentes areas trabajo', 'icon' => 'circle-o', 'visible' =>@$permiso[numero]? true : false,'url' => ['docentes-x-areas-trabajos/index'],'options' => ['id'=>'idModulo' . ( ++$numero ) .'',],],
-														// ['label' => 'Evaluación', 'icon' => 'circle-o', 'visible' =>@$permiso[numero]? true : false,'url' => ['evaluacion-docentes/index'],'options' => ['id'=>'idModulo' . ( ++$numero ) .'',],],
-														// ['label' => 'Vinculación', 'icon' => 'circle-o', 'visible' =>@$permiso[numero]? true : false,'url' => ['vinculacion-docentes/index'],'options' => ['id'=>'idModulo' . ( ++$numero ) .'',],],
-														// ['label' => 'Documentos Interés', 'icon' => 'circle-o', 'visible' =>@$permiso[numero]? true : false,'url' => ['documentos/index'],],
-														
-														
-														
-													// ],
-										// ],
-										// ['label' => 'Estudiantes',
-										// 'icon' => 'male',
-										// 'visible' =>@$permiso[numero]? true : false,'url' => '#',
-										 // 'items' => [
-														// ['label' => 'Estudiantes', 'icon' => 'circle-o', 'visible' =>@$permiso[numero]? true : false,'url' => ['representantes-legales/index'],],
-														// ['label' => 'Hoja de vida', 'icon' => 'circle-o', 'visible' =>@$permiso[numero]? true : false,'url' => ['hoja-vida-estudiante/index'],],
-													// ],
-										
-										// ],
-										
-									// ],
-						
-					// ],
-					// ['label' => 'Indicadores',
-						// 'icon' => 'line-chart',
-						// 'visible' =>@$permiso[numero]? true : false,'url' => '#',
-						// 'items' => [
-										// ['label' => 'Clima Escolar', 'icon' => 'thermometer-0', 'visible' =>@$permiso[numero]? true : false,'url' => '#',],
-										// ['label' => 'Sistema de Monitoreo', 'icon' => 'desktop', 'visible' =>@$permiso[numero]? true : false,'url' => '#',],
-									// ],
-					// ],
-									
-									
+					],  //mcee				
                 ],
             ],
 		]
