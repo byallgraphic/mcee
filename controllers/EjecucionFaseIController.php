@@ -260,6 +260,8 @@ class EjecucionFaseIController extends Controller
 			// $anio = SemillerosTicAnio::findOne( $ciclo->id_anio );
 		// }
 		
+		$docentesArray = [];
+		
 		$anio = Yii::$app->request->get('anio');
 		$esDocente = Yii::$app->request->get('esDocente');
 	
@@ -341,6 +343,9 @@ class EjecucionFaseIController extends Controller
 						else{
 							$datosSesiones[] = new DatosSesiones();
 						}
+						
+						if( $value['docente'] )
+							$docentesArray = $docentesArray + explode( ",", $value['docente'] );
 					}
 					
 					$condicionesInstitucionales = CondicionesInstitucionales::findOne([ 
@@ -391,6 +396,8 @@ class EjecucionFaseIController extends Controller
 										$ejecFase->docente = explode( ",", $ejecFase->docente );
 										// $ejecFase->id_fase = $this->id_fase;
 										$ejecucionFase[] = $ejecFase;
+										
+										$docentesArray = $docentesArray + $ejecFase->docente;
 									}
 									else
 									{
@@ -410,6 +417,7 @@ class EjecucionFaseIController extends Controller
 									}
 
 									$datosModelos[ $datosSesion->id_sesion ]['ejecucionesFase'][] = $ejecFase;
+									
 								}
 							}
 							else
@@ -427,6 +435,8 @@ class EjecucionFaseIController extends Controller
 									
 									$sesiones[] = Sesiones::findOne($datosSesion->id_sesion);
 								}
+								
+								// $docentesArray = $docentesArray + $ejecFase->docente;
 
 								$datosModelos[ $datosSesion->id_sesion ]['ejecucionesFase'][] = $ejecFase;
 							}
@@ -518,6 +528,9 @@ class EjecucionFaseIController extends Controller
 
 									$ejecFase->load( $vEjecucionFase, '' );
 									$ejecFase->docente = implode( ",", $vEjecucionFase['docente'] );
+									
+									$docentesArray = $docentesArray + $vEjecucionFase['docente'];
+									
 									$datosModelos[ $ds->id_sesion ]['ejecucionesFase'][] = $ejecFase;
 								}
 							}
@@ -640,17 +653,18 @@ class EjecucionFaseIController extends Controller
 			}
 		}
 	
-		
-		$dataPersonas 		= Personas::find()
-								->select( "( nombres || ' ' || apellidos ) as nombres, personas.id" )
-								->innerJoin( 'perfiles_x_personas pp', 'pp.id_personas=personas.id' )
-								->innerJoin( 'docentes d', 'd.id_perfiles_x_personas=pp.id' )
-								->innerJoin( 'perfiles_x_personas_institucion ppi', 'ppi.id_perfiles_x_persona=pp.id' )
-								->where( 'personas.estado=1' )
-								->andWhere( 'id_institucion='.$id_institucion )
-								->all();
-		
-		$docentes = $profesionales		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
+		if( $datosIeoProfesional->id_profesional_a ){
+			
+			$dataPersonas 		= Personas::find()
+									->select( "( nombres || ' ' || apellidos ) as nombres, personas.id" )
+									->andWhere( 'id='.$datosIeoProfesional->id_profesional_a )
+									->all();
+			
+			$profesionales		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
+		}
+		else{
+			$profesionales		= [];
+		}
 		
 		$dataEspecialidades = EspecialidadesTecnicas::findOne( $institucion->especialidad );
 		
@@ -675,50 +689,39 @@ class EjecucionFaseIController extends Controller
 					$datosModelos[ $sesion->id ][ 'dataSesion' ] 		= new DatosSesiones();
 					$datosModelos[ $sesion->id ][ 'ejecucionesFase' ][] = new EjecucionFase();
 				}
+				else{
+					foreach( $docentesArray + $datosModelos[ $sesion->id ][ 'ejecucionesFase' ] as $ef ){
+						$docentesArray = $docentesArray + $ef->docente;
+					}
+				}
 			}
 		}
 		
-		// $profesionales = [];
-		// $dataProfesionales = SemillerosDatosIeo::find()
-								// ->where( 'id_institucion='.$id_institucion )
-								// ->andWhere( 'sede='.$id_sede )
-								// ->andWhere( 'id_ciclo='.$ciclo->id )
-								// ->all();
-								
-		// foreach( $dataProfesionales as $value )
-		// {
-			// $pros = explode( ",", $value->personal_a );
-			
-			// foreach( $pros as $p )
-			// {
-				// $persona = Personas::findOne( $p );
-				// if( empty($profesionales[ $value->id ]) )
-					// $profesionales[ $value->id ] = $persona->nombres." ".$persona->apellidos;
-				// else
-					// $profesionales[ $value->id ] .= " - ".$persona->nombres." ".$persona->apellidos;
-			// }
-		// }
+		if( !empty( $sesiones ) )
+		{	
+			foreach( $sesiones as $keySesion => $sesion1 )
+			{	
+				foreach( $datosModelos[ $sesion1->id ][ 'ejecucionesFase' ] as $ef )
+				{
+					if( is_array( $ef->docente ) ){
+						$docentesArray = array_merge( $docentesArray , $ef->docente );
+					}
+				}
+			}
+		}
 		
-		
-		// $docentes = [];
-		// $dataDocentes = AcuerdosInstitucionales::find()
-								// ->where( 'id_fase='.$this->id_fase )
-								// ->andWhere( 'id_ciclo='.$ciclo->id )
-								// ->all();
-								
-		// foreach( $dataDocentes as $value )
-		// {
-			// $doces = explode( ",", $value->id_docente );
+		if( !empty( $docentesArray ) ){
 			
-			// foreach( $doces as $d )
-			// {
-				// $persona = Personas::findOne( $d );
-				// if( empty( $docentes[ $value->id ] ) )
-					// $docentes[ $value->id ] = $persona->nombres." ".$persona->apellidos;
-				// else
-					// $docentes[ $value->id ] .= " - ".$persona->nombres." ".$persona->apellidos;
-			// }
-		// }
+			$dataPersonas 		= Personas::find()
+									->select( "( nombres || ' ' || apellidos ) as nombres, personas.id" )
+									->andWhere( [ 'in', 'id', $docentesArray ] )
+									->all();
+			
+			$docentes		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
+		}
+		else{
+			$docentes		= [];
+		}
 		
 		return $this->render('create', [
             'model' 				=>  [ new EjecucionFase() ]+$ejecucionFase,
