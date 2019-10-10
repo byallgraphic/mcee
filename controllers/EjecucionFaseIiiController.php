@@ -500,17 +500,58 @@ class EjecucionFaseIiiController extends Controller
 		$listaSesiones	= ArrayHelper::map( $dataSesionesFases, 'id', 'descripcion' );
 		
 		
-		$dataPersonas 		= Personas::find()
-								->select( "( nombres || ' ' || apellidos ) as nombres, personas.id" )
-								->innerJoin( 'perfiles_x_personas pp', 'pp.id_personas=personas.id' )
-								->innerJoin( 'docentes d', 'd.id_perfiles_x_personas=pp.id' )
-								->innerJoin( 'perfiles_x_personas_institucion ppi', 'ppi.id_perfiles_x_persona=pp.id' )
-								->where( 'personas.estado=1' )
-								->andWhere( 'id_institucion='.$id_institucion )
-								->all();
+		// $dataPersonas 		= Personas::find()
+								// ->select( "( nombres || ' ' || apellidos ) as nombres, personas.id" )
+								// ->innerJoin( 'perfiles_x_personas pp', 'pp.id_personas=personas.id' )
+								// ->innerJoin( 'docentes d', 'd.id_perfiles_x_personas=pp.id' )
+								// ->innerJoin( 'perfiles_x_personas_institucion ppi', 'ppi.id_perfiles_x_persona=pp.id' )
+								// ->where( 'personas.estado=1' )
+								// ->andWhere( 'id_institucion='.$id_institucion )
+								// ->all();
 		
-		$docentes		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
-		$profesionales  = $docentes;
+		// $docentes		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
+		// $profesionales  = $docentes;
+		
+		
+		$docentesArray = [];
+		
+		if( !empty($datosIeoProfesional->id_profesional_a) ){
+			$docentesArray[] = $datosIeoProfesional->id_profesional_a;
+		}
+		
+		if( !empty( $models ) )
+		{
+			foreach( $models as $key => $model )
+			{
+				
+				// 'profesionales' => new DatosIeoProfesional([ 'id_institucion' => $id_institucion ]),
+						// 'datosSesion' 	=> new DatosSesiones(),
+						// 'ejecucionFase' => new SemillerosTicEjecucionFaseIii(),
+				// var_dump($model->id_profesional_a);
+				if( !empty($model['profesionales']->id_profesional_a) )
+					$docentesArray[] = $model['profesionales']->id_profesional_a;
+				
+				if( !empty($model['ejecucionFase']->docente_creador) )
+					$docentesArray = array_merge( $docentesArray, $model['ejecucionFase']->docente_creador );
+			}
+		}
+		
+		if( count($docentesArray) > 0 ){
+			
+			$dataPersonas 		= Personas::find()
+										->select( "( nombres || ' ' || apellidos ) as nombres, personas.id" )
+										->andWhere( [ 'in', 'id', $docentesArray ] )
+										->all();
+			
+			$docentes		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
+			$profesionales  = $docentes;
+		}
+		else
+		{
+			$profesionales  = $docentes = [];
+		}
+		
+		
 		
 
         return $this->render('create', [

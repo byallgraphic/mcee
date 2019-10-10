@@ -318,6 +318,55 @@ $( document ).ready(function(){
 				}
 			}
 		});
+	 
+	 
+		var intervalo2 = undefined;
+	 
+		$( "[id^=semillerosticejecucionfaseii][id$=docentes]" ).on( 'chosen:showing_dropdown', function(){ 
+			$( "div", $( "[id^=semillerosticejecucionfaseii][id$=docentes]" ).parent() ).removeClass( 'chosen-container-single-nosearch' );
+			$( "div input", $( "[id^=semillerosticejecucionfaseii][id$=docentes]" ).parent() ).attr({readOnly:false});
+			
+		})
+
+		$( "div input", $( "[id^=semillerosticejecucionfaseii][id$=docentes]" ).parent() ).on( 'keyup', function(e){ 
+
+			var slOriginal = $( "[id^=semillerosticejecucionfaseii][id$=docentes]" );
+
+			var search = $( this );
+			var value_search = search.val();
+
+			if( value_search.length >= 3  && e.which == 13 )
+			{
+				clearTimeout( intervalo2 );
+				intervalo2 = setTimeout( function(){
+									$( "option:not(:selected)", slOriginal ).remove();
+									search.attr({readOnly:true});
+									
+									clearTimeout( intervalo2 );
+									
+									$.get( "index?r=semilleros-datos-ieo/consultar-docentes&search="+value_search, function( data ) {
+										
+										
+										for( var x in data ){
+											slOriginal.append( "<option value='"+x+"'>"+data[x]+"</option>" );
+										}
+										
+										slOriginal.trigger( 'chosen:updated' );
+										search.val( value_search );
+										search.css({readOnly:false});
+										
+									}, 'json' );
+								}, 1000 );
+			}
+		}); 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	 }, 500 );
 	
 	//Cuando se abre un acordeon se ponen todos los elementos del encabezado del mismo tamaño

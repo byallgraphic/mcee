@@ -284,42 +284,42 @@ $( document ).ready(function(){
 	 
 	 
 		$( "[id^=ejecucionfase][id$=docente]" ).on( 'chosen:showing_dropdown', function(){ 
-		$( "div", $( "[id^=ejecucionfase][id$=docente]" ).parent() ).removeClass( 'chosen-container-single-nosearch' );
-		$( "div input", $( "[id^=ejecucionfase][id$=docente]" ).parent() ).attr({readOnly:false});
-		
-	})
+			$( "div", $( "[id^=ejecucionfase][id$=docente]" ).parent() ).removeClass( 'chosen-container-single-nosearch' );
+			$( "div input", $( "[id^=ejecucionfase][id$=docente]" ).parent() ).attr({readOnly:false});
+			
+		})
 
-	$( "div input", $( "[id^=ejecucionfase][id$=docente]" ).parent() ).on( 'keyup', function(e){ 
+		$( "div input", $( "[id^=ejecucionfase][id$=docente]" ).parent() ).on( 'keyup', function(e){ 
 
-		var slOriginal = $( "[id^=ejecucionfase][id$=docente]" );
+			var slOriginal = $( "[id^=ejecucionfase][id$=docente]" );
 
-		var search = $( this );
-		var value_search = search.val();
+			var search = $( this );
+			var value_search = search.val();
 
-		if( value_search.length >= 3  && e.which == 13 )
-		{
-			clearTimeout( intervalo2 );
-			intervalo2 = setTimeout( function(){
-								$( "option:not(:selected)", slOriginal ).remove();
-								search.attr({readOnly:true});
-								
-								clearTimeout( intervalo2 );
-								
-								$.get( "index?r=semilleros-datos-ieo/consultar-docentes&search="+value_search, function( data ) {
+			if( value_search.length >= 3  && e.which == 13 )
+			{
+				clearTimeout( intervalo2 );
+				intervalo2 = setTimeout( function(){
+									$( "option:not(:selected)", slOriginal ).remove();
+									search.attr({readOnly:true});
 									
+									clearTimeout( intervalo2 );
 									
-									for( var x in data ){
-										slOriginal.append( "<option value='"+x+"'>"+data[x]+"</option>" );
-									}
-									
-									slOriginal.trigger( 'chosen:updated' );
-									search.val( value_search );
-									search.css({readOnly:false});
-									
-								}, 'json' );
-							}, 1000 );
-		}
-	}); 
+									$.get( "index?r=semilleros-datos-ieo/consultar-docentes&search="+value_search, function( data ) {
+										
+										
+										for( var x in data ){
+											slOriginal.append( "<option value='"+x+"'>"+data[x]+"</option>" );
+										}
+										
+										slOriginal.trigger( 'chosen:updated' );
+										search.val( value_search );
+										search.css({readOnly:false});
+										
+									}, 'json' );
+								}, 1000 );
+			}
+		}); 
 	 
 	 
 	 

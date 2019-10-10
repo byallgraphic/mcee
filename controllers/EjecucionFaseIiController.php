@@ -621,65 +621,44 @@ class EjecucionFaseIiController extends Controller
 		
 		$fase  = Fases::findOne( $this->id_fase );
 		
-		$dataPersonas 		= Personas::find()
-								->select( "( nombres || ' ' || apellidos ) as nombres, personas.id" )
-								->innerJoin( 'perfiles_x_personas pp', 'pp.id_personas=personas.id' )
-								->innerJoin( 'docentes d', 'd.id_perfiles_x_personas=pp.id' )
-								->innerJoin( 'perfiles_x_personas_institucion ppi', 'ppi.id_perfiles_x_persona=pp.id' )
-								->where( 'personas.estado=1' )
-								->andWhere( 'id_institucion='.$id_institucion )
-								->all();
+		$docentesArray = [];
 		
-		$docentes		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
-		$profesionales  = $docentes;
+		if( !empty($datosIeoProfesional->id_profesional_a) ){
+			$docentesArray[] = $datosIeoProfesional->id_profesional_a;
+		}
+		
+		if( !empty( $sesiones ) )
+		{
+			foreach( $sesiones as $keySesion => $sesion )
+			{
+				foreach( $datosModelos[ $sesion->id ][ 'ejecucionesFase' ] as $ef )
+				{
+					if(is_array($ef->docentes) ){
+						$docentesArray = array_merge( $docentesArray, $ef->docentes );
+					}
+				}
+			}
+		}
+		
+		if( count($docentesArray) > 0 ){
+			
+			$dataPersonas 		= Personas::find()
+										->select( "( nombres || ' ' || apellidos ) as nombres, personas.id" )
+										->andWhere( [ 'in', 'id', $docentesArray ] )
+										->all();
+			
+			$docentes		= ArrayHelper::map( $dataPersonas, 'id', 'nombres' );
+			$profesionales  = $docentes;
+		}
+		else
+		{
+			$profesionales  = $docentes = [];
+		}
 		
 		$dataEspecialidades = EspecialidadesTecnicas::findOne( $institucion->especialidad );
 		
 		$especialidades = [ $dataEspecialidades->id => $dataEspecialidades->descripcion ];
 		
-		// $profesionales = [];
-		// $dataProfesionales = SemillerosDatosIeo::find()
-								// ->where( 'id_institucion='.$id_institucion )
-								// ->andWhere( 'sede='.$id_sede )
-								// ->andWhere( 'id_ciclo='.$ciclo->id )
-								// ->andWhere( 'estado=1' )
-								// ->all();
-								
-		// foreach( $dataProfesionales as $value )
-		// {
-			// $pros = explode( ",", $value->personal_a );
-			
-			// foreach( $pros as $p )
-			// {
-				// $persona = Personas::findOne( $p );
-				// if( empty($profesionales[ $value->id ]) )
-					// $profesionales[ $value->id ] = $persona->nombres." ".$persona->apellidos;
-				// else
-					// $profesionales[ $value->id ] .= " - ".$persona->nombres." ".$persona->apellidos;
-			// }
-		// }
-		
-		
-		// $docentes = [];
-		// $dataDocentes = AcuerdosInstitucionales::find()
-								// ->where( 'id_fase='.$this->id_fase )
-								// ->andWhere( 'id_ciclo='.$ciclo->id )
-								// ->andWhere( 'estado=1' )
-								// ->all();
-								
-		// foreach( $dataDocentes as $value )
-		// {
-			// $doces = explode( ",", $value->id_docente );
-			
-			// foreach( $doces as $d )
-			// {
-				// $persona = Personas::findOne( $d );
-				// if( empty( $docentes[ $value->id ] ) )
-					// $docentes[ $value->id ] = $persona->nombres." ".$persona->apellidos;
-				// else
-					// $docentes[ $value->id ] .= " - ".$persona->nombres." ".$persona->apellidos;
-			// }
-		// }
 		
 
         return $this->render('create', [
