@@ -29,6 +29,16 @@ if (@$_GET['instituciones'])
 {
 	$idInstitucion = $_GET['instituciones'];
 	$_SESSION['institucionSeleccionada'][0]=$idInstitucion;
+	
+	//Busco la posicion en el array de la insitucion
+	$clave = array_search( $idInstitucion, $_SESSION['instituciones'] );
+	
+	//Elimino la institución del array
+	array_splice( $_SESSION['instituciones'], $clave, 1 );
+	
+	//Agrego la institución en la primera posición
+	array_unshift( $_SESSION['instituciones'], $idInstitucion );
+	
 	// $_SESSION['instituciones'][0]=$idInstitucion;
 	?>
 	<script>  document.cookie = 'institucionJs=" <?php echo $idInstitucion; ?>"'; </script>
